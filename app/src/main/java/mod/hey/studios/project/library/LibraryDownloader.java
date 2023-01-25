@@ -205,14 +205,16 @@ public class LibraryDownloader {
         linear1.removeView(progressBarContainer);
 
         builder.setView(view);
-        dialog = builder.show();
+        builder.setCancelable(false);
+
+        dialog = builder.show();             
 
         pause.setEnabled(false);
         pause.setVisibility(View.GONE);
         resume.setEnabled(false);
         resume.setVisibility(View.GONE);
-        cancel.setEnabled(false);
-        cancel.setVisibility(View.GONE);
+        cancel.setEnabled(true);
+        cancel.setVisibility(View.VISIBLE);
 
         library.addTextChangedListener(new TextWatcher() {
 	@Override
@@ -637,7 +639,7 @@ public class LibraryDownloader {
                     @Override
                     public void onError(PRDownloader.Error e) {
                         if (e.isServerError()) {
-                            if (!(isAarDownloaded || isAarAvailable)) {
+                            if ((Use_Aar ? !(isAarDownloaded || isAarAvailable) : !(isJarDownloaded || isJarAvailable))) {
                                 if (counter < repoUrls.size()) {
                                     currentRepo = repoUrls.get(counter);
                                     String name = repoNames.get(counter);
@@ -646,7 +648,6 @@ public class LibraryDownloader {
                                     message.setText("Searching... " + counter + "/" + repoUrls.size() + " [" + name + "]");
 
                                     downloadId = _download(
-                                           // currentRepo + _getAarDownloadLink(library.getText().toString()),
                                             currentRepo.concat((Use_Aar ? _getAarDownloadLink(library.getText().toString()) : _getJarDownloadLink(library.getText().toString()))),
                                             downloadPath,
                                             _getLibName(library.getText().toString()) + ".zip",
@@ -676,8 +677,8 @@ public class LibraryDownloader {
                                     resume.setEnabled(false);
                                     resume.setVisibility(View.GONE);
 
-                                    cancel.setEnabled(false);
-                                    cancel.setVisibility(View.GONE);
+                                    cancel.setEnabled(true);
+                                    cancel.setVisibility(View.VISIBLE);
                                 }
                             }
                         } else {
@@ -694,8 +695,8 @@ public class LibraryDownloader {
                                 resume.setEnabled(false);
                                 resume.setVisibility(View.GONE);
 
-                                cancel.setEnabled(false);
-                                cancel.setVisibility(View.GONE);
+                                cancel.setEnabled(true);
+                                cancel.setVisibility(View.VISIBLE);
 
                             }
                         }
