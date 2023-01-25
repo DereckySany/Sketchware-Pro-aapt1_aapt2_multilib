@@ -717,11 +717,25 @@ public class Dp {
      * @throws By If anything goes wrong while extracting
      */
     public void maybeExtractAapt2() throws By {
-        String aapt2PathInAssets = "aapt/";
-        if (GB.a().toLowerCase().contains("x86")) {
-            aapt2PathInAssets += "aapt2-x86";
+        String abi = GB.a().toLowerCase();
+        String aaptPathInAssets = "aapt/aapt/";
+        String aapt2PathInAssets = "aapt/aapt2/";
+        if (abi.contains("64")) {
+            if (abi.contains("x86")) {
+                aaptPathInAssets += "aapt-x86_64";
+                aapt2PathInAssets += "aapt2-x86_64";
+            } else {
+                aaptPathInAssets += "aapt-arm64";
+                aapt2PathInAssets += "aapt2-arm64";
+            }
         } else {
-            aapt2PathInAssets += "aapt2-arm";
+            if (abi.contains("x86")) {
+                aaptPathInAssets += "aapt-x86";
+                aapt2PathInAssets += "aapt2-x86";
+            } else {
+                aaptPathInAssets += "aapt-arm";
+                aapt2PathInAssets += "aapt2-arm";
+            }
         }
         try {
             if (hasFileChanged(aapt2PathInAssets, aapt2Binary.getAbsolutePath())) {
