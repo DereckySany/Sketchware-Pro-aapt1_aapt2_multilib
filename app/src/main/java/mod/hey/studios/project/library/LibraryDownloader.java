@@ -91,6 +91,42 @@ public class LibraryDownloader {
             file2.mkdirs();
         }
     }
+    public static void copyFile(String sourcePath, String destPath) {
+	if (!FileUtil.isExistFile(sourcePath)) return;
+	createNewFile(destPath);
+		
+	FileInputStream fis = null;
+	FileOutputStream fos = null;
+		
+	try {
+		fis = new FileInputStream(sourcePath);
+		fos = new FileOutputStream(destPath, false);
+			
+		byte[] buff = new byte[1024];
+		int length = 0;
+			
+	while ((length = fis.read(buff)) > 0) {
+			fos.write(buff, 0, length);
+		}
+	} catch (IOException e) {
+		e.printStackTrace();
+	} finally {
+		if (fis != null) {
+	try {
+		fis.close();
+		} catch (IOException e) {
+		e.printStackTrace();
+		}
+	}
+		if (fos != null) {
+	try {
+		fos.close();
+		} catch (IOException e) {
+		e.printStackTrace();
+		}
+	     }
+	   }
+	}
 
     private static String dirpart(String str) {
         int lastIndexOf = str.lastIndexOf(File.separatorChar);
