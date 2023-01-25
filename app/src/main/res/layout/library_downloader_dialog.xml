@@ -65,7 +65,7 @@
 				android:padding="8dp"
 				android:gravity="center_horizontal"
 				android:textSize="14sp"
-				android:textColor="#FFFFFF"
+				android:textColor="#000000"
 				android:hint="Example: com.anjlab.android.iab.v3:library:1.0.44"
 				android:textColorHint="#81D4FA"
 				android:singleLine="true"
