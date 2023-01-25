@@ -49,23 +49,37 @@
             android:layout_weight="1.0"
             style="?android:progressBarStyleHorizontal" />
     </LinearLayout>
-    <LinearLayout
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:id="@id/linear4"
-        android:layout_width="fill_parent"
-        android:layout_height="50.0dip">
-        <EditText
-            android:textSize="14.0sp"
-            android:gravity="center"
-            android:id="@id/edittext1"
-            android:background="@color/transparent"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="Example: com.anjlab.android.iab.v3:library:1.0.44"
-            android:singleLine="true"
-            android:shadowRadius="@integer/app_bar_elevation_anim_duration" />
-    </LinearLayout>
+		<LinearLayout
+			android:id="@id/linear4"
+			android:layout_width="match_parent"
+			android:layout_height="50dp"
+			android:layout_marginLeft="4dp"
+			android:layout_marginRight="4dp"
+			android:gravity="bottom"
+			android:orientation="horizontal">
+			<EditText
+				android:id="@id/edittext1"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="15dp"
+				android:padding="8dp"
+				android:gravity="center_horizontal"
+				android:textSize="14sp"
+				android:textColor="#FFFFFF"
+				android:hint="Example: com.anjlab.android.iab.v3:library:1.0.44"
+				android:textColorHint="#81D4FA"
+				android:singleLine="true"
+				android:lines="1"
+				android:layout_weight="1"
+				android:focusable="true" />
+			<ImageView
+				android:id="@+id/imageview1"
+				android:focusable="false"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:src="@drawable/ic_content_paste_grey600_24dp"
+				android:scaleType="centerInside" />
+		</LinearLayout>
     <LinearLayout
         android:gravity="top"
         android:orientation="horizontal"
@@ -109,12 +123,12 @@
         <RadioGroup
             android:gravity="center"
             android:orientation="horizontal"
-            android:id="@id/choselibraryextesion"
+            android:id="@+id/choselibraryextesion"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
             <RadioButton
                 android:textStyle="bold"
-                android:id="@id/liblaryformataar"
+                android:id="@+id/liblaryformataar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="100.0dip"
@@ -123,7 +137,7 @@
                 android:layout_weight="1.0" />
             <RadioButton
                 android:textStyle="bold"
-                android:id="@id/liblaryformatjar"
+                android:id="@+id/liblaryformatjar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="100.0dip"
