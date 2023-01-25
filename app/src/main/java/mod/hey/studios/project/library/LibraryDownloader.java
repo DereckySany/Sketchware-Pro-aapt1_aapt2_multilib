@@ -128,6 +128,22 @@ public class LibraryDownloader {
 	   }
 	}
 
+     private static void createNewFile(String path) {
+		int lastSep = path.lastIndexOf(File.separator);
+		if (lastSep > 0) {
+			String dirPath = path.substring(0, lastSep);
+			FileUtil.makeDir(dirPath);
+		}
+		
+		File file = new File(path);
+		
+		try {
+			if (!file.exists()) file.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
     private static String dirpart(String str) {
         int lastIndexOf = str.lastIndexOf(File.separatorChar);
         if (lastIndexOf == -1) {
