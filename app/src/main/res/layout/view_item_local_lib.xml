@@ -18,7 +18,7 @@
         <LinearLayout
             android:layout_gravity="center"
             android:orientation="vertical"
-            android:id="@id/linear_content_indicator"
+            android:id="@+id/linear_content_indicator"
             android:background="@color/scolor_red_01"
             android:layout_width="3.0pt"
             android:layout_height="3.0pt"
