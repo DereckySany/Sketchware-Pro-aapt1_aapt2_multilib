@@ -175,4 +175,6 @@
     <color name="monokia_pro_purple">#ffab9df2</color>
     <color name="monokia_pro_grey">#ff727072</color>
     <color name="colorBottomBarSW">#ff008dcd</color>
+    <color name="white_bg">#ffffffff</color>
+    <color name="nowhite_bg">#fff6f6f6</color>
 </resources>
