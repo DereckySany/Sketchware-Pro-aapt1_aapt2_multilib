@@ -16,6 +16,8 @@ import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.RadioButton;
+import android.text.Editable;
+import android.text.TextWatcher;
 // clip board 
 import android.content.Context;
 import android.content.ClipData;
