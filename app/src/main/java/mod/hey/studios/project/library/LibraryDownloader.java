@@ -262,6 +262,7 @@ public class LibraryDownloader {
                 if (!FileUtil.isExistFile(libName)) {
                     FileUtil.makeDir(libName);
                 }
+                Use_Aar = useAar.isChecked();
 
                 isAarDownloaded = false;
 		isAarAvailable = false;
@@ -545,6 +546,9 @@ public class LibraryDownloader {
                     start.setEnabled(false);
                     start.setVisibility(View.GONE);
 
+		    useAar.setEnabled(false);
+		    useJar.setEnabled(false);
+
                     pause.setEnabled(false);
                     pause.setVisibility(View.GONE);
 
@@ -579,9 +583,9 @@ public class LibraryDownloader {
                 .start(new OnDownloadListener() {
                     @Override
                     public void onDownloadComplete() {
-                        isAarAvailable = Use_Aar;
+                        isAarAvailable  = Use_Aar;
                         isAarDownloaded = Use_Aar;
-                        isJarAvailable = !isAarAvailable;
+                        isJarAvailable  = !isAarAvailable;
                         isJarDownloaded = !isAarDownloaded;
 
                         StringBuilder path2 = new StringBuilder();
