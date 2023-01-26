@@ -2,7 +2,7 @@
 <LinearLayout
     android:orientation="vertical"
     android:id="@id/contents"
-    android:background="#ffffffff"
+    android:background="@color/white"
     android:padding="16.0dip"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
