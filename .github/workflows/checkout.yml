@@ -4,7 +4,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  - uses: actions/checkout@v3
+  checkout:
+    name: update project if full commits
+    runs-on: ubuntu-latest
     with:
-        fetch-depth: 2
-  - run: git checkout HEAD^
+      - uses: actions/checkout@v3
+        fetch-depth: '1'
+      - run: git checkout HEAD^
