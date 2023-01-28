@@ -39,6 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        fetch-depth: '1'
       - name: Upgrading the Wrapper version
         run: | 
              ./gradlew wrapper --gradle-version 7.5.1 --distribution-type all
@@ -75,6 +76,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        fetch-depth: '1'
       - name: Upgrading the Wrapper version
         run: | 
              ./gradlew wrapper --gradle-version 7.5.1 --distribution-type all
