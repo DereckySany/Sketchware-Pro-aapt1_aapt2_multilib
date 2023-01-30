@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.util.Log;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -27,7 +28,6 @@ import com.android.tools.r8.D8;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.sketchware.remod.R;
-import com.sketchware.remod.Resources;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -43,6 +43,7 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import a.a.a.Dp;
 import a.a.a.bB;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.dx.command.dexer.Main;
@@ -52,6 +53,7 @@ import mod.hey.studios.lib.prdownloader.PRDownloader;
 import mod.hey.studios.lib.prdownloader.PRDownloader.OnDownloadListener;
 import mod.hey.studios.lib.prdownloader.PRDownloader.Status;
 import mod.hey.studios.util.Helper;
+import mod.jbk.build.BuildProgressReceiver;
 import mod.jbk.build.BuiltInLibraries;
 
 //changed in 6.3.0
@@ -87,7 +89,7 @@ public class LibraryDownloader {
 
     private static void mkdirs(File file, String str) {
         File file2 = new File(file, str);
-        if (!file2.exists()) //noinspection ResultOfMethodCallIgnored
+        if (!file2.exists())
             file2.mkdirs();
     }
 
@@ -186,18 +188,18 @@ public class LibraryDownloader {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutInflater inflater = context.getLayoutInflater();
-        View view = inflater.inflate(Resources.layout.library_downloader_dialog, null);
+        View view = inflater.inflate(R.layout.library_downloader_dialog, null);
 
-        final LinearLayout linear1 = view.findViewById(Resources.id.linear1);
-        final LinearLayout progressBarContainer = view.findViewById(Resources.id.linear3);
-        final ProgressBar progressbar1 = view.findViewById(Resources.id.progressbar1);
-        final LinearLayout libraryContainer = view.findViewById(Resources.id.linear4);
-        final TextView message = view.findViewById(Resources.id.textview3);
-        final LinearLayout start = view.findViewById(Resources.id.linear8);
-        final LinearLayout pause = view.findViewById(Resources.id.linear9);
-        final LinearLayout resume = view.findViewById(Resources.id.linear10);
-        final LinearLayout cancel = view.findViewById(Resources.id.linear11);
-        final EditText library = view.findViewById(Resources.id.edittext1);
+        final LinearLayout linear1 = view.findViewById(R.id.linear1);
+        final LinearLayout progressBarContainer = view.findViewById(R.id.linear3);
+        final ProgressBar progressbar1 = view.findViewById(R.id.progressbar1);
+        final LinearLayout libraryContainer = view.findViewById(R.id.linear4);
+        final TextView message = view.findViewById(R.id.textview3);
+        final LinearLayout start = view.findViewById(R.id.linear8);
+        final LinearLayout pause = view.findViewById(R.id.linear9);
+        final LinearLayout resume = view.findViewById(R.id.linear10);
+        final LinearLayout cancel = view.findViewById(R.id.linear11);
+        final EditText library = view.findViewById(R.id.edittext1);
         final ImageButton acao = view.findViewById(R.id.imageview1);
         final RadioGroup radiog = view.findViewById(R.id.choselibraryextesion);
         final RadioButton useAar = view.findViewById(R.id.liblaryformataar);
