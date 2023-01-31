@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.sketchware.remod.Resources;
+import com.sketchware.remod.R;
 import android.content.Intent;
 
 import com.besome.sketch.tools.CompileLogActivity;
@@ -70,7 +70,7 @@ public class CompileErrorSaver {
 
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle("Last compile log")
-                .setPositiveButton(Resources.string.common_word_ok, null)
+                .setPositiveButton(R.string.common_word_ok, null)
                 .setNegativeButton("Clear", (dialog1, which) -> {
                     deleteSavedLogs();
                     SketchwareUtil.toast("Cleared log");

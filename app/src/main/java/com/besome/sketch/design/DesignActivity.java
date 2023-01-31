@@ -111,7 +111,7 @@ import mod.jbk.diagnostic.MissingFileException;
 import mod.jbk.util.LogUtil;
 import mod.khaled.logcat.LogReaderActivity;
 
-public class DesignActivity extends BaseAppCompatActivity implements OnClickListener, uo {
+public class DesignActivity extends BaseAppCompatActivity implements OnClickListener {
 
     private static final int REQUEST_CODE_VIEW_MANAGER = 208;
     private static final int REQUEST_CODE_IMAGE_MANAGER = 209;
@@ -371,7 +371,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 Menu menu = popupMenu.getMenu();
 
                 menu.add(Menu.NONE, 1, Menu.NONE, "Build Settings");
-                if (FileUtil.isExistFile(projectPath.projectMyscPath)) {
+                if (FileUtil.isExistFile(q.projectMyscPath)) {
                 menu.add(Menu.NONE, 2, Menu.NONE, "Clean temporary files");
                 }
                 menu.add(Menu.NONE, 3, Menu.NONE, "Show last compile error");
