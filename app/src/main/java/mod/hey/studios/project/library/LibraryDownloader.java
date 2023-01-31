@@ -191,22 +191,23 @@ public class LibraryDownloader {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutInflater inflater = context.getLayoutInflater();
-        View view = inflater.inflate(Resources.layout.library_downloader_dialog, null);
+        View view = inflater.inflate(R.layout.library_downloader_dialog, null);
 
-        final LinearLayout linear1 = view.findViewById(Resources.id.linear1);
-        final LinearLayout progressBarContainer = view.findViewById(Resources.id.linear3);
-        final ProgressBar progressbar1 = view.findViewById(Resources.id.progressbar1);
-        final LinearLayout libraryContainer = view.findViewById(Resources.id.linear4);
-        final TextView message = view.findViewById(Resources.id.textview3);
-        final LinearLayout start = view.findViewById(Resources.id.linear8);
-        final LinearLayout pause = view.findViewById(RResources.id.linear9);
-        final LinearLayout resume = view.findViewById(Resources.id.linear10);
-        final LinearLayout cancel = view.findViewById(Resources.id.linear11);
-        final EditText library = view.findViewById(Resources.id.edittext1);
-        final ImageButton acao = view.findViewById(R.id.imageview1);
-        final RadioGroup radiog = view.findViewById(R.id.choselibraryextesion);
-        final RadioButton useAar = view.findViewById(R.id.liblaryformataar);
-        final RadioButton useJar = view.findViewById(R.id.liblaryformatjar);
+        final LinearLayout linear1 = view.findViewById(R.id.linear1);
+        final LinearLayout progressBarContainer = view.findViewById(R.id.linear3);
+        final ProgressBar progressbar1 = view.findViewById(R.id.progressbar1);
+        final LinearLayout libraryContainer = view.findViewById(R.id.linear4);
+        final TextView message = view.findViewById(R.id.textview3);
+        final LinearLayout start = view.findViewById(R.id.linear8);
+        final LinearLayout pause = view.findViewById(R.id.linear9);
+        final LinearLayout resume = view.findViewById(R.id.linear10);
+        final LinearLayout cancel = view.findViewById(R.id.linear11);
+        final EditText library = view.findViewById(R.id.edittext1);
+
+        final ImageButton acao = view.findViewById(Resources.id.imageview1);
+        final RadioGroup radiog = view.findViewById(Resources.id.choselibraryextesion);
+        final RadioButton useAar = view.findViewById(Resources.id.liblaryformataar);
+        final RadioButton useJar = view.findViewById(Resources.id.liblaryformatjar);
 
         linear1.removeView(progressBarContainer);
 
