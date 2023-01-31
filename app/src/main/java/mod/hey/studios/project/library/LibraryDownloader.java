@@ -285,10 +285,10 @@ public class LibraryDownloader {
                 dependency = dependency.replace("group:", ":");
                 dependency = dependency.replace("name:", ":");
                 dependency = dependency.replace("version:", ":");
-                } else (
+                } else {
                     SketchwareUtil.toastError("Invalid dependency");
                     library.setTextColor(0xFFf91010);
-                )
+                }
 
                 library.setText(dependency);
                 library.setTextColor(0xFF00E676);
