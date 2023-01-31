@@ -7,7 +7,7 @@ import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -22,12 +22,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 // clip board
+import android.content.Context;
+import android.content.ClipData;
 import android.content.ClipboardManager;
 //
 import com.android.tools.r8.D8;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.sketchware.remod.R;
+import com.sketchware.remod.Resources;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -43,7 +46,7 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import a.a.a.Dp;
+
 import a.a.a.bB;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.dx.command.dexer.Main;
@@ -188,18 +191,18 @@ public class LibraryDownloader {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutInflater inflater = context.getLayoutInflater();
-        View view = inflater.inflate(R.layout.library_downloader_dialog, null);
+        View view = inflater.inflate(Resources.layout.library_downloader_dialog, null);
 
-        final LinearLayout linear1 = view.findViewById(R.id.linear1);
-        final LinearLayout progressBarContainer = view.findViewById(R.id.linear3);
-        final ProgressBar progressbar1 = view.findViewById(R.id.progressbar1);
-        final LinearLayout libraryContainer = view.findViewById(R.id.linear4);
-        final TextView message = view.findViewById(R.id.textview3);
-        final LinearLayout start = view.findViewById(R.id.linear8);
-        final LinearLayout pause = view.findViewById(R.id.linear9);
-        final LinearLayout resume = view.findViewById(R.id.linear10);
-        final LinearLayout cancel = view.findViewById(R.id.linear11);
-        final EditText library = view.findViewById(R.id.edittext1);
+        final LinearLayout linear1 = view.findViewById(Resources.id.linear1);
+        final LinearLayout progressBarContainer = view.findViewById(Resources.id.linear3);
+        final ProgressBar progressbar1 = view.findViewById(Resources.id.progressbar1);
+        final LinearLayout libraryContainer = view.findViewById(Resources.id.linear4);
+        final TextView message = view.findViewById(Resources.id.textview3);
+        final LinearLayout start = view.findViewById(Resources.id.linear8);
+        final LinearLayout pause = view.findViewById(RResources.id.linear9);
+        final LinearLayout resume = view.findViewById(Resources.id.linear10);
+        final LinearLayout cancel = view.findViewById(Resources.id.linear11);
+        final EditText library = view.findViewById(Resources.id.edittext1);
         final ImageButton acao = view.findViewById(R.id.imageview1);
         final RadioGroup radiog = view.findViewById(R.id.choselibraryextesion);
         final RadioButton useAar = view.findViewById(R.id.liblaryformataar);
@@ -265,15 +268,24 @@ public class LibraryDownloader {
                 SketchwareUtil.toastError("Invalid dependency");
                 library.setTextColor(0xFFf91010);
             } else if (dependency.contains("implementation") || dependency.contains(":")) {
-
-                // removes all unnecessary text when we copy the library from dependency ex:
-                // implementation 'io.github.amrdeveloper:codeview:1.3.4'
+                if (dependency.contains("implementation") || dependency.contains(":")) {
+                /* clear Maven Gradle (Short) and Gradle (Kotlin) format:
+                   implementation("io.github.amrdeveloper:codeview:1.3.7") */
                 dependency = dependency.replace("implementation", "");
                 dependency = dependency.replace(" ", "");
                 dependency = dependency.replace("'", "");
                 dependency = dependency.replace("\"", "");
                 dependency = dependency.replace("(", "");
                 dependency = dependency.replace(")", "");
+                } else (dependency.contains("group:") || dependency.contains(",")) {
+                /* clear Maven Gradle format:
+                   implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' */
+                dependency = dependency.replace("implementation", "");
+                dependency = dependency.replace(",", "");
+                dependency = dependency.replace("group:", ":");
+                dependency = dependency.replace("name:", ":");
+                dependency = dependency.replace("version:", ":");
+                }
 
                 library.setText(dependency);
                 library.setTextColor(0xFF00E676);
