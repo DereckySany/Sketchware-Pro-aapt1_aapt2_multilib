@@ -118,7 +118,10 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
         /* Add Logcat Reader */
         menusLayout.addView(addDrawerItem(22,false,
                 R.drawable.icons8_app_components,R.string.design_drawer_menu_title_logcat_reader,R.string.design_drawer_menu_subtitle_logcat_reader));
-    }
+        /* Add Tools Manager */
+        menusLayout.addView(addDrawerItem(23,false,
+                R.drawable.icons8_app_attrs,R.string.system_information_developer_options,R.string.design_manager_block_detail_actionbar_title));
+        }
 
     @Override
     public void onClick(View view) {
@@ -200,6 +203,9 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
 
                     case 22:
                         designActivity.toLogReader();
+                        return;
+                    case 23:
+                        designActivity.toToolsManager()
                         return;
                     case 2:
                     default:

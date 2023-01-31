@@ -5,10 +5,13 @@ import android.os.Environment;
 import java.io.File;
 
 public class FilePathUtil {
-
+    private static final File SKETCHWARE = new File(Environment.getExternalStorageDirectory(),".sketchware/");
     private static final File SKETCHWARE_DATA = new File(Environment.getExternalStorageDirectory(), ".sketchware/data/");
     private static final File SKETCHWARE_LOCAL_LIBS = new File(Environment.getExternalStorageDirectory(), ".sketchware/libs/local_libs");
 
+    public static String getLastDebugCompileLog() {
+        return new File(SKETCHWARE, "debug.txt").getAbsolutePath();
+    }
     public static String getLastCompileLogPath(String sc_id) {
         return new File(SKETCHWARE_DATA, sc_id + "/compile_log").getAbsolutePath();
     }

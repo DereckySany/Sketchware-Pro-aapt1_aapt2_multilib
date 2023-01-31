@@ -87,6 +87,7 @@ import io.github.rosemoe.sora.widget.schemes.EditorColorScheme;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.editor.manage.permission.ManagePermissionActivity;
 import mod.agus.jcoderz.editor.manage.resource.ManageResourceActivity;
+import mod.agus.jcoderz.lib.FilePathUtil;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.hey.studios.activity.managers.assets.ManageAssetsActivity;
 import mod.hey.studios.activity.managers.java.ManageJavaActivity;
@@ -101,6 +102,7 @@ import mod.hey.studios.project.stringfog.StringfogHandler;
 import mod.hey.studios.util.Helper;
 import mod.hilal.saif.activities.android_manifest.AndroidManifestInjection;
 import mod.hilal.saif.activities.tools.ConfigActivity;
+import mod.hilal.saif.activities.tools.Tools;
 import mod.jbk.build.BuildProgressReceiver;
 import mod.jbk.code.CodeEditorColorSchemes;
 import mod.jbk.code.CodeEditorLanguages;
@@ -369,11 +371,16 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 Menu menu = popupMenu.getMenu();
 
                 menu.add(Menu.NONE, 1, Menu.NONE, "Build Settings");
+                if (FileUtil.isExistFile(projectPath.projectMyscPath)) {
                 menu.add(Menu.NONE, 2, Menu.NONE, "Clean temporary files");
+                }
                 menu.add(Menu.NONE, 3, Menu.NONE, "Show last compile error");
+                menu.add(Menu.NONE, 6, Menu.NONE, "Show Quick log");
                 menu.add(Menu.NONE, 5, Menu.NONE, "Show source code");
                 if (FileUtil.isExistFile(q.finalToInstallApkPath)) {
                     menu.add(Menu.NONE, 4, Menu.NONE, "Install last built APK");
+                if (FileUtil.isExistFile(FilePathUtil.getLastDebugCompileLog())) {
+                    menu.add(Menu.NONE, 7, Menu.NONE, "Show last compile Debug");
                 }
 
                 popupMenu.setOnMenuItemClickListener(item -> {
@@ -385,7 +392,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                         case 2:
                             new Thread(() -> {
                                 FileUtil.deleteFile(q.projectMyscPath);
-                                runOnUiThread(() ->
+                            runOnUiThread(() ->
                                         SketchwareUtil.toast("Done cleaning temporary files!"));
                             }).start();
                             break;
@@ -404,6 +411,12 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
 
                         case 5:
                             showCurrentActivitySrcCode();
+                            break;
+                        case 6:
+                            new CompileErrorSaver(sc_id).showDialog(DesignActivity.this);
+                            break;
+                        case 7:
+                            showLastedDebugCompilerlog();
                             break;
 
                         default:
@@ -712,6 +725,42 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         dialog.show();
     }
 
+    private void showLastedDebugCompilerlog() {
+        ProgressDialog progress = new ProgressDialog(DesignActivity.this);
+        progress.setMessage("Geting Debug code...");
+        progress.show();
+
+        new Thread(() -> {
+
+            final String source = FileUtil.readFile(new q().getLastDebugCompileLog());
+
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(DesignActivity.this)
+                    .setTitle(projectFileSelector.getFileName())
+                    .setPositiveButton("Dismiss", null);
+
+            runOnUiThread(() -> {
+                progress.dismiss();
+
+                CodeEditor editor = new CodeEditor(DesignActivity.this);
+                editor.setTypefaceText(Typeface.MONOSPACE);
+                editor.setEditable(false);
+                editor.setEditorLanguage(new JavaLanguage());
+                editor.setColorScheme(new EditorColorScheme());
+                editor.setTextSize(14);
+                editor.setHardwareAcceleratedDrawAllowed(true);
+                editor.setText(!source.equals("") ? source : "Compiler log no exist!");
+
+                AlertDialog dialog = dialogBuilder.create();
+                dialog.setView(editor,
+                        (int) getDip(8),
+                        (int) getDip(8),
+                        (int) getDip(8),
+                        (int) getDip(8));
+                dialog.show();
+            });
+        }).start();
+    }
+
     private void showCurrentActivitySrcCode() {
         ProgressDialog progress = new ProgressDialog(DesignActivity.this);
         progress.setMessage("Generating source...");
@@ -906,6 +955,10 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             }
         }
         launchActivity(SrcViewerActivity.class, REQUEST_CODE_SOURCE_CODE_VIEWER, new Pair<>("current", current));
+    }
+
+    void toToolsManager() {
+        launchActivity(Tools.class, null);
     }
 
     @SafeVarargs

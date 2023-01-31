@@ -184,5 +184,5 @@
 	<color name="tooltip_background_light">#e6ffffff</color>
 	<color name="transparent">#00ffffff</color>
 	<color name="white_bg">#ffffffff</color>
-        <color name="white">#ffffffff</color>
+    <color name="white">#ffffffff</color>
 </resources>
