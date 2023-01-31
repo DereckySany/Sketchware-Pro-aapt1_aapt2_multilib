@@ -111,7 +111,7 @@ import mod.jbk.diagnostic.MissingFileException;
 import mod.jbk.util.LogUtil;
 import mod.khaled.logcat.LogReaderActivity;
 
-public class DesignActivity extends BaseAppCompatActivity implements OnClickListener {
+public class DesignActivity extends BaseAppCompatActivity implements OnClickListener, uo {
 
     private static final int REQUEST_CODE_VIEW_MANAGER = 208;
     private static final int REQUEST_CODE_IMAGE_MANAGER = 209;
