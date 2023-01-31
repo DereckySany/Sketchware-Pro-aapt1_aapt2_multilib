@@ -282,7 +282,7 @@ public class LibraryDownloader {
                    implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' */
                 dependency = dependency.replace("implementation", "");
                 dependency = dependency.replace(",", "");
-                dependency = dependency.replace("group:", ":");
+                dependency = dependency.replace("group:", "");
                 dependency = dependency.replace("name:", ":");
                 dependency = dependency.replace("version:", ":");
                 } else {
