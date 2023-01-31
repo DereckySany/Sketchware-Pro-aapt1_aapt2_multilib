@@ -379,6 +379,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 menu.add(Menu.NONE, 5, Menu.NONE, "Show source code");
                 if (FileUtil.isExistFile(q.finalToInstallApkPath)) {
                     menu.add(Menu.NONE, 4, Menu.NONE, "Install last built APK");
+                }
                 if (FileUtil.isExistFile(FilePathUtil.getLastDebugCompileLog())) {
                     menu.add(Menu.NONE, 7, Menu.NONE, "Show last compile Debug");
                 }
@@ -412,9 +413,11 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                         case 5:
                             showCurrentActivitySrcCode();
                             break;
+
                         case 6:
                             new CompileErrorSaver(sc_id).showDialog(DesignActivity.this);
                             break;
+
                         case 7:
                             showLastedDebugCompilerlog();
                             break;
