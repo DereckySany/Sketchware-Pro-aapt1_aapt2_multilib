@@ -277,7 +277,7 @@ public class LibraryDownloader {
                 dependency = dependency.replace("\"", "");
                 dependency = dependency.replace("(", "");
                 dependency = dependency.replace(")", "");
-                } else (dependency.contains("group:") || dependency.contains(",")) {
+                } else if (dependency.contains("group:") || dependency.contains(",")) {
                 /* clear Maven Gradle format:
                    implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' */
                 dependency = dependency.replace("implementation", "");
@@ -285,7 +285,10 @@ public class LibraryDownloader {
                 dependency = dependency.replace("group:", ":");
                 dependency = dependency.replace("name:", ":");
                 dependency = dependency.replace("version:", ":");
-                }
+                } else (
+                    SketchwareUtil.toastError("Invalid dependency");
+                    library.setTextColor(0xFFf91010);
+                )
 
                 library.setText(dependency);
                 library.setTextColor(0xFF00E676);
