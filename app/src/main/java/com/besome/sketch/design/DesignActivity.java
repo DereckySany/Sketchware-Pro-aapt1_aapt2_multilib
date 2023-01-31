@@ -735,7 +735,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
 
         new Thread(() -> {
 
-            final String source = FileUtil.readFile(new q().getLastDebugCompileLog());
+            final String source = FileUtil.readFile(new FilePathUtil.getLastDebugCompileLog());
 
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(DesignActivity.this)
                     .setTitle(projectFileSelector.getFileName())
