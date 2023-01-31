@@ -30,7 +30,6 @@ import com.android.tools.r8.D8;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.sketchware.remod.R;
-import com.sketchware.remod.Resources;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -204,10 +203,10 @@ public class LibraryDownloader {
         final LinearLayout cancel = view.findViewById(R.id.linear11);
         final EditText library = view.findViewById(R.id.edittext1);
 
-        final ImageButton acao = view.findViewById(Resources.id.imageview1);
-        final RadioGroup radiog = view.findViewById(Resources.id.choselibraryextesion);
-        final RadioButton useAar = view.findViewById(Resources.id.liblaryformataar);
-        final RadioButton useJar = view.findViewById(Resources.id.liblaryformatjar);
+        final ImageButton acao = view.findViewById(R.id.imageview1);
+        final RadioGroup radiog = view.findViewById(R.id.choselibraryextesion);
+        final RadioButton useAar = view.findViewById(R.id.liblaryformataar);
+        final RadioButton useJar = view.findViewById(R.id.liblaryformatjar);
 
         linear1.removeView(progressBarContainer);
 
