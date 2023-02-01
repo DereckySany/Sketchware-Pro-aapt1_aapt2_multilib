@@ -78,8 +78,8 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/transparent"
 				android:layout_marginRight="5dp"
-				android:src="@drawable/ic_content_paste_grey600_24dp"
-				android:scaleType="centerInside" />
+				android:src="@drawable/ic_content_paste_grey"
+				android:scaleType="center" />
 		</LinearLayout>
     <LinearLayout
         android:gravity="top"

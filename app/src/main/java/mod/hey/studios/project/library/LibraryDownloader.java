@@ -238,9 +238,9 @@ public class LibraryDownloader {
             public void onTextChanged(CharSequence _param1, int _param2, int _param3, int _param4) {
                 final String _charSeq = _param1.toString();
                 if (_charSeq.length() > 0) {
-                    acao.setImageResource(R.drawable.icon_delete);
+                    acao.setImageResource(R.drawable.ic_delete_grey);
                 } else {
-                    acao.setImageResource(R.drawable.ic_content_paste_grey600_24dp);
+                    acao.setImageResource(R.drawable.ic_content_paste_grey);
                 }
             }
 
