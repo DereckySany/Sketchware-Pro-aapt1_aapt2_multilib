@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<color name="abc_input_method_navigation_guard">@android:color/black</color>
-	<color name="abc_search_url_text_normal">#ff36befe</color>
+	<color name="abc_search_url_text_normal">#ff008dcd</color>
 	<color name="abc_search_url_text_pressed">@android:color/black</color>
 	<color name="abc_search_url_text_selected">@android:color/black</color>
 	<color name="accent_material_dark">@color/material_deep_teal_200</color>
@@ -28,17 +28,17 @@
 	<color name="cardview_light_background">#ffffffff</color>
 	<color name="cardview_shadow_end_color">#03000000</color>
 	<color name="cardview_shadow_start_color">#37000000</color>
-	<color name="colorAccent">#ff36befe</color>
-	<color name="colorBottomBarSW">#ff36befe</color>
+	<color name="colorAccent">#ff008dcd</color>
+	<color name="colorBottomBarSW">#ff008dcd</color>
 	<color name="colorHeader">@color/colorPrimary</color>
-	<color name="colorPrimary">#ff36befe</color>
-	<color name="colorPrimaryDark">#ff36befe</color>
-	<color name="color_accent">#ff36befe</color>
+	<color name="colorPrimary">#ff008dcd</color>
+	<color name="colorPrimaryDark">#ff008dcd</color>
+	<color name="color_accent">#ff008dcd</color>
 	<color name="color_btn_blue_highlight">#ff005e8a</color>
-	<color name="color_btn_blue_normal">#ff36befe</color>
+	<color name="color_btn_blue_normal">#ff008dcd</color>
 	<color name="color_btn_green_highlight">#ff1d7a73</color>
 	<color name="color_btn_ltblue_highlight">#ff0b96d9</color>
-	<color name="color_btn_ltblue_normal">#ff36befe</color>
+	<color name="color_btn_ltblue_normal">#ff008dcd</color>
 	<color name="color_btn_ltorange_dark">#ffff951b</color>
 	<color name="color_btn_ltorange_highlight">#ffffa43a</color>
 	<color name="color_btn_ltorange_normal">#ffffb055</color>
@@ -47,12 +47,12 @@
 	<color name="color_chk_white_highlight">#ffffccbc</color>
 	<color name="color_chk_white_normal">#fff5f5f5</color>
 	<color name="color_control_highlight">#20008dcd</color>
-	<color name="color_control_normal">#ff36befe</color>
-	<color name="color_primary">#ff36befe</color>
+	<color name="color_control_normal">#ff008dcd</color>
+	<color name="color_primary">#ff008dcd</color>
 	<color name="color_primary_alpha">#bb008dcd</color>
-	<color name="color_primary_dark">#ff0084c2</color>
+	<color name="color_primary_dark">#ff008dcd</color>
 	<color name="color_ripple">#b2000000</color>
-	<color name="color_secondary">#ff36befe</color>
+	<color name="color_secondary">#ff008dcd</color>
 	<color name="common_google_signin_btn_text_dark_default">@android:color/white</color>
 	<color name="common_google_signin_btn_text_dark_disabled">#1f000000</color>
 	<color name="common_google_signin_btn_text_dark_focused">@android:color/black</color>
@@ -63,8 +63,8 @@
 	<color name="common_google_signin_btn_text_light_pressed">#de000000</color>
 	<color name="darkGrey">#ff272822</color>
 	<color name="design_bottom_navigation_shadow_color">#14000000</color>
-	<color name="design_default_color_primary">#ff36befe</color>
-	<color name="design_default_color_primary_dark">#ff36befe</color>
+	<color name="design_default_color_primary">#ff008dcd</color>
+	<color name="design_default_color_primary_dark">#ff008dcd</color>
 	<color name="design_fab_shadow_end_color">@android:color/transparent</color>
 	<color name="design_fab_shadow_mid_color">#14000000</color>
 	<color name="design_fab_shadow_start_color">#44000000</color>
@@ -75,7 +75,7 @@
 	<color name="design_menu_bg">#ffffffff</color>
 	<color name="design_menu_text_color">#ff000000</color>
 	<color name="design_snackbar_background_color">#ff323232</color>
-	<color name="design_tab_background">#ff36befe</color>
+	<color name="design_tab_background">#ff008dcd</color>
 	<color name="design_tab_indicator_color">#ffffc107</color>
 	<color name="design_tab_selected_text_color">#ffffffff</color>
 	<color name="design_tab_text_color">#ffa8cde9</color>
@@ -96,8 +96,8 @@
 	<color name="list_selected_background">#20008dcd</color>
 	<color name="main_tab_background">#ffffffff</color>
 	<color name="main_tab_indicator_color">#ff71bce9</color>
-	<color name="main_tab_selected_text_color">#ff36befe</color>
-	<color name="main_tab_text_color">#ff36befe</color>
+	<color name="main_tab_selected_text_color">#ff008dcd</color>
+	<color name="main_tab_text_color">#ff008dcd</color>
 	<color name="material_blue_grey_800">#ff37474f</color>
 	<color name="material_blue_grey_900">#ff263238</color>
 	<color name="material_blue_grey_950">#ff21272b</color>
@@ -147,7 +147,7 @@
 	<color name="scolor_bg_02">#fff1f4fb</color>
 	<color name="scolor_black_01">#ff1d2129</color>
 	<color name="scolor_black_02">#ff757575</color>
-	<color name="scolor_blue_01">#ff36befe</color>
+	<color name="scolor_blue_01">#ff008dcd</color>
 	<color name="scolor_dark_yellow_01">#ffff8700</color>
 	<color name="scolor_green_01">#ff52f55c</color>
 	<color name="scolor_green_02">#ff74f37c</color>
@@ -162,7 +162,7 @@
 	<color name="scolor_sl_01">#ff1d2129</color>
 	<color name="scolor_sl_02">#ffffb055</color>
 	<color name="scolor_sl_03">#ffde0000</color>
-	<color name="scolor_sl_04">#ff36befe</color>
+	<color name="scolor_sl_04">#ff008dcd</color>
 	<color name="scolor_yellow_01">#fff1c40f</color>
 	<color name="scratch_end_gradient">#ffd0f1ff</color>
 	<color name="scratch_start_gradient">#ffd0f1ff</color>
@@ -171,7 +171,7 @@
 	<color name="secondary_text_disabled_material_dark">#36ffffff</color>
 	<color name="secondary_text_disabled_material_light">#24000000</color>
 	<color name="swipe_refresh">#ffffffff</color>
-	<color name="swipe_refresh_bg">#ff36befe</color>
+	<color name="swipe_refresh_bg">#ff008dcd</color>
 	<color name="switch_thumb_disabled_material_dark">#ff616161</color>
 	<color name="switch_thumb_disabled_material_light">#ffbdbdbd</color>
 	<color name="switch_thumb_normal_material_dark">#ffbdbdbd</color>
