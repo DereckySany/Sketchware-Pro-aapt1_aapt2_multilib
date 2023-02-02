@@ -30,6 +30,8 @@ import com.android.tools.r8.D8;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.sketchware.remod.R;
+import com.google.android.material.snackbar.Snackbar;
+
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -894,7 +896,16 @@ public class LibraryDownloader {
         protected void onPostExecute(String s) {
             if (success) {
                 // make a Toast 
-                bB.a(context, "The library has been downloaded and imported to local libraries successfully.\n" + libName.toString(), 50).show();
+                bB.a(context, "The library has been downloaded and imported to local libraries successfully.", 10).show();
+                Snackbar snackbar = Snackbar.a(coordinatorLayout, "Library: " + libName.getLastSegment().toString(), -2 /* BaseTransientBottomBar.LENGTH_INDEFINITE */);
+                snackbar.a(Helper.getResString(R.string.common_word_show), v -> {
+                    snackbar.c();
+                    // to imprementation go to library add recently
+                });
+                /* Set the text color to green */
+                snackbar.f(Color.GREEN);
+                snackbar.n();
+
                 listener.onComplete();
             } else {
                 bB.a(context, "Dexing failed: " + s, 5).show();

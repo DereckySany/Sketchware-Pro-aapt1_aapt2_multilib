@@ -159,7 +159,11 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
             // DrawerLayout#closeDrawers()
             drawerLayout.b();
         } else {
-            finish();
+            if ( Build.VERSION_SDK_INT < 23 ){
+                finish();
+            } else {
+                finishAndRemoveTask();
+            }
         }
     }
 

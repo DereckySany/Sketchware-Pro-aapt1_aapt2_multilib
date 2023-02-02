@@ -2118,9 +2118,7 @@
         <item name="android:windowFullscreen">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowActivityTransitions">true</item>   
     </style>
 
     <style name="Theme.AppCompat.Light.NoActionBar.Translucent" parent="@style/AppTheme">
@@ -2130,9 +2128,7 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowActivityTransitions">true</item>   
     </style>
 
     <style name="Theme.AppCompat.Light.NoActionBar.Translucent.FullScreen" parent="@style/AppTheme">
@@ -2142,9 +2138,7 @@
         <item name="android:windowFullscreen">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowActivityTransitions">true</item>   
     </style>
 
     <style name="Theme.AppCompat.NoActionBar" parent="@style/Theme.AppCompat">
@@ -2156,6 +2150,7 @@
         <item name="android:colorBackground">@android:color/white</item>
         <item name="android:windowBackground">@android:color/white</item>
         <item name="android:windowIsTranslucent">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="Theme.AppInvite.Preview.Base" parent="@android:style/Theme.Material.Light.DialogWhenLarge.NoActionBar" />
@@ -2193,9 +2188,7 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:backgroundDimEnabled">false</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowActivityTransitions">true</item>   
+        <item name="android:statusBarColor">@android:color/transparent</item> 
     </style>
 
     <style name="Theme.MaterialComponents" parent="@style/Base.Theme.MaterialComponents" />
@@ -2331,9 +2324,7 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowActionBar">false</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowActivityTransitions">true</item>   
+        <item name="android:statusBarColor">@android:color/transparent</item> 
     </style>
 
     <style name="Widget.AppCompat.ActionBar" parent="@style/Base.Widget.AppCompat.ActionBar" />
@@ -2825,6 +2816,7 @@
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:windowSoftInputMode">adjustPan</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="seekbarGreen" parent="@style/Widget.AppCompat.SeekBar">
