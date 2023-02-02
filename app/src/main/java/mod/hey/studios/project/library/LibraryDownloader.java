@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.graphics.Color;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,6 +27,7 @@ import android.content.Context;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 //
+
 import com.android.tools.r8.D8;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
@@ -897,7 +899,7 @@ public class LibraryDownloader {
             if (success) {
                 // make a Toast 
                 bB.a(context, "The library has been downloaded and imported to local libraries successfully.", 10).show();
-                Snackbar snackbar = Snackbar.a(coordinatorLayout, "Library: " + libName.getLastSegment().toString(), -2 /* BaseTransientBottomBar.LENGTH_INDEFINITE */);
+                Snackbar snackbar = Snackbar.a(coordinatorLayout, "Library: " + libName.toString().getLastPathSegment(), -2 ); /* BaseTransientBottomBar.LENGTH_INDEFINITE */
                 snackbar.a(Helper.getResString(R.string.common_word_show), v -> {
                     snackbar.c();
                     // to imprementation go to library add recently
