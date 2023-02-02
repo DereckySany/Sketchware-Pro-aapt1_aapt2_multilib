@@ -263,14 +263,14 @@ public class LibraryDownloader {
 
             if (dependency.isEmpty()) {
                 SketchwareUtil.toastError("Dependency can't be empty");
-                library.setTextColor(0xFFFFFFFF);
+                library.setTextColor(0xFF000000);
             } else if (!dependency.contains(":")) {
                 SketchwareUtil.toastError("Invalid dependency");
                 library.setTextColor(0xFFf91010);
             } else if (dependency.contains("implementation") || dependency.contains(":")) {
                 if (dependency.contains("implementation") || dependency.contains(":")) {
                 /* clear Maven Gradle (Short) and Gradle (Kotlin) format:
-                   implementation("io.github.amrdeveloper:codeview:1.3.7") */
+                   implementation ("io.github.amrdeveloper:codeview:1.3.7") */
                 dependency = dependency.replace("implementation", "");
                 dependency = dependency.replace(" ", "");
                 dependency = dependency.replace("'", "");
@@ -281,6 +281,8 @@ public class LibraryDownloader {
                 /* clear Maven Gradle format:
                    implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' */
                 dependency = dependency.replace("implementation", "");
+                dependency = dependency.replace(" ", "");
+                dependency = dependency.replace("'", "");
                 dependency = dependency.replace(",", "");
                 dependency = dependency.replace("group:", "");
                 dependency = dependency.replace("name:", ":");
@@ -444,11 +446,15 @@ public class LibraryDownloader {
                 });
             }
         } catch (Exception e) {
-            progressDialog.setMessage(e.toString());
-            progressDialog.wait(1000);
-            progressDialog.dismiss();
-//            e.printStackTrace();
-//            throw e;
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.setMessage(e.toString());
+                progressDialog.wait(1000);
+                progressDialog.dismiss();
+            } else {
+                progressDialog.dismiss();
+                e.printStackTrace();
+//              throw e;
+            }      
         }
     }
 
@@ -887,6 +893,7 @@ public class LibraryDownloader {
         @Override
         protected void onPostExecute(String s) {
             if (success) {
+                // make a Toast 
                 bB.a(context, "The library has been downloaded and imported to local libraries successfully.\n" + libName.toString(), 50).show();
                 listener.onComplete();
             } else {
