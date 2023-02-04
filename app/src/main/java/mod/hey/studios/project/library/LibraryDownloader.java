@@ -418,7 +418,7 @@ public class LibraryDownloader {
 
     private void _jar2dex(String _path) throws Exception {
         // 6.3.0
-        try {
+        // try {
             if (use_d8) {
                 File libs = new File(context.getFilesDir(), "libs");
 
@@ -454,7 +454,7 @@ public class LibraryDownloader {
                         _path
                 });
             }
-        } catch (Exception e) {
+      /*  } catch (Exception e) {
             if (progressDialog != null && progressDialog.isShowing()) {
                 progressDialog.setMessage(e.toString());
                 progressDialog.wait(1000);
@@ -462,9 +462,9 @@ public class LibraryDownloader {
             } else {
                 progressDialog.dismiss();
                 e.printStackTrace();
-//              throw e;
+                throw e;
             }      
-        }
+        } */
     }
 
     private void _unZipFile(String str, String str2) {
