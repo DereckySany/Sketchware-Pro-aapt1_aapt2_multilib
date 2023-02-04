@@ -273,7 +273,7 @@ public class LibraryDownloader {
                 library.setTextColor(0xFFf91010);
             } else if (dependency.contains("implementation") || dependency.contains(":")) {             
 	        if (dependency.contains("group:") || dependency.contains(",")) {
-                SketchwareUtil.toastError("Maven Gradle");
+                SketchwareUtil.toast("Maven Gradle");
 		/* clear Maven Gradle format:
 		implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' */
 		dependency = dependency.replace("implementation", "");
@@ -284,7 +284,7 @@ public class LibraryDownloader {
 		dependency = dependency.replace("version:", ":");   
 		dependency = dependency.replace(" ", "");       
 	        } else if (dependency.contains("implementation") || dependency.contains(":")) {
-                SketchwareUtil.toastError("Maven Gradle (Short), Gradle (Kotlin) or buildr");
+                SketchwareUtil.toast("Maven Gradle (Short), Gradle (Kotlin) or buildr");
 	        /* clear Maven Gradle (Short) and Gradle (Kotlin) format:
 		implementation ("io.github.amrdeveloper:codeview:1.3.7") */
 		dependency = dependency.replace("implementation", "");
