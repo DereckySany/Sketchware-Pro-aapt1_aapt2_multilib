@@ -426,7 +426,7 @@ public class LibraryDownloader {
                 cmd.add("--intermediate");
 
                 cmd.add("--lib");
-                cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar"));
+                cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
                 // cmd.add(new File(libs, "android.jar").getAbsolutePath());
 
                 cmd.add("--classpath");
