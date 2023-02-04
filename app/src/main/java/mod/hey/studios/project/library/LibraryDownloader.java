@@ -274,25 +274,25 @@ public class LibraryDownloader {
             } else if (dependency.contains("implementation") || dependency.contains(":")) {             
 	        if (dependency.contains("group:") || dependency.contains(",")) {
                 SketchwareUtil.toast("Maven Gradle");
-		/* clear Maven Gradle format:
-		implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' */
-		dependency = dependency.replace("implementation", "");
-		dependency = dependency.replace("\'", "");
-		dependency = dependency.replace(",", "");
-		dependency = dependency.replace("group:", "");
-		dependency = dependency.replace("name:", ":");
-		dependency = dependency.replace("version:", ":");   
-		dependency = dependency.replace(" ", "");       
+                /* clear Maven Gradle format:
+                implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' */
+                dependency = dependency.replace("implementation", "");
+                dependency = dependency.replace("\'", "");
+                dependency = dependency.replace(",", "");
+                dependency = dependency.replace("group:", "");
+                dependency = dependency.replace("name:", ":");
+                dependency = dependency.replace("version:", ":");   
+                dependency = dependency.replace(" ", "");       
 	        } else if (dependency.contains("implementation") || dependency.contains(":")) {
                 SketchwareUtil.toast("Maven Gradle (Short), Gradle (Kotlin) or buildr");
 	        /* clear Maven Gradle (Short) and Gradle (Kotlin) format:
-		implementation ("io.github.amrdeveloper:codeview:1.3.7") */
-		dependency = dependency.replace("implementation", "");
-		dependency = dependency.replace(" ", "");
-		dependency = dependency.replace("\'", "");
-		dependency = dependency.replace("\"", "");
-		dependency = dependency.replace("(", "");
-		dependency = dependency.replace(")", "");  
+                implementation ("io.github.amrdeveloper:codeview:1.3.7") */
+                dependency = dependency.replace("implementation", "");
+                dependency = dependency.replace(" ", "");
+                dependency = dependency.replace("\'", "");
+                dependency = dependency.replace("\"", "");
+                dependency = dependency.replace("(", "");
+                dependency = dependency.replace(")", "");  
              // buildr format
                 dependency = dependency.replace(":jar:", ":");      
                 dependency = dependency.replace(":aar:", ":");
@@ -418,27 +418,28 @@ public class LibraryDownloader {
 
     private void _jar2dex(String _path) throws Exception {
         // 6.3.0
-        // try {
             if (use_d8) {
-                File libs = new File(context.getFilesDir(), "libs");
+                // File libs = new File(context.getFilesDir(), "libs");
 
-                ArrayList<String> cm = new ArrayList<>();
-                cm.add("--release");
-                cm.add("--intermediate");
+                ArrayList<String> cmd = new ArrayList<>();
+                cmd.add("--release");
+                cmd.add("--intermediate");
 
-                cm.add("--lib");
-                cm.add(new File(libs, "android.jar").getAbsolutePath());
+                cmd.add("--lib");
+                cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar"));
+                // cmd.add(new File(libs, "android.jar").getAbsolutePath());
 
-                cm.add("--classpath");
-                cm.add(new File(libs, "core-lambda-stubs.jar").getAbsolutePath());
+                cmd.add("--classpath");
+                cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
+                // cmd.add(new File(libs, "core-lambda-stubs.jar").getAbsolutePath());
 
-                cm.add("--output");
-                cm.add(new File(_path).getParentFile().getAbsolutePath());
+                cmd.add("--output");
+                cmd.add(new File(_path).getParentFile().getAbsolutePath());
 
                 // Input
-                cm.add(_path);
+                cmd.add(_path);
                 // run D8 with list commands
-                D8.main(cm.toArray(new String[0]));
+                D8.main(cmd.toArray(new String[0]));
             } else {
                 // 6.3.0 fix2
                 Main.clearInternTables();
@@ -454,17 +455,6 @@ public class LibraryDownloader {
                         _path
                 });
             }
-      /*  } catch (Exception e) {
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.setMessage(e.toString());
-                progressDialog.wait(1000);
-                progressDialog.dismiss();
-            } else {
-                progressDialog.dismiss();
-                e.printStackTrace();
-                throw e;
-            }      
-        } */
     }
 
     private void _unZipFile(String str, String str2) {
