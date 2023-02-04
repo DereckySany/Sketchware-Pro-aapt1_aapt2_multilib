@@ -899,10 +899,10 @@ public class LibraryDownloader {
             if (success) {
                 // make a Toast 
                 bB.a(context, "The library has been downloaded and imported to local libraries successfully.\n"  + libName.toString(), 60).show();
-              /**  Snackbar snackbar = Snackbar.a(View, "Library: " + libName.toString(), -2 ); // BaseTransientBottomBar.LENGTH_INDEFINITE
+              /**  Snackbar snackbar = Snackbar.a(View, "Library: " + libName.toString(), -2 ); /* BaseTransientBottomBar.LENGTH_INDEFINITE */
                 snackbar.a(Helper.getResString(R.string.common_word_show), v -> {
                     snackbar.c();
-                    // to imprementation go to library add recently
+                    /* to imprementation go to library add recently */
                 });
                 /* Set the text color to green */
                 snackbar.f(Color.GREEN);
