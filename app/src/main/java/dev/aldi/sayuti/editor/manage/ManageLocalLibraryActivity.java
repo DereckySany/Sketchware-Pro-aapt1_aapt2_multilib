@@ -4,6 +4,7 @@ import static mod.SketchwareUtil.getDip;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -143,13 +144,14 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
             if (convertView == null) {
                 convertView = getLayoutInflater().inflate(R.layout.view_item_local_lib, parent, false);
             }
-
+            final LinearLayout indicator = convertView.findViewById(R.id.linear_content_indicator);
             final CheckBox enabled = convertView.findViewById(R.id.checkbox_content);
             enabled.setText(localLibraries.get(position));
             enabled.setOnClickListener(v -> {
                 String name = enabled.getText().toString();
 
                 String configPath = local_libs_path + name + "/config";
+                String versionPath = local_libs_path + name + "/version";
                 String resPath = local_libs_path + name + "/res";
                 String jarPath = local_libs_path + name + "/classes.jar";
                 String dexPath = local_libs_path + name + "/classes.dex";
@@ -180,6 +182,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                 if (FileUtil.isExistFile(assetsPath)) {
                     localLibrary.put("assetsPath", assetsPath);
                 }
+                setColorIdicator(indicator, configPath);
                 if (!enabled.isChecked()) {
                     int i = -1;
                     for (int j = 0; j < project_used_libs.size(); j++) {
@@ -226,6 +229,35 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                 popupMenu.show();
             });
             return convertView;
+        }
+        private void setColorIdicator(LinearLayout indicator, String configname) {
+            if (FileUtil.isExistFile(configname)) {
+                if (FileUtil.readFile(configname).getBytes().length > 0) {
+                    indicator.setBackground(new GradientDrawable() {
+                        public GradientDrawable getIns(int a, int b) {
+                            this.setCornerRadius(a);
+                            this.setColor(b);
+                            return this;
+                        }
+                    }.getIns((int) 15, 0xFF00E676));
+                } else {
+                    indicator.setBackground(new GradientDrawable() {
+                        public GradientDrawable getIns(int a, int b) {
+                            this.setCornerRadius(a);
+                            this.setColor(b);
+                            return this;
+                        }
+                    }.getIns((int) 15, 0xFFD50000));
+                }
+            } else {
+                indicator.setBackground(new GradientDrawable() {
+                    public GradientDrawable getIns(int a, int b) {
+                        this.setCornerRadius(a);
+                        this.setColor(b);
+                        return this;
+                    }
+                }.getIns((int) 15, 0xFF555555));
+            }
         }
     }
 }
