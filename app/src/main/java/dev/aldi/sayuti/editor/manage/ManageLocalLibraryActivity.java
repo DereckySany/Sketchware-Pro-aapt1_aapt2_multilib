@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -27,6 +29,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import a.a.a.aB;
+import a.a.a.xB;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.hey.studios.project.library.LibraryDownloader;
@@ -165,6 +169,9 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                 if (FileUtil.isExistFile(configPath)) {
                     localLibrary.put("packageName", FileUtil.readFile(configPath));
                 }
+                if (FileUtil.isExistFile(versionPath)) {
+                    localLibrary.put("packageVersion", FileUtil.readFile(versionPath));
+                }
                 if (FileUtil.isExistFile(resPath)) {
                     localLibrary.put("resPath", resPath);
                 }
@@ -220,17 +227,111 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
 
             convertView.findViewById(R.id.img_delete).setOnClickListener(v -> {
                 PopupMenu popupMenu = new PopupMenu(ManageLocalLibraryActivity.this, v);
-                popupMenu.getMenu().add(Menu.NONE, Menu.NONE, Menu.NONE, "Delete");
+
+                Menu menu = popupMenu.getMenu();
+                menu.add(Menu.NONE, 1, Menu.NONE, "Info");
+                menu.add(Menu.NONE, 2, Menu.NONE, "Rename");
+                menu.add(Menu.NONE, 3, Menu.NONE, "Delete");
+
                 popupMenu.setOnMenuItemClickListener(menuItem -> {
-                    FileUtil.deleteFile(local_libs_path.concat(enabled.getText().toString()));
-                    SketchwareUtil.toast("Deleted successfully");
-                    loadFiles();
+                    switch (menuItem.getTitle().toString()) {
+                        case "Info":
+                            final File pkgName = new File(local_libs_path.concat(enabled.getText().toString() + "/config"));
+                            final File pkgImport = new File(local_libs_path.concat(enabled.getText().toString() + "/version"));
+                            aB infodialog = new aB(ManageLocalLibraryActivity.this);
+                            infodialog.a(Resources.drawable.color_about_96);
+                            infodialog.b("Info library!");
+                            infodialog.a(enabled.isChecked() ? "This local library name:\n" : "This used local libraries for this project.:\n"
+                                    + enabled.getText().toString() + "\nPackage Name:\n"
+                                    + (pkgName.exists() && !isEmpty() ? FileUtil.readFile(pkgName.getAbsolutePath()) : "Not avaliable!")
+                                    + "\nImport Package Name:\n"
+                                    + (pkgImport.exists() && !isEmpty() ? FileUtil.readFile(pkgImport.getAbsolutePath()) : "Not avaliable!"));
+                            infodialog.b(xB.b().a(getApplicationContext(), Resources.string.common_word_ok), view -> {
+                                infodialog.dismiss();
+                            });
+                            infodialog.show();
+                            break;
+                        case "Rename":
+                            final AlertDialog realog = new AlertDialog.Builder(ManageLocalLibraryActivity.this).create();
+
+                            final View root = getLayoutInflater().inflate(Resources.layout.dialog_input_layout, null);
+                            final LinearLayout title = root.findViewById(R.id.dialoginputlayoutLinearLayout1);
+                            final TextInputLayout tilFilename = root.findViewById(R.id.dialoginputlayoutLinearLayout2);
+                            final EditText filename = root.findViewById(R.id.edittext_change_name);
+
+                            final View titleChildAt1 = title.getChildAt(1);
+                            if (titleChildAt1 instanceof TextView) {
+                                final TextView titleTextView = (TextView) titleChildAt1;
+                                titleTextView.setText("Rename local library");
+                            }
+
+                            tilFilename.setHint("New local library name");
+                            filename.setText(enabled.getText().toString());
+                            root.findViewById(R.id.text_cancel)
+                                    .setOnClickListener(Helper.getDialogDismissListener(realog));
+                            root.findViewById(R.id.text_save)
+                                    .setOnClickListener(view -> {
+                                        enabled.setChecked(false);
+                                        File input = new File(local_libs_path.concat(enabled.getText().toString()));
+                                        File output = new File(local_libs_path.concat(filename.getText().toString()));
+                                        if (!input.renameTo(output)) {
+                                            SketchwareUtil.toastError("Failed to rename library");
+                                        }
+                                        SketchwareUtil.toast("NOTE: Removed library from used local libraries");
+                                        realog.dismiss();
+                                    });
+                            realog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                            filename.requestFocus();
+                            realog.setView(root);
+                            realog.show();
+                            break;
+
+                        case "Delete":
+                            final AlertDialog deleteDialog = new AlertDialog.Builder(ManageLocalLibraryActivity.this).create();
+
+                            final View deleteRoot = getLayoutInflater().inflate(R.layout.dialog_delete_layout, null);
+                            final LinearLayout deleteTitle = deleteRoot.findViewById(R.id.dialogdeletelayoutLinearLayout1);
+                            final TextInputLayout deleteFileName = deleteRoot.findViewById(R.id.dialogdeletelayoutLinearLayout2);
+                            final EditText fileNameToDelete = deleteRoot.findViewById(R.id.edittext_delete_name);
+
+                            final View deleteTitleChildAt1 = deleteTitle.getChildAt(1);
+                            if (deleteTitleChildAt1 instanceof TextView) {
+                                final TextView deleteTitleTextView = (TextView) deleteTitleChildAt1;
+                                deleteTitleTextView.setText("Delete local library");
+                            }
+                            deleteFileName.setHint("That local library will be permanently removed!");
+                            fileNameToDelete.setText(enabled.getText().toString());
+                            fileNameToDelete.setEnabled(false);
+                            deleteRoot.findViewById(R.id.text_del_cancel)
+                                    .setOnClickListener(Helper.getDialogDismissListener(deleteDialog));
+                            deleteRoot.findViewById(R.id.text_del_delete)
+                                    .setOnClickListener(view -> {
+                                        enabled.setChecked(false);
+                                        final String lib = (local_libs_path + enabled.getText().toString());
+                                        deleteFile(lib);
+                                        loadFiles();
+                                        if (FileUtil.isExistFile(lib)) {
+                                            SketchwareUtil.toastError("Failed to rename library");
+                                        }
+                                        SketchwareUtil.toast("NOTE: Removed library from used local libraries");
+                                        deleteDialog.dismiss();
+                                    });
+                            deleteDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                            fileNameToDelete.requestFocus();
+                            deleteDialog.setView(deleteRoot);
+                            deleteDialog.show();
+                            break;
+
+                        default:
+                            return false;
+                    }
                     return true;
                 });
                 popupMenu.show();
             });
             return convertView;
         }
+
         private void setColorIdicator(LinearLayout indicator, String configname) {
             if (FileUtil.isExistFile(configname)) {
                 if (FileUtil.readFile(configname).getBytes().length > 0) {
