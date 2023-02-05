@@ -20,9 +20,12 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import com.sketchware.remod.R;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -239,14 +242,14 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                             final File pkgName = new File(local_libs_path.concat(enabled.getText().toString() + "/config"));
                             final File pkgImport = new File(local_libs_path.concat(enabled.getText().toString() + "/version"));
                             aB infodialog = new aB(ManageLocalLibraryActivity.this);
-                            infodialog.a(Resources.drawable.color_about_96);
+                            infodialog.a(R.drawable.color_about_96);
                             infodialog.b("Info library!");
                             infodialog.a(enabled.isChecked() ? "This local library name:\n" : "This used local libraries for this project.:\n"
                                     + enabled.getText().toString() + "\nPackage Name:\n"
                                     + (pkgName.exists() && !isEmpty() ? FileUtil.readFile(pkgName.getAbsolutePath()) : "Not avaliable!")
                                     + "\nImport Package Name:\n"
                                     + (pkgImport.exists() && !isEmpty() ? FileUtil.readFile(pkgImport.getAbsolutePath()) : "Not avaliable!"));
-                            infodialog.b(xB.b().a(getApplicationContext(), Resources.string.common_word_ok), view -> {
+                            infodialog.b(xB.b().a(getApplicationContext(), R.string.common_word_ok), view -> {
                                 infodialog.dismiss();
                             });
                             infodialog.show();
@@ -254,7 +257,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                         case "Rename":
                             final AlertDialog realog = new AlertDialog.Builder(ManageLocalLibraryActivity.this).create();
 
-                            final View root = getLayoutInflater().inflate(Resources.layout.dialog_input_layout, null);
+                            final View root = getLayoutInflater().inflate(R.layout.dialog_input_layout, null);
                             final LinearLayout title = root.findViewById(R.id.dialoginputlayoutLinearLayout1);
                             final TextInputLayout tilFilename = root.findViewById(R.id.dialoginputlayoutLinearLayout2);
                             final EditText filename = root.findViewById(R.id.edittext_change_name);
