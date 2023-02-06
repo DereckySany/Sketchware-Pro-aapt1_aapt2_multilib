@@ -300,7 +300,7 @@ public class LibraryDownloader {
                     SketchwareUtil.toastError("Invalid dependency");
                     library.setTextColor(0xFFf91010);
                 }
-
+                dependency.trim();
                 library.setText(dependency);
                 library.setTextColor(0xFF00E676);
 

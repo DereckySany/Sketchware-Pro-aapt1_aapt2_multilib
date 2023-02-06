@@ -134,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="100.0dip"
                 android:checked="true"
-                android:text=".aar"
+                android:text="aar"
                 android:layout_weight="1.0" />
             <RadioButton
                 android:textStyle="bold"
@@ -142,7 +142,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="100.0dip"
-                android:text=".jar"
+                android:text="jar"
                 android:layout_weight="1.0" />
         </RadioGroup>
     </LinearLayout>

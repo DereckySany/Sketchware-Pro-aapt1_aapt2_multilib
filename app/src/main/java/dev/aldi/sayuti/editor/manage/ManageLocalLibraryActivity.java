@@ -131,17 +131,24 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manage_permission);
 
+        LinearLayout searchViewContainer = findViewById(R.id.managepermissionLinearLayout1);
+//        searchViewContainer.setVisibility(View.GONE);
+        searchViewContainer.setBackgroundDrawable(getDrawable(R.drawable.bg_rectangle_white));
         listview = findViewById(R.id.main_content);
-        findViewById(R.id.managepermissionLinearLayout1).setVisibility(View.GONE);
-        initToolbar();
+        ViewGroup mainContent = (ViewGroup) searchViewContainer.getParent();
+        ViewGroup root = (ViewGroup) mainContent.getParent();
+        root.removeView(mainContent);
 
         if (getIntent().hasExtra("sc_id")) {
             String sc_id = getIntent().getStringExtra("sc_id");
             notAssociatedWithProject = sc_id.equals("system");
             configurationFilePath = FileUtil.getExternalStorageDir().concat("/.sketchware/data/").concat(sc_id.concat("/local_library"));
+            local_libs_path = FileUtil.getExternalStorageDir().concat("/.sketchware/libs/local_libs/");
+            initToolbar();
+            loadFiles();
+        } else {
+            finish();
         }
-        local_libs_path = FileUtil.getExternalStorageDir().concat("/.sketchware/libs/local_libs/");
-        loadFiles();
     }
 
     private void loadFiles() {
