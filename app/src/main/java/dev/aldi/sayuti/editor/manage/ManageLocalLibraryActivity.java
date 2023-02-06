@@ -304,7 +304,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                             aB infodialog = new aB(ManageLocalLibraryActivity.this);
                             infodialog.a(R.drawable.color_about_96);
                             infodialog.b("Info library!");
-                            infodialog.a(enabled.isChecked() ? "This local library name:\n" : "This used local libraries for this project.:\n"
+                            infodialog.a("This local library name:\n"
                                     + enabled.getText().toString() + "\nPackage Name:\n"
                                     + (pkgName.exists() && !isEmpty() ? FileUtil.readFile(pkgName.getAbsolutePath()) : "Not avaliable!")
                                     + "\nImport Package Name:\n"
