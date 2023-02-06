@@ -70,7 +70,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
         Helper.applyRippleToToolbarView(importLibrary_icon);
         importLibrary_icon.setOnClickListener(this);
 
-        if (notAssociatedWithProject) {
+        if (!notAssociatedWithProject) {
             ImageView reset = new ImageView(ManageLocalLibraryActivity.this);
             LinearLayout toolbar = (LinearLayout) back_icon.getParent();
             toolbar.addView(reset, 2);
@@ -103,7 +103,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                 .setNeutralButton("Cancel", null)
                 .show();
         } else if (RESET_LOCAL_LIBRARIES_TAG.equals(v.getTag())) {
-            if (notAssociatedWithProject) {
+            if (!notAssociatedWithProject) {
                 aB dialog = new aB(this);
                 dialog.a(R.drawable.rollback_96);
                 dialog.b("Reset libraries?");
