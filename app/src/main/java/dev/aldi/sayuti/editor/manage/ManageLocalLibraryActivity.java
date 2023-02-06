@@ -45,7 +45,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
 
     private boolean notAssociatedWithProject = false;
     private ListView listview;
-    private String local_lib_file = "";
+    private String configurationFilePath = "";
     private String local_libs_path = "";
     private ArrayList<HashMap<String, Object>> lookup_list = new ArrayList<>();
     private ArrayList<HashMap<String, Object>> project_used_libs = new ArrayList<>();
@@ -105,12 +105,12 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
         } else if (RESET_LOCAL_LIBRARIES_TAG.equals(v.getTag())) {
             if (notAssociatedWithProject) {
                 aB dialog = new aB(this);
-                dialog.a(Resources.drawable.rollback_96);
+                dialog.a(Range.drawable.rollback_96);
                 dialog.b("Reset libraries?");
                 dialog.a("This will reset all used local libraries for this project. Are you sure?");
-                dialog.a(xB.b().a(getApplicationContext(), Resources.string.common_word_cancel),
+                dialog.a(xB.b().a(getApplicationContext(), R.string.common_word_cancel),
                         Helper.getDialogDismissListener(dialog));
-                dialog.b(xB.b().a(getApplicationContext(), Resources.string.common_word_reset), view -> {
+                dialog.b(xB.b().a(getApplicationContext(), R.string.common_word_reset), view -> {
                     FileUtil.writeFile(configurationFilePath, "[]");
                     SketchwareUtil.toast("Successfully reset local libraries");
                     loadFiles();
@@ -138,7 +138,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
         if (getIntent().hasExtra("sc_id")) {
             String sc_id = getIntent().getStringExtra("sc_id");
             notAssociatedWithProject = sc_id.equals("system");
-            local_lib_file = FileUtil.getExternalStorageDir().concat("/.sketchware/data/").concat(sc_id.concat("/local_library"));
+            configurationFilePath = FileUtil.getExternalStorageDir().concat("/.sketchware/data/").concat(sc_id.concat("/local_library"));
         }
         local_libs_path = FileUtil.getExternalStorageDir().concat("/.sketchware/libs/local_libs/");
         loadFiles();
@@ -149,8 +149,8 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
         lookup_list.clear();
         if (!notAssociatedWithProject) {
             String fileContent;
-            if (!FileUtil.isExistFile(local_lib_file) || (fileContent = FileUtil.readFile(local_lib_file)).equals("")) {
-                FileUtil.writeFile(local_lib_file, "[]");
+            if (!FileUtil.isExistFile(configurationFilePath) || (fileContent = FileUtil.readFile(configurationFilePath)).equals("")) {
+                FileUtil.writeFile(configurationFilePath, "[]");
             } else {
                 project_used_libs = new Gson().fromJson(fileContent, Helper.TYPE_MAP_LIST);
             }
@@ -259,13 +259,13 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                     }
                     project_used_libs.add(localLibrary);
                 }
-                FileUtil.writeFile(local_lib_file, new Gson().toJson(project_used_libs));
+                FileUtil.writeFile(configurationFilePath, new Gson().toJson(project_used_libs));
             });
             setColorIdicator(indicator, configPath);
 
             enabled.setChecked(false);
             if (!notAssociatedWithProject) {
-                lookup_list = new Gson().fromJson(FileUtil.readFile(local_lib_file), Helper.TYPE_MAP_LIST);
+                lookup_list = new Gson().fromJson(FileUtil.readFile(configurationFilePath), Helper.TYPE_MAP_LIST);
                 for (HashMap<String, Object> localLibrary : lookup_list) {
                     if (enabled.getText().toString().equals(localLibrary.get("name").toString())) {
                         enabled.setChecked(true);
