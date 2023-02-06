@@ -53,22 +53,22 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
     private void initToolbar() {
         ImageView back_icon = findViewById(R.id.ig_toolbar_back);
         TextView title = findViewById(R.id.tx_toolbar_title);
-        ImageView import_library_icon = findViewById(R.id.ig_toolbar_load_file);
+        ImageView importLibrary_icon = findViewById(R.id.ig_toolbar_load_file);
 
         Helper.applyRippleToToolbarView(back_icon);
         back_icon.setOnClickListener(Helper.getBackPressedClickListener(this));
         
         title.setText("Local library Manager");
-        import_library_icon.setPadding(
+        importLibrary_icon.setPadding(
             (int) getDip(2), 
             (int) getDip(2), 
             (int) getDip(2), 
             (int) getDip(2)
         );
-        import_library_icon.setImageResource(R.drawable.download_80px);
-        import_library_icon.setVisibility(View.VISIBLE);
-        Helper.applyRippleToToolbarView(import_library_icon);
-        import_library_icon.setOnClickListener(this);
+        importLibrary_icon.setImageResource(R.drawable.download_80px);
+        importLibrary_icon.setVisibility(View.VISIBLE);
+        Helper.applyRippleToToolbarView(importLibrary_icon);
+        importLibrary_icon.setOnClickListener(this);
 
         if (notAssociatedWithProject) {
             ImageView reset = new ImageView(ManageLocalLibraryActivity.this);
@@ -77,7 +77,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
 
             reset.setTag(RESET_LOCAL_LIBRARIES_TAG);
             {
-                ViewGroup.LayoutParams layoutParams = importLibrary.getLayoutParams();
+                ViewGroup.LayoutParams layoutParams = importLibrary_icon.getLayoutParams();
                 if (layoutParams != null) {
                     reset.setLayoutParams(layoutParams);
                 }
