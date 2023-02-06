@@ -52,7 +52,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
 
     private void initToolbar() {
         ImageView back_icon = findViewById(R.id.ig_toolbar_back);
-        TextView title = findViewById(Resources.id.tx_toolbar_title);
+        TextView title = findViewById(R.id.tx_toolbar_title);
         ImageView import_library_icon = findViewById(R.id.ig_toolbar_load_file);
 
         Helper.applyRippleToToolbarView(back_icon);
@@ -91,7 +91,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == Resources.id.ig_toolbar_load_file) {
+        if (v.getId() == R.id.ig_toolbar_load_file) {
             new AlertDialog.Builder(this)
                 .setTitle("Dexer")
                 .setMessage("Would you like to use Dx or D8 to dex the library?\n" +
@@ -105,7 +105,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
         } else if (RESET_LOCAL_LIBRARIES_TAG.equals(v.getTag())) {
             if (notAssociatedWithProject) {
                 aB dialog = new aB(this);
-                dialog.a(Range.drawable.rollback_96);
+                dialog.a(R.drawable.rollback_96);
                 dialog.b("Reset libraries?");
                 dialog.a("This will reset all used local libraries for this project. Are you sure?");
                 dialog.a(xB.b().a(getApplicationContext(), R.string.common_word_cancel),
@@ -201,6 +201,10 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
             final LinearLayout indicator = convertView.findViewById(R.id.linear_content_indicator);
             final CheckBox enabled = convertView.findViewById(R.id.checkbox_content);
             enabled.setText(localLibraries.get(position));
+
+            String libname = enabled.getText().toString();
+            String libconfig = local_libs_path + libname + "/config";
+            
             enabled.setOnClickListener(v -> {
                 String name = enabled.getText().toString();
 
@@ -261,7 +265,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                 }
                 FileUtil.writeFile(configurationFilePath, new Gson().toJson(project_used_libs));
             });
-            setColorIdicator(indicator, configPath);
+            setColorIdicator(indicator, libconfig);
 
             enabled.setChecked(false);
             if (!notAssociatedWithProject) {
