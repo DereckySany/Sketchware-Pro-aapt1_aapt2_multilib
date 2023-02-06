@@ -138,6 +138,8 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
         ViewGroup mainContent = (ViewGroup) searchViewContainer.getParent();
         ViewGroup root = (ViewGroup) mainContent.getParent();
         root.removeView(mainContent);
+        root.addView(mainContent);
+
 
         if (getIntent().hasExtra("sc_id")) {
             String sc_id = getIntent().getStringExtra("sc_id");
