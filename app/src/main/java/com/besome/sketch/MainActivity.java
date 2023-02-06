@@ -326,6 +326,7 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
             }
             preference.a("sortBy", sortValue, true);
             dialog.dismiss();
+            n();
         });
         dialog.setNegativeButton("Cancel", view -> dialog.dismiss());
         dialog.show();
@@ -340,14 +341,9 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.sortProject) {
-            if (!mB.a()) {
-                showProjectSortingDialog();
-            }
-            //Refresh projects
-            n();
+            if (!mB.a()) showProjectSortingDialog();
         }
-        // ActionBarDrawerToggle#onOptionsItemSelected(MenuItem)
-        if (drawerToggle.a(item)) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         } else {
             return super.onOptionsItemSelected(item);
