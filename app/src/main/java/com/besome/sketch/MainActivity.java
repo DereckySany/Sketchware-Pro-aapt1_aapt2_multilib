@@ -343,7 +343,8 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
         if (item.getItemId() == R.id.sortProject) {
             if (!mB.a()) showProjectSortingDialog();
         }
-        if (drawerToggle.onOptionsItemSelected(item)) {
+        //drawerToggle.onOptionsItemSelected(item)
+        if (drawerToggle.a(item)) {
             return true;
         } else {
             return super.onOptionsItemSelected(item);
