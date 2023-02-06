@@ -41,6 +41,8 @@ import mod.hey.studios.util.Helper;
 
 public class ManageLocalLibraryActivity extends Activity implements View.OnClickListener, LibraryDownloader.OnCompleteListener {
 
+    private static final String RESET_LOCAL_LIBRARIES_TAG = "reset_local_libraries";
+
     private boolean notAssociatedWithProject = false;
     private ListView listview;
     private String local_lib_file = "";
@@ -49,21 +51,48 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
     private ArrayList<HashMap<String, Object>> project_used_libs = new ArrayList<>();
 
     private void initToolbar() {
-        ((TextView) findViewById(R.id.tx_toolbar_title)).setText("Local library Manager");
         ImageView back_icon = findViewById(R.id.ig_toolbar_back);
+        TextView title = findViewById(Resources.id.tx_toolbar_title);
+        ImageView import_library_icon = findViewById(R.id.ig_toolbar_load_file);
+
         Helper.applyRippleToToolbarView(back_icon);
         back_icon.setOnClickListener(Helper.getBackPressedClickListener(this));
-        ImageView import_library_icon = findViewById(R.id.ig_toolbar_load_file);
-        import_library_icon.setPadding((int) getDip(2), (int) getDip(2), (int) getDip(2), (int) getDip(2));
+        
+        title.setText("Local library Manager");
+        import_library_icon.setPadding(
+            (int) getDip(2), 
+            (int) getDip(2), 
+            (int) getDip(2), 
+            (int) getDip(2)
+        );
         import_library_icon.setImageResource(R.drawable.download_80px);
         import_library_icon.setVisibility(View.VISIBLE);
         Helper.applyRippleToToolbarView(import_library_icon);
         import_library_icon.setOnClickListener(this);
+
+        if (notAssociatedWithProject) {
+            ImageView reset = new ImageView(ManageLocalLibraryActivity.this);
+            LinearLayout toolbar = (LinearLayout) back_icon.getParent();
+            toolbar.addView(reset, 2);
+
+            reset.setTag(RESET_LOCAL_LIBRARIES_TAG);
+            {
+                ViewGroup.LayoutParams layoutParams = importLibrary.getLayoutParams();
+                if (layoutParams != null) {
+                    reset.setLayoutParams(layoutParams);
+                }
+            }
+            reset.setImageResource(R.drawable.ic_restore_white_24dp);
+            reset.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            Helper.applyRippleToToolbarView(reset);
+            reset.setOnClickListener(this);
+        }
     }
 
     @Override
     public void onClick(View v) {
-        new AlertDialog.Builder(this)
+        if (v.getId() == Resources.id.ig_toolbar_load_file) {
+            new AlertDialog.Builder(this)
                 .setTitle("Dexer")
                 .setMessage("Would you like to use Dx or D8 to dex the library?\n" +
                         "D8 supports Java 8, whereas Dx does not. Limitation: D8 only works on Android 8 and above.")
@@ -73,6 +102,23 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                         false).showDialog(ManageLocalLibraryActivity.this))
                 .setNeutralButton("Cancel", null)
                 .show();
+        } else if (RESET_LOCAL_LIBRARIES_TAG.equals(v.getTag())) {
+            if (notAssociatedWithProject) {
+                aB dialog = new aB(this);
+                dialog.a(Resources.drawable.rollback_96);
+                dialog.b("Reset libraries?");
+                dialog.a("This will reset all used local libraries for this project. Are you sure?");
+                dialog.a(xB.b().a(getApplicationContext(), Resources.string.common_word_cancel),
+                        Helper.getDialogDismissListener(dialog));
+                dialog.b(xB.b().a(getApplicationContext(), Resources.string.common_word_reset), view -> {
+                    FileUtil.writeFile(configurationFilePath, "[]");
+                    SketchwareUtil.toast("Successfully reset local libraries");
+                    loadFiles();
+                    dialog.dismiss();
+                });
+                dialog.show();
+            }
+        }
     }
 
     @Override
@@ -193,7 +239,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                 if (FileUtil.isExistFile(assetsPath)) {
                     localLibrary.put("assetsPath", assetsPath);
                 }
-                setColorIdicator(indicator, configPath);
+
                 if (!enabled.isChecked()) {
                     int i = -1;
                     for (int j = 0; j < project_used_libs.size(); j++) {
@@ -215,6 +261,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                 }
                 FileUtil.writeFile(local_lib_file, new Gson().toJson(project_used_libs));
             });
+            setColorIdicator(indicator, configPath);
 
             enabled.setChecked(false);
             if (!notAssociatedWithProject) {
