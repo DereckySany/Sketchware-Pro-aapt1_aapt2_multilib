@@ -127,7 +127,7 @@ dependencies {
 
     //noinspection GradleDependency
     minApi21Implementation "org.eclipse.jdt:ecj:3.13.0"
-    minApi26Implementation "org.eclipse.jdt:ecj:3.27.0"
+    minApi26Implementation "org.eclipse.jdt:ecj:3.26.0"
 
     minApi26Implementation project(path: ":kotlinc")
 
