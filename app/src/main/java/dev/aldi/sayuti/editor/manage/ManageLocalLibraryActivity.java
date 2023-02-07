@@ -371,7 +371,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                                     .setOnClickListener(view -> {
                                         enabled.setChecked(false);
                                         final String lib = local_libs_path.concat(enabled.getText().toString());
-                                        fileUtil.deleteFile(lib);
+                                        FileUtil.deleteFile(lib);
                                         if (FileUtil.isExistFile(lib)) {
                                             SketchwareUtil.toastError("Failed to remove library");
                                         }
