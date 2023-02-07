@@ -370,8 +370,8 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                             deleteRoot.findViewById(R.id.text_del_delete)
                                     .setOnClickListener(view -> {
                                         enabled.setChecked(false);
-                                        final String lib = (local_libs_path.concat(enabled.getText().toString()));
-                                        deleteFile(lib);
+                                        final String lib = local_libs_path.concat(enabled.getText().toString());
+                                        fileUtil.deleteFile(lib);
                                         if (FileUtil.isExistFile(lib)) {
                                             SketchwareUtil.toastError("Failed to remove library");
                                         }
