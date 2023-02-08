@@ -374,14 +374,13 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 if (FileUtil.isExistFile(q.projectMyscPath)) {
                 menu.add(Menu.NONE, 2, Menu.NONE, "Clean temporary files");
                 }
-                menu.add(Menu.NONE, 3, Menu.NONE, "Show last compile error");
-                menu.add(Menu.NONE, 6, Menu.NONE, "Show Quick log");
-                menu.add(Menu.NONE, 5, Menu.NONE, "Show source code");
+                menu.add(Menu.NONE, 3, Menu.NONE, "Show Quick log");
+                menu.add(Menu.NONE, 4, Menu.NONE, "Show source code");
                 if (FileUtil.isExistFile(q.finalToInstallApkPath)) {
-                    menu.add(Menu.NONE, 4, Menu.NONE, "Install last built APK");
+                    menu.add(Menu.NONE, 5, Menu.NONE, "Install last built APK");
                 }
                 if (FileUtil.isExistFile(FilePathUtil.getLastDebugCompileLog())) {
-                    menu.add(Menu.NONE, 7, Menu.NONE, "Show last compile Debug");
+                    menu.add(Menu.NONE, 6, Menu.NONE, "Show last compile Debug");
                 }
 
                 popupMenu.setOnMenuItemClickListener(item -> {
@@ -399,10 +398,14 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                             break;
 
                         case 3:
-                            new CompileErrorSaver(sc_id).showLastErrors(DesignActivity.this);
+                            new CompileErrorSaver(sc_id).showDialog(DesignActivity.this);
                             break;
 
                         case 4:
+                            showCurrentActivitySrcCode();
+                            break;
+
+                        case 5:
                             if (FileUtil.isExistFile(q.finalToInstallApkPath)) {
                                 installBuiltApk();
                             } else {
@@ -410,25 +413,15 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                             }
                             break;
 
-                        case 5:
-                            showCurrentActivitySrcCode();
-                            break;
-
                         case 6:
-                            new CompileErrorSaver(sc_id).showDialog(DesignActivity.this);
-                            break;
-
-                        case 7:
                             showLastedDebugCompilerlog();
                             break;
 
                         default:
                             return false;
                     }
-
                     return true;
                 });
-
                 popupMenu.show();
             }
         }
@@ -738,7 +731,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             final String source = FileUtil.readFile(new FilePathUtil().getLastDebugCompileLog());
 
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(DesignActivity.this)
-                    .setTitle(projectFileSelector.getFileName())
+                    .setTitle("Compile Debug")
                     .setPositiveButton("Dismiss", null);
 
             runOnUiThread(() -> {
