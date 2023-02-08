@@ -159,7 +159,7 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
             // DrawerLayout#closeDrawers()
             drawerLayout.b();
         } else {
-            if (Build.VERSION.SDK_INT > 23){
+            if (Build.VERSION.SDK_INT < 23){
                 finish();
             } else {
                 finishAndRemoveTask();
@@ -334,13 +334,15 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+     MenuItem menuitem1 = menu.add(Menu.NONE,1,Menu.NONE,"");
+     menuitem1.setIcon(R.drawable.ic_format_list_bulleted_white_24dp);
+     menuitem1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.sortProject) {
+        if (item.getItemId() == (int)1) {
             if (!mB.a()) showProjectSortingDialog();
         }
         //drawerToggle.onOptionsItemSelected(item)
