@@ -76,7 +76,7 @@ public class CompileErrorSaver {
                     SketchwareUtil.toast("Cleared log");
                 })
                 .setNeutralButton("Show longView", (dialog1, which) -> {
-                    new CompileErrorSaver(sc_id).showLastErrors(this);
+                    new CompileErrorSaver(sc_id).showLastErrors(context);
                 })
                 .create();
 
