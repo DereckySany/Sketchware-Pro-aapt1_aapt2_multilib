@@ -90,6 +90,7 @@ public class CompileErrorSaver {
 
         if (errorLogTxt.getText().toString().equals(MESSAGE_NO_COMPILE_ERRORS_SAVED)) {
             dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setVisibility(View.GONE);
+            dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(View.GONE);
         }
     }
 
