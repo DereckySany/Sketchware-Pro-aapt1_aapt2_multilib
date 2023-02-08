@@ -24,6 +24,7 @@
         <item name="colorControlNormal">@color/color_primary</item>
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="android:windowFullscreen">false</item>
     </style>
 
     <style name="AppTheme.Button.Amber" parent="@style/Base.Widget.AppCompat.Button">
