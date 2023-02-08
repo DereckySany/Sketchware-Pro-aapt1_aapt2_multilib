@@ -222,7 +222,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
 
     public class LibraryAdapter extends BaseAdapter {
 
-        private final List<String> localLibraries;
+        private List<String> localLibraries;
 
         public LibraryAdapter(List<String> localLibraries) {
             this.localLibraries = localLibraries;
