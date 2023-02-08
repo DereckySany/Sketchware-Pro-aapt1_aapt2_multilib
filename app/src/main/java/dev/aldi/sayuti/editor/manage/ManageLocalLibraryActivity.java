@@ -39,13 +39,14 @@ import a.a.a.xB;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.hey.studios.project.library.LibraryDownloader;
-import mod.hey.studios.util.Helper;
+import mod.hey.studios.util.Helper; 
 
 public class ManageLocalLibraryActivity extends Activity implements View.OnClickListener, LibraryDownloader.OnCompleteListener {
 
     private static final String RESET_LOCAL_LIBRARIES_TAG = "reset_local_libraries";
 
-    private ListAdapter adapter;
+    private LibraryAdapter adapter;
+    private ArrayList<String> arrayList;
     private boolean notAssociatedWithProject = false;
     private ListView listview;
     private SearchView searchview;
@@ -65,7 +66,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
             public boolean onQueryTextChange(String newText) {
                 String lowerCase = newText.toLowerCase();
                 ArrayList<String> filter = new ArrayList<>();
-                for (String next : arrayList) {
+                for (String next : localLibraryNames) {
                     if (next.toLowerCase().contains(lowerCase)) {
                         filter.add(next);
                     }
@@ -178,9 +179,9 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
             notAssociatedWithProject = sc_id.equals("system");
             configurationFilePath = FileUtil.getExternalStorageDir().concat("/.sketchware/data/").concat(sc_id.concat("/local_library"));
             local_libs_path = FileUtil.getExternalStorageDir().concat("/.sketchware/libs/local_libs/");
+            loadFiles();
             setUpSearchView();
             initToolbar();
-            loadFiles();
         } else {
             finish();
         }
@@ -211,7 +212,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
         //
         //arrayList = ListPermission.getPermissions();
         //ListAdapter listAdapter = new ListAdapter(arrayList);
-        ListAdapter listAdapter = new LibraryAdapter(localLibraryNames);
+        LibraryAdapter listAdapter = new LibraryAdapter(localLibraryNames);
         adapter = listAdapter;
         listview.setAdapter(listAdapter);
         //
