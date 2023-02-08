@@ -954,7 +954,11 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
     }
 
     void toToolsManager() {
-        launchActivity(Tools.class, null);
+       // launchActivity(Tools.class, null);
+        Intent intent = new Intent(getApplicationContext(), Tools.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.putExtra("sc_id", sc_id);
+        startActivity(intent);
     }
 
     @SafeVarargs

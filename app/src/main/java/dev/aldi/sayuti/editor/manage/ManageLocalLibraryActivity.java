@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -43,12 +45,41 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
 
     private static final String RESET_LOCAL_LIBRARIES_TAG = "reset_local_libraries";
 
+    private ListAdapter adapter;
     private boolean notAssociatedWithProject = false;
     private ListView listview;
+    private SearchView searchview;
     private String configurationFilePath = "";
     private String local_libs_path = "";
     private ArrayList<HashMap<String, Object>> lookup_list = new ArrayList<>();
     private ArrayList<HashMap<String, Object>> project_used_libs = new ArrayList<>();
+
+    private void setUpSearchView() {
+        searchview.setActivated(true);
+        searchview.setQueryHint("Search for a library");
+        searchview.onActionViewExpanded();
+        searchview.setIconifiedByDefault(true);
+        searchview.clearFocus();
+        searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                String lowerCase = newText.toLowerCase();
+                ArrayList<String> filter = new ArrayList<>();
+                for (String next : arrayList) {
+                    if (next.toLowerCase().contains(lowerCase)) {
+                        filter.add(next);
+                    }
+                }
+                adapter.setFilter(filter);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return true;
+            }
+        });
+    }
 
     private void initToolbar() {
         ImageView back_icon = findViewById(R.id.ig_toolbar_back);
@@ -134,6 +165,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
         LinearLayout searchViewContainer = findViewById(R.id.managepermissionLinearLayout1);
 //        searchViewContainer.setVisibility(View.GONE);
         searchViewContainer.setBackgroundDrawable(getDrawable(R.drawable.bg_rectangle_white));
+        searchview = findViewById(R.id.search_perm);
         listview = findViewById(R.id.main_content);
         ViewGroup mainContent = (ViewGroup) searchViewContainer.getParent();
         ViewGroup root = (ViewGroup) mainContent.getParent();
@@ -146,6 +178,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
             notAssociatedWithProject = sc_id.equals("system");
             configurationFilePath = FileUtil.getExternalStorageDir().concat("/.sketchware/data/").concat(sc_id.concat("/local_library"));
             local_libs_path = FileUtil.getExternalStorageDir().concat("/.sketchware/libs/local_libs/");
+            setUpSearchView();
             initToolbar();
             loadFiles();
         } else {
@@ -175,7 +208,14 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                 localLibraryNames.add(Uri.parse(filename).getLastPathSegment());
             }
         }
-        listview.setAdapter(new LibraryAdapter(localLibraryNames));
+        //
+        //arrayList = ListPermission.getPermissions();
+        //ListAdapter listAdapter = new ListAdapter(arrayList);
+        ListAdapter listAdapter = new LibraryAdapter(localLibraryNames);
+        adapter = listAdapter;
+        listview.setAdapter(listAdapter);
+        //
+        //listview.setAdapter(new LibraryAdapter(localLibraryNames));
         ((BaseAdapter) listview.getAdapter()).notifyDataSetChanged();
     }
 
@@ -423,6 +463,13 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                     }
                 }.getIns((int) 15, 0xFF555555));
             }
+        }
+
+        public void setFilter(ArrayList<String> filter) {
+            ArrayList<String> arrayList2 = new ArrayList<>();
+            localLibraries = arrayList2;
+            arrayList2.addAll(filter);
+            notifyDataSetChanged();
         }
     }
 }
