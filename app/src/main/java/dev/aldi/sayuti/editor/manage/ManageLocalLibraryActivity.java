@@ -65,8 +65,8 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
             @Override
             public boolean onQueryTextChange(String newText) {
                 String lowerCase = newText.toLowerCase();
-                ArrayList<String> filter = new ArrayList<>();
-                for (String next : localLibraryNames) {
+                List<String> filter = new List<>();
+                for (String next : arrayList) {
                     if (next.toLowerCase().contains(lowerCase)) {
                         filter.add(next);
                     }
@@ -466,8 +466,8 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
             }
         }
 
-        public void setFilter(ArrayList<String> filter) {
-            ArrayList<String> arrayList2 = new ArrayList<>();
+        public void setFilter(List<String> filter) {
+            List<String> arrayList2 = new List<>();
             localLibraries = arrayList2;
             arrayList2.addAll(filter);
             notifyDataSetChanged();
