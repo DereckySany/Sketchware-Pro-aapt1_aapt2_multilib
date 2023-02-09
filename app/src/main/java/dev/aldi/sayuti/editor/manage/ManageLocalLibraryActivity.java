@@ -64,6 +64,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
         searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextChange(String newText) {
+            /*
                 String lowerCase = newText.toLowerCase();
                 ArrayList<String> filter = new ArrayList<>();
                 for (String next : arrayList) {
@@ -71,12 +72,15 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                         filter.add(next);
                     }
                 }
-                adapter.setFilter(filter);
+             */
+               // adapter.setFilter(filter);
+             listAdapter.getFilter().setFilter(newText);
                 return true;
             }
 
             @Override
             public boolean onQueryTextSubmit(String query) {
+            listAdapter.getFilter().setFilter(newText);
                 return true;
             }
         });
@@ -209,13 +213,14 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                 localLibraryNames.add(Uri.parse(filename).getLastPathSegment());
             }
         }
-        //
+        /*
         //arrayList = ListPermission.getPermissions();
         //ListAdapter listAdapter = new ListAdapter(arrayList);
+        */
         LibraryAdapter listAdapter = new LibraryAdapter(localLibraryNames);
         adapter = listAdapter;
         listview.setAdapter(listAdapter);
-        //
+        
         //listview.setAdapter(new LibraryAdapter(localLibraryNames));
         ((BaseAdapter) listview.getAdapter()).notifyDataSetChanged();
     }
@@ -465,12 +470,13 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                 }.getIns((int) 15, 0xFF555555));
             }
         }
-
+        /*
         public void setFilter(ArrayList<String> filter) {
             ArrayList<String> arrayList2 = new ArrayList<>();
             localLibraries = arrayList2;
             arrayList2.addAll(filter);
             notifyDataSetChanged();
-        }
+        } 
+        */
     }
 }
