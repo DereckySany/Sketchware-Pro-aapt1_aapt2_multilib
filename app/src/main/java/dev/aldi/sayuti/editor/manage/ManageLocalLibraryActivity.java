@@ -74,13 +74,13 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                 }
              */
                // adapter.setFilter(filter);
-             adapter.getFilter().setFilter(newText);
+             LibraryAdapter.getFilter().setFilter(newText);
                 return true;
             }
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-            adapter.getFilter().setFilter(query);
+            LibraryAdapter.getFilter().setFilter(query);
                 return true;
             }
         });
