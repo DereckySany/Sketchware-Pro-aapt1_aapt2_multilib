@@ -7,7 +7,6 @@ import android.app.AlertDialog;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
-import com.google.gson.JsonParseException;
 import com.sketchware.remod.R;
 
 import java.io.File;
@@ -64,7 +62,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
         searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextChange(String newText) {
-            /*
+
                 String lowerCase = newText.toLowerCase();
                 ArrayList<String> filter = new ArrayList<>();
                 for (String next : arrayList) {
@@ -72,15 +70,13 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                         filter.add(next);
                     }
                 }
-             */
-               // adapter.setFilter(filter);
-             LibraryAdapter.getFilter().setFilter(newText);
                 return true;
             }
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-            LibraryAdapter.getFilter().setFilter(query);
+//            arrayList.stream().filter(this::onQueryTextSubmit);
+//                adapter.setFilter(query);
                 return true;
             }
         });
@@ -345,20 +341,37 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                 popupMenu.setOnMenuItemClickListener(menuItem -> {
                     switch (menuItem.getTitle().toString()) {
                         case "Info":
-                            final File pkgName = new File(local_libs_path.concat(enabled.getText().toString() + "/config"));
-                            final File pkgImport = new File(local_libs_path.concat(enabled.getText().toString() + "/version"));
-                            aB infodialog = new aB(ManageLocalLibraryActivity.this);
-                            infodialog.a(R.drawable.color_about_96);
-                            infodialog.b("Info library!");
-                            infodialog.a("This local library name:\n"
-                                    + enabled.getText().toString() + "\nPackage Name:\n"
-                                    + (pkgName.exists() && !isEmpty() ? FileUtil.readFile(pkgName.getAbsolutePath()) : "Not avaliable!")
-                                    + "\nImport Package Name:\n"
-                                    + (pkgImport.exists() && !isEmpty() ? FileUtil.readFile(pkgImport.getAbsolutePath()) : "Not avaliable!"));
-                            infodialog.b(xB.b().a(getApplicationContext(), R.string.common_word_ok), view -> {
-                                infodialog.dismiss();
-                            });
-                            infodialog.show();
+                            final File infoName = new File(local_libs_path.concat(enabled.getText().toString() + "/config"));
+                            final File infoImport = new File(local_libs_path.concat(enabled.getText().toString() + "/version"));
+                            final File infoManifast = new File(local_libs_path.concat(enabled.getText().toString() + "/AndroidManifest.xml"));
+
+                            final AlertDialog infoLog = new AlertDialog.Builder(ManageLocalLibraryActivity.this).create();
+
+                            final View inforoot = getLayoutInflater().inflate(R.layout.dialog_info_layout, null);
+                            final LinearLayout Ititle = inforoot.findViewById(R.id.dialoginfolayoutLinearLayout0);
+                            final TextInputLayout tilname = inforoot.findViewById(R.id.dialoginfolayoutLinearLayout1);
+                            final TextInputLayout tilImport = inforoot.findViewById(R.id.dialoginfolayoutLinearLayout2);
+                            final TextInputLayout tilManifast = inforoot.findViewById(R.id.dialoginfolayoutLinearLayout3);
+                            final EditText Ename = inforoot.findViewById(R.id.edittext_info_name);
+                            final EditText Eimport = inforoot.findViewById(R.id.edittext_info_import);
+                            final EditText Emanifast = inforoot.findViewById(R.id.edittext_info_manifast);
+
+                            final View titleChildAt0 = Ititle.getChildAt(1);
+                            if (titleChildAt0 instanceof TextView) {
+                                final TextView titleTextView = (TextView) titleChildAt0;
+                                titleTextView.setText("Information Library");
+                            }
+                            tilname.setHint("Name Library");
+                            tilImport.setHint("Import library name");
+                            tilManifast.setHint("Manifast");
+                            Ename.setText((infoName.exists() && !isEmpty() ? FileUtil.readFile(infoName.getAbsolutePath()) : "Not avaliable!"));
+                            Eimport.setText((infoImport.exists() && !isEmpty() ? FileUtil.readFile(infoImport.getAbsolutePath()) : "Not avaliable!"));
+                            Emanifast.setText((infoManifast.exists() && !isEmpty() ? FileUtil.readFile(infoManifast.getAbsolutePath()) : "Not avaliable!"));
+                            inforoot.findViewById(R.id.text_info_ok)
+                                    .setOnClickListener(Helper.getDialogDismissListener(infoLog));
+                            infoLog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                            infoLog.setView(inforoot);
+                            infoLog.show();
                             break;
                         case "Rename":
                             final AlertDialog realog = new AlertDialog.Builder(ManageLocalLibraryActivity.this).create();
@@ -441,6 +454,12 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
             return convertView;
         }
 
+        public void setFilter(String filter) {
+            ArrayList<String> arrayList2 = new ArrayList<>();
+            localLibraries = arrayList2;
+            arrayList2.addAll(Collections.singleton(filter));
+            notifyDataSetChanged();
+        }
         private void setColorIdicator(LinearLayout indicator, String configname) {
             if (FileUtil.isExistFile(configname)) {
                 if (FileUtil.readFile(configname).getBytes().length > 0) {
@@ -470,13 +489,5 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
                 }.getIns((int) 15, 0xFF555555));
             }
         }
-        /*
-        public void setFilter(ArrayList<String> filter) {
-            ArrayList<String> arrayList2 = new ArrayList<>();
-            localLibraries = arrayList2;
-            arrayList2.addAll(filter);
-            notifyDataSetChanged();
-        } 
-        */
     }
 }
