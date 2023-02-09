@@ -164,7 +164,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
         setContentView(R.layout.manage_permission);
 
         LinearLayout searchViewContainer = findViewById(R.id.managepermissionLinearLayout1);
-//        searchViewContainer.setVisibility(View.GONE);
+        searchViewContainer.setVisibility(View.GONE);
         searchViewContainer.setBackgroundDrawable(getDrawable(R.drawable.bg_rectangle_white));
         searchview = findViewById(R.id.search_perm);
         listview = findViewById(R.id.main_content);
