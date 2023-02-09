@@ -294,8 +294,14 @@ public class LibraryDownloader {
                 dependency = dependency.replace("(", "");
                 dependency = dependency.replace(")", "");  
              // buildr format
-                dependency = dependency.replace(":jar:", ":");      
-                dependency = dependency.replace(":aar:", ":");
+                if (dependency.contains(":jar:")){
+                    dependency = dependency.replace(":jar:", ":"); 
+                    useJar.setChecked(true);
+                }
+                if (dependency.contains(":aar:")){
+                    dependency = dependency.replace(":aar:", ":");
+                    useAar.setChecked(true);
+                }
                 } else {
                     SketchwareUtil.toastError("Invalid dependency");
                     library.setTextColor(0xFFf91010);
