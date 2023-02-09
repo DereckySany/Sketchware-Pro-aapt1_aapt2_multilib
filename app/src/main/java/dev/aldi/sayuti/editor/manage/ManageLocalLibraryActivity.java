@@ -80,7 +80,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-            listAdapter.getFilter().setFilter(newText);
+            listAdapter.getFilter().setFilter(query);
                 return true;
             }
         });
