@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.besome.sketch.beans.ProjectFileBean;
+import com.besome.sketch.editor.LogicEditorActivity;
 import com.sketchware.remod.R;
 
 import a.a.a.Kw;
@@ -25,6 +26,10 @@ import a.a.a.mB;
 import a.a.a.uq;
 import a.a.a.wB;
 import mod.hey.studios.util.Helper;
+import mod.hilal.saif.activities.tools.ConfigActivity;
+import mod.hilal.saif.asd.AsdDialog;
+import mod.hilal.saif.asd.asdforall.AsdAllEditor;
+import mod.hilal.saif.asd.old.AsdOldDialog;
 
 @SuppressLint("ViewConstructor")
 public class PropertyInputItem extends RelativeLayout implements View.OnClickListener {
@@ -34,6 +39,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
     private String value = "";
     private ImageView imgLeftIcon;
     private int icon;
+    private LogicEditorActivity logicEditor;
     private TextView tvName;
     private TextView tvValue;
     private View propertyItem;
