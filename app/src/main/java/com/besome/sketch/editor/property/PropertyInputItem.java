@@ -261,13 +261,32 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         EditText input = view.findViewById(R.id.ed_input);
         SB lengthValidator = new SB(context, view.findViewById(R.id.ti_input), minValue, maxValue);
         lengthValidator.a(value);
+        Ss ss = null;
         dialog.a(view);
         dialog.b(Helper.getResString(R.string.common_word_save), v -> {
+            String content = input.getText().toString();
             if (lengthValidator.b()) {
-                setValue(input.getText().toString());
+                setValue(content);
                 if (valueChangeListener != null) valueChangeListener.a(key, value);
+                logicEditor.a(ss, (Object) content);
                 dialog.dismiss();
             }
+        });
+        dialog.configureDefaultButton("Code Editor", v -> {
+            if (ConfigActivity.isLegacyCeEnabled()) {
+                AsdOldDialog asdOldDialog = new AsdOldDialog(logicEditor);
+                asdOldDialog.setCon(input.getText().toString());
+                asdOldDialog.show();
+                asdOldDialog.saveLis(logicEditor, false, ss, asdOldDialog);
+                asdOldDialog.cancelLis(logicEditor, asdOldDialog);
+            } else {
+                AsdDialog asdDialog = new AsdDialog(logicEditor);
+                asdDialog.setCon(input.getText().toString());
+                asdDialog.show();
+                asdDialog.saveLis(logicEditor, false, ss, asdDialog);
+                asdDialog.cancelLis(asdDialog);
+            }
+            dialog.dismiss();
         });
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.show();
