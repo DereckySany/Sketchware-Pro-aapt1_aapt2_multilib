@@ -43,8 +43,11 @@
             android:layout_height="fill_parent"
             android:hint="Name Library"
             android:text=""
+            android:editable="false"
+            android:textIsSelectable="true"
             android:inputType="text"
-            android:autofillHints="" />
+            android:autofillHints=""
+            tools:ignore="Deprecated" />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
         android:orientation="vertical"
@@ -61,8 +64,11 @@
             android:layout_height="fill_parent"
             android:hint="Import library name"
             android:text=""
+            android:editable="false"
+            android:textIsSelectable="true"
             android:inputType="text"
-            android:autofillHints="" />
+            android:autofillHints=""
+            tools:ignore="Deprecated" />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
         android:orientation="vertical"
@@ -83,8 +89,12 @@
             android:maxLines="6"
             android:hint="Manifast"
             android:text=""
+            android:editable="false"
+            android:textIsSelectable="true"
             android:inputType="textMultiLine"
-            android:autofillHints="" /></ScrollView>
+            android:autofillHints=""
+            tools:ignore="Deprecated" />
+        </ScrollView>
     </com.google.android.material.textfield.TextInputLayout>
     <LinearLayout
         android:gravity="right"
