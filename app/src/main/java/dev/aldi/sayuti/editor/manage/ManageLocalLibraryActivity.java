@@ -148,71 +148,66 @@ public class ManageLocalLibraryActivity extends Activity
         loadFiles();
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.manage_permission);
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.manage_permission);
 
-        LinearLayout searchViewContainer = findViewById(R.id.managepermissionLinearLayout1);
-        searchViewContainer.setVisibility(View.GONE);
-        searchViewContainer.setBackgroundDrawable(getDrawable(R.drawable.bg_rectangle_white));
-        searchview = findViewById(R.id.search_perm);
-        listview = findViewById(R.id.main_content);
-        ViewGroup mainContent = (ViewGroup) searchViewContainer.getParent();
-        ViewGroup root = (ViewGroup) mainContent.getParent();
-        root.removeView(mainContent);
-        root.addView(mainContent);
+    LinearLayout searchViewContainer = findViewById(R.id.managepermissionLinearLayout1);
+    searchViewContainer.setVisibility(View.GONE);
+    searchViewContainer.setBackground(getDrawable(R.drawable.bg_rectangle_white));
+    searchview = findViewById(R.id.search_perm);
+    listview = findViewById(R.id.main_content);
+    ViewGroup mainContent = (ViewGroup) searchViewContainer.getParent();
+    ViewGroup root = (ViewGroup) mainContent.getParent();
+    root.removeView(mainContent);
+    root.addView(mainContent);
 
-        if (getIntent().hasExtra("sc_id")) {
-            String sc_id = getIntent().getStringExtra("sc_id");
-            notAssociatedWithProject = sc_id.equals("system");
-            configurationFilePath = FileUtil.getExternalStorageDir().concat("/.sketchware/data/")
-                    .concat(sc_id.concat("/local_library"));
-            local_libs_path = FileUtil.getExternalStorageDir().concat("/.sketchware/libs/local_libs/");
-            loadFiles();
-            setUpSearchView();
-            initToolbar();
+    if (getIntent().hasExtra("sc_id")) {
+        String sc_id = getIntent().getStringExtra("sc_id");
+        notAssociatedWithProject = sc_id.equals("system");
+        configurationFilePath = FileUtil.getExternalStorageDir().concat("/.sketchware/data/")
+                .concat(sc_id.concat("/local_library"));
+        local_libs_path = FileUtil.getExternalStorageDir().concat("/.sketchware/libs/local_libs/");
+        loadFiles();
+        setUpSearchView();
+        initToolbar();
+    } else {
+        finish();
+    }
+}
+
+private void loadFiles() {
+    arrayList.clear();
+    project_used_libs.clear();
+    lookup_list.clear();
+    if (!notAssociatedWithProject) {
+        String fileContent;
+        if (!FileUtil.isExistFile(configurationFilePath)
+                || (fileContent = FileUtil.readFile(configurationFilePath)).equals("")) {
+            FileUtil.writeFile(configurationFilePath, "[]");
         } else {
-            finish();
+            project_used_libs = new Gson().fromJson(fileContent, Helper.TYPE_MAP_LIST);
         }
     }
+    ArrayList<String> arrayList = new ArrayList<>();
+    FileUtil.listDir(local_libs_path, arrayList);
+    // noinspection Java8ListSort
+    Collections.sort(arrayList, String.CASE_INSENSITIVE_ORDER);
 
-    private void loadFiles() {
-        arrayList.clear();
-        project_used_libs.clear();
-        lookup_list.clear();
-        if (!notAssociatedWithProject) {
-            String fileContent;
-            if (!FileUtil.isExistFile(configurationFilePath)
-                    || (fileContent = FileUtil.readFile(configurationFilePath)).equals("")) {
-                FileUtil.writeFile(configurationFilePath, "[]");
-            } else {
-                project_used_libs = new Gson().fromJson(fileContent, Helper.TYPE_MAP_LIST);
-            }
+    List<String> localLibraryNames = new LinkedList<>();
+    for (String filename : arrayList) {
+        if (FileUtil.isDirectory(filename)) {
+            localLibraryNames.add(Uri.parse(filename).getLastPathSegment());
         }
-        ArrayList<String> arrayList = new ArrayList<>();
-        FileUtil.listDir(local_libs_path, arrayList);
-        // noinspection Java8ListSort
-        Collections.sort(arrayList, String.CASE_INSENSITIVE_ORDER);
-
-        List<String> localLibraryNames = new LinkedList<>();
-        for (String filename : arrayList) {
-            if (FileUtil.isDirectory(filename)) {
-                localLibraryNames.add(Uri.parse(filename).getLastPathSegment());
-            }
-        }
-        arrayList.addAll(localLibraryNames);
-        /*
-         * //arrayList = ListPermission.getPermissions();
-         * //ListAdapter listAdapter = new ListAdapter(arrayList);
-         */
-        LibraryAdapter listAdapter = new LibraryAdapter(localLibraryNames);
-        adapter = listAdapter;
-        listview.setAdapter(listAdapter);
-
-        // listview.setAdapter(new LibraryAdapter(localLibraryNames));
-        ((BaseAdapter) listview.getAdapter()).notifyDataSetChanged();
     }
+    arrayList.addAll(localLibraryNames);
+    LibraryAdapter listAdapter = new LibraryAdapter(localLibraryNames);
+    adapter = listAdapter;
+    listview.setAdapter(listAdapter);
+    ((BaseAdapter) listview.getAdapter()).notifyDataSetChanged();
+}
+
 
     public class LibraryAdapter extends BaseAdapter {
 
