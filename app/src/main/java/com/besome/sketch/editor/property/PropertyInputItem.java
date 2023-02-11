@@ -271,13 +271,10 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         Ss ss = null;
         dialog.a(view);
         dialog.b(Helper.getResString(R.string.common_word_save), v -> {
-            String content = input.getText().toString();
             if (lengthValidator.b()) {
-                setValue(content);
+                setValue(input.getText().toString());
                 if (valueChangeListener != null) valueChangeListener.a(key, value);
-                logicEditor.a(ss, (Object) content);
                 dialog.dismiss();
-            }
         });
         dialog.configureDefaultButton("Code Editor", v -> {
             if (ConfigActivity.isLegacyCeEnabled()) {

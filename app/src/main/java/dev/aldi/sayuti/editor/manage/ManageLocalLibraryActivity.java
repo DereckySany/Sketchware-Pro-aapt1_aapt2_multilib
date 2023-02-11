@@ -206,8 +206,8 @@ private void loadFiles() {
 
 private void applyFilter(String query) {
     if (query.isEmpty()) {
-        //adapter.updateData(arrayList);
-        adapter = new LibraryAdapter(arrayList);
+        adapter.updateData(arrayList);
+        //adapter = new LibraryAdapter(arrayList)
         listview.setAdapter(adapter);
         return;
     }
@@ -218,8 +218,10 @@ private void applyFilter(String query) {
             filteredList.add(library);
         }
     }
-    adapter.updateData(filteredList);
+    //adapter.updateData(filteredList);
+    adapter = new LibraryAdapter(filteredList);
     listview.setAdapter(adapter);
+    ((BaseAdapter)listview.getAdapter()).notifyDataSetChanged();
 }
 
 
