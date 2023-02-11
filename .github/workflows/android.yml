@@ -43,6 +43,7 @@ jobs:
       - name: Upgrading the Wrapper version
         run: |
           ./gradlew wrapper --gradle-version 8.0-rc-2 --distribution-type all
+          ./gradlew wrapper --gradle-version 8.0-rc-2 --distribution-type all
       - name: Verify the checksum of the Wrapper JAR
         run: |
           cd gradle/wrapper
@@ -78,6 +79,7 @@ jobs:
           fetch-depth: 0
       - name: Upgrading the Wrapper version
         run: |
+          ./gradlew wrapper --gradle-version 8.0-rc-2 --distribution-type all
           ./gradlew wrapper --gradle-version 8.0-rc-2 --distribution-type all
       - name: Verify the checksum of the Wrapper JAR
         run: |
