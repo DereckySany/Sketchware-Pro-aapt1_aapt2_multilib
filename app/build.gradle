@@ -25,6 +25,8 @@ android {
         targetSdkVersion 28
         versionCode 150
         versionName "v6.4.0-SNAPSHOT-" + getCommitHash()
+        
+        applicationId System.getProperty("newPackageName", defaultConfig.applicationId)
 
         buildConfigField("String", "GIT_HASH", "\"${gitCommitHash}\"")
 
