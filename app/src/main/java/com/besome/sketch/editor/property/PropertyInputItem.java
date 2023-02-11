@@ -275,6 +275,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
                 setValue(input.getText().toString());
                 if (valueChangeListener != null) valueChangeListener.a(key, value);
                 dialog.dismiss();
+                }
         });
         dialog.configureDefaultButton("Code Editor", v -> {
             if (ConfigActivity.isLegacyCeEnabled()) {
