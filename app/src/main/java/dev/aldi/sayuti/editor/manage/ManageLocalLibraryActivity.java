@@ -220,7 +220,6 @@ private void applyFilter(String query) {
     }
     adapter.updateData(filteredList);
     listview.setAdapter(adapter);
-    notifyDataSetChanged();
 }
 
 
