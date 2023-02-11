@@ -44,6 +44,7 @@ public class ManageLocalLibraryActivity extends Activity
 
     private static final String RESET_LOCAL_LIBRARIES_TAG = "reset_local_libraries";
 
+    private LibraryAdapter adapter;
     private List<String> arrayList = new ArrayList<>();
     private boolean notAssociatedWithProject = false;
     private ListView listview;
@@ -62,7 +63,7 @@ public class ManageLocalLibraryActivity extends Activity
         searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextChange(String newText) {
-                setFilter(newText);
+                applyFilter(newText);
                 return false;
             }
 
@@ -177,10 +178,10 @@ protected void onCreate(Bundle savedInstanceState) {
     }
 }
 
+//
+
 private void loadFiles() {
     arrayList.clear();
-    project_used_libs.clear();
-    lookup_list.clear();
     if (!notAssociatedWithProject) {
         String fileContent;
         if (!FileUtil.isExistFile(configurationFilePath)
@@ -190,9 +191,7 @@ private void loadFiles() {
             project_used_libs = new Gson().fromJson(fileContent, Helper.TYPE_MAP_LIST);
         }
     }
-    ArrayList<String> arrayList = new ArrayList<>();
     FileUtil.listDir(local_libs_path, arrayList);
-    // noinspection Java8ListSort
     Collections.sort(arrayList, String.CASE_INSENSITIVE_ORDER);
 
     List<String> localLibraryNames = new LinkedList<>();
@@ -202,20 +201,27 @@ private void loadFiles() {
         }
     }
     arrayList.addAll(localLibraryNames);
-    LibraryAdapter listAdapter = new LibraryAdapter(localLibraryNames);
-    //adapter = listAdapter;
-    listview.setAdapter(listAdapter);
-    ((BaseAdapter) listview.getAdapter()).notifyDataSetChanged();
+    adapter = new LibraryAdapter(localLibraryNames);
+    listview.setAdapter(adapter);
 }
-    private void setFilter(String query) {
-        List<String> filteredList = new ArrayList<>();
-            for (String library : arrayList) {
-                if (library.toLowerCase().contains(query.toLowerCase())) {
-                    filteredList.add(library);
-                }
-            }
-        ((LibraryAdapter) listview.getAdapter()).updateData(filteredList);
+
+private void applyFilter(String query) {
+    if (query.isEmpty()) {
+        adapter.updateData(arrayList);
+        listview.setAdapter(adapter);
+        return;
     }
+
+    List<String> filteredList = new ArrayList<>();
+    for (String library : arrayList) {
+        if (library.toLowerCase().contains(query.toLowerCase())) {
+            filteredList.add(library);
+        }
+    }
+    adapter.updateData(filteredList);
+    listview.setAdapter(adapter);
+}
+
 
     public class LibraryAdapter extends BaseAdapter {
 
