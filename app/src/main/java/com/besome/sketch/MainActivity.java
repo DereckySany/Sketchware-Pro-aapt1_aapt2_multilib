@@ -335,7 +335,7 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
      MenuItem menuitem1 = menu.add(Menu.NONE,1,Menu.NONE,"");
-     menuitem1.setIcon(R.drawable.ic_format_list_bulleted_white_24dp);
+     menuitem1.setIcon(R.drawable.sorting_options_48);
      menuitem1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         return super.onCreateOptionsMenu(menu);
     }

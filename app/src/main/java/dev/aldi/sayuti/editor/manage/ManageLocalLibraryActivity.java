@@ -178,8 +178,6 @@ protected void onCreate(Bundle savedInstanceState) {
     }
 }
 
-//
-
 private void loadFiles() {
     arrayList.clear();
     if (!notAssociatedWithProject) {
@@ -191,6 +189,7 @@ private void loadFiles() {
             project_used_libs = new Gson().fromJson(fileContent, Helper.TYPE_MAP_LIST);
         }
     }
+    ArrayList<String> arrayList = new ArrayList<>();
     FileUtil.listDir(local_libs_path, arrayList);
     Collections.sort(arrayList, String.CASE_INSENSITIVE_ORDER);
 
