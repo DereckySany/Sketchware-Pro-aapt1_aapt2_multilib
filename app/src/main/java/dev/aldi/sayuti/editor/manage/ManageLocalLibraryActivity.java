@@ -249,13 +249,6 @@ convertView = getLayoutInflater().inflate(R.layout.view_item_local_lib, parent, 
     String libname = enabled.getText().toString();
     String libconfig = local_libs_path + libname + "/config";
 
-    private HashMap<String, Object> getLocalLibraryData(String libname) {
-    HashMap<String, Object> localLibrary = new HashMap<>();
-    localLibrary.put("name", libname);
-    localLibrary.put("config", local_libs_path + libname + "/config");
-    return localLibrary;
-}
-
     enabled.setOnClickListener(v -> {
         HashMap<String, Object> localLibrary = getLocalLibraryData(libname);
         if (!enabled.isChecked()) {
@@ -424,7 +417,12 @@ convertView = getLayoutInflater().inflate(R.layout.view_item_local_lib, parent, 
     });
     return convertView;
     }
-
+    private HashMap<String, Object> getLocalLibraryData(String libname) {
+        HashMap<String, Object> localLibrary = new HashMap<>();
+        localLibrary.put("name", libname);
+        localLibrary.put("config", local_libs_path + libname + "/config");
+        return localLibrary;
+    }
         private void setColorIdicator(LinearLayout indicator, String configname) {
             if (FileUtil.isExistFile(configname)) {
                 if (FileUtil.readFile(configname).getBytes().length > 0) {
