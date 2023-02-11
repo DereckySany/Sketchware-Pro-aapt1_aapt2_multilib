@@ -154,7 +154,7 @@ protected void onCreate(Bundle savedInstanceState) {
     setContentView(R.layout.manage_permission);
 
     LinearLayout searchViewContainer = findViewById(R.id.managepermissionLinearLayout1);
-    searchViewContainer.setVisibility(View.GONE);
+    searchViewContainer.setVisibility(View.VISIBLE);
     searchViewContainer.setBackground(getDrawable(R.drawable.bg_rectangle_white));
     searchview = findViewById(R.id.search_perm);
     listview = findViewById(R.id.main_content);
