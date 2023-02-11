@@ -203,7 +203,7 @@ private void loadFiles() {
     }
     arrayList.addAll(localLibraryNames);
     LibraryAdapter listAdapter = new LibraryAdapter(localLibraryNames);
-    adapter = listAdapter;
+    //adapter = listAdapter;
     listview.setAdapter(listAdapter);
     ((BaseAdapter) listview.getAdapter()).notifyDataSetChanged();
 }
