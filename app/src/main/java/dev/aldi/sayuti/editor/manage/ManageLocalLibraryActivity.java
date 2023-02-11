@@ -249,6 +249,13 @@ convertView = getLayoutInflater().inflate(R.layout.view_item_local_lib, parent, 
     String libname = enabled.getText().toString();
     String libconfig = local_libs_path + libname + "/config";
 
+    private HashMap<String, Object> getLocalLibraryData(String libname) {
+    HashMap<String, Object> localLibrary = new HashMap<>();
+    localLibrary.put("name", libname);
+    localLibrary.put("config", local_libs_path + libname + "/config");
+    return localLibrary;
+}
+
     enabled.setOnClickListener(v -> {
         HashMap<String, Object> localLibrary = getLocalLibraryData(libname);
         if (!enabled.isChecked()) {
