@@ -421,17 +421,7 @@ convertView = getLayoutInflater().inflate(R.layout.view_item_local_lib, parent, 
         popupMenu.show();
     });
     return convertView;
-}
-
-        private void setFilter(String query) {
-            List<String> filteredList = new ArrayList<>();
-            for (String library : arrayList) {
-                if (library.toLowerCase().contains(query.toLowerCase())) {
-                    filteredList.add(library);
-                }
-            }
-            ((LibraryAdapter) listview.getAdapter()).updateData(filteredList);
-        }
+    }
 
         private void setColorIdicator(LinearLayout indicator, String configname) {
             if (FileUtil.isExistFile(configname)) {
@@ -461,6 +451,15 @@ convertView = getLayoutInflater().inflate(R.layout.view_item_local_lib, parent, 
                     }
                 }.getIns((int) 15, 0xFF555555));
             }
+        }
+        private void setFilter(String query) {
+            List<String> filteredList = new ArrayList<>();
+            for (String library : arrayList) {
+                if (library.toLowerCase().contains(query.toLowerCase())) {
+                    filteredList.add(library);
+                }
+            }
+            ((LibraryAdapter) listview.getAdapter()).updateData(filteredList);
         }
     }
 }
