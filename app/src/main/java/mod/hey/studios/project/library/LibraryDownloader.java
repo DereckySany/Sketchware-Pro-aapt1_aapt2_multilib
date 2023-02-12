@@ -442,7 +442,7 @@ public class LibraryDownloader {
         // 6.3.0
         if (tool.equals("D8")) {
         // File libs = new File(context.getFilesDir(), "libs");
-                ArrayList<String> cmd = new ArrayList<>();
+            ArrayList<String> cmd = new ArrayList<>();
             cmd.add("--release");
             cmd.add("--intermediate");
 
@@ -461,30 +461,31 @@ public class LibraryDownloader {
             cmd.add(_path);
             // run D8 with list commands
             D8.main(cmd.toArray(new String[0]));
+            
         } else if (tool.equals("Dx")) {
             // 6.3.0 fix2
             Main.clearInternTables();
-
             // dx
             Main.main(new String[]{
-                    // 6.3.0 fix1
-                    "--dex", // not use ??
-                    "--debug",
-                    "--verbose",
-                    "--multi-dex",
-                    "--output=" + new File(_path).getParentFile().getAbsolutePath(),
-                    _path
+            // 6.3.0 fix1
+            "--debug",
+            "--verbose",
+            "--multi-dex",
+            "--output=" + new File(_path).getParentFile().getAbsolutePath(),
+            _path
             });
+
         } else if (tool.equals("R8")) {
             // R8
-            Main.main(new String[]{
-                    // 6.3.0 fix1
-                    "--debug",
-                    "--verbose",
-                    "--multi-dex",
-                    "--output=" + new File(_path).getParentFile().getAbsolutePath(),
-                    _path
+            R8.main(new String[]{
+                // 6.3.0 fix1
+                "--debug",
+                "--verbose",
+                "--multi-dex",
+                "--output=" + new File(_path).getParentFile().getAbsolutePath(),
+                _path
             });
+
         }
     }
 
