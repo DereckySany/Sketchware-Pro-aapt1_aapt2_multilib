@@ -159,57 +159,6 @@ public class LibraryDownloader {
         return String.valueOf(clip.getItemAt(0).getText());
     }
 
-    public class DependencyFormatter() {
-        private String dependency;
-
-    public DependencyFormatter(String dependency) {
-        this.dependency = dependency;
-    }
-
-    public String formatDependency() {
-        if (dependency.isEmpty()) {
-            SketchwareUtil.toastError("Dependency can't be empty");
-        } else if (!dependency.contains(":")) {
-            SketchwareUtil.toastError("Invalid dependency");
-        } else if (dependency.contains("implementation") || dependency.contains(":")) {
-            if (dependency.contains("group:") || dependency.contains(",")) {
-                SketchwareUtil.toast("Maven Gradle");
-                /* clear Maven Gradle format:
-                implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' */
-                dependency = dependency.replace("implementation", "");
-                dependency = dependency.replace("\'", "");
-                dependency = dependency.replace(",", "");
-                dependency = dependency.replace("group:", "");
-                dependency = dependency.replace("name:", ":");
-                dependency = dependency.replace("version:", ":");   
-                dependency = dependency.replace(" ", "");       
-            } else if (dependency.contains("implementation") || dependency.contains(":")) {
-                SketchwareUtil.toast("Maven Gradle (Short), Gradle (Kotlin) or buildr");
-                /* clear Maven Gradle (Short) and Gradle (Kotlin) format:
-                implementation ("io.github.amrdeveloper:codeview:1.3.7") */
-                dependency = dependency.replace("implementation", "");
-                dependency = dependency.replace(" ", "");
-                dependency = dependency.replace("\'", "");
-                dependency = dependency.replace("\"", "");
-                dependency = dependency.replace("(", "");
-                dependency = dependency.replace(")", "");  
-             // buildr format
-                if (dependency.contains(":jar:")){
-                    dependency = dependency.replace(":jar:", ":"); 
-                }
-                if (dependency.contains(":aar:")){
-                    dependency = dependency.replace(":aar:", ":");
-                }
-            } else {
-                SketchwareUtil.toastError("Invalid dependency");
-            }
-            dependency = dependency.replace("\n", "");
-            dependency.trim();
-            }
-        return dependency;
-        }
-    }
-
 
     public void showDialog(OnCompleteListener listener) {
         this.listener = listener;
@@ -794,6 +743,56 @@ public class LibraryDownloader {
         }
     }
 
+    public class DependencyFormatter() {
+        private String dependency;
+
+    public DependencyFormatter(String dependency) {
+        this.dependency = dependency;
+    }
+
+    public String formatDependency() {
+        if (dependency.isEmpty()) {
+            SketchwareUtil.toastError("Dependency can't be empty");
+        } else if (!dependency.contains(":")) {
+            SketchwareUtil.toastError("Invalid dependency");
+        } else if (dependency.contains("implementation") || dependency.contains(":")) {
+            if (dependency.contains("group:") || dependency.contains(",")) {
+                SketchwareUtil.toast("Maven Gradle");
+                /* clear Maven Gradle format:
+                implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' */
+                dependency = dependency.replace("implementation", "");
+                dependency = dependency.replace("\'", "");
+                dependency = dependency.replace(",", "");
+                dependency = dependency.replace("group:", "");
+                dependency = dependency.replace("name:", ":");
+                dependency = dependency.replace("version:", ":");   
+                dependency = dependency.replace(" ", "");       
+            } else if (dependency.contains("implementation") || dependency.contains(":")) {
+                SketchwareUtil.toast("Maven Gradle (Short), Gradle (Kotlin) or buildr");
+                /* clear Maven Gradle (Short) and Gradle (Kotlin) format:
+                implementation ("io.github.amrdeveloper:codeview:1.3.7") */
+                dependency = dependency.replace("implementation", "");
+                dependency = dependency.replace(" ", "");
+                dependency = dependency.replace("\'", "");
+                dependency = dependency.replace("\"", "");
+                dependency = dependency.replace("(", "");
+                dependency = dependency.replace(")", "");  
+             // buildr format
+                if (dependency.contains(":jar:")){
+                    dependency = dependency.replace(":jar:", ":"); 
+                }
+                if (dependency.contains(":aar:")){
+                    dependency = dependency.replace(":aar:", ":");
+                }
+            } else {
+                SketchwareUtil.toastError("Invalid dependency");
+            }
+            dependency = dependency.replace("\n", "");
+            dependency.trim();
+            }
+        return dependency;
+        }
+    }
 
     public interface OnCompleteListener {
         void onComplete();
