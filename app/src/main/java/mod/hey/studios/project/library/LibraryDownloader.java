@@ -226,12 +226,14 @@ public class LibraryDownloader {
         });
 
         start.setOnClickListener(startView -> {
-
-            if (dependency.isEmpty()) {
-                SketchwareUtil.toastError("Dependency can't be empty");
-            } else if (!dependency.contains(":")) {
-                SketchwareUtil.toastError("Invalid dependency");
-            } else if (dependency.contains("implementation") || dependency.contains(":")) {
+                String dependency = library.getText().toString();
+                if (dependency.isEmpty()) {
+                    SketchwareUtil.toastError("Dependency can't be empty");
+                    library.setTextColor(0xFF000000);
+                } else if (!dependency.contains(":")) {
+                    SketchwareUtil.toastError("Invalid dependency");
+                    library.setTextColor(0xFFf91010);
+                } else if (dependency.contains("implementation") || dependency.contains(":")) {
                 if (dependency.contains("group:") || dependency.contains(",")) {
                     SketchwareUtil.toast("Maven Gradle");
                     /* clear Maven Gradle format:
@@ -264,6 +266,7 @@ public class LibraryDownloader {
                     }
                 } else {
                     SketchwareUtil.toastError("Invalid dependency");
+                    library.setTextColor(0xFFf91010);
                 }
                 dependency = dependency.replace("\n", "");
                 dependency.trim();
