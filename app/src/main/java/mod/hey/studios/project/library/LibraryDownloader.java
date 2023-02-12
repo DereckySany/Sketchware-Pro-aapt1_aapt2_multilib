@@ -79,6 +79,7 @@ public class LibraryDownloader {
     private boolean isAarAvailable = false, isAarDownloaded = false;
     private boolean isJarAvailable = false, isJarDownloaded = false;
     private boolean Use_Aar = true;
+    private String typeLib = "";
     private int downloadId;
     private String libName = "";
     private String currentRepo = "";
@@ -281,6 +282,7 @@ public class LibraryDownloader {
                     FileUtil.makeDir(libName);
                 }
                 Use_Aar = useAar.isChecked();
+                typeLib = (Use_Aar ? "aar" : "jar");
 
                 isAarDownloaded = false;
                 isAarAvailable = false;
@@ -304,9 +306,9 @@ public class LibraryDownloader {
                 _getRepository();
                 counter = 0;
                 currentRepo = repoUrls.get(counter);
-
+                
                 downloadId = _download(
-                        currentRepo.concat(getDownloadLink(dependency, Use_Aar ? "aar" : "jar")),
+                        currentRepo.concat(getDownloadLink(dependency, typeLib)),
                         downloadPath,
                         getLibName(dependency + ".zip"),
                         library,
@@ -672,7 +674,7 @@ public class LibraryDownloader {
                                     message.setText("Searching... " + counter + "/" + repoUrls.size() + " [" + name + "]");
 
                                     downloadId = _download(
-                                            currentRepo.concat(getDownloadLink(dependency, Use_Aar ? "aar" : "jar")),
+                                            currentRepo.concat(getDownloadLink(dependency, typeLib)),
                                             downloadPath,
                                             getLibName(library.getText().toString()) + ".zip",
                                             library,
@@ -745,39 +747,6 @@ public class LibraryDownloader {
         repoNames.clear();
         counter = 0;
 
-        HashMap<String, Object> repoConfig = getRepoConfig();
-        for (HashMap<String, Object> configuration : repoConfig) {
-            String repoUrl = (String) configuration.get("url");
-            String repoName = (String) configuration.get("name");
-
-            if (repoUrl != null && repoName != null) {
-                repoUrls.add(repoUrl);
-                repoNames.add(repoName);
-                counter++;
-            }
-        }
-    }
-
-    private HashMap<String, Object> getRepoConfig() {
-        HashMap<String, Object> repoConfig;
-        try {
-            String repositories = FileUtil.readFile(CONFIGURED_REPOSITORIES_FILE.getAbsolutePath());
-            repoConfig = new Gson().fromJson(repositories, Helper.TYPE_MAP_LIST);
-        } catch (JsonParseException | IOException ignored) {
-            SketchwareUtil.toastError("Custom Repositories configuration file couldn't be read from. Using default repositories for now", Toast.LENGTH_LONG);
-            repoConfig = new Gson().fromJson(DEFAULT_REPOSITORIES_FILE_CONTENT, Helper.TYPE_MAP_LIST);
-        }
-        return repoConfig;
-    }
-
-
-    /*
-    private void _getRepository() {
-        repoUrls.clear();
-        repoMap.clear();
-        repoNames.clear();
-        counter = 0;
-
         String repositories = null;
         List<HashMap<String, Object>> repoConfig = null;
         try {
@@ -812,7 +781,7 @@ public class LibraryDownloader {
             }
         }
     }
-    */
+    
     public interface OnCompleteListener {
         void onComplete();
     }
