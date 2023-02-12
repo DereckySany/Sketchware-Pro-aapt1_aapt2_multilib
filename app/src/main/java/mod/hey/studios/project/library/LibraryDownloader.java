@@ -76,8 +76,7 @@ public class LibraryDownloader {
     boolean use_d8;
     private OnCompleteListener listener;
     private AlertDialog dialog;
-    private boolean isAarAvailable = false, isAarDownloaded = false;
-    private boolean isJarAvailable = false, isJarDownloaded = false;
+    private boolean isAvailable = false, isDownloaded = false;
     private boolean Use_Aar = true;
     private int downloadId;
     private String libName = "";
@@ -319,11 +318,8 @@ public class LibraryDownloader {
                 
                 Use_Aar = useAar.isChecked();
 
-                isAarDownloaded = false;
-                isAarAvailable = false;
-
-                isJarDownloaded = false;
-                isJarAvailable = false;
+                isDownloaded = false;
+                isAvailable = false;
 
                 library.setEnabled(false);
 
@@ -343,7 +339,7 @@ public class LibraryDownloader {
                 currentRepo = repoUrls.get(counter);
 
                 downloadId = _download(
-                        currentRepo.concat((Use_Aar ? _getAarDownloadLink(dependency) : _getJarDownloadLink(dependency))),
+                        currentRepo.concat(_getDownloadLink(dependency,Use_Aar))),
                         downloadPath,
                         _getLibName(dependency + ".zip"),
                         library,
@@ -387,6 +383,22 @@ public class LibraryDownloader {
         });
     }
 
+    private String _getDownloadLink(String str, boolean type) {
+        String[] split = str.split(":");
+        String str2 = "/";
+
+        for (int i = 0; i < split.length - 1; i++) {
+            str2 = str2.concat(split[i].replace(".", "/") + "/");
+        }
+
+        return str2.concat(split[split.length - 1]).concat("/").concat(_getTypeLibName(str,type));
+    }
+    // new method
+    private String _getTypeLibName(String str, boolean typeAar) {
+    String[] split = str.split(":");
+    return split[split.length - 2] + "-" + split[split.length - 1] + (typeAar ? ".aar" : ".jar");
+    }
+    /*
     private String _getAarDownloadLink(String str) {
         String[] split = str.split(":");
         String str2 = "/";
@@ -397,7 +409,7 @@ public class LibraryDownloader {
 
         return str2.concat(split[split.length - 1]).concat("/").concat(_getAarName(str));
     }
-    /** keep separated for futures fix **/
+    // keep separated for futures fix //
     private String _getJarDownloadLink(String str) {
         String[] split = str.split(":");
         String str2 = "/";
@@ -413,12 +425,12 @@ public class LibraryDownloader {
         String[] split = str.split(":");
         return split[split.length - 2] + "-" + split[split.length - 1] + ".aar";
     }
-    /** keep separated for futures fix **/
+    // keep separated for futures fix //
     private String _getJarName(String str) {
         String[] split = str.split(":");
         return split[split.length - 2] + "-" + split[split.length - 1] + ".jar";
     }
-
+    */
     private String _getLibName(String str) {
         String[] split = str.split(":");
         return split[split.length - 2] + "_v_" + split[split.length - 1];
@@ -662,21 +674,17 @@ public class LibraryDownloader {
                 .start(new OnDownloadListener() {
                     @Override
                     public void onDownloadComplete() {
-                        // this is a default in Sketchware
-                        isAarAvailable = Use_Aar;
-                        isAarDownloaded = Use_Aar;
-                        // this is the beginning of magic
-                        isJarAvailable = !isAarAvailable;
-                        isJarDownloaded = !isAarDownloaded;
+
+                        isAvailable = true;
+                        isDownloaded = true;
 
                         StringBuilder path2 = new StringBuilder();
                         path2.append(downloadPath);
                         path2.append(_getLibName(library.getText().toString()).concat(".zip"));
 
-                        if (isAarDownloaded && isAarAvailable) {
+                        if (Use_Aar) {
                             _unZipFile(path2.toString(), libName);
-                        }
-                        if (isJarDownloaded && isJarAvailable) {
+                        } else {
                             FileUtil.makeDir(path2.toString());
                             copyFile(path2.toString(), libName.concat("/classes.jar").toString());
                         }
@@ -742,7 +750,7 @@ public class LibraryDownloader {
                     @Override
                     public void onError(PRDownloader.Error e) {
                         if (e.isServerError()) {
-                            if ((Use_Aar ? !(isAarDownloaded || isAarAvailable) : !(isJarDownloaded || isJarAvailable))) {
+                            if (isDownloaded || isAvailable) {
                                 if (counter < repoUrls.size()) {
                                     currentRepo = repoUrls.get(counter);
                                     String name = repoNames.get(counter);
@@ -751,7 +759,7 @@ public class LibraryDownloader {
                                     message.setText("Searching... " + counter + "/" + repoUrls.size() + " [" + name + "]");
 
                                     downloadId = _download(
-                                            currentRepo.concat((Use_Aar ? _getAarDownloadLink(library.getText().toString()) : _getJarDownloadLink(library.getText().toString()))),
+                                            currentRepo.concat(_getDownloadLink(library.getText().toString(),Use_Aar)),
                                             downloadPath,
                                             _getLibName(library.getText().toString()) + ".zip",
                                             library,
@@ -793,6 +801,7 @@ public class LibraryDownloader {
                             }
                         } else {
                             if (e.isConnectionError()) {
+                                FileUtil.deleteFile(libName);
                                 message.setText("Downloading failed. No network");
                                 library.setEnabled(true);
 
