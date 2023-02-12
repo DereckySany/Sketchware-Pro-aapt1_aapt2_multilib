@@ -339,7 +339,7 @@ public class LibraryDownloader {
                 currentRepo = repoUrls.get(counter);
 
                 downloadId = _download(
-                        currentRepo.concat(_getDownloadLink(dependency,Use_Aar))),
+                        currentRepo.concat(_getDownloadLink(dependency,Use_Aar)),
                         downloadPath,
                         _getLibName(dependency + ".zip"),
                         library,
