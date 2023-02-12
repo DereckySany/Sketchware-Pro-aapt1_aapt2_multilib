@@ -86,11 +86,18 @@ public class LibraryDownloader {
     private ArrayList<HashMap<String, Object>> repoMap = new ArrayList<>();
     private ProgressDialog progressDialog;
 
-    public LibraryDownloader(Activity context, String tool) {
+    public LibraryDownloader(Activity context, boolean use_d8) {
         this.context = context;
-        this.tool = tool;
+        this.use_d8 = use_d8;
 
         downloadPath = FileUtil.getExternalStorageDir() + "/.sketchware/libs/local_libs/";
+    }
+    
+    public LibraryDownloader(Activity context, String tool) {
+    this.context = context;
+    this.tool = tool;
+
+    downloadPath = FileUtil.getExternalStorageDir() + "/.sketchware/libs/local_libs/";
     }
 
     private static void mkdirs(File file, String str) {
@@ -268,14 +275,62 @@ public class LibraryDownloader {
             if (dependency.isEmpty()) {
                 SketchwareUtil.toastError("Dependency can't be empty");
                 library.setTextColor(0xFF000000);
+            } else {
+                String gradleFormat = "implementation[ ]*(?<group>[^\\s:]+):(?<name>[^\\s:]+):(?<version>[^\\s:]+)";
+                String shortGradleFormat = "implementation[ ]*\\((?<group>[^\\s:]+):(?<name>[^\\s:]+):(?<version>[^\\s:]+)\\)";
+                String buildrFormat = "(?<group>[^\\s:]+):(?<name>[^\\s:]+):(?<version>[^\\s:]+)(:jar:|:aar:)?";
+
+                Pattern gradlePattern = Pattern.compile(gradleFormat);
+                Pattern shortGradlePattern = Pattern.compile(shortGradleFormat);
+                Pattern buildrPattern = Pattern.compile(buildrFormat);
+
+                Matcher gradleMatcher = gradlePattern.matcher(dependency);
+                Matcher shortGradleMatcher = shortGradlePattern.matcher(dependency);
+                Matcher buildrMatcher = buildrPattern.matcher(dependency);
+
+                if (gradleMatcher.find()) {
+                    SketchwareUtil.toast("Maven Gradle");
+                    dependency = gradleMatcher.group("group") + ":" + gradleMatcher.group("name") + ":" + gradleMatcher.group("version");
+                } else if (shortGradleMatcher.find()) {
+                    SketchwareUtil.toast("Maven Gradle (Short), Gradle (Kotlin) or buildr");
+                    dependency = shortGradleMatcher.group("group") + ":" + shortGradleMatcher.group("name") + ":" + shortGradleMatcher.group("version");
+                } else if (buildrMatcher.find()) {
+                    SketchwareUtil.toast("buildr");
+                    dependency = buildrMatcher.group("group") + ":" + buildrMatcher.group("name") + ":" + buildrMatcher.group("version");
+                    if (dependency.endsWith(":jar:")) {
+                        useJar.setChecked(true);
+                        dependency = dependency.replace(":jar:", "");
+                    }
+                    if (dependency.endsWith(":aar:")) {
+                        useAar.setChecked(true);
+                        dependency = dependency.replace(":aar:", "");
+                    }
+                } else {
+                    SketchwareUtil.toastError("Invalid dependency");
+                    library.setTextColor(0xFFf91010);
+                }
+                dependency = dependency.trim();
+                library.setText(dependency);
+                library.setTextColor(0xFF00E676);
+
+                libName = downloadPath + _getLibName(dependency);
+
+
+
+            /*
+            String dependency = library.getText().toString();
+
+            if (dependency.isEmpty()) {
+                SketchwareUtil.toastError("Dependency can't be empty");
+                library.setTextColor(0xFF000000);
             } else if (!dependency.contains(":")) {
                 SketchwareUtil.toastError("Invalid dependency");
                 library.setTextColor(0xFFf91010);
             } else if (dependency.contains("implementation") || dependency.contains(":")) {             
 	        if (dependency.contains("group:") || dependency.contains(",")) {
                 SketchwareUtil.toast("Maven Gradle");
-                /* clear Maven Gradle format:
-                implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' */
+                // clear Maven Gradle format:
+                // implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' 
                 dependency = dependency.replace("implementation", "");
                 dependency = dependency.replace("\'", "");
                 dependency = dependency.replace(",", "");
@@ -285,8 +340,8 @@ public class LibraryDownloader {
                 dependency = dependency.replace(" ", "");       
 	        } else if (dependency.contains("implementation") || dependency.contains(":")) {
                 SketchwareUtil.toast("Maven Gradle (Short), Gradle (Kotlin) or buildr");
-	        /* clear Maven Gradle (Short) and Gradle (Kotlin) format:
-                implementation ("io.github.amrdeveloper:codeview:1.3.7") */
+	        // clear Maven Gradle (Short) and Gradle (Kotlin) format:
+            //    implementation ("io.github.amrdeveloper:codeview:1.3.7") 
                 dependency = dependency.replace("implementation", "");
                 dependency = dependency.replace(" ", "");
                 dependency = dependency.replace("\'", "");
@@ -312,6 +367,7 @@ public class LibraryDownloader {
                 library.setTextColor(0xFF00E676);
 
                 libName = downloadPath + _getLibName(dependency);
+                */
 
                 if (!FileUtil.isExistFile(libName)) {
                     FileUtil.makeDir(libName);
@@ -730,6 +786,13 @@ public class LibraryDownloader {
 
                         isAvailable = true;
                         isDownloaded = true;
+                        if (tool.equals("D8") || tool.equals("R8")) {
+                                use_d8 = true;
+                            } else if (tool.equals("Dx")) {
+                                use_d8 = false;
+                            } else {
+                                message.setText("Ferramenta não suportada: " + tool);
+                        }
 
                         StringBuilder path2 = new StringBuilder();
                         path2.append(downloadPath);
@@ -743,13 +806,6 @@ public class LibraryDownloader {
                         }
 
                         if (FileUtil.isExistFile(libName.concat("/classes.jar"))) {
-                            if (tool.equals("D8") || tool.equals("R8")) {
-                                use_d8 = true;
-                            } else if (tool.equals("Dx")) {
-                                use_d8 = false;
-                            } else {
-                                message.setText("Ferramenta não suportada: " + tool);
-                            }
                             if (use_d8 || JarCheck.checkJar(libName.concat("/classes.jar"), 44, 51)) {
 
                                 message.setText("Download completed!");
