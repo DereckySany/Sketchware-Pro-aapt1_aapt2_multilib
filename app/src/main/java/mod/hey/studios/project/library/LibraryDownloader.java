@@ -94,45 +94,22 @@ public class LibraryDownloader {
     }
 
     private static void mkdirs(File file, String str) {
-        File file2 = new File(file, str);
-        if (!file2.exists())
-            file2.mkdirs();
+        new File(file, str).mkdirs();
     }
 
     public static void copyFile(String sourcePath, String destPath) {
         if (!FileUtil.isExistFile(sourcePath)) return;
         createNewFile(destPath);
 
-        FileInputStream fis = null;
-        FileOutputStream fos = null;
-
-        try {
-            fis = new FileInputStream(sourcePath);
-            fos = new FileOutputStream(destPath, false);
-
+        try (FileInputStream fis = new FileInputStream(sourcePath);
+            FileOutputStream fos = new FileOutputStream(destPath, false)) {
             byte[] buff = new byte[1024];
-            int length = 0;
-
+            int length;
             while ((length = fis.read(buff)) > 0) {
                 fos.write(buff, 0, length);
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (fis != null) {
-                try {
-                    fis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (fos != null) {
-                try {
-                    fos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
@@ -161,33 +138,93 @@ public class LibraryDownloader {
         return str.substring(0, lastIndexOf);
     }
 
-    private static void extractFile(ZipInputStream zipInputStream, File file, String str) throws IOException {
-        byte[] bArr = new byte[4096];
-        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(new File(file, str)));
-        while (true) {
-            int read = zipInputStream.read(bArr);
-
-            if (read == -1) {
-                bufferedOutputStream.close();
-                return;
+    private static void extractFile(ZipInputStream zipInputStream, File directory, String fileName) throws IOException {
+        byte[] buffer = new byte[4096];
+        File file = new File(directory, fileName);
+        try (BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
+            int bytesRead;
+            while ((bytesRead = zipInputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
             }
-
-            bufferedOutputStream.write(bArr, 0, read);
         }
     }
 
-    public String getClipeBoard() {
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(context.CLIPBOARD_SERVICE);
-        if (clipboard.hasPrimaryClip()) {
-            //android.content.ClipDescription description = clipboard.getPrimaryClipDescription();
-            android.content.ClipData data = clipboard.getPrimaryClip();
-            //if (data != null && description != null && description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN))
-            if (data != null) {
-                return String.valueOf(data.getItemAt(0).getText());
+    public String getClipboard() {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        if (!clipboard.hasPrimaryClip()) return null;
+
+        ClipData clip = clipboard.getPrimaryClip();
+        if (clip == null) return null;
+
+        return String.valueOf(clip.getItemAt(0).getText());
+    }
+
+    public class DependencyExtractor {
+
+        private static final Pattern DEPENDENCY_PATTERN = Pattern.compile("(implementation\\s+'|<dependency\\s+org=\\\"|libraryDependencies\\s+=\\s+\\\"|<dependency\\s+org=\\\"|dependency\\s+|\\[)(.*)/(.*)\\s+(.*):(.*):(.*)('|\\\"\\]|/>|\\\"\\]|\\\")");
+
+        public static String extractDependency(String dependencyFormat) {
+            Matcher matcher = DEPENDENCY_PATTERN.matcher(dependencyFormat);
+
+            if (matcher.matches()) {
+            return matcher.group(2) + ":" + matcher.group(5) + ":" + matcher.group(6);
+            } else {
+            return "";
             }
         }
-        return null;
     }
+
+    public class DependencyFormatter {
+        private String dependency;
+
+    public DependencyFormatter(String dependency) {
+        this.dependency = dependency;
+    }
+
+    public String formatDependency() {
+        if (dependency.isEmpty()) {
+            SketchwareUtil.toastError("Dependency can't be empty");
+        } else if (!dependency.contains(":")) {
+            SketchwareUtil.toastError("Invalid dependency");
+        } else if (dependency.contains("implementation") || dependency.contains(":")) {
+            if (dependency.contains("group:") || dependency.contains(",")) {
+                SketchwareUtil.toast("Maven Gradle");
+                /* clear Maven Gradle format:
+                implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' */
+                dependency = dependency.replace("implementation", "");
+                dependency = dependency.replace("\'", "");
+                dependency = dependency.replace(",", "");
+                dependency = dependency.replace("group:", "");
+                dependency = dependency.replace("name:", ":");
+                dependency = dependency.replace("version:", ":");   
+                dependency = dependency.replace(" ", "");       
+            } else if (dependency.contains("implementation") || dependency.contains(":")) {
+                SketchwareUtil.toast("Maven Gradle (Short), Gradle (Kotlin) or buildr");
+                /* clear Maven Gradle (Short) and Gradle (Kotlin) format:
+                implementation ("io.github.amrdeveloper:codeview:1.3.7") */
+                dependency = dependency.replace("implementation", "");
+                dependency = dependency.replace(" ", "");
+                dependency = dependency.replace("\'", "");
+                dependency = dependency.replace("\"", "");
+                dependency = dependency.replace("(", "");
+                dependency = dependency.replace(")", "");  
+             // buildr format
+                if (dependency.contains(":jar:")){
+                    dependency = dependency.replace(":jar:", ":"); 
+                }
+                if (dependency.contains(":aar:")){
+                    dependency = dependency.replace(":aar:", ":");
+                }
+            } else {
+                SketchwareUtil.toastError("Invalid dependency");
+            }
+            dependency = dependency.replace("\n", "");
+            dependency.trim();
+            }
+        return dependency;
+        }
+    }
+
 
     public void showDialog(OnCompleteListener listener) {
         this.listener = listener;
@@ -235,10 +272,6 @@ public class LibraryDownloader {
 
         library.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
             public void onTextChanged(CharSequence _param1, int _param2, int _param3, int _param4) {
                 final String _charSeq = _param1.toString();
                 if (_charSeq.length() > 0) {
@@ -247,11 +280,8 @@ public class LibraryDownloader {
                     acao.setImageResource(R.drawable.ic_content_paste_grey);
                 }
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
         });
+
 
         acao.setOnClickListener(acaoView -> {
             if (library.getText().toString().length() > 0) {
@@ -262,56 +292,38 @@ public class LibraryDownloader {
         });
 
         start.setOnClickListener(startView -> {
-
-            String dependency = library.getText().toString();
-
-            if (dependency.isEmpty()) {
-                SketchwareUtil.toastError("Dependency can't be empty");
-                library.setTextColor(0xFF000000);
-            } else if (!dependency.contains(":")) {
-                SketchwareUtil.toastError("Invalid dependency");
-                library.setTextColor(0xFFf91010);
-            } else if (dependency.contains("implementation") || dependency.contains(":")) {             
-	        if (dependency.contains("group:") || dependency.contains(",")) {
-                SketchwareUtil.toast("Maven Gradle");
-                /* clear Maven Gradle format:
-                implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' */
-                dependency = dependency.replace("implementation", "");
-                dependency = dependency.replace("\'", "");
-                dependency = dependency.replace(",", "");
-                dependency = dependency.replace("group:", "");
-                dependency = dependency.replace("name:", ":");
-                dependency = dependency.replace("version:", ":");   
-                dependency = dependency.replace(" ", "");       
-	        } else if (dependency.contains("implementation") || dependency.contains(":")) {
-                SketchwareUtil.toast("Maven Gradle (Short), Gradle (Kotlin) or buildr");
-	        /* clear Maven Gradle (Short) and Gradle (Kotlin) format:
-                implementation ("io.github.amrdeveloper:codeview:1.3.7") */
-                dependency = dependency.replace("implementation", "");
-                dependency = dependency.replace(" ", "");
-                dependency = dependency.replace("\'", "");
-                dependency = dependency.replace("\"", "");
-                dependency = dependency.replace("(", "");
-                dependency = dependency.replace(")", "");  
-             // buildr format
-                if (dependency.contains(":jar:")){
-                    dependency = dependency.replace(":jar:", ":"); 
-                    useJar.setChecked(true);
-                }
-                if (dependency.contains(":aar:")){
-                    dependency = dependency.replace(":aar:", ":");
-                    useAar.setChecked(true);
-                }
-                } else {
-                    SketchwareUtil.toastError("Invalid dependency");
-                    library.setTextColor(0xFFf91010);
-                }
-                dependency = dependency.replace("\n", "");
-                dependency.trim();
+                //
+                String dependency = library.getText().toString();
+                DependencyFormatter formatter = new DependencyFormatter(dependency);
+                String formattedDependency = formatter.formatDependency();
+                //
+                dependency = formattedDependency.replace("\n", "");
+                if (!dependency.isEmpty()){
                 library.setText(dependency);
                 library.setTextColor(0xFF00E676);
 
-                libName = downloadPath + _getLibName(dependency);
+                /*
+                String dependency = library.getText().toString();
+
+                if (dependency.isEmpty()) {
+                    SketchwareUtil.toastError("Dependency can't be empty");
+                    library.setTextColor(0xFF000000);
+                } else {
+                    String extractedDependency = DependencyExtractor.extractDependency(dependency);
+
+                    if (extractedDependency.isEmpty()) {
+                        SketchwareUtil.toastError("Invalid dependency");
+                        library.setTextColor(0xFFf91010);
+                    } else {
+                        SketchwareUtil.toast("Dependency extracted successfully");
+                        library.setText(extractedDependency);
+                        library.setTextColor(0xFF00E676);
+                    }
+                }
+
+                */
+
+                libName = downloadPath + getLibName(dependency);
 
                 if (!FileUtil.isExistFile(libName)) {
                     FileUtil.makeDir(libName);
@@ -342,9 +354,9 @@ public class LibraryDownloader {
                 currentRepo = repoUrls.get(counter);
 
                 downloadId = _download(
-                        currentRepo.concat((Use_Aar ? _getAarDownloadLink(dependency) : _getJarDownloadLink(dependency))),
+                        currentRepo.concat(getDownloadLink(dependency,(Use_Aar ? "aar" : "jar"))),
                         downloadPath,
-                        _getLibName(dependency + ".zip"),
+                        getLibName(dependency + ".zip"),
                         library,
                         message,
                         progressBarContainer,
@@ -385,126 +397,85 @@ public class LibraryDownloader {
             }
         });
     }
+    private String getDownloadLink(String str, String fileType) {
+    String[] components = str.split(":");
+    String link = "/";
 
-    private String _getAarDownloadLink(String str) {
-        String[] split = str.split(":");
-        String str2 = "/";
-
-        for (int i = 0; i < split.length - 1; i++) {
-            str2 = str2.concat(split[i].replace(".", "/") + "/");
-        }
-
-        return str2.concat(split[split.length - 1]).concat("/").concat(_getAarName(str));
-    }
-    /** keep separated for futures fix **/
-    private String _getJarDownloadLink(String str) {
-        String[] split = str.split(":");
-        String str2 = "/";
-
-        for (int i = 0; i < split.length - 1; i++) {
-            str2 = str2.concat(split[i].replace(".", "/") + "/");
-        }
-
-        return str2.concat(split[split.length - 1]).concat("/").concat(_getJarName(str));
+    for (int i = 0; i < components.length - 1; i++) {
+        link = link.concat(components[i].replace(".", "/") + "/");
     }
 
-    private String _getAarName(String str) {
-        String[] split = str.split(":");
-        return split[split.length - 2] + "-" + split[split.length - 1] + ".aar";
-    }
-    /** keep separated for futures fix **/
-    private String _getJarName(String str) {
-        String[] split = str.split(":");
-        return split[split.length - 2] + "-" + split[split.length - 1] + ".jar";
+    return link.concat(components[components.length - 1]).concat("/").concat(getFileName(str, fileType));
     }
 
-    private String _getLibName(String str) {
-        String[] split = str.split(":");
-        return split[split.length - 2] + "_V_" + split[split.length - 1];
+    private String getFileName(String str, String fileType) {
+        String[] components = str.split(":");
+        return components[components.length - 2] + "-" + components[components.length - 1] + "." + fileType;
+    }
+
+    private String getLibName(String str) {
+        String[] components = str.split(":");
+        return components[components.length - 2] + "_V_" + components[components.length - 1];
     }
 
     private void _jar2dex(String _path) throws Exception {
-        // 6.3.0
-            if (use_d8) {
-                // File libs = new File(context.getFilesDir(), "libs");
+        ArrayList<String> cmd = new ArrayList<>();
 
-                ArrayList<String> cmd = new ArrayList<>();
-                cmd.add("--release");
-                cmd.add("--intermediate");
+        if (use_d8) {
+            cmd.add("--release");
+            cmd.add("--intermediate");
 
-                cmd.add("--lib");
-                cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
-                // cmd.add(new File(libs, "android.jar").getAbsolutePath());
+            cmd.add("--lib");
+            cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
 
-                cmd.add("--classpath");
-                cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
-                // cmd.add(new File(libs, "core-lambda-stubs.jar").getAbsolutePath());
+            cmd.add("--classpath");
+            cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
 
-                cmd.add("--output");
-                cmd.add(new File(_path).getParentFile().getAbsolutePath());
+            cmd.add("--output");
+            cmd.add(new File(_path).getParentFile().getAbsolutePath());
 
-                // Input
-                cmd.add(_path);
-                // run D8 with list commands
-                D8.main(cmd.toArray(new String[0]));
-            } else {
-                // 6.3.0 fix2
-                Main.clearInternTables();
+            cmd.add(_path);
+            D8.main(cmd.toArray(new String[0]));
+        } else {
+            Main.clearInternTables();
 
-                // dx
-                Main.main(new String[]{
-                        // 6.3.0 fix1
-                        "--dex", // not use ??
-                        "--debug",
-                        "--verbose",
-                        "--multi-dex",
-                        "--output=" + new File(_path).getParentFile().getAbsolutePath(),
-                        _path
-                });
-            }
+            cmd.add("--debug");
+            cmd.add("--verbose");
+            cmd.add("--multi-dex");
+            cmd.add("--output=" + new File(_path).getParentFile().getAbsolutePath());
+            cmd.add(_path);
+            Main.main(cmd.toArray(String[].class));
+        }
     }
 
-    private void _unZipFile(String str, String str2) {
-        try {
-            File file = new File(str2);
-            ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(str));
-
-            while (true) {
-                ZipEntry nextEntry = zipInputStream.getNextEntry();
-
-                if (nextEntry == null) {
-                    zipInputStream.close();
-                    return;
-                }
-
+    private void _unZipFile(String str, String str2) throws IOException {
+        File file = new File(str2);
+        try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(str))) {
+            ZipEntry nextEntry;
+            while ((nextEntry = zipInputStream.getNextEntry()) != null) {
                 String name = nextEntry.getName();
-
                 if (nextEntry.isDirectory()) {
                     mkdirs(file, name);
                 } else {
                     String dirpart = dirpart(name);
-
                     if (dirpart != null) {
                         mkdirs(file, dirpart);
                     }
-
                     extractFile(zipInputStream, file, name);
                 }
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
-    private String getLastSegment(String path) {
-        return Uri.parse(path).getLastPathSegment();
-    }
 
-    private String findPackageName(String path, String defaultValue) {
+        private String getLastSegment(String path) {
+        int lastSlashIndex = path.lastIndexOf('/');
+        return lastSlashIndex != -1 ? path.substring(lastSlashIndex + 1) : path;
+        }
+
+        private String findPackageName(String path, String defaultValue) {
         ArrayList<String> files = new ArrayList<>();
         FileUtil.listDir(path, files);
-
         // Method 1: use manifest
         for (String f : files) {
             if (getLastSegment(f).equals("AndroidManifest.xml")) {
@@ -534,8 +505,6 @@ public class LibraryDownloader {
     }
 
     private void deleteUnnecessaryFiles(String path) {
-
-        // 6.3.0
         String[] list = {
                 "res",
                 "classes.dex",
@@ -548,19 +517,18 @@ public class LibraryDownloader {
                 "proguard.txt"
         };
 
-        List<String> validFiles = new ArrayList<>(Arrays.asList(list));
+        List<String> validFiles = Arrays.asList(list);
         ArrayList<String> files = new ArrayList<>();
         FileUtil.listDir(path, files);
 
         for (String f : files) {
-            // 6.3.0
-            // Skip all dex files
             String p = getLastSegment(f);
 
             if (p.startsWith("classes") && p.endsWith(".dex")) continue;
             if (!validFiles.contains(p)) FileUtil.deleteFile(f);
         }
     }
+
 
     @SuppressLint("SetTextI18n")
     private int _download(
@@ -670,7 +638,7 @@ public class LibraryDownloader {
 
                         StringBuilder path2 = new StringBuilder();
                         path2.append(downloadPath);
-                        path2.append(_getLibName(library.getText().toString()).concat(".zip"));
+                        path2.append(getLibName(library.getText().toString()).concat(".zip"));
 
                         if (Use_Aar) {
                             if (isAarDownloaded && isAarAvailable) {
@@ -752,9 +720,9 @@ public class LibraryDownloader {
                                     message.setText("Searching... " + counter + "/" + repoUrls.size() + " [" + name + "]");
 
                                     downloadId = _download(
-                                            currentRepo.concat((Use_Aar ? _getAarDownloadLink(library.getText().toString()) : _getJarDownloadLink(library.getText().toString()))),
+                                            currentRepo.concat(getDownloadLink(dependency,(Use_Aar ? "aar" : "jar"))),
                                             downloadPath,
-                                            _getLibName(library.getText().toString()) + ".zip",
+                                            getLibName(library.getText().toString()) + ".zip",
                                             library,
                                             message,
                                             progressBarContainer,
@@ -768,7 +736,6 @@ public class LibraryDownloader {
                                             useJar,
                                             progressbar1
                                     );
-
                                 } else {
                                     FileUtil.deleteFile(libName);
                                     message.setText("Library was not found in loaded repositories");
@@ -826,29 +793,27 @@ public class LibraryDownloader {
         repoNames.clear();
         counter = 0;
 
-        readRepositories:
-        {
-            String repositories;
+        String repositories = null;
+        HashMap<String, Object> repoConfig = null;
+        try {
             if (CONFIGURED_REPOSITORIES_FILE.exists() && !(repositories = FileUtil.readFile(CONFIGURED_REPOSITORIES_FILE.getAbsolutePath())).isEmpty()) {
-                try {
-                    repoMap = new Gson().fromJson(repositories, Helper.TYPE_MAP_LIST);
+                repoConfig = new Gson().fromJson(repositories, Helper.TYPE_MAP_LIST);
+            }
+        } catch (JsonParseException ignored) {
+            // fall-through to shared error toast
+        }
 
-                    if (repoMap != null) {
-                        break readRepositories;
-                    }
-                } catch (JsonParseException ignored) {
-                    // fall-through to shared error toast
-                }
-
-                SketchwareUtil.toastError("Custom Repositories configuration file couldn't be read from. Using default repositories for now", Toast.LENGTH_LONG);
-            } else {
+        if (repoConfig == null) {
+            if (!CONFIGURED_REPOSITORIES_FILE.exists()) {
                 FileUtil.writeFile(CONFIGURED_REPOSITORIES_FILE.getAbsolutePath(), DEFAULT_REPOSITORIES_FILE_CONTENT);
             }
 
-            repoMap = new Gson().fromJson(DEFAULT_REPOSITORIES_FILE_CONTENT, Helper.TYPE_MAP_LIST);
+            SketchwareUtil.toastError("Custom Repositories configuration file couldn't be read from. Using default repositories for now", Toast.LENGTH_LONG);
+
+            repoConfig = new Gson().fromJson(DEFAULT_REPOSITORIES_FILE_CONTENT, Helper.TYPE_MAP_LIST);
         }
 
-        for (HashMap<String, Object> configuration : repoMap) {
+        for (HashMap<String, Object> configuration : repoConfig) {
             Object repoUrl = configuration.get("url");
 
             if (repoUrl instanceof String) {
@@ -857,12 +822,12 @@ public class LibraryDownloader {
                 if (repoName instanceof String) {
                     repoUrls.add((String) repoUrl);
                     repoNames.add((String) repoName);
+                    counter++;
                 }
             }
-
-            counter++;
         }
     }
+
 
     public interface OnCompleteListener {
         void onComplete();

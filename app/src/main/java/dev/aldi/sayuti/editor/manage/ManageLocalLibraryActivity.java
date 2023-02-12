@@ -218,8 +218,8 @@ private void applyFilter(String query) {
             filteredList.add(library);
         }
     }
-    //adapter.updateData(filteredList);
-    adapter = new LibraryAdapter(filteredList);
+    adapter.updateData(filteredList);
+    //adapter = new LibraryAdapter(filteredList);
     listview.setAdapter(adapter);
     ((BaseAdapter)listview.getAdapter()).notifyDataSetChanged();
 }
