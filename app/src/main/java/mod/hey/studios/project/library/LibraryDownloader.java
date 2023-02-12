@@ -29,6 +29,7 @@ import android.content.ClipboardManager;
 //
 
 import com.android.tools.r8.D8;
+import com.android.tools.r8.R8;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.sketchware.remod.R;
