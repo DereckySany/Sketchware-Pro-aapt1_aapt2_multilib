@@ -159,7 +159,7 @@ public class LibraryDownloader {
         return String.valueOf(clip.getItemAt(0).getText());
     }
 
-    public class DependencyExtractor {
+    public class DependencyExtractor() {
 
         private static final Pattern DEPENDENCY_PATTERN = Pattern.compile("(implementation\\s+'|<dependency\\s+org=\\\"|libraryDependencies\\s+=\\s+\\\"|<dependency\\s+org=\\\"|dependency\\s+|\\[)(.*)/(.*)\\s+(.*):(.*):(.*)('|\\\"\\]|/>|\\\"\\]|\\\")");
 
@@ -174,7 +174,7 @@ public class LibraryDownloader {
         }
     }
 
-    public class DependencyFormatter {
+    public class DependencyFormatter() {
         private String dependency;
 
     public DependencyFormatter(String dependency) {
