@@ -92,7 +92,7 @@ public class LibraryDownloader {
 
         downloadPath = FileUtil.getExternalStorageDir() + "/.sketchware/libs/local_libs/";
     }
-    
+
     public LibraryDownloader(Activity context, String tool) {
     this.context = context;
     this.tool = tool;
@@ -275,7 +275,7 @@ public class LibraryDownloader {
             if (dependency.isEmpty()) {
                 SketchwareUtil.toastError("Dependency can't be empty");
                 library.setTextColor(0xFF000000);
-            } else {
+            } else if (dependency.contains(":")) {
                 String gradleFormat = "implementation[ ]*(?<group>[^\\s:]+):(?<name>[^\\s:]+):(?<version>[^\\s:]+)";
                 String shortGradleFormat = "implementation[ ]*\\((?<group>[^\\s:]+):(?<name>[^\\s:]+):(?<version>[^\\s:]+)\\)";
                 String buildrFormat = "(?<group>[^\\s:]+):(?<name>[^\\s:]+):(?<version>[^\\s:]+)(:jar:|:aar:)?";
@@ -317,57 +317,57 @@ public class LibraryDownloader {
 
 
 
-            /*
-            String dependency = library.getText().toString();
+                        /*
+                        String dependency = library.getText().toString();
 
-            if (dependency.isEmpty()) {
-                SketchwareUtil.toastError("Dependency can't be empty");
-                library.setTextColor(0xFF000000);
-            } else if (!dependency.contains(":")) {
-                SketchwareUtil.toastError("Invalid dependency");
-                library.setTextColor(0xFFf91010);
-            } else if (dependency.contains("implementation") || dependency.contains(":")) {             
-	        if (dependency.contains("group:") || dependency.contains(",")) {
-                SketchwareUtil.toast("Maven Gradle");
-                // clear Maven Gradle format:
-                // implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' 
-                dependency = dependency.replace("implementation", "");
-                dependency = dependency.replace("\'", "");
-                dependency = dependency.replace(",", "");
-                dependency = dependency.replace("group:", "");
-                dependency = dependency.replace("name:", ":");
-                dependency = dependency.replace("version:", ":");   
-                dependency = dependency.replace(" ", "");       
-	        } else if (dependency.contains("implementation") || dependency.contains(":")) {
-                SketchwareUtil.toast("Maven Gradle (Short), Gradle (Kotlin) or buildr");
-	        // clear Maven Gradle (Short) and Gradle (Kotlin) format:
-            //    implementation ("io.github.amrdeveloper:codeview:1.3.7") 
-                dependency = dependency.replace("implementation", "");
-                dependency = dependency.replace(" ", "");
-                dependency = dependency.replace("\'", "");
-                dependency = dependency.replace("\"", "");
-                dependency = dependency.replace("(", "");
-                dependency = dependency.replace(")", "");  
-             // buildr format
-                if (dependency.contains(":jar:")){
-                    dependency = dependency.replace(":jar:", ":"); 
-                    useJar.setChecked(true);
-                }
-                if (dependency.contains(":aar:")){
-                    dependency = dependency.replace(":aar:", ":");
-                    useAar.setChecked(true);
-                }
-                } else {
-                    SketchwareUtil.toastError("Invalid dependency");
-                    library.setTextColor(0xFFf91010);
-                }
-                dependency = dependency.replace("\n", "");
-                dependency.trim();
-                library.setText(dependency);
-                library.setTextColor(0xFF00E676);
+                        if (dependency.isEmpty()) {
+                            SketchwareUtil.toastError("Dependency can't be empty");
+                            library.setTextColor(0xFF000000);
+                        } else if (!dependency.contains(":")) {
+                            SketchwareUtil.toastError("Invalid dependency");
+                            library.setTextColor(0xFFf91010);
+                        } else if (dependency.contains("implementation") || dependency.contains(":")) {             
+                        if (dependency.contains("group:") || dependency.contains(",")) {
+                            SketchwareUtil.toast("Maven Gradle");
+                            // clear Maven Gradle format:
+                            // implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' 
+                            dependency = dependency.replace("implementation", "");
+                            dependency = dependency.replace("\'", "");
+                            dependency = dependency.replace(",", "");
+                            dependency = dependency.replace("group:", "");
+                            dependency = dependency.replace("name:", ":");
+                            dependency = dependency.replace("version:", ":");   
+                            dependency = dependency.replace(" ", "");       
+                        } else if (dependency.contains("implementation") || dependency.contains(":")) {
+                            SketchwareUtil.toast("Maven Gradle (Short), Gradle (Kotlin) or buildr");
+                        // clear Maven Gradle (Short) and Gradle (Kotlin) format:
+                        //    implementation ("io.github.amrdeveloper:codeview:1.3.7") 
+                            dependency = dependency.replace("implementation", "");
+                            dependency = dependency.replace(" ", "");
+                            dependency = dependency.replace("\'", "");
+                            dependency = dependency.replace("\"", "");
+                            dependency = dependency.replace("(", "");
+                            dependency = dependency.replace(")", "");  
+                        // buildr format
+                            if (dependency.contains(":jar:")){
+                                dependency = dependency.replace(":jar:", ":"); 
+                                useJar.setChecked(true);
+                            }
+                            if (dependency.contains(":aar:")){
+                                dependency = dependency.replace(":aar:", ":");
+                                useAar.setChecked(true);
+                            }
+                            } else {
+                                SketchwareUtil.toastError("Invalid dependency");
+                                library.setTextColor(0xFFf91010);
+                            }
+                            dependency = dependency.replace("\n", "");
+                            dependency.trim();
+                            library.setText(dependency);
+                            library.setTextColor(0xFF00E676);
 
-                libName = downloadPath + _getLibName(dependency);
-                */
+                            libName = downloadPath + _getLibName(dependency);
+                            */
 
                 if (!FileUtil.isExistFile(libName)) {
                     FileUtil.makeDir(libName);
@@ -490,10 +490,10 @@ public class LibraryDownloader {
     */
     private String _getLibName(String str) {
         String[] split = str.split(":");
-        return split[split.length - 2] + "_v_" + split[split.length - 1];
+        return split[split.length - 2] + "_V_" + split[split.length - 1];
     }
 
-    private void _jar2dex(String _path, String tool) throws Exception {
+    private void _jar2dex(String _path) throws Exception {
         // 6.3.0
         if (tool.equals("D8")) {
         // File libs = new File(context.getFilesDir(), "libs");
@@ -866,7 +866,7 @@ public class LibraryDownloader {
                     @Override
                     public void onError(PRDownloader.Error e) {
                         if (e.isServerError()) {
-                            if (isDownloaded || isAvailable) {
+                            if ((isDownloaded || isAvailable)) {
                                 if (counter < repoUrls.size()) {
                                     currentRepo = repoUrls.get(counter);
                                     String name = repoNames.get(counter);
@@ -1012,7 +1012,7 @@ public class LibraryDownloader {
         @Override
         protected String doInBackground(String... params) {
             try {
-                _jar2dex(params[0],tool);
+                _jar2dex(params[0]);
                 success = true;
             } catch (Exception e) {
                 success = false;
