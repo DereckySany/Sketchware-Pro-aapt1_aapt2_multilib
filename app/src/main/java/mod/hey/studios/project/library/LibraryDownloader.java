@@ -74,6 +74,7 @@ public class LibraryDownloader {
     private final ArrayList<String> repoNames = new ArrayList<>();
     Activity context;
     boolean use_d8;
+    String tool;
     private OnCompleteListener listener;
     private AlertDialog dialog;
     private boolean isAvailable = false, isDownloaded = false;
@@ -85,9 +86,9 @@ public class LibraryDownloader {
     private ArrayList<HashMap<String, Object>> repoMap = new ArrayList<>();
     private ProgressDialog progressDialog;
 
-    public LibraryDownloader(Activity context, boolean use_d8) {
+    public LibraryDownloader(Activity context, String tool) {
         this.context = context;
-        this.use_d8 = use_d8;
+        this.tool = tool;
 
         downloadPath = FileUtil.getExternalStorageDir() + "/.sketchware/libs/local_libs/";
     }
@@ -436,6 +437,57 @@ public class LibraryDownloader {
         return split[split.length - 2] + "_v_" + split[split.length - 1];
     }
 
+    private void _jar2dex(String _path, String tool) throws Exception {
+        // 6.3.0
+        if (tool.equals("D8")) {
+        // File libs = new File(context.getFilesDir(), "libs");
+                ArrayList<String> cmd = new ArrayList<>();
+            cmd.add("--release");
+            cmd.add("--intermediate");
+
+            cmd.add("--lib");
+            cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
+            // cmd.add(new File(libs, "android.jar").getAbsolutePath()));
+
+            cmd.add("--classpath");
+            cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
+            // cmd.add(new File(libs, "core-lambda-stubs.jar").getAbsolutePath());
+
+            cmd.add("--output");
+            cmd.add(new File(_path).getParentFile().getAbsolutePath());
+
+            // Input
+            cmd.add(_path);
+            // run D8 with list commands
+            D8.main(cmd.toArray(new String[0]));
+        } else if (tool.equals("Dx")) {
+            // 6.3.0 fix2
+            Main.clearInternTables();
+
+            // dx
+            Main.main(new String[]{
+                    // 6.3.0 fix1
+                    "--dex", // not use ??
+                    "--debug",
+                    "--verbose",
+                    "--multi-dex",
+                    "--output=" + new File(_path).getParentFile().getAbsolutePath(),
+                    _path
+            });
+        } else if (tool.equals("R8")) {
+            // R8
+            Main.main(new String[]{
+                    // 6.3.0 fix1
+                    "--debug",
+                    "--verbose",
+                    "--multi-dex",
+                    "--output=" + new File(_path).getParentFile().getAbsolutePath(),
+                    _path
+            });
+        }
+    }
+
+    /*
     private void _jar2dex(String _path) throws Exception {
         // 6.3.0
             if (use_d8) {
@@ -476,6 +528,7 @@ public class LibraryDownloader {
                 });
             }
     }
+    */
 
     private void _unZipFile(String str, String str2) {
         try {
@@ -690,6 +743,13 @@ public class LibraryDownloader {
                         }
 
                         if (FileUtil.isExistFile(libName.concat("/classes.jar"))) {
+                            if (tool.equals("D8") || tool.equals("R8")) {
+                                use_d8 = true;
+                            } else if (tool.equals("Dx")) {
+                                use_d8 = false;
+                            } else {
+                                throw new Exception("Ferramenta não suportada: " + tool);
+                            }
                             if (use_d8 || JarCheck.checkJar(libName.concat("/classes.jar"), 44, 51)) {
 
                                 message.setText("Download completed!");
@@ -887,7 +947,8 @@ public class LibraryDownloader {
             }
             progressDialog = new ProgressDialog(context);
             progressDialog.setTitle("Please wait");
-            progressDialog.setMessage((use_d8 ? "D8" : "Dx") + " is running...");
+            //progressDialog.setMessage((use_d8 ? "D8" : "Dx") + " is running...");
+            progressDialog.setMessage(tool + " is running...");
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
@@ -895,7 +956,7 @@ public class LibraryDownloader {
         @Override
         protected String doInBackground(String... params) {
             try {
-                _jar2dex(params[0]);
+                _jar2dex(params[0],tool);
                 success = true;
             } catch (Exception e) {
                 success = false;

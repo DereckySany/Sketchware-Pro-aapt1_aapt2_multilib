@@ -116,6 +116,21 @@ public class ManageLocalLibraryActivity extends Activity
     public void onClick(View v) {
         if (v.getId() == R.id.ig_toolbar_load_file) {
             new AlertDialog.Builder(this)
+                    .setTitle("Escolha o compilador")
+                    .setMessage("Você gostaria de usar DX, D8 ou R8 para compilar a biblioteca?\n" +
+                            "D8 suporta Java 8, enquanto que o DX não suporta. Limitação: o D8 só funciona no Android 8 e acima.\n" +
+                            "O R8 é o novo compilador oficial do Android Studio.")
+                    .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this,
+                            "D8").showDialog(ManageLocalLibraryActivity.this))
+                    .setNegativeButton("DX", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this,
+                            "Dx").showDialog(ManageLocalLibraryActivity.this))
+                    .setNeutralButton("R8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this,
+                            "R8").showDialog(ManageLocalLibraryActivity.this))
+                    .setCancelable(false)
+                    .show();
+
+            /*
+            new AlertDialog.Builder(this)
                     .setTitle("Dexer")
                     .setMessage("Would you like to use Dx or D8 to dex the library?\n" +
                             "D8 supports Java 8, whereas Dx does not. Limitation: D8 only works on Android 8 and above.")
@@ -125,6 +140,7 @@ public class ManageLocalLibraryActivity extends Activity
                             false).showDialog(ManageLocalLibraryActivity.this))
                     .setNeutralButton("Cancel", null)
                     .show();
+            */
         } else if (RESET_LOCAL_LIBRARIES_TAG.equals(v.getTag())) {
             if (!notAssociatedWithProject) {
                 aB dialog = new aB(this);
