@@ -212,6 +212,7 @@ public class Dp {
      *
      * @throws Exception Thrown if the compiler had any problems compiling
      */
+     /*
     public void createDexFilesFromClasses() throws Exception {
         FileUtil.makeDir(yq.binDirectoryPath + File.separator + "dex");
         if (proguard.isProguardEnabled() && isR8Enabled()) return;
@@ -251,6 +252,45 @@ public class Dp {
             }
         }
     }
+    */
+    //
+    public void createDexFilesFromClasses() throws Exception {
+    FileUtil.makeDir(yq.binDirectoryPath + File.separator + "dex");
+        if (proguard.isProguardEnabled() && isR8Enabled()) {
+            return;
+        }
+    long savedTimeMillis = System.currentTimeMillis();
+        if (isD8Enabled()) {
+            try {
+                DexCompiler.compileDexFiles(this);
+                LogUtil.d(TAG, "D8 took " + (System.currentTimeMillis() - savedTimeMillis) + "ms");
+            } catch (Exception e) {
+                LogUtil.e(TAG, "D8 failed to process .class files", e);
+                throw e;
+            }
+        } else {
+            List<String> args = Arrays.asList(
+                "--debug",
+                "--verbose",
+                "--multi-dex",
+                "--output=" + yq.binDirectoryPath + File.separator + "dex",
+                proguard.isProguardEnabled() ? yq.classesProGuardPath : yq.compiledClassesPath
+            );
+                try {
+                    Main.clearInternTables();
+                    Main.Arguments arguments = new Main.Arguments();
+                    Method parseMethod = Main.Arguments.class.getDeclaredMethod("parse", String[].class);
+                    parseMethod.setAccessible(true);
+                    parseMethod.invoke(arguments, (Object) args.toArray(new String[0]));
+                    Main.run(arguments);
+                    LogUtil.d(TAG, "DX took " + (System.currentTimeMillis() - savedTimeMillis) + "ms");
+                } catch (Exception e) {
+                    LogUtil.e(TAG, "DX failed to process .class files", e);
+                    throw e;
+                }
+            }
+    }
+    //
 
     public String getClasspath() {
         StringBuilder classpath = new StringBuilder();

@@ -159,21 +159,6 @@ public class LibraryDownloader {
         return String.valueOf(clip.getItemAt(0).getText());
     }
 
-    public class DependencyExtractor() {
-
-        private static final Pattern DEPENDENCY_PATTERN = Pattern.compile("(implementation\\s+'|<dependency\\s+org=\\\"|libraryDependencies\\s+=\\s+\\\"|<dependency\\s+org=\\\"|dependency\\s+|\\[)(.*)/(.*)\\s+(.*):(.*):(.*)('|\\\"\\]|/>|\\\"\\]|\\\")");
-
-        public static String extractDependency(String dependencyFormat) {
-            Matcher matcher = DEPENDENCY_PATTERN.matcher(dependencyFormat);
-
-            if (matcher.matches()) {
-            return matcher.group(2) + ":" + matcher.group(5) + ":" + matcher.group(6);
-            } else {
-            return "";
-            }
-        }
-    }
-
     public class DependencyFormatter() {
         private String dependency;
 
@@ -298,30 +283,11 @@ public class LibraryDownloader {
                 String formattedDependency = formatter.formatDependency();
                 //
                 dependency = formattedDependency.replace("\n", "");
-                if (!dependency.isEmpty()){
+                if (!dependency.isEmpty()) {
+
                 library.setText(dependency);
                 library.setTextColor(0xFF00E676);
 
-                /*
-                String dependency = library.getText().toString();
-
-                if (dependency.isEmpty()) {
-                    SketchwareUtil.toastError("Dependency can't be empty");
-                    library.setTextColor(0xFF000000);
-                } else {
-                    String extractedDependency = DependencyExtractor.extractDependency(dependency);
-
-                    if (extractedDependency.isEmpty()) {
-                        SketchwareUtil.toastError("Invalid dependency");
-                        library.setTextColor(0xFFf91010);
-                    } else {
-                        SketchwareUtil.toast("Dependency extracted successfully");
-                        library.setText(extractedDependency);
-                        library.setTextColor(0xFF00E676);
-                    }
-                }
-
-                */
 
                 libName = downloadPath + getLibName(dependency);
 
