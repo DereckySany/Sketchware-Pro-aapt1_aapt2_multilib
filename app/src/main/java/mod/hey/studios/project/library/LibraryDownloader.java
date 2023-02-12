@@ -441,29 +441,42 @@ public class LibraryDownloader {
 
     private void _jar2dex(String _path) throws Exception {
         // 6.3.0
-        if (tool.equals("D8")) {
-        // File libs = new File(context.getFilesDir(), "libs");
-            ArrayList<String> cmd = new ArrayList<>();
-            cmd.add("--release");
-            cmd.add("--intermediate");
+        if (use_d8) {
+            if (tool.equals("D8")) {
+            // File libs = new File(context.getFilesDir(), "libs");
+                ArrayList<String> cmd = new ArrayList<>();
+                cmd.add("--release");
+                cmd.add("--intermediate");
 
-            cmd.add("--lib");
-            cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
-            // cmd.add(new File(libs, "android.jar").getAbsolutePath()));
+                cmd.add("--lib");
+                cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
+                // cmd.add(new File(libs, "android.jar").getAbsolutePath()));
 
-            cmd.add("--classpath");
-            cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
-            // cmd.add(new File(libs, "core-lambda-stubs.jar").getAbsolutePath());
+                cmd.add("--classpath");
+                cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
+                // cmd.add(new File(libs, "core-lambda-stubs.jar").getAbsolutePath());
 
-            cmd.add("--output");
-            cmd.add(new File(_path).getParentFile().getAbsolutePath());
+                cmd.add("--output");
+                cmd.add(new File(_path).getParentFile().getAbsolutePath());
 
-            // Input
-            cmd.add(_path);
-            // run D8 with list commands
-            D8.main(cmd.toArray(new String[0]));
-            
-        } else if (tool.equals("Dx")) {
+                // Input
+                cmd.add(_path);
+                // run D8 with list commands
+                D8.main(cmd.toArray(new String[0]));
+                
+            } else if (tool.equals("R8")) {
+                // R8
+                R8.main(new String[]{
+                    // 6.3.0 fix1
+                    "--debug",
+                    "--verbose",
+                    "--multi-dex",
+                    "--output=" + new File(_path).getParentFile().getAbsolutePath(),
+                    _path
+                });
+
+            }
+        } else {
             // 6.3.0 fix2
             Main.clearInternTables();
             // dx
@@ -475,18 +488,6 @@ public class LibraryDownloader {
             "--output=" + new File(_path).getParentFile().getAbsolutePath(),
             _path
             });
-
-        } else if (tool.equals("R8")) {
-            // R8
-            R8.main(new String[]{
-                // 6.3.0 fix1
-                "--debug",
-                "--verbose",
-                "--multi-dex",
-                "--output=" + new File(_path).getParentFile().getAbsolutePath(),
-                _path
-            });
-
         }
     }
 
@@ -531,7 +532,7 @@ public class LibraryDownloader {
                 });
             }
     }
-    */
+            */
 
     private void _unZipFile(String str, String str2) {
         try {
