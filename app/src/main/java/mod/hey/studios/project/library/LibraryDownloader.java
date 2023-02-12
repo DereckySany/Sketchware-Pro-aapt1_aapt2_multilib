@@ -221,7 +221,7 @@ public class LibraryDownloader {
             if (library.getText().toString().length() > 0) {
                 library.setText("");
             } else {
-                library.setText(getClipeBoard());
+                library.setText(getClipboard());
             }
         });
 
@@ -389,6 +389,7 @@ public class LibraryDownloader {
             cmd.add(_path);
             D8.main(cmd.toArray(new String[0]));
         } else {
+            List<String> cmd = new ArrayList<>();
             Main.clearInternTables();
 
             cmd.add("--debug");
@@ -396,7 +397,8 @@ public class LibraryDownloader {
             cmd.add("--multi-dex");
             cmd.add("--output=" + new File(_path).getParentFile().getAbsolutePath());
             cmd.add(_path);
-            Main.main(cmd.toArray(String[].class));
+            Main.main(cmd.toArray(new String[0]));
+
         }
     }
 
@@ -746,10 +748,10 @@ public class LibraryDownloader {
         counter = 0;
 
         String repositories = null;
-        HashMap<String, Object> repoConfig = null;
+        List<HashMap<String, Object>> repoConfig = null;
         try {
             if (CONFIGURED_REPOSITORIES_FILE.exists() && !(repositories = FileUtil.readFile(CONFIGURED_REPOSITORIES_FILE.getAbsolutePath())).isEmpty()) {
-                repoConfig = new Gson().fromJson(repositories, Helper.TYPE_MAP_LIST);
+                repoConfig = new Gson().fromJson(repositories, new TypeToken<List<HashMap<String, Object>>>(){}.getType());
             }
         } catch (JsonParseException ignored) {
             // fall-through to shared error toast
@@ -762,7 +764,7 @@ public class LibraryDownloader {
 
             SketchwareUtil.toastError("Custom Repositories configuration file couldn't be read from. Using default repositories for now", Toast.LENGTH_LONG);
 
-            repoConfig = new Gson().fromJson(DEFAULT_REPOSITORIES_FILE_CONTENT, Helper.TYPE_MAP_LIST);
+            repoConfig = new Gson().fromJson(DEFAULT_REPOSITORIES_FILE_CONTENT, new TypeToken<List<HashMap<String, Object>>>(){}.getType());
         }
 
         for (HashMap<String, Object> configuration : repoConfig) {
