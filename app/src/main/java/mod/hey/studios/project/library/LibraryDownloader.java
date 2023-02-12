@@ -341,7 +341,7 @@ public class LibraryDownloader {
                 currentRepo = repoUrls.get(counter);
 
                 downloadId = _download(
-                        currentRepo.concat(_getDownloadLink(dependency,Use_Aar)),
+                        currentRepo.concat(_getDownloadLink(dependency)),
                         downloadPath,
                         _getLibName(dependency + ".zip"),
                         library,
@@ -385,7 +385,7 @@ public class LibraryDownloader {
         });
     }
 
-    private String _getDownloadLink(String str, boolean type) {
+    private String _getDownloadLink(String str) {
         String[] split = str.split(":");
         String str2 = "/";
 
@@ -393,14 +393,14 @@ public class LibraryDownloader {
             str2 = str2.concat(split[i].replace(".", "/") + "/");
         }
 
-        return str2.concat(split[split.length - 1]).concat("/").concat(_getTypeLibName(str,type));
+        return str2.concat(split[split.length - 1]).concat("/").concat(_getTypeLibName(str));
     }
     // new method
-    private String _getTypeLibName(String str, boolean typeAar) {
+    private String _getTypeLibName(String str) {
     String[] split = str.split(":");
-    return split[split.length - 2] + "-" + split[split.length - 1] + (typeAar ? ".aar" : ".jar");
+    return split[split.length - 2] + "-" + split[split.length - 1] + (Use_Aar ? ".aar" : ".jar");
     }
-    /*
+    /////=====================================================================//////
     private String _getAarDownloadLink(String str) {
         String[] split = str.split(":");
         String str2 = "/";
@@ -432,10 +432,10 @@ public class LibraryDownloader {
         String[] split = str.split(":");
         return split[split.length - 2] + "-" + split[split.length - 1] + ".jar";
     }
-    */
+    /////=====================================================================//////
     private String _getLibName(String str) {
         String[] split = str.split(":");
-        return split[split.length - 2] + "_V_" + split[split.length - 1];
+        return split[split.length - 2] + "_v_" + split[split.length - 1];
     }
 
     private void _jar2dex(String _path) throws Exception {
@@ -813,7 +813,7 @@ public class LibraryDownloader {
                                     message.setText("Searching... " + counter + "/" + repoUrls.size() + " [" + name + "]");
 
                                     downloadId = _download(
-                                            currentRepo.concat(_getDownloadLink(library.getText().toString(),Use_Aar)),
+                                            currentRepo.concat(_getDownloadLink(library.getText().toString())),
                                             downloadPath,
                                             _getLibName(library.getText().toString()) + ".zip",
                                             library,
