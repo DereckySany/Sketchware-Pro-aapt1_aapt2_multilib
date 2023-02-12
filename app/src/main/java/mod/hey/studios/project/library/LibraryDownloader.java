@@ -748,7 +748,7 @@ public class LibraryDownloader {
                             } else if (tool.equals("Dx")) {
                                 use_d8 = false;
                             } else {
-                                throw new Exception("Ferramenta não suportada: " + tool);
+                                message.setText("Ferramenta não suportada: " + tool);
                             }
                             if (use_d8 || JarCheck.checkJar(libName.concat("/classes.jar"), 44, 51)) {
 
