@@ -308,7 +308,7 @@ public class LibraryDownloader {
                 currentRepo = repoUrls.get(counter);
                 
                 downloadId = _download(
-                        currentRepo.concat(getDownloadLink(dependency, typeLib)),
+                        currentRepo.concat(getDownloadLink(dependency , typeLib)),
                         downloadPath,
                         getLibName(dependency + ".zip"),
                         library,
@@ -747,27 +747,29 @@ public class LibraryDownloader {
         repoNames.clear();
         counter = 0;
 
-        String repositories = null;
-        List<HashMap<String, Object>> repoConfig = null;
-        try {
+        readRepositories:
+        {
+            String repositories;
             if (CONFIGURED_REPOSITORIES_FILE.exists() && !(repositories = FileUtil.readFile(CONFIGURED_REPOSITORIES_FILE.getAbsolutePath())).isEmpty()) {
-                repoConfig = new Gson().fromJson(repositories, new TypeToken<List<HashMap<String, Object>>>(){}.getType());
-            }
-        } catch (JsonParseException ignored) {
-            // fall-through to shared error toast
-        }
+                try {
+                    repoMap = new Gson().fromJson(repositories, Helper.TYPE_MAP_LIST);
 
-        if (repoConfig == null) {
-            if (!CONFIGURED_REPOSITORIES_FILE.exists()) {
+                    if (repoMap != null) {
+                        break readRepositories;
+                    }
+                } catch (JsonParseException ignored) {
+                    // fall-through to shared error toast
+                }
+
+                SketchwareUtil.toastError("Custom Repositories configuration file couldn't be read from. Using default repositories for now", Toast.LENGTH_LONG);
+            } else {
                 FileUtil.writeFile(CONFIGURED_REPOSITORIES_FILE.getAbsolutePath(), DEFAULT_REPOSITORIES_FILE_CONTENT);
             }
 
-            SketchwareUtil.toastError("Custom Repositories configuration file couldn't be read from. Using default repositories for now", Toast.LENGTH_LONG);
-
-            repoConfig = new Gson().fromJson(DEFAULT_REPOSITORIES_FILE_CONTENT, new TypeToken<List<HashMap<String, Object>>>(){}.getType());
+            repoMap = new Gson().fromJson(DEFAULT_REPOSITORIES_FILE_CONTENT, Helper.TYPE_MAP_LIST);
         }
 
-        for (HashMap<String, Object> configuration : repoConfig) {
+        for (HashMap<String, Object> configuration : repoMap) {
             Object repoUrl = configuration.get("url");
 
             if (repoUrl instanceof String) {
@@ -776,12 +778,13 @@ public class LibraryDownloader {
                 if (repoName instanceof String) {
                     repoUrls.add((String) repoUrl);
                     repoNames.add((String) repoName);
-                    counter++;
                 }
             }
+
+            counter++;
         }
     }
-    
+
     public interface OnCompleteListener {
         void onComplete();
     }
