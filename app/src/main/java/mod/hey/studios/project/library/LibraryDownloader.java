@@ -371,9 +371,8 @@ public class LibraryDownloader {
     }
 
     private void _jar2dex(String _path) throws Exception {
-        private final ArrayList<String> cmd = new ArrayList<>();
-        cmd.clear();
         if (use_d8) {
+            ArrayList<String> cmd = new ArrayList<>();
             cmd.add("--release");
             cmd.add("--intermediate");
 
@@ -389,18 +388,17 @@ public class LibraryDownloader {
             cmd.add(_path);
             D8.main(cmd.toArray(new String[0]));
         } else {
-            private final List<String> cmd = new ArrayList<>();
             Main.clearInternTables();
-
-            cmd.add("--debug");
-            cmd.add("--verbose");
-            cmd.add("--multi-dex");
-            cmd.add("--output=" + new File(_path).getParentFile().getAbsolutePath());
-            cmd.add(_path);
-            Main.main(cmd.toArray(new String[0]));
-
+            Main.main(new String[]{
+                    "--debug",
+                    "--verbose",
+                    "--multi-dex",
+                    "--output=" + new File(_path).getParentFile().getAbsolutePath(),
+                    _path
+            });
         }
     }
+
 
     private void _unZipFile(String str, String str2) throws IOException {
         File file = new File(str2);
