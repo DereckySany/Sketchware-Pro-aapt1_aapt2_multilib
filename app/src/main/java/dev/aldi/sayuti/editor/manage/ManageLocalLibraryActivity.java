@@ -120,11 +120,11 @@ public class ManageLocalLibraryActivity extends Activity
                     .setMessage("Você gostaria de usar DX, D8 ou R8 para compilar a biblioteca?\n" +
                             "D8 suporta Java 8, enquanto que o DX não suporta. Limitação: o D8 só funciona no Android 8 e acima.\n" +
                             "O R8 é o novo compilador oficial do Android Studio.")
-                    .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this,
+                    .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this,true,
                             "D8").showDialog(ManageLocalLibraryActivity.this))
-                    .setNegativeButton("DX", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this,
+                    .setNegativeButton("DX", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this,false,
                             "Dx").showDialog(ManageLocalLibraryActivity.this))
-                    .setNeutralButton("R8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this,
+                    .setNeutralButton("R8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this,true,
                             "R8").showDialog(ManageLocalLibraryActivity.this))
                     .setCancelable(false)
                     .show();

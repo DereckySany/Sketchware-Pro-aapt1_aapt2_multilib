@@ -86,18 +86,12 @@ public class LibraryDownloader {
     private ArrayList<HashMap<String, Object>> repoMap = new ArrayList<>();
     private ProgressDialog progressDialog;
 
-    public LibraryDownloader(Activity context, boolean use_d8) {
+    public LibraryDownloader(Activity context, boolean use_d8, String tool) {
         this.context = context;
         this.use_d8 = use_d8;
+        this.tool = tool;
 
         downloadPath = FileUtil.getExternalStorageDir() + "/.sketchware/libs/local_libs/";
-    }
-
-    public LibraryDownloader(Activity context, String tool) {
-    this.context = context;
-    this.tool = tool;
-
-    downloadPath = FileUtil.getExternalStorageDir() + "/.sketchware/libs/local_libs/";
     }
 
     private static void mkdirs(File file, String str) {
@@ -786,13 +780,6 @@ public class LibraryDownloader {
 
                         isAvailable = true;
                         isDownloaded = true;
-                        if (tool.equals("D8") || tool.equals("R8")) {
-                                use_d8 = true;
-                            } else if (tool.equals("Dx")) {
-                                use_d8 = false;
-                            } else {
-                                message.setText("Ferramenta não suportada: " + tool);
-                        }
 
                         StringBuilder path2 = new StringBuilder();
                         path2.append(downloadPath);
