@@ -90,7 +90,7 @@ public class LibraryDownloader {
     public LibraryDownloader(Activity context, boolean use_d8,String tool) {
         this.context = context;
         this.use_d8 = use_d8;
-        this.type = tool;
+        this.tool = tool;
 
         downloadPath = FileUtil.getExternalStorageDir() + "/.sketchware/libs/local_libs/";
     }
