@@ -52,7 +52,6 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import R8Compiler;
 import a.a.a.bB;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.dx.command.dexer.Main;
@@ -61,6 +60,7 @@ import mod.hey.studios.lib.JarCheck;
 import mod.hey.studios.lib.prdownloader.PRDownloader;
 import mod.hey.studios.lib.prdownloader.PRDownloader.OnDownloadListener;
 import mod.hey.studios.lib.prdownloader.PRDownloader.Status;
+import mod.hey.studios.project.library.R8Compiler;
 import mod.hey.studios.util.Helper;
 import mod.jbk.build.BuildProgressReceiver;
 import mod.jbk.build.BuiltInLibraries;
@@ -467,7 +467,7 @@ public class LibraryDownloader {
             });
         }
     }
-    
+
     public static void compileJar2Dex(String jarPath, String dexPath) throws Exception {
         D8Command.Builder builder = D8Command.builder();
         builder.addProgramFiles(Paths.get(jarPath));
