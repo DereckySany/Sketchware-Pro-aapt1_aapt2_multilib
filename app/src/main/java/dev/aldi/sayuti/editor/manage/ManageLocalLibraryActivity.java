@@ -126,7 +126,7 @@ public class ManageLocalLibraryActivity extends Activity
                             "Dx").showDialog(ManageLocalLibraryActivity.this))
                     .setNeutralButton("R8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this,true,
                             "R8").showDialog(ManageLocalLibraryActivity.this))
-                    .setCancelable(false)
+                    .setCancelable(true)
                     .show();
 
             /*

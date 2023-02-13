@@ -33,7 +33,6 @@ import com.android.tools.r8.R8;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.sketchware.remod.R;
-import com.google.android.material.snackbar.Snackbar;
 
 
 import java.io.BufferedOutputStream;
@@ -75,7 +74,7 @@ public class LibraryDownloader {
     private final ArrayList<String> repoNames = new ArrayList<>();
     Activity context;
     boolean use_d8;
-    String dexer;
+    String tool;
     private OnCompleteListener listener;
     private AlertDialog dialog;
     private boolean isAarAvailable = false, isAarDownloaded = false;
@@ -88,10 +87,10 @@ public class LibraryDownloader {
     private ArrayList<HashMap<String, Object>> repoMap = new ArrayList<>();
     private ProgressDialog progressDialog;
 
-    public LibraryDownloader(Activity context, boolean use_d8, String dexer) {
+    public LibraryDownloader(Activity context, boolean use_d8,String tool) {
         this.context = context;
         this.use_d8 = use_d8;
-        this.dexer = dexer;
+        this.type = tool;
 
         downloadPath = FileUtil.getExternalStorageDir() + "/.sketchware/libs/local_libs/";
     }
@@ -345,7 +344,7 @@ public class LibraryDownloader {
                 currentRepo = repoUrls.get(counter);
 
                 downloadId = _download(
-                        currentRepo.concat((Use_Aar ? _getAarDownloadLink(dependency) : _getJarDownloadLink(dependency))),
+                        currentRepo.concat(_getDownloadLink(dependency)),
                         downloadPath,
                         _getLibName(dependency + ".zip"),
                         library,
@@ -389,7 +388,7 @@ public class LibraryDownloader {
         });
     }
 
-    private String _getAarDownloadLink(String str) {
+    private String _getDownloadLink(String str) {
         String[] split = str.split(":");
         String str2 = "/";
 
@@ -397,40 +396,24 @@ public class LibraryDownloader {
             str2 = str2.concat(split[i].replace(".", "/") + "/");
         }
 
-        return str2.concat(split[split.length - 1]).concat("/").concat(_getAarName(str));
-    }
-    /** keep separated for futures fix **/
-    private String _getJarDownloadLink(String str) {
-        String[] split = str.split(":");
-        String str2 = "/";
-
-        for (int i = 0; i < split.length - 1; i++) {
-            str2 = str2.concat(split[i].replace(".", "/") + "/");
-        }
-
-        return str2.concat(split[split.length - 1]).concat("/").concat(_getJarName(str));
+        return str2.concat(split[split.length - 1]).concat("/").concat(_getExtencionName(str));
     }
 
-    private String _getAarName(String str) {
+    private String _getExtencionName(String str) {
         String[] split = str.split(":");
-        return split[split.length - 2] + "-" + split[split.length - 1] + ".aar";
-    }
-    /** keep separated for futures fix **/
-    private String _getJarName(String str) {
-        String[] split = str.split(":");
-        return split[split.length - 2] + "-" + split[split.length - 1] + ".jar";
+        return split[split.length - 2] + "-" + split[split.length - 1] + (Use_Aar ? ".aar" : ".jar");
     }
 
     private String _getLibName(String str) {
         String[] split = str.split(":");
-        return split[split.length - 2] + "_V_" + split[split.length - 1];
+        return split[split.length - 2] + "_v_" + split[split.length - 1];
     }
 
     private void _jar2dex(String _path) throws Exception {
         // 6.3.0
-            if (use_d8) {
+        if (use_d8) {
+            if (tool.equals("D8")) {
                 // File libs = new File(context.getFilesDir(), "libs");
-
                 ArrayList<String> cmd = new ArrayList<>();
                 cmd.add("--release");
                 cmd.add("--intermediate");
@@ -450,21 +433,34 @@ public class LibraryDownloader {
                 cmd.add(_path);
                 // run D8 with list commands
                 D8.main(cmd.toArray(new String[0]));
-            } else {
-                // 6.3.0 fix2
-                Main.clearInternTables();
 
-                // dx
-                Main.main(new String[]{
+            } else if (tool.equals("R8")) {
+                // R8
+                R8.main(new String[]{
                         // 6.3.0 fix1
-                        "--dex", // not use ??
                         "--debug",
                         "--verbose",
                         "--multi-dex",
                         "--output=" + new File(_path).getParentFile().getAbsolutePath(),
                         _path
                 });
+
             }
+        } else {
+            // 6.3.0 fix2
+            Main.clearInternTables();
+
+            // dx
+            Main.main(new String[]{
+                    // 6.3.0 fix1
+                    "--dex", // not use ??
+                    "--debug",
+                    "--verbose",
+                    "--multi-dex",
+                    "--output=" + new File(_path).getParentFile().getAbsolutePath(),
+                    _path
+            });
+        }
     }
 
     private void _unZipFile(String str, String str2) {
@@ -755,7 +751,7 @@ public class LibraryDownloader {
                                     message.setText("Searching... " + counter + "/" + repoUrls.size() + " [" + name + "]");
 
                                     downloadId = _download(
-                                            currentRepo.concat((Use_Aar ? _getAarDownloadLink(library.getText().toString()) : _getJarDownloadLink(library.getText().toString()))),
+                                            currentRepo.concat(_getDownloadLink(library.getText().toString())),
                                             downloadPath,
                                             _getLibName(library.getText().toString()) + ".zip",
                                             library,
