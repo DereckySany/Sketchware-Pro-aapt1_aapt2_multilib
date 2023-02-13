@@ -438,8 +438,8 @@ public class LibraryDownloader {
 
             } else if (tool.equals("R8")) {
                 // R8
-                //compileJarToDex(_path, new File(_path).getParentFile().getAbsolutePath());
-                compileJar2Dex(_path, new File(_path).getParentFile().getAbsolutePath());
+                compileJarToDex(_path, new File(_path).getParentFile().getAbsolutePath());
+                //compileJar2Dex(_path, new File(_path).getParentFile().getAbsolutePath());
                 /*
                 R8.main(new String[]{
                         // 6.3.0 fix1
