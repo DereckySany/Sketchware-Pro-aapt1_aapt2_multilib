@@ -60,7 +60,6 @@ import mod.hey.studios.lib.JarCheck;
 import mod.hey.studios.lib.prdownloader.PRDownloader;
 import mod.hey.studios.lib.prdownloader.PRDownloader.OnDownloadListener;
 import mod.hey.studios.lib.prdownloader.PRDownloader.Status;
-import mod.hey.studios.project.library.R8Compiler;
 import mod.hey.studios.util.Helper;
 import mod.jbk.build.BuildProgressReceiver;
 import mod.jbk.build.BuiltInLibraries;
@@ -439,8 +438,8 @@ public class LibraryDownloader {
 
             } else if (tool.equals("R8")) {
                 // R8
-                R8Compiler.compileJarToDex(_path, new File(_path).getParentFile().getAbsolutePath());
-                //compileJar2Dex(_path, new File(_path).getParentFile().getAbsolutePath());
+                //compileJarToDex(_path, new File(_path).getParentFile().getAbsolutePath());
+                compileJar2Dex(_path, new File(_path).getParentFile().getAbsolutePath());
                 /*
                 R8.main(new String[]{
                         // 6.3.0 fix1
