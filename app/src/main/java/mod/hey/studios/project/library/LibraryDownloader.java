@@ -75,7 +75,7 @@ public class LibraryDownloader {
     private final ArrayList<String> repoNames = new ArrayList<>();
     Activity context;
     boolean use_d8;
-    String dexer
+    String dexer;
     private OnCompleteListener listener;
     private AlertDialog dialog;
     private boolean isAarAvailable = false, isAarDownloaded = false;
