@@ -75,10 +75,11 @@ public class LibraryDownloader {
     private final ArrayList<String> repoNames = new ArrayList<>();
     Activity context;
     boolean use_d8;
-    String tool;
+    String dexer
     private OnCompleteListener listener;
     private AlertDialog dialog;
-    private boolean isAvailable = false, isDownloaded = false;
+    private boolean isAarAvailable = false, isAarDownloaded = false;
+    private boolean isJarAvailable = false, isJarDownloaded = false;
     private boolean Use_Aar = true;
     private int downloadId;
     private String libName = "";
@@ -87,10 +88,10 @@ public class LibraryDownloader {
     private ArrayList<HashMap<String, Object>> repoMap = new ArrayList<>();
     private ProgressDialog progressDialog;
 
-    public LibraryDownloader(Activity context, boolean use_d8, String tool) {
+    public LibraryDownloader(Activity context, boolean use_d8, String dexer) {
         this.context = context;
         this.use_d8 = use_d8;
-        this.tool = tool;
+        this.dexer = dexer;
 
         downloadPath = FileUtil.getExternalStorageDir() + "/.sketchware/libs/local_libs/";
     }
@@ -274,21 +275,21 @@ public class LibraryDownloader {
                 SketchwareUtil.toastError("Invalid dependency");
                 library.setTextColor(0xFFf91010);
             } else if (dependency.contains("implementation") || dependency.contains(":")) {             
-                if (dependency.contains("group:") || dependency.contains(",")) {
-                    SketchwareUtil.toast("Maven Gradle");
-                    // clear Maven Gradle format:
-                    // implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' 
-                    dependency = dependency.replace("implementation", "");
-                    dependency = dependency.replace("\'", "");
-                    dependency = dependency.replace(",", "");
-                    dependency = dependency.replace("group:", "");
-                    dependency = dependency.replace("name:", ":");
-                    dependency = dependency.replace("version:", ":");   
-                    dependency = dependency.replace(" ", "");       
-                } else if (dependency.contains("implementation") || dependency.contains(":")) {
+	        if (dependency.contains("group:") || dependency.contains(",")) {
+                SketchwareUtil.toast("Maven Gradle");
+                /* clear Maven Gradle format:
+                implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' */
+                dependency = dependency.replace("implementation", "");
+                dependency = dependency.replace("\'", "");
+                dependency = dependency.replace(",", "");
+                dependency = dependency.replace("group:", "");
+                dependency = dependency.replace("name:", ":");
+                dependency = dependency.replace("version:", ":");   
+                dependency = dependency.replace(" ", "");       
+	        } else if (dependency.contains("implementation") || dependency.contains(":")) {
                     SketchwareUtil.toast("Maven Gradle (Short), Gradle (Kotlin) or buildr");
-                    // clear Maven Gradle (Short) and Gradle (Kotlin) format:
-                    //    implementation ("io.github.amrdeveloper:codeview:1.3.7") 
+                    /* clear Maven Gradle (Short) and Gradle (Kotlin) format:
+                    implementation ("io.github.amrdeveloper:codeview:1.3.7") */
                     dependency = dependency.replace("implementation", "");
                     dependency = dependency.replace(" ", "");
                     dependency = dependency.replace("\'", "");
@@ -318,11 +319,13 @@ public class LibraryDownloader {
                 if (!FileUtil.isExistFile(libName)) {
                     FileUtil.makeDir(libName);
                 }
-                
                 Use_Aar = useAar.isChecked();
 
-                isDownloaded = false;
-                isAvailable = false;
+                isAarDownloaded = false;
+                isAarAvailable = false;
+
+                isJarDownloaded = false;
+                isJarAvailable = false;
 
                 library.setEnabled(false);
 
@@ -342,7 +345,7 @@ public class LibraryDownloader {
                 currentRepo = repoUrls.get(counter);
 
                 downloadId = _download(
-                        currentRepo.concat(_getDownloadLink(dependency)),
+                        currentRepo.concat((Use_Aar ? _getAarDownloadLink(dependency) : _getJarDownloadLink(dependency))),
                         downloadPath,
                         _getLibName(dependency + ".zip"),
                         library,
@@ -386,22 +389,6 @@ public class LibraryDownloader {
         });
     }
 
-    private String _getDownloadLink(String str) {
-        String[] split = str.split(":");
-        String str2 = "/";
-
-        for (int i = 0; i < split.length - 1; i++) {
-            str2 = str2.concat(split[i].replace(".", "/") + "/");
-        }
-
-        return str2.concat(split[split.length - 1]).concat("/").concat(_getTypeLibName(str));
-    }
-    // new method
-    private String _getTypeLibName(String str) {
-    String[] split = str.split(":");
-    return split[split.length - 2] + "-" + split[split.length - 1] + (Use_Aar ? ".aar" : ".jar");
-    }
-    /////=====================================================================//////
     private String _getAarDownloadLink(String str) {
         String[] split = str.split(":");
         String str2 = "/";
@@ -412,7 +399,7 @@ public class LibraryDownloader {
 
         return str2.concat(split[split.length - 1]).concat("/").concat(_getAarName(str));
     }
-    // keep separated for futures fix //
+    /** keep separated for futures fix **/
     private String _getJarDownloadLink(String str) {
         String[] split = str.split(":");
         String str2 = "/";
@@ -428,70 +415,17 @@ public class LibraryDownloader {
         String[] split = str.split(":");
         return split[split.length - 2] + "-" + split[split.length - 1] + ".aar";
     }
-    // keep separated for futures fix //
+    /** keep separated for futures fix **/
     private String _getJarName(String str) {
         String[] split = str.split(":");
         return split[split.length - 2] + "-" + split[split.length - 1] + ".jar";
     }
-    /////=====================================================================//////
+
     private String _getLibName(String str) {
         String[] split = str.split(":");
-        return split[split.length - 2] + "_v_" + split[split.length - 1];
+        return split[split.length - 2] + "_V_" + split[split.length - 1];
     }
 
-    private void _jar2dex(String _path) throws Exception {
-        // 6.3.0
-        if (use_d8) {
-            if (tool.equals("D8")) {
-            // File libs = new File(context.getFilesDir(), "libs");
-                ArrayList<String> cmd = new ArrayList<>();
-                cmd.add("--release");
-                cmd.add("--intermediate");
-
-                cmd.add("--lib");
-                cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
-                // cmd.add(new File(libs, "android.jar").getAbsolutePath()));
-
-                cmd.add("--classpath");
-                cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
-                // cmd.add(new File(libs, "core-lambda-stubs.jar").getAbsolutePath());
-
-                cmd.add("--output");
-                cmd.add(new File(_path).getParentFile().getAbsolutePath());
-
-                // Input
-                cmd.add(_path);
-                // run D8 with list commands
-                D8.main(cmd.toArray(new String[0]));
-                
-            } else if (tool.equals("R8")) {
-                // R8
-                R8.main(new String[]{
-                    // 6.3.0 fix1
-                    "--debug",
-                    "--verbose",
-                    "--multi-dex",
-                    "--output=" + new File(_path).getParentFile().getAbsolutePath(),
-                    _path
-                });
-
-            }
-        } else {
-            // 6.3.0 fix2
-            Main.clearInternTables();
-            // dx
-            Main.main(new String[]{
-            // 6.3.0 fix1
-            "--debug",
-            "--verbose",
-            "--multi-dex",
-            "--output=" + new File(_path).getParentFile().getAbsolutePath(),
-            _path
-            });
-        }
-    }
-
-    /*
     private void _jar2dex(String _path) throws Exception {
         // 6.3.0
             if (use_d8) {
@@ -532,7 +466,6 @@ public class LibraryDownloader {
                 });
             }
     }
-            */
 
     private void _unZipFile(String str, String str2) {
         try {
@@ -731,21 +664,27 @@ public class LibraryDownloader {
                 .start(new OnDownloadListener() {
                     @Override
                     public void onDownloadComplete() {
-
-                        isAvailable = true;
-                        isDownloaded = true;
+                        // this is a default in Sketchware
+                        isAarAvailable = Use_Aar;
+                        isAarDownloaded = Use_Aar;
+                        // this is the beginning of magic
+                        isJarAvailable = !isAarAvailable;
+                        isJarDownloaded = !isAarDownloaded;
 
                         StringBuilder path2 = new StringBuilder();
                         path2.append(downloadPath);
                         path2.append(_getLibName(library.getText().toString()).concat(".zip"));
 
                         if (Use_Aar) {
-                            _unZipFile(path2.toString(), libName);
+                            if (isAarDownloaded && isAarAvailable) {
+                                _unZipFile(path2.toString(), libName);
+                            }
                         } else {
-                            FileUtil.makeDir(path2.toString());
-                            copyFile(path2.toString(), libName.concat("/classes.jar").toString());
+                            if (isJarDownloaded && isJarAvailable) {
+                                FileUtil.makeDir(path2.toString());
+                                copyFile(path2.toString(), libName.concat("/classes.jar").toString());
+                            }
                         }
-
                         if (FileUtil.isExistFile(libName.concat("/classes.jar"))) {
                             if (use_d8 || JarCheck.checkJar(libName.concat("/classes.jar"), 44, 51)) {
 
@@ -807,7 +746,7 @@ public class LibraryDownloader {
                     @Override
                     public void onError(PRDownloader.Error e) {
                         if (e.isServerError()) {
-                            if ((isDownloaded || isAvailable)) {
+                            if ((Use_Aar ? !(isAarDownloaded || isAarAvailable) : !(isJarDownloaded || isJarAvailable))) {
                                 if (counter < repoUrls.size()) {
                                     currentRepo = repoUrls.get(counter);
                                     String name = repoNames.get(counter);
@@ -816,7 +755,7 @@ public class LibraryDownloader {
                                     message.setText("Searching... " + counter + "/" + repoUrls.size() + " [" + name + "]");
 
                                     downloadId = _download(
-                                            currentRepo.concat(_getDownloadLink(library.getText().toString())),
+                                            currentRepo.concat((Use_Aar ? _getAarDownloadLink(library.getText().toString()) : _getJarDownloadLink(library.getText().toString()))),
                                             downloadPath,
                                             _getLibName(library.getText().toString()) + ".zip",
                                             library,
@@ -858,7 +797,6 @@ public class LibraryDownloader {
                             }
                         } else {
                             if (e.isConnectionError()) {
-                                FileUtil.deleteFile(libName);
                                 message.setText("Downloading failed. No network");
                                 library.setEnabled(true);
 
@@ -944,8 +882,7 @@ public class LibraryDownloader {
             }
             progressDialog = new ProgressDialog(context);
             progressDialog.setTitle("Please wait");
-            //progressDialog.setMessage((use_d8 ? "D8" : "Dx") + " is running...");
-            progressDialog.setMessage(tool + " is running...");
+            progressDialog.setMessage((use_d8 ? "D8" : "Dx") + " is running...");
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
