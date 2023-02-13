@@ -30,14 +30,15 @@ import android.content.ClipboardManager;
 
 import com.android.tools.r8.D8;
 import com.android.tools.r8.R8;
-import com.android.tools.r8.OutputMode;
 import com.android.tools.r8.D8Command;
+import com.android.tools.r8.OutputMode;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.sketchware.remod.R;
 
 import java.nio.file.Paths;
 
+import java.io.ByteArrayOutputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -438,17 +439,18 @@ public class LibraryDownloader {
 
             } else if (tool.equals("R8")) {
                 // R8
-                compileJarToDex(_path, new File(_path).getParentFile().getAbsolutePath());
-                //compileJar2Dex(_path, new File(_path).getParentFile().getAbsolutePath());
-                /*
-                R8.main(new String[]{
-                        // 6.3.0 fix1
-                        "--debug",
-                        "--verbose",
-                        "--multi-dex",
-                        "--output=" + new File(_path).getParentFile().getAbsolutePath(),
-                        _path
-                }); */
+                D8Command.Builder builder = D8Command.builder();
+                builder.setRelease(true);
+                builder.setIntermediate(true);
+                builder.setOutput(Paths.get(new File(_path).getParentFile().getAbsolutePath()), OutputMode.DexIndexed);
+                builder.addProgramFiles(Paths.get(_path));
+                builder.build().run(new ByteArrayOutputStream() {
+                    @Override
+                    public void flush() throws IOException {
+                        super.flush();
+                        progressDialog.setMessage(toString());
+                    }
+                });
             }
         } else {
             // 6.3.0 fix2
@@ -465,18 +467,6 @@ public class LibraryDownloader {
                     _path
             });
         }
-    }
-
-    public static void compileJar2Dex(String jarPath, String dexPath) throws Exception {
-        D8Command.Builder builder = D8Command.builder();
-        builder.addProgramFiles(Paths.get(jarPath));
-        builder.setOutput(Paths.get(dexPath), OutputMode.DexIndexed);
-        R8.run(builder.build());
-    }
-
-    public static void compileJarToDex(String inputJar, String outputDex) throws Exception {
-        R8Compiler compiler = new R8Compiler();
-        compiler._jar2dex(inputJar);
     }
 
     private void _unZipFile(String str, String str2) {
