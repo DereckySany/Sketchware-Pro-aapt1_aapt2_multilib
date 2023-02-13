@@ -524,18 +524,85 @@ public class LibraryDownloader {
             }
         }
 
-        // Method 2: screw manifest. use dependency
+        // Method 2: use Gradle
+        for (String f : files) {
+            if (getLastSegment(f).endsWith(".gradle")) {
+                String content = FileUtil.readFile(f);
+
+                Pattern p = Pattern.compile("^\\s*applicationId\\s*[:=].*\"(.*)\"", Pattern.MULTILINE);
+                Matcher m = p.matcher(content);
+
+                if (m.find()) {
+                    return m.group(1);
+                }
+            }
+        }
+
+        // Method 3: use META-INF
+        for (String f : files) {
+            if (f.endsWith("META-INF/MANIFEST.MF")) {
+                String content = FileUtil.readFile(f);
+
+                Pattern p = Pattern.compile("^\\s*Bundle-SymbolicName\\s*:\\s*(.*);", Pattern.MULTILINE);
+                Matcher m = p.matcher(content);
+
+                if (m.find()) {
+                    return m.group(1);
+                }
+            }
+        }
+
+        // Method 4: use baseline-prof.txt
+        for (String f : files) {
+            if (getLastSegment(f).equals("baseline-prof.txt")) {
+                String content = FileUtil.readFile(f);
+
+                Pattern p = Pattern.compile("^\\s*package: (.*)", Pattern.MULTILINE);
+                Matcher m = p.matcher(content);
+
+                if (m.find()) {
+                    return m.group(1);
+                }
+            }
+        }
+
+        // Method 5: screw manifest. use dependency
         if (defaultValue.contains(":")) {
             return defaultValue.split(":")[0];
         }
 
-        // Method 3: ignore manifesto. ignore dependency, testing new ways
+        // Method 6: ignore manifesto. ignore dependency, testing new ways
         if (defaultValue.contains(".")) {
             return defaultValue.split("\\.")[0];
         }
 
-        // Method 4: nothing worked. return empty string (lmao) (yeah lmao)
+        // Method 7: nothing worked. return empty string (lmao) (yeah lmao)
         return "";
+    }
+
+    private void checkLibsDirectory(String path) {
+        ArrayList<String> files = new ArrayList<>();
+        FileUtil.listDir(path, files);
+
+        for (String f : files) {
+            String p = getLastSegment(f);
+            if (p.equals("libs")) {
+                String libsPath = f;
+                ArrayList<String> libsFiles = new ArrayList<>();
+                FileUtil.listDir(libsPath, libsFiles);
+
+                for (String lib : libsFiles) {
+                    if (lib.endsWith(".jar")) {
+                        File libFile = new File(lib);
+                        File classesJar = new File(path + File.separator + "classes.jar");
+                        if (libFile.length() > classesJar.length()) {
+                            classesJar.delete();
+                            FileUtil.copyFile(lib, path + File.separator + "classes.jar");
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void deleteUnnecessaryFiles(String path) {
@@ -699,8 +766,8 @@ public class LibraryDownloader {
                                 FileUtil.writeFile(libName + "/config", findPackageName(libName + "/", library.getText().toString()));
                                 FileUtil.writeFile(libName + "/version", library.getText().toString());
 
+                                checkLibsDirectory(libName + "/");
                                 deleteUnnecessaryFiles(libName + "/");
-
                             } else {
                                 message.setText("This jar is not supported by Dx since Dx only supports up to Java 1.7. In order to proceed, you need to switch to D8 (if your Android version is 8+)");
                                 FileUtil.deleteFile(path2.toString());
@@ -884,7 +951,8 @@ public class LibraryDownloader {
             }
             progressDialog = new ProgressDialog(context);
             progressDialog.setTitle("Please wait");
-            progressDialog.setMessage((use_d8 ? "D8" : "Dx") + " is running...");
+            //progressDialog.setMessage((use_d8 ? "D8" : "Dx") + " is running...");
+            progressDialog.setMessage( tool + " is running...");
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
@@ -917,7 +985,7 @@ public class LibraryDownloader {
               //
                 listener.onComplete();
             } else {
-                bB.a(context, "Dexing failed: " + s, 5).show();
+                bB.a(context, "Dexing failed: " + s, 60).show();
             }
 
             if (dialog != null && dialog.isShowing()) {
@@ -928,7 +996,7 @@ public class LibraryDownloader {
             }
         }
         protected void setSuccess(String success){
-            bB.a(context, "Dexing finish: " + success, 5).show();
+            bB.a(context, "Dexing finish: " + success, 25).show();
         }
     }
 }
