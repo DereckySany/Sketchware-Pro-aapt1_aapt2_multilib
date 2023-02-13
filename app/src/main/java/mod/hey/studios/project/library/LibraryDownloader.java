@@ -437,7 +437,7 @@ public class LibraryDownloader {
                 // cmd.add("--classpath");
                 // cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
                 // Input
-                // cmd.add("--input");
+                cmd.add("--input");
                 cmd.add(_path);
                 // run D8 with list commands
                 R8.main(cmd.toArray(new String[0]));
@@ -455,13 +455,13 @@ public class LibraryDownloader {
             Main.clearInternTables();
             // dx
             // 6.3.0 fix1
-            // "--dex",
+            // "--incremental",
             Main.main(new String[]{
+                    "--dex",
                     "--debug",
                     "--verbose",
                     "--keep-classes",
                     "--multi-dex",
-                    "--incremental",
                     "--output=" + new File(_path).getParentFile().getAbsolutePath(),
                     _path
             });
