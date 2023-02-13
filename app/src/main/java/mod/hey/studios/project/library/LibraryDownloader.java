@@ -4,11 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ClipboardManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.graphics.Color;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -22,23 +21,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-// clip board
-import android.content.Context;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-//
-
 import com.android.tools.r8.D8;
 import com.android.tools.r8.R8;
-import com.android.tools.r8.D8Command;
-import com.android.tools.r8.OutputMode;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.sketchware.remod.R;
 
-import java.nio.file.Paths;
-
-import java.io.ByteArrayOutputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -62,7 +50,6 @@ import mod.hey.studios.lib.prdownloader.PRDownloader;
 import mod.hey.studios.lib.prdownloader.PRDownloader.OnDownloadListener;
 import mod.hey.studios.lib.prdownloader.PRDownloader.Status;
 import mod.hey.studios.util.Helper;
-import mod.jbk.build.BuildProgressReceiver;
 import mod.jbk.build.BuiltInLibraries;
 
 //changed in 6.3.0
@@ -297,10 +284,10 @@ public class LibraryDownloader {
                     dependency = dependency.replace("\'", "");
                     dependency = dependency.replace("\"", "");
                     dependency = dependency.replace("(", "");
-                    dependency = dependency.replace(")", "");  
+                    dependency = dependency.replace(")", "");
                     // buildr format
                     if (dependency.contains(":jar:")){
-                        dependency = dependency.replace(":jar:", ":"); 
+                        dependency = dependency.replace(":jar:", ":");
                         useJar.setChecked(true);
                     }
                     if (dependency.contains(":aar:")){
@@ -439,23 +426,31 @@ public class LibraryDownloader {
 
             } else if (tool.equals("R8")) {
                 // R8
-                D8Command.Builder builder = D8Command.builder();
-                builder.setRelease(true);
-                builder.setIntermediate(true);
-                builder.setOutput(Paths.get(new File(_path).getParentFile().getAbsolutePath()), OutputMode.DexIndexed);
-                builder.addProgramFiles(Paths.get(_path));
-                builder.build().run(new ByteArrayOutputStream() {
-                    @Override
-                    public void flush() throws IOException {
-                        super.flush();
-                        progressDialog.setMessage(toString());
-                    }
-                });
+                ArrayList<String> cmd = new ArrayList<>();
+                // Input
+                cmd.add("--input");
+                cmd.add(_path);
+                // Output
+                cmd.add("--output");
+                cmd.add(new File(_path).getParentFile().getAbsolutePath());
+                cmd.add("--release");
+                cmd.add("--lib");
+                cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
+                cmd.add("--classpath");
+                cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
+                // run D8 with list commands
+                R8.main(cmd.toArray(new String[0]));
+
+//                String[] cmd = new String[] {
+//                        "--input", _path,
+//                        "--output", _path,
+//                        "--release"
+//                };
+//                R8.main(cmd);
             }
         } else {
             // 6.3.0 fix2
             Main.clearInternTables();
-
             // dx
             Main.main(new String[]{
                     // 6.3.0 fix1
