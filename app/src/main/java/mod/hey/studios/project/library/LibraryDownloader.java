@@ -30,10 +30,13 @@ import android.content.ClipboardManager;
 
 import com.android.tools.r8.D8;
 import com.android.tools.r8.R8;
+import com.android.tools.r8.OutputMode;
+import com.android.tools.r8.D8Command;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.sketchware.remod.R;
 
+import java.nio.file.Paths;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -49,7 +52,7 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-
+import R8Compiler;
 import a.a.a.bB;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.dx.command.dexer.Main;
@@ -436,6 +439,9 @@ public class LibraryDownloader {
 
             } else if (tool.equals("R8")) {
                 // R8
+                R8Compiler.compileJarToDex(_path, new File(_path).getParentFile().getAbsolutePath());
+                //compileJar2Dex(_path, new File(_path).getParentFile().getAbsolutePath());
+                /*
                 R8.main(new String[]{
                         // 6.3.0 fix1
                         "--debug",
@@ -443,8 +449,7 @@ public class LibraryDownloader {
                         "--multi-dex",
                         "--output=" + new File(_path).getParentFile().getAbsolutePath(),
                         _path
-                });
-
+                }); */
             }
         } else {
             // 6.3.0 fix2
@@ -461,6 +466,18 @@ public class LibraryDownloader {
                     _path
             });
         }
+    }
+    
+    public static void compileJar2Dex(String jarPath, String dexPath) throws Exception {
+        D8Command.Builder builder = D8Command.builder();
+        builder.addProgramFiles(Paths.get(jarPath));
+        builder.setOutput(Paths.get(dexPath), OutputMode.DexIndexed);
+        R8.run(builder.build());
+    }
+
+    public static void compileJarToDex(String inputJar, String outputDex) throws Exception {
+        R8Compiler compiler = new R8Compiler();
+        compiler._jar2dex(inputJar);
     }
 
     private void _unZipFile(String str, String str2) {
