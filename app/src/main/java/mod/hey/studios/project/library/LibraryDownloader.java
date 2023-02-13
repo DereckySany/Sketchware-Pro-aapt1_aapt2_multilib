@@ -52,6 +52,10 @@ import mod.hey.studios.lib.prdownloader.PRDownloader.Status;
 import mod.hey.studios.util.Helper;
 import mod.jbk.build.BuiltInLibraries;
 
+import mod.hey.studios.project.ProjectSettings;
+import mod.pranav.build.R8Compiler;
+import mod.hey.studios.project.proguard.ProguardHandler;
+
 //changed in 6.3.0
 
 public class LibraryDownloader {
@@ -76,6 +80,8 @@ public class LibraryDownloader {
     private int counter = 0;
     private ArrayList<HashMap<String, Object>> repoMap = new ArrayList<>();
     private ProgressDialog progressDialog;
+
+    public ProjectSettings settings;
 
     public LibraryDownloader(Activity context, boolean use_d8,String tool) {
         this.context = context;
@@ -427,20 +433,20 @@ public class LibraryDownloader {
 
             } else if (tool.equals("R8")) {
                 // R8
-                ArrayList<String> cmd = new ArrayList<>();           
-                cmd.add("--release");
+                //ArrayList<String> cmd = new ArrayList<>();           
+                //cmd.add("--release");
                 // Output
-                cmd.add("--output");
-                cmd.add(new File(_path).getParentFile().getAbsolutePath());                  
+                //cmd.add("--output");
+                //cmd.add(new File(_path).getParentFile().getAbsolutePath());                  
                 // cmd.add("--lib");
                 // cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
                 // cmd.add("--classpath");
                 // cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
                 // Input
-                cmd.add("--input");
-                cmd.add(_path);
+                //cmd.add("--input");
+                //cmd.add(_path);
                 // run D8 with list commands
-                R8.main(cmd.toArray(new String[0]));
+                //R8.main(cmd.toArray(new String[0]));
 
 //                String[] cmd = new String[] {
 //
@@ -449,18 +455,43 @@ public class LibraryDownloader {
 //                        "--output", _path,
 //                };
 //                R8.main(cmd);
+                ArrayList<String> config = new ArrayList<>();
+                ArrayList<String> rules = new ArrayList<>();
+
+                File proguardFile = new File(_path).getParentFile().getAbsolutePath() + "proguard.txt";
+                File rFile = new File(_path).getParentFile().getAbsolutePath() + "R.txt";
+
+                config.add(ProguardHandler.ANDROID_PROGUARD_RULES_PATH);
+                if (proguardFile.exists()) {
+                    config.add(proguardFile.getAbsolutePath());
+                }
+                if (rFile.exists()) {
+                    rules = new ArrayList<String>(Arrays.asList(rFile.getAbsolutePath()));
+                }
+                try {
+                    new R8Compiler(
+                        rules,
+                        config.toArray(new String[0]),
+                        null,
+                        _path,
+                        settings.getMinSdkVersion(),
+                        new File(_path).getParentFile().getAbsolutePath()
+                    ).compile();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             // 6.3.0 fix2
             Main.clearInternTables();
             // dx
             // 6.3.0 fix1
-            // "--incremental",
+            //  "--keep-classes",
+            //  "--incremental",
             Main.main(new String[]{
                     "--dex",
                     "--debug",
                     "--verbose",
-                    "--keep-classes",
                     "--multi-dex",
                     "--output=" + new File(_path).getParentFile().getAbsolutePath(),
                     _path
