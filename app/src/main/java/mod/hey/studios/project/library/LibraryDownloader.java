@@ -405,21 +405,22 @@ public class LibraryDownloader {
             if (tool.equals("D8")) {
                 // File libs = new File(context.getFilesDir(), "libs");
                 ArrayList<String> cmd = new ArrayList<>();
+                //  Compile without debugging information.
                 cmd.add("--release");
-                cmd.add("--intermediate");
-
+                //  Output result in <file>
+                cmd.add("--output");
+                cmd.add(new File(_path).getParentFile().getAbsolutePath());
+                //  Add <file|jdk-home> as a library resource
                 cmd.add("--lib");
                 cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
-                // cmd.add(new File(libs, "android.jar").getAbsolutePath());
-
+                //  cmd.add(new File(libs, "android.jar").getAbsolutePath());
+                //  Add <file> as a classpath resource
                 cmd.add("--classpath");
                 cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
                 // cmd.add(new File(libs, "core-lambda-stubs.jar").getAbsolutePath());
-
-                cmd.add("--output");
-                cmd.add(new File(_path).getParentFile().getAbsolutePath());
-
-                // Input
+                //  Compile an intermediate result intended for later merging
+                cmd.add("--intermediate");
+                // Input <file>
                 cmd.add(_path);
                 // run D8 with list commands
                 D8.main(cmd.toArray(new String[0]));
@@ -455,11 +456,13 @@ public class LibraryDownloader {
             Main.clearInternTables();
             // dx
             // 6.3.0 fix1
-            // "--dex", // not use ??
             Main.main(new String[]{
+                    "--dex",
                     "--debug",
                     "--verbose",
+                    "--keep-classes",
                     "--multi-dex",
+                    "--incremental",
                     "--output=" + new File(_path).getParentFile().getAbsolutePath(),
                     _path
             });
