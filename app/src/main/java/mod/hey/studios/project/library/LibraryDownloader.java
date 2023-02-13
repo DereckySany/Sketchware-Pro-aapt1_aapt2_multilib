@@ -458,8 +458,8 @@ public class LibraryDownloader {
                 ArrayList<String> config = new ArrayList<>();
                 ArrayList<String> rules = new ArrayList<>();
 
-                File proguardFile = new File(_path + "proguard.txt").getParentFile().getAbsolutePath();
-                File rFile = new File(_path + "R.txt").getParentFile().getAbsolutePath();
+                File proguardFile = new File(_path, "proguard.txt").getParentFile().getAbsolutePath();
+                File rFile = new File(_path, "R.txt").getParentFile().getAbsolutePath();
 
                 config.add(ProguardHandler.ANDROID_PROGUARD_RULES_PATH);
                 if (proguardFile.exists()) {
@@ -469,14 +469,7 @@ public class LibraryDownloader {
                     rules = new ArrayList<String>(Arrays.asList(rFile.getAbsolutePath()));
                 }
                 try {
-                    new R8Compiler(
-                        rules,
-                        config.toArray(new String[0]),
-                        null,
-                        _path,
-                        settings.getMinSdkVersion(),
-                        new File(_path).getParentFile().getAbsolutePath()
-                    ).compile();
+                    new R8Compiler(rules,config.toArray(new String[0]),null,_path,settings.getMinSdkVersion(),new File(_path).getParentFile().getAbsolutePath()).compile();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
