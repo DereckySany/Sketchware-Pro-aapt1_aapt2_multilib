@@ -58,6 +58,8 @@ import mod.hey.studios.project.ProjectSettings;
 
 public class LibraryDownloader {
 
+    private static final String SEARCHING_MESSAGE = "Searching...";
+    
     public static final File CONFIGURED_REPOSITORIES_FILE = new File(Environment.getExternalStorageDirectory(),
             ".sketchware" + File.separator + "libs" + File.separator + "repositories.json");
     private static final String DEFAULT_REPOSITORIES_FILE_CONTENT = "[{\"url\":\"https://repo.hortonworks.com/content/repositories/releases\",\"name\":\"HortanWorks\"},{\"url\":\"https://maven.atlassian.com/content/repositories/atlassian-public\",\"name\":\"Atlassian\"},{\"url\":\"https://jitpack.io\",\"name\":\"JitPack\"},{\"url\":\"https://jcenter.bintray.com\",\"name\":\"JCenter\"},{\"url\":\"https://oss.sonatype.org/content/repositories/releases\",\"name\":\"Sonatype\"},{\"url\":\"https://repo.spring.io/plugins-release\",\"name\":\"Spring Plugins\"},{\"url\":\"https://repo.spring.io/libs-milestone\",\"name\":\"Spring Milestone\"},{\"url\":\"https://repo.maven.apache.org/maven2\",\"name\":\"Apache Maven\"},{\"url\":\"https://dl.google.com/dl/android/maven2\",\"name\":\"Google Maven\"},{\"url\":\"https://repo1.maven.org/maven2\",\"name\":\"Maven Central\"}]";
@@ -826,7 +828,8 @@ public class LibraryDownloader {
                                     String name = repoNames.get(counter);
 
                                     counter++;
-                                    message.setText("Searching... " + counter + "/" + repoUrls.size() + " [" + name + "]");
+                                    String messageText = String.format("%s %d/%d [%s]", SEARCHING_MESSAGE, counter, repoUrls.size(), name);
+                                    message.setText(messageText);
 
                                     downloadId = _download(
                                             currentRepo.concat(_getDownloadLink(library.getText().toString())),
@@ -846,6 +849,31 @@ public class LibraryDownloader {
                                             progressbar1
                                     );
 
+                                /*                                    
+                                    currentRepo = repoUrls.get(counter);
+                                    String name = repoNames.get(counter);
+
+                                    counter++;
+                                    message.setText("Searching... " + counter + "/" + repoUrls.size() + " [" + name + "]");
+
+                                    downloadId = _download(
+                                            currentRepo.concat(_getDownloadLink(library.getText().toString())),
+                                            downloadPath,
+                                            _getLibName(library.getText().toString()) + ".zip",
+                                            library,
+                                            message,
+                                            progressBarContainer,
+                                            libraryContainer,
+                                            start,
+                                            pause,
+                                            resume,
+                                            cancel,
+                                            acao,
+                                            useAar,
+                                            useJar,
+                                            progressbar1
+                                    );
+                                */
                                 } else {
                                     FileUtil.deleteFile(libName);
                                     message.setText("Library was not found in loaded repositories");
