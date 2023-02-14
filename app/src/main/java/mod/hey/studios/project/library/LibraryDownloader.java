@@ -458,8 +458,8 @@ public class LibraryDownloader {
                 ArrayList<String> config = new ArrayList<>();
                 ArrayList<String> rules = new ArrayList<>();
 
-                File proguardFile = new File(_path, "proguard.txt").getParentFile().getAbsolutePath();
-                File rFile = new File(_path, "R.txt").getParentFile().getAbsolutePath();
+                File proguardFile = new File(_path, "proguard.txt").getParentFile();
+                File rFile = new File(_path, "R.txt").getParentFile();
 
                 config.add(ProguardHandler.ANDROID_PROGUARD_RULES_PATH);
                 if (proguardFile.exists()) {
