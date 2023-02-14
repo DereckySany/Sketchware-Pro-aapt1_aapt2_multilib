@@ -29,7 +29,7 @@ public class R8Compiler {
         }
         Path outputFile = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            outputFile = Paths.get(outputFilePath + ".dex");
+            outputFile = Paths.get(outputFilePath);
         }
         R8Command command;
         try {

@@ -453,7 +453,7 @@ public class LibraryDownloader {
                 //  };
                 // R8.main(cmd);
 
-                R8Compiler compiler = new R8Compiler(_path, new File(_path).getParentFile().getAbsolutePath());
+                R8Compiler compiler = new R8Compiler(_path, new File(_path, "classes.dex").getParentFile().getAbsolutePath());
                 compiler.compile();
             }
         } else {
@@ -897,6 +897,42 @@ public class LibraryDownloader {
                 });
     }
 
+    private void getRepository() {
+        repoUrls.clear();
+        repoMap.clear();
+        repoNames.clear();
+        int counter = 0;
+
+        String jsonString = readFile(CONFIGURED_REPOSITORIES_FILE);
+        if (jsonString.isEmpty()) {
+            jsonString = DEFAULT_REPOSITORIES_FILE_CONTENT;
+            writeFile(CONFIGURED_REPOSITORIES_FILE, jsonString);
+        }
+
+        repoMap = new Gson().fromJson(jsonString, Helper.TYPE_MAP_LIST);
+
+        for (HashMap<String, Object> configuration : repoMap) {
+            String repositoryUrl = (String) configuration.get("url");
+            String repositoryName = (String) configuration.get("name");
+            repoUrls.add(repositoryUrl);
+            repoNames.add(repositoryName);
+            counter++;
+        }
+    }
+
+    private String readFile(File file) {
+        if (!file.exists()) {
+            return "";
+        }
+        return FileUtil.readFile(file.getAbsolutePath());
+    }
+
+    private void writeFile(File file, String content) {
+        FileUtil.writeFile(file.getAbsolutePath(), content);
+    }
+
+
+    /*
     private void _getRepository() {
         repoUrls.clear();
         repoMap.clear();
@@ -940,7 +976,7 @@ public class LibraryDownloader {
             counter++;
         }
     }
-
+        */
     public interface OnCompleteListener {
         void onComplete();
     }
