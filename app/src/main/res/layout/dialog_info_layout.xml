@@ -70,6 +70,9 @@
             android:autofillHints=""
             tools:ignore="Deprecated" />
     </com.google.android.material.textfield.TextInputLayout>
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
     <com.google.android.material.textfield.TextInputLayout
         android:orientation="vertical"
         android:id="@+id/dialoginfolayoutLinearLayout3"
@@ -77,16 +80,13 @@
         android:paddingRight="20.0dip"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-        <ScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
         <EditText
             android:textSize="18.0sp"
             android:textColorHint="#ff142fbc"
             android:id="@+id/edittext_info_manifast"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:maxLines="6"
+            android:maxLines="5"
             android:hint="Manifast"
             android:text=""
             android:editable="false"
@@ -94,7 +94,7 @@
             android:inputType="textMultiLine"
             android:autofillHints=""
             tools:ignore="Deprecated" />
-        </ScrollView>
+    </ScrollView>
     </com.google.android.material.textfield.TextInputLayout>
     <LinearLayout
         android:gravity="right"

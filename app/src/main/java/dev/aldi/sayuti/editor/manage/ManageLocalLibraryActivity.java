@@ -45,7 +45,7 @@ public class ManageLocalLibraryActivity extends Activity
     private static final String RESET_LOCAL_LIBRARIES_TAG = "reset_local_libraries";
 
     private LibraryAdapter adapter;
-    private List<String> arrayList = new ArrayList<>();
+    //    private List<String> arrayList = new ArrayList<>();
     private ArrayList<String> arrayList = new ArrayList<>();
     private boolean notAssociatedWithProject = false;
     private ListView listview;
@@ -55,7 +55,6 @@ public class ManageLocalLibraryActivity extends Activity
     private ArrayList<HashMap<String, Object>> lookup_list = new ArrayList<>();
     private ArrayList<HashMap<String, Object>> project_used_libs = new ArrayList<>();
 
-    
 
     private void setUpSearchView() {
         searchview.setActivated(true);
@@ -63,18 +62,18 @@ public class ManageLocalLibraryActivity extends Activity
         searchview.onActionViewExpanded();
         searchview.setIconifiedByDefault(false);
         searchview.clearFocus();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    return false;
-                }
+        searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+              @Override
+              public boolean onQueryTextSubmit(String query) {
+                  return false;
+              }
 
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    applyFilter(newText);
-                    return true;
-                }
-            }
+              @Override
+              public boolean onQueryTextChange(String newText) {
+                  applyFilter(newText);
+                  return true;
+              }
+          }
         );
     }
 
@@ -124,11 +123,11 @@ public class ManageLocalLibraryActivity extends Activity
                     .setMessage("Você gostaria de usar DX, D8 ou R8 para compilar a biblioteca?\n" +
                             "D8 suporta Java 8, enquanto que o DX não suporta. Limitação: o D8 só funciona no Android 8 e acima.\n" +
                             "O R8 é o novo compilador oficial do Android Studio.")
-                    .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this,true,
+                    .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
                             "D8").showDialog(ManageLocalLibraryActivity.this))
-                    .setNegativeButton("DX", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this,false,
+                    .setNegativeButton("DX", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, false,
                             "Dx").showDialog(ManageLocalLibraryActivity.this))
-                    .setNeutralButton("R8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this,true,
+                    .setNeutralButton("R8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
                             "R8").showDialog(ManageLocalLibraryActivity.this))
                     .setCancelable(true)
                     .show();
@@ -169,77 +168,77 @@ public class ManageLocalLibraryActivity extends Activity
         loadFiles();
     }
 
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.manage_permission);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.manage_permission);
 
-    LinearLayout searchViewContainer = findViewById(R.id.managepermissionLinearLayout1);
-    searchViewContainer.setVisibility(View.VISIBLE);
-    searchViewContainer.setBackground(getDrawable(R.drawable.bg_rectangle_white));
-    searchview = findViewById(R.id.search_perm);
-    listview = findViewById(R.id.main_content);
-    ViewGroup mainContent = (ViewGroup) searchViewContainer.getParent();
-    ViewGroup root = (ViewGroup) mainContent.getParent();
-    root.removeView(mainContent);
-    root.addView(mainContent);
+        LinearLayout searchViewContainer = findViewById(R.id.managepermissionLinearLayout1);
+        searchViewContainer.setVisibility(View.VISIBLE);
+        searchViewContainer.setBackground(getDrawable(R.drawable.bg_rectangle_white));
+        searchview = findViewById(R.id.search_perm);
+        listview = findViewById(R.id.main_content);
+        ViewGroup mainContent = (ViewGroup) searchViewContainer.getParent();
+        ViewGroup root = (ViewGroup) mainContent.getParent();
+        root.removeView(mainContent);
+        root.addView(mainContent);
 
-    if (getIntent().hasExtra("sc_id")) {
-        String sc_id = getIntent().getStringExtra("sc_id");
-        notAssociatedWithProject = sc_id.equals("system");
-        configurationFilePath = FileUtil.getExternalStorageDir().concat("/.sketchware/data/")
-                .concat(sc_id.concat("/local_library"));
-        local_libs_path = FileUtil.getExternalStorageDir().concat("/.sketchware/libs/local_libs/");
-        // Carregar arquivos
-        loadFiles();
-        // Inicializar o SearchView
-        setUpSearchView();
-        initToolbar();
-    } else {
-        finish();
-    }
-}
-
-private void loadFiles() {
-    arrayList.clear();
-    if (!notAssociatedWithProject) {
-        String fileContent;
-        if (!FileUtil.isExistFile(configurationFilePath)
-                || (fileContent = FileUtil.readFile(configurationFilePath)).equals("")) {
-            FileUtil.writeFile(configurationFilePath, "[]");
+        if (getIntent().hasExtra("sc_id")) {
+            String sc_id = getIntent().getStringExtra("sc_id");
+            notAssociatedWithProject = sc_id.equals("system");
+            configurationFilePath = FileUtil.getExternalStorageDir().concat("/.sketchware/data/")
+                    .concat(sc_id.concat("/local_library"));
+            local_libs_path = FileUtil.getExternalStorageDir().concat("/.sketchware/libs/local_libs/");
+            // Carregar arquivos
+            loadFiles();
+            // Inicializar o SearchView
+            setUpSearchView();
+            initToolbar();
         } else {
-            project_used_libs = new Gson().fromJson(fileContent, Helper.TYPE_MAP_LIST);
+            finish();
         }
     }
-    ArrayList<String> arrayList = new ArrayList<>();
-    FileUtil.listDir(local_libs_path, arrayList);
-    Collections.sort(arrayList, String.CASE_INSENSITIVE_ORDER);
 
-    List<String> localLibraryNames = new LinkedList<>();
-    for (String filename : arrayList) {
-        if (FileUtil.isDirectory(filename)) {
-            localLibraryNames.add(Uri.parse(filename).getLastPathSegment());
+    private void loadFiles() {
+        arrayList.clear();
+        if (!notAssociatedWithProject) {
+            String fileContent;
+            if (!FileUtil.isExistFile(configurationFilePath)
+                    || (fileContent = FileUtil.readFile(configurationFilePath)).equals("")) {
+                FileUtil.writeFile(configurationFilePath, "[]");
+            } else {
+                project_used_libs = new Gson().fromJson(fileContent, Helper.TYPE_MAP_LIST);
+            }
         }
-    }
-    arrayList.addAll(localLibraryNames);
-    adapter = new LibraryAdapter(localLibraryNames);
-    listview.setAdapter(adapter);
-}
+        ArrayList<String> arrayList = new ArrayList<>();
+        FileUtil.listDir(local_libs_path, arrayList);
+        Collections.sort(arrayList, String.CASE_INSENSITIVE_ORDER);
 
-private void applyFilter(String query) {
-    if (query.isEmpty()) {
-        adapter.updateData(arrayList);
-        return;
-    }
-
-    List<String> filteredList = new ArrayList<>();
-    for (String library : arrayList) {
-        if (library.toLowerCase().contains(query.toLowerCase())) {
-            filteredList.add(library);
+        List<String> localLibraryNames = new LinkedList<>();
+        for (String filename : arrayList) {
+            if (FileUtil.isDirectory(filename)) {
+                localLibraryNames.add(Uri.parse(filename).getLastPathSegment());
+            }
         }
+        arrayList.addAll(localLibraryNames);
+        adapter = new LibraryAdapter(localLibraryNames);
+        listview.setAdapter(adapter);
     }
-    adapter.updateData(filteredList);
-}
+
+    private void applyFilter(String query) {
+        if (query.isEmpty()) {
+            adapter.updateData(arrayList);
+            return;
+        }
+
+        List<String> filteredList = new ArrayList<>();
+        for (String library : arrayList) {
+            if (library.toLowerCase().contains(query.toLowerCase())) {
+                filteredList.add(library);
+            }
+        }
+        adapter.updateData(filteredList);
+    }
 
 
     public class LibraryAdapter extends BaseAdapter {
@@ -270,48 +269,48 @@ private void applyFilter(String query) {
             return position;
         }
 
-@Override
-public View getView(int position, View convertView, ViewGroup parent) {
-if (convertView == null) {
-convertView = getLayoutInflater().inflate(R.layout.view_item_local_lib, parent, false);
-}
-    final LinearLayout indicator = convertView.findViewById(R.id.linear_content_indicator);
-    final CheckBox enabled = convertView.findViewById(R.id.checkbox_content);
-    enabled.setText(localLibraries.get(position));
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = getLayoutInflater().inflate(R.layout.view_item_local_lib, parent, false);
+            }
+            final LinearLayout indicator = convertView.findViewById(R.id.linear_content_indicator);
+            final CheckBox enabled = convertView.findViewById(R.id.checkbox_content);
+            enabled.setText(localLibraries.get(position));
 
-    String libname = enabled.getText().toString();
-    String libconfig = local_libs_path + libname + "/config";
+            String libname = enabled.getText().toString();
+            String libconfig = local_libs_path + libname + "/config";
 
-    enabled.setOnClickListener(v -> {
-        HashMap<String, Object> localLibrary = getLocalLibraryData(libname);
-        if (!enabled.isChecked()) {
-            int i = project_used_libs.indexOf(localLibrary);
-            project_used_libs.remove(i);
-        } else {
-            project_used_libs.remove(localLibrary);
-            project_used_libs.add(localLibrary);
-        }
-        FileUtil.writeFile(configurationFilePath, new Gson().toJson(project_used_libs));
-    });
+            enabled.setOnClickListener(v -> {
+                HashMap<String, Object> localLibrary = getLocalLibraryData(libname);
+                if (!enabled.isChecked()) {
+                    int i = project_used_libs.indexOf(localLibrary);
+                    project_used_libs.remove(i);
+                } else {
+                    project_used_libs.remove(localLibrary);
+                    project_used_libs.add(localLibrary);
+                }
+                FileUtil.writeFile(configurationFilePath, new Gson().toJson(project_used_libs));
+            });
 
-    setColorIdicator(indicator, libconfig);
+            setColorIdicator(indicator, libconfig);
 
-    enabled.setChecked(false);
-    if (!notAssociatedWithProject) {
-        lookup_list = new Gson().fromJson(FileUtil.readFile(configurationFilePath), Helper.TYPE_MAP_LIST);
-        enabled.setChecked(lookup_list.contains(getLocalLibraryData(libname)));
-    } else {
-        enabled.setEnabled(false);
-    }
+            enabled.setChecked(false);
+            if (!notAssociatedWithProject) {
+                lookup_list = new Gson().fromJson(FileUtil.readFile(configurationFilePath), Helper.TYPE_MAP_LIST);
+                enabled.setChecked(lookup_list.contains(getLocalLibraryData(libname)));
+            } else {
+                enabled.setEnabled(false);
+            }
 
-    convertView.findViewById(R.id.img_delete).setOnClickListener(v -> {
-        PopupMenu popupMenu = new PopupMenu(ManageLocalLibraryActivity.this, v);
-        popupMenu.getMenu().add(Menu.NONE, 1, Menu.NONE, "Info");
-        popupMenu.getMenu().add(Menu.NONE, 2, Menu.NONE, "Rename");
-        popupMenu.getMenu().add(Menu.NONE, 3, Menu.NONE, "Delete");
+            convertView.findViewById(R.id.img_delete).setOnClickListener(v -> {
+                PopupMenu popupMenu = new PopupMenu(ManageLocalLibraryActivity.this, v);
+                popupMenu.getMenu().add(Menu.NONE, 1, Menu.NONE, "Info");
+                popupMenu.getMenu().add(Menu.NONE, 2, Menu.NONE, "Rename");
+                popupMenu.getMenu().add(Menu.NONE, 3, Menu.NONE, "Delete");
 
-        popupMenu.setOnMenuItemClickListener(menuItem -> {
-            switch (menuItem.getTitle().toString()) {
+                popupMenu.setOnMenuItemClickListener(menuItem -> {
+                    switch (menuItem.getTitle().toString()) {
                         case "Info":
                             final String libraryName = enabled.getText().toString();
                             final String configPath = local_libs_path.concat(libraryName + "/config");
@@ -346,13 +345,18 @@ convertView = getLayoutInflater().inflate(R.layout.view_item_local_lib, parent, 
                             tilName.setHint("Name Library");
                             tilImport.setHint("Import library name");
                             tilManifast.setHint("Manifast");
-
+                            etName.setEnabled(false);
+                            etImport.setTextIsSelectable(true);
                             etName.setText(
                                     (infoName.exists() && !isEmpty() ? FileUtil.readFile(infoName.getAbsolutePath())
                                             : "Not avaliable!"));
+                            etImport.setEnabled(false);
+                            etImport.setTextIsSelectable(true);
                             etImport.setText(
                                     (infoImport.exists() && !isEmpty() ? FileUtil.readFile(infoImport.getAbsolutePath())
                                             : "Not avaliable!"));
+                            etManifast.setEnabled(false);
+                            etImport.setTextIsSelectable(true);
                             etManifast.setText((infoManifast.exists() && !isEmpty()
                                     ? FileUtil.readFile(infoManifast.getAbsolutePath())
                                     : "Not avaliable!"));
@@ -444,18 +448,20 @@ convertView = getLayoutInflater().inflate(R.layout.view_item_local_lib, parent, 
                         default:
                             return false;
                     }
-            return true;
-        });
-        popupMenu.show();
-    });
-    return convertView;
-    }
-    private HashMap<String, Object> getLocalLibraryData(String libname) {
-        HashMap<String, Object> localLibrary = new HashMap<>();
-        localLibrary.put("name", libname);
-        localLibrary.put("config", local_libs_path + libname + "/config");
-        return localLibrary;
-    }
+                    return true;
+                });
+                popupMenu.show();
+            });
+            return convertView;
+        }
+
+        private HashMap<String, Object> getLocalLibraryData(String libname) {
+            HashMap<String, Object> localLibrary = new HashMap<>();
+            localLibrary.put("name", libname);
+            localLibrary.put("config", local_libs_path + libname + "/config");
+            return localLibrary;
+        }
+
         private void setColorIdicator(LinearLayout indicator, String configname) {
             if (FileUtil.isExistFile(configname)) {
                 if (FileUtil.readFile(configname).getBytes().length > 0) {
