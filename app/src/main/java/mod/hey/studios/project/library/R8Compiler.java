@@ -42,7 +42,7 @@ public class R8Compiler {
             // Tenta criar o objeto R8Command, que define as configurações para a compilação.
             command = R8Command.builder()
                 .addProgramFiles(inputFile)
-                .setMinApiLevel(settings.getMinSdkVersion())
+                .setMinApiLevel(21)
                 .setOutput(outputFile, OutputMode.DexIndexed)
                 .addProguardConfigurationFiles(ANDROID_PROGUARD_RULES_PATH)
                 .setMode(CompilationMode.RELEASE)
