@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.android.tools.r8.D8;
 import com.android.tools.r8.R8;
+import com.android.tools.r8.R8Compiler;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.sketchware.remod.R;
@@ -54,7 +55,7 @@ import mod.jbk.build.BuiltInLibraries;
 
 import mod.hey.studios.project.ProjectSettings;
 import mod.pranav.build.R8Compiler;
-import mod.hey.studios.project.proguard.ProguardHandler;
+import mod.hey.studios.project.library.R8Compiler;
 
 //changed in 6.3.0
 
@@ -455,31 +456,8 @@ public class LibraryDownloader {
 //                        "--output", _path,
 //                };
 //                R8.main(cmd);
-                ArrayList<String> config = new ArrayList<>();
-                ArrayList<String> rules = new ArrayList<>();
-
-                File proguardFile = new File(_path, "proguard.txt");
-                File rFile = new File(_path, "R.txt");
-
-                config.add(ProguardHandler.ANDROID_PROGUARD_RULES_PATH);
-                if (proguardFile.exists()) {
-                    config.add(proguardFile.getAbsolutePath());
-                }
-                if (rFile.exists()) {
-                    rules.add(rFile.getAbsolutePath());
-                }
-                try {
-                    new R8Compiler(
-                        rules.toArray(new String[0]),
-                        config.toArray(new String[0]),
-                        null,
-                        _path,
-                        settings.getMinSdkVersion(),
-                        new File(_path).getParentFile().getAbsolutePath()
-                    ).compile();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                R8Compiler compiler = new R8Compiler(_path, new File(_path).getParentFile().getAbsolutePath());
+                compiler.compile();
             }
         } else {
             // 6.3.0 fix2
