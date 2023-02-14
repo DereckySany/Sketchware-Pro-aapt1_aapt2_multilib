@@ -23,7 +23,6 @@ import android.widget.Toast;
 
 import com.android.tools.r8.D8;
 import com.android.tools.r8.R8;
-import com.android.tools.r8.R8Compiler;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.sketchware.remod.R;
@@ -54,7 +53,6 @@ import mod.hey.studios.util.Helper;
 import mod.jbk.build.BuiltInLibraries;
 
 import mod.hey.studios.project.ProjectSettings;
-import mod.pranav.build.R8Compiler;
 import mod.hey.studios.project.library.R8Compiler;
 
 //changed in 6.3.0

@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import com.android.tools.r8.R8;
-import com.android.tools.r8.R8Command;
+import com.android.tools.r8.R8Command.*;
 import com.android.tools.r8.shaking.ProguardRuleParserException;
 
 import mod.hey.studios.project.proguard.ProguardHandler;
