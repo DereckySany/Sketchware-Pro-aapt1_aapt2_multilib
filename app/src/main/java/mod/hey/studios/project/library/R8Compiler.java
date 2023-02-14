@@ -9,6 +9,7 @@ import com.android.tools.r8.R8Command;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import mod.agus.jcoderz.lib.FileUtil;
 
@@ -27,11 +28,15 @@ public class R8Compiler {
         Path inputFile = null;
         Path outputFile = null;
         Path ANDROID_PROGUARD_RULES_PATH = null;
+        Path ANDROID_PROGUARD_RULES = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             /* Verifica se a versão do Android é maior ou igual ao Android 8.0 (Oreo).
              Se for, o caminho para o arquivo de entrada é obtido com o Paths.get().*/
             inputFile = Paths.get(inputFilePath);
             outputFile = Paths.get(outputFilePath);
+            if (outputFilePath.contains("proguard.txt")){
+                ANDROID_PROGUARD_RULES = Paths.get(outputFilePath + "/proguard.txt");
+            }
             ANDROID_PROGUARD_RULES_PATH = Paths.get(FileUtil.getExternalStorageDir() + "/.sketchware/libs/android-proguard-rules.pro");
         }
 
@@ -42,7 +47,7 @@ public class R8Compiler {
                 .addProgramFiles(inputFile)
                 .setMinApiLevel(21)
                 .setOutput(outputFile, OutputMode.DexIndexed)
-                .addProguardConfigurationFiles(ANDROID_PROGUARD_RULES_PATH)
+                .addProguardConfigurationFiles(ANDROID_PROGUARD_RULES_PATH,ANDROID_PROGUARD_RULES)
                 .setMode(CompilationMode.RELEASE)
                 .build();
         } catch (CompilationFailedException e) {
