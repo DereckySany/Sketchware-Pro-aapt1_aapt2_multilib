@@ -35,7 +35,7 @@ public class R8Compiler {
         try {
             command = R8Command.builder()
                 .addProgramFiles(inputFile)
-                .setMinApiLevel(settings.getMinSdkVersion())
+                .setMinApiLevel(21)
                 .setOutput(outputFile, OutputMode.DexIndexed)
                 .setMode(CompilationMode.RELEASE)
                 .build();
