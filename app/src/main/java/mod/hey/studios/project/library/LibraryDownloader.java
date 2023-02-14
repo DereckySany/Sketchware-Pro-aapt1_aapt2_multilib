@@ -897,7 +897,7 @@ public class LibraryDownloader {
                 });
     }
 
-    private void getRepository() {
+    private void _getRepository() {
         repoUrls.clear();
         repoMap.clear();
         repoNames.clear();
