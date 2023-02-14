@@ -94,8 +94,8 @@
             android:inputType="textMultiLine"
             android:autofillHints=""
             tools:ignore="Deprecated" />
-    </ScrollView>
     </com.google.android.material.textfield.TextInputLayout>
+    </ScrollView>
     <LinearLayout
         android:gravity="right"
         android:orientation="horizontal"
