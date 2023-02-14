@@ -228,6 +228,7 @@ public class ManageLocalLibraryActivity extends Activity
     private void applyFilter(String query) {
         if (query.isEmpty()) {
             adapter.updateData(arrayList);
+            listview.setAdapter(adapter);
             return;
         }
 
@@ -345,17 +346,17 @@ public class ManageLocalLibraryActivity extends Activity
                             tilName.setHint("Name Library");
                             tilImport.setHint("Import library name");
                             tilManifast.setHint("Manifast");
-                            etName.setEnabled(false);
+                            etName.setEnabled(true);
                             etImport.setTextIsSelectable(true);
                             etName.setText(
                                     (infoName.exists() && !isEmpty() ? FileUtil.readFile(infoName.getAbsolutePath())
                                             : "Not avaliable!"));
-                            etImport.setEnabled(false);
+                            etImport.setEnabled(true);
                             etImport.setTextIsSelectable(true);
                             etImport.setText(
                                     (infoImport.exists() && !isEmpty() ? FileUtil.readFile(infoImport.getAbsolutePath())
                                             : "Not avaliable!"));
-                            etManifast.setEnabled(false);
+                            etManifast.setEnabled(true);
                             etImport.setTextIsSelectable(true);
                             etManifast.setText((infoManifast.exists() && !isEmpty()
                                     ? FileUtil.readFile(infoManifast.getAbsolutePath())
@@ -396,6 +397,7 @@ public class ManageLocalLibraryActivity extends Activity
                                             SketchwareUtil.toastError("Failed to rename library");
                                         }
                                         SketchwareUtil.toast("NOTE: Removed library from used local libraries");
+                                        loadFiles();
                                         realog.dismiss();
                                     });
                             realog.getWindow()
