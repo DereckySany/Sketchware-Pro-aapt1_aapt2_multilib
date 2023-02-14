@@ -53,7 +53,6 @@ import mod.hey.studios.util.Helper;
 import mod.jbk.build.BuiltInLibraries;
 
 import mod.hey.studios.project.ProjectSettings;
-import mod.hey.studios.project.library.R8Compiler;
 
 //changed in 6.3.0
 
@@ -432,7 +431,7 @@ public class LibraryDownloader {
 
             } else if (tool.equals("R8")) {
                 // R8
-                //ArrayList<String> cmd = new ArrayList<>();           
+                //ArrayList<String> cmd = new ArrayList<>();
                 //cmd.add("--release");
                 // Output
                 //cmd.add("--output");
@@ -447,13 +446,13 @@ public class LibraryDownloader {
                 // run D8 with list commands
                 //R8.main(cmd.toArray(new String[0]));
 
-//                String[] cmd = new String[] {
-//
-//                        "--release"
-//                        "--input", _path,
-//                        "--output", _path,
-//                };
-//                R8.main(cmd);
+                //  String[] cmd = new String[] {
+                //  "--release"
+                //  "--input", _path,
+                //  "--output", new File(_path).getParentFile().getAbsolutePath(),
+                //  };
+                // R8.main(cmd);
+
                 R8Compiler compiler = new R8Compiler(_path, new File(_path).getParentFile().getAbsolutePath());
                 compiler.compile();
             }

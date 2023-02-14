@@ -1,19 +1,15 @@
 package mod.hey.studios.project.library;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
+import com.android.tools.r8.CompilationFailedException;
 import com.android.tools.r8.CompilationMode;
 import com.android.tools.r8.OutputMode;
 import com.android.tools.r8.R8;
 import com.android.tools.r8.R8Command;
-import com.android.tools.r8.origin.Origin;
-import com.android.tools.r8.shaking.ProguardRuleParserException;
 
-import mod.hey.studios.project.proguard.ProguardHandler;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import mod.hey.studios.project.ProjectSettings;
 
 public class R8Compiler {
@@ -26,16 +22,30 @@ public class R8Compiler {
         this.outputFilePath = outputFilePath;
     }
 
-    public void compile() throws IOException, ProguardRuleParserException {
-        Path inputFile = Paths.get(inputFilePath);
-        Path outputFile = Paths.get(outputFilePath);
-        R8Command command = R8Command.builder()
-            .addProgramFiles(inputFile)
-            .setMinApiLevel(settings.getMinSdkVersion())
-            .setOutput(outputFile, R8Command.OutputMode.DexIndexed)
-            .addProguardConfiguration(ProguardHandler.ANDROID_PROGUARD_RULES_PATH, new String[0])
-            .setMode(CompilationMode.RELEASE)
-            .build();
-        R8.run(command);
+    public void compile() throws IOException {
+        Path inputFile = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            inputFile = Paths.get(inputFilePath);
+        }
+        Path outputFile = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            outputFile = Paths.get(outputFilePath + ".dex");
+        }
+        R8Command command;
+        try {
+            command = R8Command.builder()
+                .addProgramFiles(inputFile)
+                .setMinApiLevel(settings.getMinSdkVersion())
+                .setOutput(outputFile, OutputMode.DexIndexed)
+                .setMode(CompilationMode.RELEASE)
+                .build();
+        } catch (CompilationFailedException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            R8.run(command);
+        } catch (CompilationFailedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
