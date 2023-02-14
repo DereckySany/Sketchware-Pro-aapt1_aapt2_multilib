@@ -463,8 +463,8 @@ public class LibraryDownloader {
             // 6.3.0 fix1
             //  "--keep-classes",
             //  "--incremental",
+            //  "--dex",
             Main.main(new String[]{
-                    "--dex",
                     "--debug",
                     "--verbose",
                     "--multi-dex",
