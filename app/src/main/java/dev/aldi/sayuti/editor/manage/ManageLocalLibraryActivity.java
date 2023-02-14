@@ -46,6 +46,7 @@ public class ManageLocalLibraryActivity extends Activity
 
     private LibraryAdapter adapter;
     private List<String> arrayList = new ArrayList<>();
+    private ArrayList<String> arrayList = new ArrayList<>();
     private boolean notAssociatedWithProject = false;
     private ListView listview;
     private SearchView searchview;
@@ -54,24 +55,27 @@ public class ManageLocalLibraryActivity extends Activity
     private ArrayList<HashMap<String, Object>> lookup_list = new ArrayList<>();
     private ArrayList<HashMap<String, Object>> project_used_libs = new ArrayList<>();
 
+    
+
     private void setUpSearchView() {
         searchview.setActivated(true);
         searchview.setQueryHint("Search for a library");
         searchview.onActionViewExpanded();
         searchview.setIconifiedByDefault(false);
         searchview.clearFocus();
-        searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                applyFilter(newText);
-                return false;
-            }
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
 
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    applyFilter(newText);
+                    return true;
+                }
             }
-        });
+        );
     }
 
     private void initToolbar() {
@@ -186,7 +190,9 @@ protected void onCreate(Bundle savedInstanceState) {
         configurationFilePath = FileUtil.getExternalStorageDir().concat("/.sketchware/data/")
                 .concat(sc_id.concat("/local_library"));
         local_libs_path = FileUtil.getExternalStorageDir().concat("/.sketchware/libs/local_libs/");
+        // Carregar arquivos
         loadFiles();
+        // Inicializar o SearchView
         setUpSearchView();
         initToolbar();
     } else {
@@ -223,8 +229,6 @@ private void loadFiles() {
 private void applyFilter(String query) {
     if (query.isEmpty()) {
         adapter.updateData(arrayList);
-        //adapter = new LibraryAdapter(arrayList)
-        listview.setAdapter(adapter);
         return;
     }
 
@@ -235,9 +239,6 @@ private void applyFilter(String query) {
         }
     }
     adapter.updateData(filteredList);
-    //adapter = new LibraryAdapter(filteredList);
-    listview.setAdapter(adapter);
-    ((BaseAdapter)listview.getAdapter()).notifyDataSetChanged();
 }
 
 
