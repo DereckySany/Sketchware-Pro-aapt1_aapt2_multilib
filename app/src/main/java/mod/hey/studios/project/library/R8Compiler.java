@@ -37,6 +37,7 @@ public class R8Compiler {
                 .addProgramFiles(inputFile)
                 .setMinApiLevel(21)
                 .setOutput(outputFile, OutputMode.DexIndexed)
+                .setProguardConfig(new File(".sketchware/libs/android-proguard-rules.pro"))
                 .setMode(CompilationMode.RELEASE)
                 .build();
         } catch (CompilationFailedException e) {
