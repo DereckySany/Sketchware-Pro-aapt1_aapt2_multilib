@@ -29,6 +29,7 @@ public class aB extends Dialog {
     private View.OnClickListener dialogNoListener = null;
     private String dialogYesText = "Yes";
     private View.OnClickListener dialogYesListener = null;
+    private View.OnClickListener dialogTranslateListener = null;
 
     public aB(Activity activity) {
         super(activity);
@@ -61,6 +62,9 @@ public class aB extends Dialog {
     public void a(String noText, View.OnClickListener noListener) {
         dialogNoText = noText;
         dialogNoListener = noListener;
+    }
+    public void a(View.OnClickListener trnslateListener) {
+        dialogTranslateListener = trnslateListener;
     }
 
     /**
@@ -97,6 +101,8 @@ public class aB extends Dialog {
         setContentView(R.layout.dialog);
 
         ImageView dialogImage = findViewById(R.id.dialog_img);
+        ImageView dialogTranslate = findViewById(R.id.dialog_img_translated);
+        dialogTranslate.setOnClickListener(dialogTranslateListener);
         TextView dialogTitle = findViewById(R.id.dialog_title);
         TextView dialogMessage = findViewById(R.id.dialog_msg);
         FrameLayout dialogCustomViewContainer = findViewById(R.id.custom_view);
@@ -137,6 +143,9 @@ public class aB extends Dialog {
         if (dialogYesListener == null) {
             dialogYes.setVisibility(View.GONE);
         }
+        if (dialogTranslateListener == null) {
+            dialogTranslate.setVisibility(View.GONE);
+        }
 
         if (dialogImageResId == -1) {
             dialogImage.setVisibility(View.GONE);
@@ -155,7 +164,7 @@ public class aB extends Dialog {
     @Override
     public void show() {
         super.show();
-        if (dialogDefaultListener == null && dialogYesListener == null && dialogNoListener == null) {
+        if (dialogDefaultListener == null && dialogYesListener == null && dialogNoListener == null && dialogTranslateListener == null) {
             if (dialogButtonsContainer != null) {
                 dialogButtonsContainer.setVisibility(View.GONE);
             }

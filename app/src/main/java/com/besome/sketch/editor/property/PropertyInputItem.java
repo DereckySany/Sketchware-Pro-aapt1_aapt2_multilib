@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.besome.sketch.beans.ProjectFileBean;
 import com.besome.sketch.editor.LogicEditorActivity;
@@ -40,6 +41,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
     private String value = "";
     private ImageView imgLeftIcon;
     private int icon;
+    private int icon2;
     private LogicEditorActivity logicEditor;
     private TextView tvName;
     private TextView tvValue;
@@ -62,6 +64,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
 
             case "property_text":
                 icon = R.drawable.abc_96;
+                icon2 = R.drawable.language_translate_96;
                 break;
 
             case "property_hint":
@@ -102,6 +105,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
 
             case "property_inject":
                 icon = R.drawable.ic_property_inject;
+                icon2 = R.drawable.language_translate_96;
                 break;
 
             case "property_convert":
@@ -276,6 +280,9 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
                 if (valueChangeListener != null) valueChangeListener.a(key, value);
                 dialog.dismiss();
                 }
+        });
+        dialog.a(v ->{
+            Toast.makeText(context, "translated clicked!", Toast.LENGTH_SHORT).show();
         });
         dialog.configureDefaultButton("Code Editor", v -> {
             if (ConfigActivity.isLegacyCeEnabled()) {
