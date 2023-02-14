@@ -25,7 +25,7 @@ public class R8Compiler {
 
     public void compile() throws IOException {
         // Método que compila o arquivo de entrada com o R8.
-        ProjectSettings settings = null;
+        ProjectSettings settings = 0;
         Path inputFile = null;
         Path outputFile = null;
         Path ANDROID_PROGUARD_RULES_PATH = null;
@@ -42,7 +42,7 @@ public class R8Compiler {
             // Tenta criar o objeto R8Command, que define as configurações para a compilação.
             command = R8Command.builder()
                 .addProgramFiles(inputFile)
-                .setMinApiLevel(21)
+                .setMinApiLevel(settings.getMinSdkVersion())
                 .setOutput(outputFile, OutputMode.DexIndexed)
                 .addProguardConfigurationFiles(ANDROID_PROGUARD_RULES_PATH)
                 .setMode(CompilationMode.RELEASE)
