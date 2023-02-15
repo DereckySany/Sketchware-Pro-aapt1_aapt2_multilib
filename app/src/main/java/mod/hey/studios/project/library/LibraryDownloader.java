@@ -471,24 +471,24 @@ public class LibraryDownloader {
 
             } else if (tool.equals("R8")) {
                 // R8
-                ArrayList<String> cmd = new ArrayList<>();
-                cmd.add("--release"); 
-                cmd.add("--intermediate"); 
-                cmd.add("--no-desugaring"); 
-                cmd.add("--min-api"); 
-                cmd.add("26");
+                ArrayList<String> options = new ArrayList<>();
+                options.add("--release"); 
+                options.add("--intermediate"); 
+                options.add("--no-desugaring"); 
+                options.add("--min-api"); 
+                options.add(26);
                 // Output
-                cmd.add("--output");
-                cmd.add(new File(_path, "classes.zip").getParentFile().getAbsolutePath());                  
-                cmd.add("--lib");
-                cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
-                cmd.add("--classpath");
-                cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
+                options.add("--output");
+                options.add(new File(_path, "classes.zip").getParentFile().getAbsolutePath());                  
+                options.add("--lib");
+                options.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
+                options.add("--classpath");
+                options.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
                 // Input
                 //cmd.add("--input");
-                cmd.add(_path);
+                options.add(_path);
                 //run D8 with list commands
-                R8.main(cmd.toArray(new String[0]));
+                R8.main(options.toArray(new String[0]));
 
                 //String[] cmd = new String[] {
                 //"--release"
