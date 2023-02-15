@@ -455,7 +455,7 @@ public class LibraryDownloader {
                 //  };
                 // R8.main(cmd);
 
-                R8Compiler compiler = new R8Compiler(_path, new File(_path, "classes.dex").getParentFile().getAbsolutePath());
+                R8Compiler compiler = new R8Compiler(_path, new File(_path).getParentFile().getAbsolutePath());
                 compiler.compile();
             }
         } else {
