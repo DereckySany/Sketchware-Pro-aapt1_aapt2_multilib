@@ -19,6 +19,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.lang.InterruptedException;
 
 import com.besome.sketch.beans.ProjectFileBean;
 import com.besome.sketch.editor.LogicEditorActivity;
@@ -278,7 +279,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         dialog.show();
     }
 
-    private void showTextInputDialog(int minValue, int maxValue) {
+    private void showTextInputDialog(int minValue, int maxValue) throws InterruptedException {
         aB dialog = new aB((Activity) getContext());
         dialog.b(tvName.getText().toString());
         dialog.a(icon);
@@ -297,10 +298,11 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             }
         });
         dialog.a(v ->{
-            String translatedText = translate(text);
+            String translatedText;
             try {
-            input.setText(translatedText);
-            Toast.makeText(context, "Conteúdo traduzido para o Português!", Toast.LENGTH_SHORT).show();
+                translatedText = translate(text);
+                input.setText(translatedText);
+                Toast.makeText(context, "Conteúdo traduzido para o Português!", Toast.LENGTH_SHORT).show();
             } catch (InterruptedException e) {
                 String errorMessage = "Ocorreu um erro ao traduzir o texto: " + e.getMessage();
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
