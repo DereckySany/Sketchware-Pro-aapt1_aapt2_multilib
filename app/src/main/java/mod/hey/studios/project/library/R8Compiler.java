@@ -57,7 +57,7 @@ public class R8Compiler {
             command = R8Command.builder()
                 .setMode(CompilationMode.RELEASE)
                 .setIntermediate(true)
-                .setDisableDesugaring(true);
+                .setDisableDesugaring(true)
                 .setMinApiLevel(26)
                 .setClasspathFiles(classpath)
                 .addLibraryFiles(library)
