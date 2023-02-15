@@ -266,7 +266,7 @@ public class LibraryDownloader {
             if (dependency.isEmpty()) {
                 SketchwareUtil.toastError("Dependency can't be empty");
                 library.setTextColor(0xFF000000);
-            } else {
+            } else if (!dependency.isEmpty()) {
                 if (!dependency.contains(".")) {
                     SketchwareUtil.toastError("Invalid dependency");
                     library.setTextColor(0xFFf91010);
@@ -310,6 +310,17 @@ public class LibraryDownloader {
                     // Maven
                     SketchwareUtil.toast("Maven");
                     dependency = dependency.replaceAll("\\<dependency\\>|\\</dependency\\>|\\<groupId\\>|\\</groupId\\>|\\<artifactId\\>|\\</artifactId\\>|\\<version\\>|\\</version\\>", "");
+                } else if (dependency.contains("org") && dependency.contains("name") && dependency.contains("version")) {
+                    SketchwareUtil.toast("Gradle (Groovy)");
+                    /* clear Gradle (Groovy) format:
+                    compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7' */
+                    dependency = dependency.replaceAll("compile '", "");
+                    dependency = dependency.replaceAll("testCompile '", "");
+                    dependency = dependency.replaceAll("implementation '", "");
+                    dependency = dependency.replaceAll("runtime '", "");
+                    dependency = dependency.replaceAll(" '", "");
+                    dependency = dependency.replaceAll(":", ":");
+                    dependency = dependency.replaceAll("'", "");
                 } else if (dependency.contains("@Grapes(")) {
                     // Grape
                     SketchwareUtil.toast("Grape");
