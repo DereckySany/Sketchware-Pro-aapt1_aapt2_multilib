@@ -303,7 +303,7 @@
                         android:padding="8.0dip"
                         android:layout_width="wrap_content"
                         android:layout_height="48.0dip"
-                        android:text="@string/logic_editor_more_block_button_add" />
+                        android:text="@string/block_add_list_int_head" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

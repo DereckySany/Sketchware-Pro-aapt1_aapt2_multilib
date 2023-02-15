@@ -227,7 +227,7 @@ public class EventsHandler {
             case "onStop":
             case "onDestroy":
             case "onTabLayoutNewTabAdded":
-                return R.drawable.widget_source;
+                return R.drawable.align_left_48;
 
             case " onLongClick":
                 return R.drawable.check_upload_apk_48dp;

@@ -2,6 +2,7 @@ package com.besome.sketch.editor.property;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.text.InputType;
 import android.view.View;
@@ -23,7 +24,13 @@ import com.besome.sketch.beans.ProjectFileBean;
 import com.besome.sketch.editor.LogicEditorActivity;
 import com.sketchware.remod.R;
 
-import a.a.a.Ss;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+
 import a.a.a.Kw;
 import a.a.a.OB;
 import a.a.a.SB;
@@ -279,40 +286,51 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         EditText input = view.findViewById(R.id.ed_input);
         SB lengthValidator = new SB(context, view.findViewById(R.id.ti_input), minValue, maxValue);
         lengthValidator.a(value);
+        String text = input.getText().toString();
         //Ss ss = null;
         dialog.a(view);
         dialog.b(Helper.getResString(R.string.common_word_save), v -> {
             if (lengthValidator.b()) {
-                setValue(input.getText().toString());
+                setValue(text);
                 if (valueChangeListener != null) valueChangeListener.a(key, value);
                 dialog.dismiss();
-                }
+            }
         });
         dialog.a(v ->{
-            String text = input.getText().toString();
             String translatedText = translate(text);
+            try {
             input.setText(translatedText);
             Toast.makeText(context, "Conteúdo traduzido para o Português!", Toast.LENGTH_SHORT).show();
+            } catch (InterruptedException e) {
+                String errorMessage = "Ocorreu um erro ao traduzir o texto: " + e.getMessage();
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Erro");
+                builder.setMessage(errorMessage);
+                builder.setPositiveButton("OK", null);
+                AlertDialog errorlog = builder.create();
+                errorlog.show();
+            }
         });
+        dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.configureDefaultButton("Code Editor", v -> {
             if (ConfigActivity.isLegacyCeEnabled()) {
                 AsdOldDialog asdOldDialog = new AsdOldDialog(logicEditor);
-                asdOldDialog.setCon(input.getText().toString());
-                //asdOldDialog.saveLis(logicEditor, false, ss, asdOldDialog);
-                asdOldDialog.cancelLis(logicEditor, asdOldDialog);
+                asdOldDialog.setCon(text);
                 asdOldDialog.show();
+                asdOldDialog.saveLis(logicEditor, false, null, asdOldDialog);
+                asdOldDialog.cancelLis(logicEditor, asdOldDialog);
             } else {
                 AsdDialog asdDialog = new AsdDialog(logicEditor);
-                asdDialog.setCon(input.getText().toString());
-                //asdDialog.saveLis(logicEditor, false, ss, asdDialog);
-                asdDialog.cancelLis(asdDialog);
+                asdDialog.setCon(text);
                 asdDialog.show();
+                asdDialog.saveLis(logicEditor, false, null, asdDialog);
+                asdDialog.cancelLis(asdDialog);
             }
             dialog.dismiss();
         });
-        dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.show();
     }
+
     private String translate(String text) {
         try {
             String encodedText = URLEncoder.encode(text, "UTF-8");

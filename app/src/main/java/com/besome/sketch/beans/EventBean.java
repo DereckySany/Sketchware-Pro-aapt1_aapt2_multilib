@@ -57,7 +57,7 @@ public class EventBean extends CollapsibleBean implements Parcelable {
     public static int getEventIconResource(int eventType, int targetType) {
         switch (eventType) {
             case EVENT_TYPE_ACTIVITY:
-                return R.drawable.widget_source;
+                return R.drawable.align_left_48;
 
             case EVENT_TYPE_VIEW:
             case EVENT_TYPE_DRAWER_VIEW:
