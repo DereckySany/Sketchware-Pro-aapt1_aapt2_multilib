@@ -270,18 +270,18 @@ public class LibraryDownloader {
                 SketchwareUtil.toastError("Invalid dependency");
                 library.setTextColor(0xFFf91010);
             } else if (dependency.contains("implementation") || dependency.contains(":")) {             
-	        if (dependency.contains("group:") || dependency.contains(",")) {
-                SketchwareUtil.toast("Maven Gradle");
-                /* clear Maven Gradle format:
-                implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' */
-                dependency = dependency.replace("implementation", "");
-                dependency = dependency.replace("\'", "");
-                dependency = dependency.replace(",", "");
-                dependency = dependency.replace("group:", "");
-                dependency = dependency.replace("name:", ":");
-                dependency = dependency.replace("version:", ":");   
-                dependency = dependency.replace(" ", "");       
-	        } else if (dependency.contains("implementation") || dependency.contains(":")) {
+                if (dependency.contains("group:") || dependency.contains(",")) {
+                    SketchwareUtil.toast("Maven Gradle");
+                    /* clear Maven Gradle format:
+                    implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' */
+                    dependency = dependency.replace("implementation", "");
+                    dependency = dependency.replace("\'", "");
+                    dependency = dependency.replace(",", "");
+                    dependency = dependency.replace("group:", "");
+                    dependency = dependency.replace("name:", ":");
+                    dependency = dependency.replace("version:", ":");   
+                    dependency = dependency.replace(" ", "");       
+                } else if (dependency.contains("implementation") || dependency.contains(":")) {
                     SketchwareUtil.toast("Maven Gradle (Short), Gradle (Kotlin) or buildr");
                     /* clear Maven Gradle (Short) and Gradle (Kotlin) format:
                     implementation ("io.github.amrdeveloper:codeview:1.3.7") */
@@ -300,6 +300,44 @@ public class LibraryDownloader {
                         dependency = dependency.replace(":aar:", ":");
                         useAar.setChecked(true);
                     }
+                } else if (dependency.startsWith("[") && dependency.endsWith("]")) {
+                    SketchwareUtil.toast("Leiningen Formato [group:name:version]");
+                    dependency = dependency.replace("[", "");
+                    dependency = dependency.replace("]", "");
+                    dependency = dependency.replace("/", ":");
+                } else if (dependency.contains("<dependency") && dependency.contains("rev=\"")) {
+                    SketchwareUtil.toast("Ivy");
+                    /* clear Ivy format:
+                    <dependency org="io.github.amrdeveloper" name="codeview" rev="1.3.7" />
+                    */
+                    dependency = dependency.replace("<dependency", "");
+                    dependency = dependency.replace("org=\"", "");
+                    dependency = dependency.replace("\" name=\"", ":");
+                    dependency = dependency.replace("\" rev=\"", ":");
+                    dependency = dependency.replace("\" />", "");
+                    dependency = dependency.trim();
+                } else if (dependency.contains("<dependency>") && dependency.contains("</dependency>")) {
+                    SketchwareUtil.toast("Maven POM");
+                    dependency = dependency.replaceAll("\\s+","");
+                    String[] parts = dependency.split("<groupId>|</groupId>|<artifactId>|</artifactId>|<version>|</version>");
+                    dependency = parts[1] + ":" + parts[3] + ":" + parts[5];
+                } else if (dependency.contains("libraryDependencies")) {
+                    SketchwareUtil.toast("SBT libraryDependencies");
+                    /* clear libraryDependencies format:
+                    libraryDependencies += "io.github.amrdeveloper" % "codeview" % "1.3.7" */
+                    dependency = dependency.replace("libraryDependencies", "");
+                    dependency = dependency.replace("+=", "");
+                    dependency = dependency.replace("\"", "");
+                    dependency = dependency.replace(" ", "");
+                    dependency = dependency.replace("%", ":");
+                } else if (dependency.contains("@Grapes")) {
+                    SketchwareUtil.toast("Grapes");
+                    dependency = dependency.replace("@Grapes(\n    @Grab(", "");
+                    dependency = dependency.replace(")\n)", "");
+                    dependency = dependency.replace("group='", "");
+                    dependency = dependency.replace("', module='", ":");
+                    dependency = dependency.replace("', version='", ":");
+                    dependency = dependency.replace("')", "");
                 } else {
                     SketchwareUtil.toastError("Invalid dependency");
                     library.setTextColor(0xFFf91010);
