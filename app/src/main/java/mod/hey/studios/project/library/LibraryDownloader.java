@@ -473,10 +473,10 @@ public class LibraryDownloader {
                 // R8
                 ArrayList<String> options = new ArrayList<>();
                 options.add("--release"); 
-                options.add("--intermediate"); 
-                options.add("--no-desugaring"); 
+                //options.add("--intermediate"); 
+                //options.add("--no-desugaring"); 
                 options.add("--min-api"); 
-                options.add(26);
+                options.add("26");
                 // Output
                 options.add("--output");
                 options.add(new File(_path, "classes.zip").getParentFile().getAbsolutePath());                  
