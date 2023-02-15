@@ -279,7 +279,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         dialog.show();
     }
 
-    private void showTextInputDialog(int minValue, int maxValue) throws InterruptedException {
+    private void showTextInputDialog(int minValue, int maxValue) {
         aB dialog = new aB((Activity) getContext());
         dialog.b(tvName.getText().toString());
         dialog.a(icon);
@@ -303,9 +303,9 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
                 translatedText = translate(text);
                 input.setText(translatedText);
                 Toast.makeText(context, "Conteúdo traduzido para o Português!", Toast.LENGTH_SHORT).show();
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 String errorMessage = "Ocorreu um erro ao traduzir o texto: " + e.getMessage();
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.AlertDialog_AppCompat);
                 builder.setTitle("Erro");
                 builder.setMessage(errorMessage);
                 builder.setPositiveButton("OK", null);
@@ -350,7 +350,14 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             String translatedText = result.substring(result.indexOf("<span title=\"") + 13, result.indexOf("\">", result.indexOf("<span title=\"") + 13));
             return translatedText;
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            String errorMessage = "Ocorreu um erro ao acessar o site para traduzir o texto: " + e.getMessage();
+            AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.AlertDialog_AppCompat);
+            builder.setTitle("Erro");
+            builder.setMessage(errorMessage);
+            builder.setPositiveButton("OK", null);
+            AlertDialog translatederror = builder.create();
+            translatederror.show();
         }
         return null;
     }
