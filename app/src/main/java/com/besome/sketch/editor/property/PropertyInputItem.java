@@ -12,6 +12,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+
 import com.besome.sketch.beans.ProjectFileBean;
 import com.besome.sketch.editor.LogicEditorActivity;
 import com.sketchware.remod.R;
@@ -284,6 +291,12 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         dialog.a(v ->{
             Toast.makeText(context, "translated clicked!", Toast.LENGTH_SHORT).show();
         });
+        dialog.a(v ->{
+            String text = input.getText().toString();
+            String translatedText = translate(text);
+            input.setText(translatedText);
+            Toast.makeText(context, "Conteúdo traduzido para o Português!", Toast.LENGTH_SHORT).show();
+        });
         dialog.configureDefaultButton("Code Editor", v -> {
             if (ConfigActivity.isLegacyCeEnabled()) {
                 AsdOldDialog asdOldDialog = new AsdOldDialog(logicEditor);
@@ -302,6 +315,27 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         });
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.show();
+    }
+    private String translate(String text) {
+        try {
+            String encodedText = URLEncoder.encode(text, "UTF-8");
+            String urlStr = "https://translate.google.com/?sl=auto&tl=pt&text=" + encodedText;
+            URL url = new URL(urlStr);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+            String result = "";
+            String line;
+            while ((line = in.readLine()) != null) {
+                result += line;
+            }
+            in.close();
+            String translatedText = result.substring(result.indexOf("<span title=\"") + 13, result.indexOf("\">", result.indexOf("<span title=\"") + 13));
+            return translatedText;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private void showNumberDecimalInputDialog(int minValue, int maxValue) {
