@@ -289,9 +289,6 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
                 }
         });
         dialog.a(v ->{
-            Toast.makeText(context, "translated clicked!", Toast.LENGTH_SHORT).show();
-        });
-        dialog.a(v ->{
             String text = input.getText().toString();
             String translatedText = translate(text);
             input.setText(translatedText);
@@ -301,15 +298,15 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             if (ConfigActivity.isLegacyCeEnabled()) {
                 AsdOldDialog asdOldDialog = new AsdOldDialog(logicEditor);
                 asdOldDialog.setCon(input.getText().toString());
-                asdOldDialog.show();
                 //asdOldDialog.saveLis(logicEditor, false, ss, asdOldDialog);
                 asdOldDialog.cancelLis(logicEditor, asdOldDialog);
+                asdOldDialog.show();
             } else {
                 AsdDialog asdDialog = new AsdDialog(logicEditor);
                 asdDialog.setCon(input.getText().toString());
-                asdDialog.show();
                 //asdDialog.saveLis(logicEditor, false, ss, asdDialog);
                 asdDialog.cancelLis(asdDialog);
+                asdDialog.show();
             }
             dialog.dismiss();
         });
