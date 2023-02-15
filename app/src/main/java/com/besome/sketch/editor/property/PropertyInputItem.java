@@ -287,25 +287,24 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         EditText input = view.findViewById(R.id.ed_input);
         SB lengthValidator = new SB(context, view.findViewById(R.id.ti_input), minValue, maxValue);
         lengthValidator.a(value);
-        String text = input.getText().toString();
-        //Ss ss = null;
         dialog.a(view);
         dialog.b(Helper.getResString(R.string.common_word_save), v -> {
             if (lengthValidator.b()) {
-                setValue(text);
+                setValue(input.getText().toString());
                 if (valueChangeListener != null) valueChangeListener.a(key, value);
                 dialog.dismiss();
             }
         });
         dialog.a(v ->{
             String translatedText;
+            String text = input.getText().toString();
             try {
                 translatedText = translate(text);
                 input.setText(translatedText);
                 Toast.makeText(context, "Conteúdo traduzido para o Português!", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 String errorMessage = "Ocorreu um erro ao traduzir o texto: " + e.getMessage();
-                AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.AlertDialog_AppCompat);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle("Erro");
                 builder.setMessage(errorMessage);
                 builder.setPositiveButton("OK", null);
@@ -317,13 +316,13 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         dialog.configureDefaultButton("Code Editor", v -> {
             if (ConfigActivity.isLegacyCeEnabled()) {
                 AsdOldDialog asdOldDialog = new AsdOldDialog(logicEditor);
-                asdOldDialog.setCon(text);
+                asdOldDialog.setCon(input.getText().toString());
                 asdOldDialog.show();
                 asdOldDialog.saveLis(logicEditor, false, null, asdOldDialog);
                 asdOldDialog.cancelLis(logicEditor, asdOldDialog);
             } else {
                 AsdDialog asdDialog = new AsdDialog(logicEditor);
-                asdDialog.setCon(text);
+                asdDialog.setCon(input.getText().toString());
                 asdDialog.show();
                 asdDialog.saveLis(logicEditor, false, null, asdDialog);
                 asdDialog.cancelLis(asdDialog);
@@ -352,7 +351,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         } catch (IOException e) {
 //            e.printStackTrace();
             String errorMessage = "Ocorreu um erro ao acessar o site para traduzir o texto: " + e.getMessage();
-            AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.AlertDialog_AppCompat);
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("Erro");
             builder.setMessage(errorMessage);
             builder.setPositiveButton("OK", null);
