@@ -263,9 +263,9 @@ public class LibraryDownloader {
 
             String dependency = library.getText().toString();
             dependency = dependency.replace("\n", "");
-            dependency = dependency.replace("\/\/.*/g", "");
-            dependency = dependency.replaceAll("<!--.*\n{0,}-->/g", "");
-            dependency = dependency.replaceAll(".*?\/\/.*\n/g", "");
+            dependency = dependency.replace("/\/\/.*/gm", "");
+            dependency = dependency.replaceAll("/<!--.*\n{0,}-->/gm", "");
+            dependency = dependency.replaceAll("/.*?\/\/.*\n/gm", "");
 
             if (dependency.isEmpty()) {
                 SketchwareUtil.toastError("Dependency can't be empty");
@@ -277,7 +277,7 @@ public class LibraryDownloader {
                         SketchwareUtil.toast("Maven Gradle");
                         /* clear Maven Gradle format:
                         implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' */
-                        Pattern p = Pattern.compile("implementation\s.*\:.*'(.*?)'.*'(.*?)'.*'(.*?)'/g", Pattern.DOTALL);
+                        Pattern p = Pattern.compile("/implementation\s.*\:.*'(.*?)'.*'(.*?)'.*'(.*?)'/gm", Pattern.DOTALL);
                         Matcher m = p.matcher(dependency);
                         if (m.find()) {
                             dependency = m.group(1) + ":" + m.group(2) + ":" + m.group(3);
@@ -302,7 +302,7 @@ public class LibraryDownloader {
                         }
                         //implementation 'com.google.code.gson:gson:2.10.1'
                         //implementation("com.google.code.gson:gson:2.10.1")
-                        Pattern p = Pattern.compile("implementation\D+'(\S+)'|implementation\D+"(\S+)"/g", Pattern.DOTALL);
+                        Pattern p = Pattern.compile("/implementation\D+'(\S+)'|implementation\D+"(\S+)"/gm", Pattern.DOTALL);
                         Matcher m = p.matcher(dependency);
 
                         if (m.find()) {
@@ -312,7 +312,7 @@ public class LibraryDownloader {
                 } else if ((dependency.contains("libraryDependencies") || dependency.contains("%"))) {
                     // SBT
                     SketchwareUtil.toast("SBT");
-                    Pattern p = Pattern.compile("libraryDependencies\s.*\+=.*\"(.*?)\".*\"(.*?)\".*\"(.*?)\"/g", Pattern.DOTALL);
+                    Pattern p = Pattern.compile("/libraryDependencies\s.*\+=.*\"(.*?)\".*\"(.*?)\".*\"(.*?)\"/gm", Pattern.DOTALL);
                     Matcher m = p.matcher(dependency);
                     if (m.find()) {
                         dependency = m.group(1) + ":" + m.group(2) + ":" + m.group(3);
@@ -321,7 +321,7 @@ public class LibraryDownloader {
                     // Maven
                     SketchwareUtil.toast("Maven");
                     //Pattern p = Pattern.compile("/\b>(\S+)\</gm", Pattern.DOTALL);
-                    Pattern p = Pattern.compile("<\w+>(\S+)<\/\w+>", Pattern.DOTALL);
+                    Pattern p = Pattern.compile("/<\w+>(\S+)<\/\w+>/gm", Pattern.DOTALL);
                     //Pattern p = Pattern.compile("/<groupId>(\S+)<\/groupId>\W+<artifactId>(\S+)<\/artifactId>\W+<version>(\S+)<\/version>/gm", Pattern.DOTALL);
                     Matcher m = p.matcher(dependency);
                     StringBuilder output = new StringBuilder();
@@ -336,7 +336,7 @@ public class LibraryDownloader {
                     SketchwareUtil.toast("Ivy");
                     /* clear Ivy format:
                     <dependency org="org.jsoup" name="jsoup" rev="1.7.2" /> */
-                    Pattern p = Pattern.compile("\"(\S+)\"/gm", Pattern.DOTALL);
+                    Pattern p = Pattern.compile("/\"(\S+)\"/gm", Pattern.DOTALL);
                     Matcher m = p.matcher(dependency);
                     StringBuilder output = new StringBuilder();
                     while (m.find()) {
