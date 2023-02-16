@@ -315,16 +315,16 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.configureDefaultButton("Code Editor", v -> {
             if (ConfigActivity.isLegacyCeEnabled()) {
-                AsdOldDialog asdOldDialog = new AsdOldDialog(context);
+                AsdOldDialog asdOldDialog = new AsdOldDialog(this);
                 asdOldDialog.setCon(input.getText().toString());
                 asdOldDialog.show();
-                asdOldDialog.saveLis(context, false, null, asdOldDialog);
-                asdOldDialog.cancelLis(context, asdOldDialog);
+                asdOldDialog.saveLis(logicEditor, false, null, asdOldDialog);
+                asdOldDialog.cancelLis(logicEditor, asdOldDialog);
             } else {
-                AsdDialog asdDialog = new AsdDialog(context);
+                AsdDialog asdDialog = new AsdDialog(this);
                 asdDialog.setCon(input.getText().toString());
                 asdDialog.show();
-                asdDialog.saveLis(context, false, null, asdDialog);
+                asdDialog.saveLis(logicEditor, false, null, asdDialog);
                 asdDialog.cancelLis(asdDialog);
             }
             dialog.dismiss();
