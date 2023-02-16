@@ -485,31 +485,31 @@ public class LibraryDownloader {
 
             } else if (tool.equals("R8")) {
                 // R8
-                ArrayList<String> options = new ArrayList<>();
-                options.add("--release"); 
+                //ArrayList<String> options = new ArrayList<>();
+                //options.add("--release"); 
                 //options.add("--intermediate"); 
                 //options.add("--no-desugaring"); 
-                options.add("--min-api"); 
-                options.add("26");
+                //options.add("--min-api"); 
+                //options.add("26");
                 // Output
-                options.add("--output");
-                options.add(new File(_path, "classes.zip").getParentFile().getAbsolutePath());                  
-                options.add("--lib");
-                options.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
-                options.add("--classpath");
-                options.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
+                //options.add("--output");
+                //options.add(new File(_path, "classes.zip").getParentFile().getAbsolutePath());                  
+                //options.add("--lib");
+                //options.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
+                //options.add("--classpath");
+                //options.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
                 // Input
                 //cmd.add("--input");
-                options.add(_path);
+                //options.add(_path);
                 //run D8 with list commands
-                R8.main(options.toArray(new String[0]));
+                //R8.main(options.toArray(new String[0]));
 
-                //String[] cmd = new String[] {
-                //"--release"
-                //"--output", new File(_path,classes.zip).getParentFile().getAbsolutePath(),
-                //_path,
-                //};
-                //R8.main(cmd);
+                String[] cmd = new String[] {
+                "--release"
+                "--output", new File(_path,"classes.zip").getParentFile().getAbsolutePath(),
+                _path,
+                };
+                R8.main(cmd);
 
                 //R8Compiler compiler = new R8Compiler(_path, new File(_path).getParentFile().getAbsolutePath());
                 //compiler.compile();
