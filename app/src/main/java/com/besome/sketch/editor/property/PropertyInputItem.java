@@ -315,16 +315,16 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.configureDefaultButton("Code Editor", v -> {
             if (ConfigActivity.isLegacyCeEnabled()) {
-                AsdOldDialog asdOldDialog = new AsdOldDialog(logicEditor);
+                AsdOldDialog asdOldDialog = new AsdOldDialog(context);
                 asdOldDialog.setCon(input.getText().toString());
                 asdOldDialog.show();
-                asdOldDialog.saveLis(logicEditor, false, null, asdOldDialog);
-                asdOldDialog.cancelLis(logicEditor, asdOldDialog);
+                asdOldDialog.saveLis(context, false, null, asdOldDialog);
+                asdOldDialog.cancelLis(context, asdOldDialog);
             } else {
-                AsdDialog asdDialog = new AsdDialog(logicEditor);
+                AsdDialog asdDialog = new AsdDialog(context);
                 asdDialog.setCon(input.getText().toString());
                 asdDialog.show();
-                asdDialog.saveLis(logicEditor, false, null, asdDialog);
+                asdDialog.saveLis(context, false, null, asdDialog);
                 asdDialog.cancelLis(asdDialog);
             }
             dialog.dismiss();
@@ -346,8 +346,8 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
                 result += line;
             }
             in.close();
-            String translatedText = result.substring(result.indexOf("<span title=\"") + 13, result.indexOf("\">", result.indexOf("<span title=\"") + 13));
-            return translatedText;
+            String translated = result.substring(result.indexOf("<span title=\"") + 13, result.indexOf("\">", result.indexOf("<span title=\"") + 13));
+            return translated;
         } catch (IOException e) {
 //            e.printStackTrace();
             String errorMessage = "Ocorreu um erro ao acessar o site para traduzir o texto: " + e.getMessage();

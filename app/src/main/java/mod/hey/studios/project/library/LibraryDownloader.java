@@ -266,7 +266,7 @@ public class LibraryDownloader {
             if (dependency.isEmpty()) {
                 SketchwareUtil.toastError("Dependency can't be empty");
                 library.setTextColor(0xFF000000);
-            } else if (!dependency.isEmpty()) {
+            } else {
                 if (!dependency.contains(".")) {
                     SketchwareUtil.toastError("Invalid dependency");
                     library.setTextColor(0xFFf91010);
@@ -310,7 +310,15 @@ public class LibraryDownloader {
                     // Maven
                     SketchwareUtil.toast("Maven");
                     dependency = dependency.replaceAll("\\<dependency\\>|\\</dependency\\>|\\<groupId\\>|\\</groupId\\>|\\<artifactId\\>|\\</artifactId\\>|\\<version\\>|\\</version\\>", "");
-                } else if (dependency.contains("org") && dependency.contains("name") && dependency.contains("version")) {
+                } else if (dependency.contains("org") && dependency.contains("name") && dependency.contains("rev")) {
+                    SketchwareUtil.toast("Ivy");
+                    /* clear Ivy format:
+                    <dependency org="org.jsoup" name="jsoup" rev="1.7.2" /> */
+                    dependency = dependency.replaceAll("<dependency org=\"", "");
+                    dependency = dependency.replaceAll("\" name=\"", ":");
+                    dependency = dependency.replaceAll("\" rev=\"", ":");
+                    dependency = dependency.replaceAll("\" />", "");
+                } else if (dependency.contains("group") && dependency.contains("name") && dependency.contains("version")) {
                     SketchwareUtil.toast("Gradle (Groovy)");
                     /* clear Gradle (Groovy) format:
                     compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7' */
@@ -321,18 +329,12 @@ public class LibraryDownloader {
                     dependency = dependency.replaceAll(" '", "");
                     dependency = dependency.replaceAll(":", ":");
                     dependency = dependency.replaceAll("'", "");
-                } else if (dependency.contains("@Grapes(")) {
-                    // Grape
+                } else if (dependency.contains("@Grapes")) {
                     SketchwareUtil.toast("Grape");
-                    dependency = dependency.replaceAll("\\@Grapes\\(|\\@Grab\\(|\\)|\\\'|\\\"", "");
-                    dependency = dependency.replace("group=", "");
-                    dependency = dependency.replace("module=", "");
-                    dependency = dependency.replace("version=", "");
-                    dependency = dependency.replace(",", ":");
-                } else if (dependency.contains("<dependency org=")) {
-                    // Ivy
-                    SketchwareUtil.toast("Ivy");
-                    dependency = dependency.replaceAll("\\<dependency\\>|\\</dependency\\>|\\<conf\\>.*\\</conf\\>|\\<artifact\\>|\\</artifact\\>|\\<org\\>|\\</org\\>|\\<rev\\>|\\</rev\\>", "");
+                    /* clear Grape format:
+                    @Grapes(@Grab(group='org.jsoup', module='jsoup', version='1.7.2')) */
+                    String[] parts = dependency.split("'");
+                    dependency = parts[1] + ":" + parts[3] + ":" + parts[5];
                 } else if (dependency.startsWith("[") && dependency.contains("/")) {
                     SketchwareUtil.toast("Leiningen");
                     dependency = dependency.replace("[", "");
@@ -408,10 +410,6 @@ public class LibraryDownloader {
                         useJar,
                         progressbar1
                 );
-
-            } else {
-                SketchwareUtil.toastError("Invalid dependency");
-                library.setTextColor(0xFFf91010);
             }
         });
 
@@ -505,7 +503,7 @@ public class LibraryDownloader {
                 //R8.main(options.toArray(new String[0]));
 
                 String[] cmd = new String[] {
-                "--release"
+                "--release",
                 "--output", new File(_path,"classes.zip").getParentFile().getAbsolutePath(),
                 _path,
                 };
