@@ -379,7 +379,7 @@ public class LibraryDownloader {
             }
         });
 
-        private void _status(int status){
+        public void _status(int status) {
             if (status = 1) {
                 SketchwareUtil.toastError("Dependency can't be empty");
                 library.setTextColor(0xFFFFFFFF);
