@@ -262,143 +262,131 @@ public class LibraryDownloader {
         start.setOnClickListener(startView -> {
 
             String dependency = library.getText().toString();
-            
-            // remove all comments of imports
-            dependency = dependency.replace("\\/.*/", "");
-            dependency = dependency.replaceAll("/<!--.*\n{0,}-->/gm", "");
-            dependency = dependency.replaceAll("/(;;.*\\S+)\n", "");
-            dependency = dependency.replaceAll("/.*?\\/.*\n/gm", "");
-           
             if (dependency.isEmpty()) {
-                //System.out.println("Dependency can't be empty");
-                SketchwareUtil.toastError("Dependency can't be empty");
-                library.setTextColor(0xFF000000);
-            } else if (dependency.contains(".")) {
-                if (dependency.contains(":") && dependency.contains("implementation")) {
-                    // Gradle
-                    if (dependency.contains("group:")||dependency.contains("version:")) {
-                        //System.out.println("Maven Gradle");
-                        SketchwareUtil.toast("Maven Gradle");
-                        /* clear Maven Gradle format:
-                        implementation group: 'io.github.amrdeveloper', name: 'codeview', version: '1.3.7' */
-                        Pattern p = Pattern.compile("implementation\\s.*\\:.*'(.*?)'.*'(.*?)'.*'(.*?)'/g", Pattern.DOTALL);
-                        Matcher m = p.matcher(dependency);
-                        if (m.find()) {
-                            dependency = m.group(1) + ":" + m.group(2) + ":" + m.group(3);
-                        }
-                    } else if (dependency.contains("implementation") && dependency.contains(":")) {
-                        // Gradle (Short) | (Kotlin)
-                        //implementation 'com.google.code.gson:gson:2.10.1'
-                        //implementation("com.google.code.gson:gson:2.10.1")
-                        Pattern p = Pattern.compile("'(\\S+)'|\"(\\S+)\"", Pattern.DOTALL);
-                        Matcher m = p.matcher(dependency);
-
-                        if (m.find()) {
-                            if (dependency.contains("'")){
-                                //System.out.println("Gradle (Short)");
-                                SketchwareUtil.toast("Gradle (Short)");
-                                dependency = m.group(1);
-                            }else{
-                                //System.out.println("Gradle (Kotlin)");
-                                SketchwareUtil.toast("Gradle (Kotlin)");
-                                dependency = m.group(2);
-                            }
-                        }
-                    } else {
-                        //System.out.println("Gradle (Groovy)");
-                        SketchwareUtil.toast("Gradle (Groovy)");
-                        /* clear Gradle (Groovy) format:
-                        compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7' */
-                        dependency = dependency.replaceAll("compile", "");
-                        dependency = dependency.replaceAll("testCompile", "");
-                        dependency = dependency.replaceAll("implementation", "");
-                        dependency = dependency.replaceAll("runtime", "");
-                        dependency = dependency.replaceAll("'", "");
-                        dependency = dependency.replaceAll(":", ":");
-                        dependency = dependency.replaceAll("'", "");
-                        dependency = dependency.replaceAll(" ", "");
-                    }
-                } else if ((dependency.contains("libraryDependencies") || dependency.contains("%"))) {
-                    // SBT
-                    //System.out.println("SBT");
-                    SketchwareUtil.toast("SBT");
-                    Pattern p = Pattern.compile("\"(.*?)\".*\"(.*?)\".*\"(.*?)\"", Pattern.DOTALL);
-                    Matcher m = p.matcher(dependency);
-                    if (m.find()) {
-                        dependency = m.group(1) + ":" + m.group(2) + ":" + m.group(3);
-                    }
-                } else if (dependency.contains("<dependency>") || dependency.contains("<groupId>")) {
-                    // Maven
-                    //System.out.println("Maven");
-                    SketchwareUtil.toast("Maven");
-                    //Pattern p = Pattern.compile("/\b>(\S+)\</gm", Pattern.DOTALL);
-                    Pattern p = Pattern.compile("/<\\w+>(\\S+)<\\/\\w+>/g", Pattern.DOTALL);
-                    //Pattern p = Pattern.compile("/<groupId>(\S+)<\/groupId>\W+<artifactId>(\S+)<\/artifactId>\W+<version>(\S+)<\/version>/gm", Pattern.DOTALL);
-                    Matcher m = p.matcher(dependency);
-                    StringBuilder output = new StringBuilder();
-                    while (m.find()) {
-                        output.append(m.group(1));
-                        output.append(":");
-                    }
-                    //output.deleteCharAt(output.length() - 1);
-                    dependency = output.toString();
-                
-                } else if (dependency.contains("org=") && dependency.contains("name=") && dependency.contains("rev=")) {
-                    //System.out.println("Ivy");
-                    SketchwareUtil.toast("Ivy");
-                    /* clear Ivy format:
-                    <dependency org="org.jsoup" name="jsoup" rev="1.7.2" /> */
-                    Pattern p = Pattern.compile("\"(\\S+)\"", Pattern.DOTALL);
-                    Matcher m = p.matcher(dependency);
-                    StringBuilder output = new StringBuilder();
-                    while (m.find()) {
-                        output.append(m.group(1));
-                        output.append(":");
-                    }
-                    output.deleteCharAt(output.length() - 1);
-                    dependency = output.toString();
-                } else if (dependency.contains("@Grapes")) {
-                    //System.out.println("Grape");
-                    SketchwareUtil.toast("Grape");
-                    /* clear Grape format:s
-                    "@Grapes(@Grab(group='org.jsoup', module='jsoup', version='1.7.2'))" */
-                    String[] parts = dependency.split("'");
-                    dependency = parts[1] + ":" + parts[3] + ":" + parts[5];
-                } else if (dependency.contains("[") && dependency.contains("/") && dependency.endsWith("]")) {
-                    //System.out.println("Leiningen");
-                    SketchwareUtil.toast("Leiningen");
-                    //dependency = dependency.replace("/", ":");
-                    Pattern p = Pattern.compile("..(.*)\\/(\\w+).\"(\\V+)\"");
-                    Matcher m = p.matcher(dependency);
-                    if (m.find()) {
-                        dependency = m.group(1) + ":" + m.group(2) + ":" + m.group(3);
-                    }
-                } else if (dependency.contains(":jar:") | dependency.contains(":aar:")) {
-                    //System.out.println("Buildr");
-                    SketchwareUtil.toast("Buildr");
-                    // buildr format
-                    Pattern p = Pattern.compile("'(.*\\S+)(:\\D+)(.+)'");
-                    Matcher m = p.matcher(dependency);
-                    if (m.find()) {
-                    if (m.group(2).contains(":jar:")) {
-                        //dependency = dependency.replace(":jar:", ":");
-                        useJar.setChecked(true);
-                    }
-                    if (m.group(2).contains(":aar:")) {
-                        //dependency = dependency.replace(":aar:", ":");
-                        useAar.setChecked(true);
-                    }
-                        dependency = m.group(1) + ":" + m.group(3);
-                    }
-                } else {
-                    //System.out.println("Invalid dependency");
-                    SketchwareUtil.toastError("Invalid dependency");
-                    library.setTextColor(0xFFF91010);
+                _status(1);
+            } else if (!dependency.contains(".")) {
+                _status(2);
+            } else if (dependency.contains("dependency") & dependency.contains("groupId")) {
+                SketchwareUtil.toast("Maven");
+                dependency = dependency.replaceAll("(<\\/\\w+>)", "");
+                Pattern p = Pattern.compile("<\\w+>(\\S+)<\\/\\w+>");
+                Matcher m = p.matcher(dependency);
+                StringBuilder output = new StringBuilder();
+                while (m.find()) {
+                    output.append(m.group(1));
+                    output.append(":");
                 }
-                // remove new lines
+                output.deleteCharAt(output.length() - 1);
+                dependency = output;
+                _status(3);
+                //System.out.println(output);
+            } else if (dependency.contains("implementation") & dependency.contains("group:")) {
+                //implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
+                SketchwareUtil.toast("Gradle");
+                dependency = dependency.replace("implementation", "");
+                dependency = dependency.replace("group:", "");
+                dependency = dependency.replace("name:", ":");
+                dependency = dependency.replace("version:", ":");
+                dependency = dependency.replace(",", "");
+                dependency = dependency.replace("'", "");
+                dependency = dependency.replace(" ", "");
+                dependency = dependency.replace("/n", "");
+                _status(3);
+                //System.out.println(dependency);
+            } else if (dependency.contains("implementation") & dependency.contains(":")) {
+                if (dependency.contains("'")){
+                    SketchwareUtil.toast("(Gradle (Short)");
+                }else{
+                    SketchwareUtil.toast("Gradle (Kotlin)");
+                // implementation 'io.github.amrdeveloper:codeview:1.3.4'
+                dependency = dependency.replace("implementation", "");
+                dependency = dependency.replace(" ", "");
+                dependency = dependency.replace("'", "");
+                dependency = dependency.replace("\"", "");
+                dependency = dependency.replace("(", "");
+                dependency = dependency.replace(")", "");
+                }
+                _status(3);
+                //System.out.println(dependency);
+            } else if (dependency.contains("libraryDependencies") & dependency.contains("%")) {
+                //libraryDependencies += "com.google.code.gson" % "gson" % "2.10.1"
+                SketchwareUtil.toast("SBT");
+                dependency = dependency.replace("libraryDependencies", "");
+                dependency = dependency.replace("+=", "");
+                dependency = dependency.replace("\"", "");
+                dependency = dependency.replace("%", "");
+                dependency = dependency.replace(" ", ":");
+                dependency = dependency.replaceAll("(^::)", "");
+                dependency = dependency.replace("::", ":");
+                dependency = dependency.replace("/n", "");
+                //library.setText(dependency);
+                _status(3);
+                //System.out.println(dependency);
+            } else if (dependency.contains("dependency") & dependency.contains("org=")) {
+                //<dependency org="com.google.code.gson" name="gson" rev="2.10.1"/>
+                SketchwareUtil.toast("Ivy");
+                dependency = dependency.replace("dependency", "");
+                dependency = dependency.replace("\"", "");
+                dependency = dependency.replace("<", "");
+                dependency = dependency.replace(">", "");
+                dependency = dependency.replace("/", "");
+                dependency = dependency.replace(":", "");
+                dependency = dependency.replace("org=", "");
+                dependency = dependency.replace("name=", ":");
+                dependency = dependency.replace("rev=", ":");
+                dependency = dependency.replace(" ", "");
+                dependency = dependency.replace("/n", "");
+                //library.setText(dependency);
+                _status(3);
+                //System.out.println(dependency);
+            } else if (dependency.contains("@Grapes") & dependency.contains("version=")) {
+                SketchwareUtil.toast("Grape");
                 dependency = dependency.replace("\n", "");
-                dependency = dependency.replace("\t", "");
-                
+                dependency = dependency.replace("@Grapes", "");
+                dependency = dependency.replace("@Grab", "");
+                dependency = dependency.replace("group=", "");
+                dependency = dependency.replace("module=", ":");
+                dependency = dependency.replace("version=", ":");
+                dependency = dependency.replace("'", "");
+                dependency = dependency.replace("(", "");
+                dependency = dependency.replace(")", "");
+                dependency = dependency.replace(",", "");
+                dependency = dependency.replace(" ", "");
+                _status(3);
+                //System.out.println(dependency);
+            } else if (dependency.contains("[") & dependency.contains("/") & dependency.contains("]")) {
+                SketchwareUtil.toast("Leiningen");
+                dependency = dependency.replace("[", "");
+                dependency = dependency.replace("]", "");
+                dependency = dependency.replace("/", ":");
+                dependency = dependency.replaceAll("( \")", ":");
+                dependency = dependency.replace("\"", "");
+                dependency = dependency.replace(" ", "");
+                _status(3);
+                //System.out.println(dependency);
+            } else if (dependency.contains("'") & dependency.contains(":aar:") | dependency.contains(":jar:")) {
+                SketchwareUtil.toast("Buildr");
+                dependency = dependency.replace("'", "");
+                dependency = dependency.replace(":aar:", ":");
+                dependency = dependency.replace(":jar:", ":");
+                dependency = dependency.replace(" ", "");
+                _status(3);
+                //System.out.println(dependency);
+            } else {
+                //System.out.println("Invalid dependency");
+                _status(2);
+                SketchwareUtil.toastError("Invalid dependency");
+            }
+        });
+
+        private void _status(int status){
+            if (status = 1) {
+                SketchwareUtil.toastError("Dependency can't be empty");
+                library.setTextColor(0xFFFFFFFF);
+            } else if (status = 2) {
+                SketchwareUtil.toastError("Invalid dependency");
+                library.setTextColor(0xFFf91010);
+            } else if (status = 3) {
                 if (dependency.contains(":") || dependency.contains(".")){
                     library.setTextColor(0xFF00E676);
                 }else{
@@ -452,11 +440,12 @@ public class LibraryDownloader {
                         useJar,
                         progressbar1
                 );
-            }  else {
+            } else {
+                status = 0;
                 SketchwareUtil.toastError("Invalid dependency");
-                library.setTextColor(0xFFF91010);
+                library.setTextColor(0xFFf91010);
             }
-        });
+        };
 
         pause.setOnClickListener(pauseView -> {
             if (PRDownloader.getStatus(downloadId) == Status.RUNNING) {
