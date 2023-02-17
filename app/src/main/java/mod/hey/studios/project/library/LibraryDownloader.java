@@ -377,9 +377,7 @@ public class LibraryDownloader {
                 _status(2);
                 SketchwareUtil.toastError("Invalid dependency");
             }
-        });
-
-        public static void _status(int status) {
+            
             if (status = 1) {
                 SketchwareUtil.toastError("Dependency can't be empty");
                 library.setTextColor(0xFFFFFFFF);
@@ -445,7 +443,7 @@ public class LibraryDownloader {
                 SketchwareUtil.toastError("Invalid dependency");
                 library.setTextColor(0xFFf91010);
             }
-        };
+        });
 
         pause.setOnClickListener(pauseView -> {
             if (PRDownloader.getStatus(downloadId) == Status.RUNNING) {
