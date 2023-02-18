@@ -51,9 +51,7 @@ jobs:
         uses: actions/cache@v3.2.5
         with:
           # A list of files, directories, and wildcard patterns to cache and restore
-          path: /repos/{owner}/{repo}/actions/cache/usage
-          key: ${{ secrets.KEY }}
-          restore-keys: true
+          path: app
         
       - name: Build debug APK
         uses: gradle/gradle-build-action@v2
@@ -85,8 +83,7 @@ jobs:
         uses: actions/cache@v3.2.5
         with:
           # A list of files, directories, and wildcard patterns to cache and restore
-          path: app/build/
-          restore-keys: true
+          path: app
 
       - name: Build debug APK
         uses: gradle/gradle-build-action@v2
