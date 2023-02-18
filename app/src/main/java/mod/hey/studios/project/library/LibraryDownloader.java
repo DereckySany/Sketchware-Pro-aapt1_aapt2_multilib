@@ -260,26 +260,25 @@ public class LibraryDownloader {
         });
 
         start.setOnClickListener(startView -> {
-
-            String dependency = library.getText().toString();
             int status = 0;
+            String dependency = library.getText().toString();
+            
             if (dependency.isEmpty()) {
                 status = 1;
             } else if (!dependency.contains(".")) {
                 status = 2;
             } else if (dependency.contains("dependency") & dependency.contains("groupId")) {
                 SketchwareUtil.toast("Maven");
-                dependency = dependency.replace("/n", "");
                 dependency = dependency.replace("<artifactId>", ":");
-                dependency = dependency.replace("artifactId", ":");
+                dependency = dependency.replace("artifactId", "");
                 dependency = dependency.replace("<version>", ":");
                 dependency = dependency.replace("</version>", "");
                 dependency = dependency.replace("dependency", "");
                 dependency = dependency.replace("groupId", "");
                 dependency = dependency.replace("<>", "");
                 dependency = dependency.replace("</>", "");
-                dependency = dependency.replace(" ", "");
                 dependency = dependency.replace("/n", "");
+                dependency = dependency.replace(" ", "");
                 status = 3;
             } else if (dependency.contains("implementation") & dependency.contains("group:")) {
                 //implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
@@ -373,17 +372,16 @@ public class LibraryDownloader {
                 dependency = dependency.replace(" ", "");
                 if (dependency.contains(":")){
                     Pattern p = Pattern.compile("(\\w+.\\w+.?\\w+.\\w+:\\w+-?\\w*:\\d+.\\d+.\\d+-?\\w*\\d*)");
-                    Matcher m = p.matcher(dependency);
-                
+                    Matcher m = p.matcher(dependency);                
                     if (m.find()) {
                         dependency = m.group(1);
                         SketchwareUtil.toast("done");
                         status = 3;
                     }
-                } else if (!dependency.contains(".") & !dependency.contains(":")) {
-                    status = 2;
-                } else {
+                } else if (dependency.contains(":") && dependency.contains(".")) {
                     status = 3;
+                } else {
+                    status = 2;
                 }
             } else {
                 status = 2;
