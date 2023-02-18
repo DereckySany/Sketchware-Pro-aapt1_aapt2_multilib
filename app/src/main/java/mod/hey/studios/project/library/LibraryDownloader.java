@@ -271,12 +271,13 @@ public class LibraryDownloader {
                 SketchwareUtil.toast("Maven");
                 dependency = dependency.replace("/n", "");
                 dependency = dependency.replace("<artifactId>", ":");
+                dependency = dependency.replace("artifactId", ":");
                 dependency = dependency.replace("<version>", ":");
                 dependency = dependency.replace("</version>", "");
                 dependency = dependency.replace("dependency", "");
                 dependency = dependency.replace("groupId", "");
-                dependency = dependency.replace("</>", "");
                 dependency = dependency.replace("<>", "");
+                dependency = dependency.replace("</>", "");
                 dependency = dependency.replace(" ", "");
                 dependency = dependency.replace("/n", "");
                 status = 3;
@@ -367,7 +368,9 @@ public class LibraryDownloader {
                 dependency = dependency.replace(" ", "");
                 dependency = dependency.replace("/n", "");
                 status = 3;
-            } else if (dependency.contains(".") & dependency.contains(":")) {
+            } else if (dependency.contains(":") & dependency.contains(".")) {
+                dependency = dependency.replace("/n", "");
+                dependency = dependency.replace(" ", "");
                 if (dependency.contains(":")){
                     Pattern p = Pattern.compile("(\\w+.\\w+.?\\w+.\\w+:\\w+-?\\w*:\\d+.\\d+.\\d+-?\\w*\\d*)");
                     Matcher m = p.matcher(dependency);
@@ -377,10 +380,10 @@ public class LibraryDownloader {
                         SketchwareUtil.toast("done");
                         status = 3;
                     }
-                } else if (dependency.contains(".") & dependency.contains(":")) {
-                    status = 3;
-                } else {
+                } else if (!dependency.contains(".") & !dependency.contains(":")) {
                     status = 2;
+                } else {
+                    status = 3;
                 }
             } else {
                 status = 2;
@@ -394,7 +397,7 @@ public class LibraryDownloader {
                 SketchwareUtil.toastError("Invalid dependency");
                 library.setTextColor(0xFFf91010);
             } else if (status == 3) {
-                if (dependency.contains(":") || dependency.contains(".")){
+                if (dependency.contains(":") | dependency.contains(".")){
                     library.setTextColor(0xFF00E676);
                 }else{
                     library.setTextColor(0xFFF91010);
@@ -449,7 +452,6 @@ public class LibraryDownloader {
                         progressbar1
                 );
             } else {
-                status = 0;
                 SketchwareUtil.toastError("Invalid dependency");
                 library.setTextColor(0xFFf91010);
             }
