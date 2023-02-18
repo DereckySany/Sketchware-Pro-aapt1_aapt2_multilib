@@ -278,7 +278,7 @@ public class LibraryDownloader {
                     output.append(":");
                 }
                 output.deleteCharAt(output.length() - 1);
-                dependency = output;
+                dependency = output.toString();
                 status = 3;
             } else if (dependency.contains("implementation") & dependency.contains("group:")) {
                 //implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
@@ -368,13 +368,13 @@ public class LibraryDownloader {
                 SketchwareUtil.toastError("Invalid dependency");
             }
 
-            if (status = 1) {
+            if (status == 1) {
                 SketchwareUtil.toastError("Dependency can't be empty");
                 library.setTextColor(0xFFFFFFFF);
-            } else if (status = 2) {
+            } else if (status == 2) {
                 SketchwareUtil.toastError("Invalid dependency");
                 library.setTextColor(0xFFf91010);
-            } else if (status = 3) {
+            } else if (status == 3) {
                 if (dependency.contains(":") || dependency.contains(".")){
                     library.setTextColor(0xFF00E676);
                 }else{
