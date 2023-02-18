@@ -262,10 +262,11 @@ public class LibraryDownloader {
         start.setOnClickListener(startView -> {
 
             String dependency = library.getText().toString();
+            int status = 0;
             if (dependency.isEmpty()) {
-                _status(1);
+                status = 1;
             } else if (!dependency.contains(".")) {
-                _status(2);
+                status = 2;
             } else if (dependency.contains("dependency") & dependency.contains("groupId")) {
                 SketchwareUtil.toast("Maven");
                 dependency = dependency.replaceAll("(<\\/\\w+>)", "");
@@ -278,8 +279,7 @@ public class LibraryDownloader {
                 }
                 output.deleteCharAt(output.length() - 1);
                 dependency = output;
-                _status(3);
-                //System.out.println(output);
+                status = 3;
             } else if (dependency.contains("implementation") & dependency.contains("group:")) {
                 //implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
                 SketchwareUtil.toast("Gradle");
@@ -291,8 +291,7 @@ public class LibraryDownloader {
                 dependency = dependency.replace("'", "");
                 dependency = dependency.replace(" ", "");
                 dependency = dependency.replace("/n", "");
-                _status(3);
-                //System.out.println(dependency);
+                status = 3;
             } else if (dependency.contains("implementation") & dependency.contains(":")) {
                 if (dependency.contains("'")){
                     SketchwareUtil.toast("(Gradle (Short)");
@@ -306,8 +305,7 @@ public class LibraryDownloader {
                 dependency = dependency.replace("(", "");
                 dependency = dependency.replace(")", "");
                 }
-                _status(3);
-                //System.out.println(dependency);
+                status = 3;
             } else if (dependency.contains("libraryDependencies") & dependency.contains("%")) {
                 //libraryDependencies += "com.google.code.gson" % "gson" % "2.10.1"
                 SketchwareUtil.toast("SBT");
@@ -319,9 +317,7 @@ public class LibraryDownloader {
                 dependency = dependency.replaceAll("(^::)", "");
                 dependency = dependency.replace("::", ":");
                 dependency = dependency.replace("/n", "");
-                //library.setText(dependency);
-                _status(3);
-                //System.out.println(dependency);
+                status = 3;
             } else if (dependency.contains("dependency") & dependency.contains("org=")) {
                 //<dependency org="com.google.code.gson" name="gson" rev="2.10.1"/>
                 SketchwareUtil.toast("Ivy");
@@ -336,9 +332,7 @@ public class LibraryDownloader {
                 dependency = dependency.replace("rev=", ":");
                 dependency = dependency.replace(" ", "");
                 dependency = dependency.replace("/n", "");
-                //library.setText(dependency);
-                _status(3);
-                //System.out.println(dependency);
+                status = 3;
             } else if (dependency.contains("@Grapes") & dependency.contains("version=")) {
                 SketchwareUtil.toast("Grape");
                 dependency = dependency.replace("\n", "");
@@ -352,8 +346,7 @@ public class LibraryDownloader {
                 dependency = dependency.replace(")", "");
                 dependency = dependency.replace(",", "");
                 dependency = dependency.replace(" ", "");
-                _status(3);
-                //System.out.println(dependency);
+                status = 3;
             } else if (dependency.contains("[") & dependency.contains("/") & dependency.contains("]")) {
                 SketchwareUtil.toast("Leiningen");
                 dependency = dependency.replace("[", "");
@@ -362,22 +355,19 @@ public class LibraryDownloader {
                 dependency = dependency.replaceAll("( \")", ":");
                 dependency = dependency.replace("\"", "");
                 dependency = dependency.replace(" ", "");
-                _status(3);
-                //System.out.println(dependency);
+                status = 3;
             } else if (dependency.contains("'") & dependency.contains(":aar:") | dependency.contains(":jar:")) {
                 SketchwareUtil.toast("Buildr");
                 dependency = dependency.replace("'", "");
                 dependency = dependency.replace(":aar:", ":");
                 dependency = dependency.replace(":jar:", ":");
                 dependency = dependency.replace(" ", "");
-                _status(3);
-                //System.out.println(dependency);
+                status = 3;
             } else {
-                //System.out.println("Invalid dependency");
-                _status(2);
+                status = 2;
                 SketchwareUtil.toastError("Invalid dependency");
             }
-            
+
             if (status = 1) {
                 SketchwareUtil.toastError("Dependency can't be empty");
                 library.setTextColor(0xFFFFFFFF);
@@ -800,6 +790,7 @@ public class LibraryDownloader {
                     cancel.setVisibility(View.VISIBLE);
                 })
                 .setOnCancelListener(() -> {
+                    FileUtil.deleteFile(libName);
                     library.setEnabled(true);
 
                     acao.setEnabled(true);
@@ -863,6 +854,7 @@ public class LibraryDownloader {
                                 deleteUnnecessaryFiles(libName + "/");
                             } else {
                                 message.setText("This jar is not supported by Dx since Dx only supports up to Java 1.7. In order to proceed, you need to switch to D8 (if your Android version is 8+)");
+                                FileUtil.deleteFile(libName);
                                 FileUtil.deleteFile(path2.toString());
 
                                 cancel.setEnabled(true);
@@ -870,6 +862,7 @@ public class LibraryDownloader {
                             }
                         } else {
                             message.setText("Library doesn't contain a jar file.");
+                            FileUtil.deleteFile(libName);
                             FileUtil.deleteFile(path2.toString());
                             library.setEnabled(true);
 
@@ -985,6 +978,7 @@ public class LibraryDownloader {
                             }
                         } else {
                             if (e.isConnectionError()) {
+                                FileUtil.deleteFile(libName);
                                 message.setText("Downloading failed. No network");
                                 library.setEnabled(true);
 
