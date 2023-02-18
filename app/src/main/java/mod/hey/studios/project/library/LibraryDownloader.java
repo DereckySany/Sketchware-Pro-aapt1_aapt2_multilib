@@ -269,16 +269,16 @@ public class LibraryDownloader {
                 status = 2;
             } else if (dependency.contains("dependency") & dependency.contains("groupId")) {
                 SketchwareUtil.toast("Maven");
-                dependency = dependency.replaceAll("(<\\/\\w+>)", "");
-                Pattern p = Pattern.compile("<\\w+>(\\S+)<\\/\\w+>");
-                Matcher m = p.matcher(dependency);
-                StringBuilder output = new StringBuilder();
-                while (m.find()) {
-                    output.append(m.group(1));
-                    output.append(":");
-                }
-                output.deleteCharAt(output.length() - 1);
-                dependency = output.toString();
+                dependency = dependency.replace("/n", "");
+                dependency = dependency.replace("<artifactId>", ":");
+                dependency = dependency.replace("<version>", ":");
+                dependency = dependency.replace("</version>", "");
+                dependency = dependency.replace("dependency", "");
+                dependency = dependency.replace("groupId", "");
+                dependency = dependency.replace("</>", "");
+                dependency = dependency.replace("<>", "");
+                dependency = dependency.replace(" ", "");
+                dependency = dependency.replace("/n", "");
                 status = 3;
             } else if (dependency.contains("implementation") & dependency.contains("group:")) {
                 //implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
@@ -297,14 +297,15 @@ public class LibraryDownloader {
                     SketchwareUtil.toast("(Gradle (Short)");
                 }else{
                     SketchwareUtil.toast("Gradle (Kotlin)");
+                }
                 // implementation 'io.github.amrdeveloper:codeview:1.3.4'
                 dependency = dependency.replace("implementation", "");
-                dependency = dependency.replace(" ", "");
                 dependency = dependency.replace("'", "");
                 dependency = dependency.replace("\"", "");
                 dependency = dependency.replace("(", "");
                 dependency = dependency.replace(")", "");
-                }
+                dependency = dependency.replace(" ", "");
+                dependency = dependency.replace("/n", "");
                 status = 3;
             } else if (dependency.contains("libraryDependencies") & dependency.contains("%")) {
                 //libraryDependencies += "com.google.code.gson" % "gson" % "2.10.1"
@@ -346,6 +347,7 @@ public class LibraryDownloader {
                 dependency = dependency.replace(")", "");
                 dependency = dependency.replace(",", "");
                 dependency = dependency.replace(" ", "");
+                dependency = dependency.replace("/n", "");
                 status = 3;
             } else if (dependency.contains("[") & dependency.contains("/") & dependency.contains("]")) {
                 SketchwareUtil.toast("Leiningen");
@@ -355,6 +357,7 @@ public class LibraryDownloader {
                 dependency = dependency.replaceAll("( \")", ":");
                 dependency = dependency.replace("\"", "");
                 dependency = dependency.replace(" ", "");
+                dependency = dependency.replace("/n", "");
                 status = 3;
             } else if (dependency.contains("'") & dependency.contains(":aar:") | dependency.contains(":jar:")) {
                 SketchwareUtil.toast("Buildr");
@@ -362,6 +365,7 @@ public class LibraryDownloader {
                 dependency = dependency.replace(":aar:", ":");
                 dependency = dependency.replace(":jar:", ":");
                 dependency = dependency.replace(" ", "");
+                dependency = dependency.replace("/n", "");
                 status = 3;
             } else if (dependency.contains(".") & dependency.contains(":")) {
                 if (dependency.contains(":")){
@@ -373,6 +377,8 @@ public class LibraryDownloader {
                         SketchwareUtil.toast("done");
                         status = 3;
                     }
+                } else if (dependency.contains(".") & dependency.contains(":")) {
+                    status = 3;
                 } else {
                     status = 2;
                 }
@@ -393,6 +399,7 @@ public class LibraryDownloader {
                 }else{
                     library.setTextColor(0xFFF91010);
                 }
+                dependency = dependency.replace(" ", "");
                 library.setText(dependency);
                 libName = downloadPath + _getLibName(dependency);
 
