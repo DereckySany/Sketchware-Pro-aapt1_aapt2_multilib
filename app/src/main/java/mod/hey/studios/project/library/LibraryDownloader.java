@@ -277,9 +277,8 @@ public class LibraryDownloader {
                 dependency = dependency.replace("groupId", "");
                 dependency = dependency.replace("<>", "");
                 dependency = dependency.replace("</>", "");
-                dependency = dependency.replace(" ", "");
-                dependency = dependency.replace(" :", ":");
-                dependency = dependency.replace("/n", "");
+                dependency = dependency.replaceAll(" ", "");
+                dependency = dependency.replace("\n", "");
                 status = 3;
             } else if (dependency.contains("implementation") & dependency.contains("group:")) {
                 //implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
@@ -291,7 +290,7 @@ public class LibraryDownloader {
                 dependency = dependency.replace(",", "");
                 dependency = dependency.replace("'", "");
                 dependency = dependency.replace(" ", "");
-                dependency = dependency.replace("/n", "");
+                dependency = dependency.replace("\n", "");
                 status = 3;
             } else if (dependency.contains("implementation") & dependency.contains(":")) {
                 if (dependency.contains("'")){
@@ -306,7 +305,7 @@ public class LibraryDownloader {
                 dependency = dependency.replace("(", "");
                 dependency = dependency.replace(")", "");
                 dependency = dependency.replace(" ", "");
-                dependency = dependency.replace("/n", "");
+                dependency = dependency.replace("\n", "");
                 status = 3;
             } else if (dependency.contains("libraryDependencies") & dependency.contains("%")) {
                 //libraryDependencies += "com.google.code.gson" % "gson" % "2.10.1"
@@ -318,7 +317,7 @@ public class LibraryDownloader {
                 dependency = dependency.replace(" ", ":");
                 dependency = dependency.replaceAll("(^::)", "");
                 dependency = dependency.replace("::", ":");
-                dependency = dependency.replace("/n", "");
+                dependency = dependency.replace("\n", "");
                 status = 3;
             } else if (dependency.contains("dependency") & dependency.contains("org=")) {
                 //<dependency org="com.google.code.gson" name="gson" rev="2.10.1"/>
@@ -333,7 +332,7 @@ public class LibraryDownloader {
                 dependency = dependency.replace("name=", ":");
                 dependency = dependency.replace("rev=", ":");
                 dependency = dependency.replace(" ", "");
-                dependency = dependency.replace("/n", "");
+                dependency = dependency.replace("\n", "");
                 status = 3;
             } else if (dependency.contains("@Grapes") & dependency.contains("version=")) {
                 SketchwareUtil.toast("Grape");
@@ -348,7 +347,7 @@ public class LibraryDownloader {
                 dependency = dependency.replace(")", "");
                 dependency = dependency.replace(",", "");
                 dependency = dependency.replace(" ", "");
-                dependency = dependency.replace("/n", "");
+                dependency = dependency.replace("\n", "");
                 status = 3;
             } else if (dependency.contains("[") & dependency.contains("/") & dependency.contains("]")) {
                 SketchwareUtil.toast("Leiningen");
@@ -358,7 +357,7 @@ public class LibraryDownloader {
                 dependency = dependency.replaceAll("( \")", ":");
                 dependency = dependency.replace("\"", "");
                 dependency = dependency.replace(" ", "");
-                dependency = dependency.replace("/n", "");
+                dependency = dependency.replace("\n", "");
                 status = 3;
             } else if (dependency.contains("'") & dependency.contains(":aar:") | dependency.contains(":jar:")) {
                 SketchwareUtil.toast("Buildr");
@@ -366,11 +365,11 @@ public class LibraryDownloader {
                 dependency = dependency.replace(":aar:", ":");
                 dependency = dependency.replace(":jar:", ":");
                 dependency = dependency.replace(" ", "");
-                dependency = dependency.replace("/n", "");
+                dependency = dependency.replace("\n", "");
                 status = 3;
             } else if (dependency.contains(":") & dependency.contains(".")) {
-                dependency = dependency.replace(" ", "");
-                dependency = dependency.replace("/n", "");
+                dependency = dependency.replaceAll("\n", "");
+                dependency = dependency.replaceAll(" ", "");
                 if (dependency.contains(":")){
                     Pattern p = Pattern.compile("(\\w+.\\w+.?\\w+.\\w+:\\w+-?\\w*:\\d+.\\d+.\\d+-?\\w*\\d*)");
                     Matcher m = p.matcher(dependency);                
@@ -401,10 +400,12 @@ public class LibraryDownloader {
                     library.setTextColor(0xFF00E676);
                 }else{
                     library.setTextColor(0xFFF91010);
-                }
-                dependency = dependency.replace(" ", "");
+                }                
+                dependency = dependency.replaceAll("\n", "");
+                dependency = dependency.replaceAll(" ", "");
+
                 library.setText(dependency);
-                libName = downloadPath + _getLibName(dependency);
+                libName = downloadPath + _getLibName(dependency).trim();
 
                 if (!FileUtil.isExistFile(libName)) {
                     FileUtil.makeDir(libName);
