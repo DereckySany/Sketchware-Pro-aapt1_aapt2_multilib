@@ -46,7 +46,13 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
-
+          
+      - name: Cache
+        uses: actions/cache@v3.2.5
+        with:
+          # A list of files, directories, and wildcard patterns to cache and restore
+          path: app/build/
+        
       - name: Build debug APK
         uses: gradle/gradle-build-action@v2
         with:
@@ -72,6 +78,12 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
+          
+      - name: Cache
+        uses: actions/cache@v3.2.5
+        with:
+          # A list of files, directories, and wildcard patterns to cache and restore
+          path: app/build/
 
       - name: Build debug APK
         uses: gradle/gradle-build-action@v2
