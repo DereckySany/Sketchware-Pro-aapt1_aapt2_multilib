@@ -51,7 +51,7 @@ jobs:
         uses: actions/cache@v3.2.5
         with:
           # A list of files, directories, and wildcard patterns to cache and restore
-          path: app/build/
+          path: /repos/{owner}/{repo}/actions/cache/usage
           restore-keys: true
         
       - name: Build debug APK
