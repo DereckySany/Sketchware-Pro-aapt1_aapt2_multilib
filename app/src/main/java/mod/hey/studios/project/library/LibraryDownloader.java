@@ -363,6 +363,19 @@ public class LibraryDownloader {
                 dependency = dependency.replace(":jar:", ":");
                 dependency = dependency.replace(" ", "");
                 status = 3;
+            } else if (dependency.contains(".") & dependency.contains(":")) {
+                if (dependency.contains(":")){
+                    Pattern p = Pattern.compile("(\\w+.\\w+.?\\w+.\\w+:\\w+-?\\w*:\\d+.\\d+.\\d+-?\\w*\\d*)");
+                    Matcher m = p.matcher(dependency);
+                
+                    if (m.find()) {
+                        dependency = m.group(1);
+                        SketchwareUtil.toast("done");
+                        status = 3;
+                    }
+                } else {
+                    status = 2;
+                }
             } else {
                 status = 2;
                 SketchwareUtil.toastError("Invalid dependency");
