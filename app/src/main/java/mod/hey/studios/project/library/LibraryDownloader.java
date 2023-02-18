@@ -277,8 +277,9 @@ public class LibraryDownloader {
                 dependency = dependency.replace("groupId", "");
                 dependency = dependency.replace("<>", "");
                 dependency = dependency.replace("</>", "");
-                dependency = dependency.replace("/n", "");
                 dependency = dependency.replace(" ", "");
+                dependency = dependency.replace(" :", ":");
+                dependency = dependency.replace("/n", "");
                 status = 3;
             } else if (dependency.contains("implementation") & dependency.contains("group:")) {
                 //implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
@@ -368,8 +369,8 @@ public class LibraryDownloader {
                 dependency = dependency.replace("/n", "");
                 status = 3;
             } else if (dependency.contains(":") & dependency.contains(".")) {
-                dependency = dependency.replace("/n", "");
                 dependency = dependency.replace(" ", "");
+                dependency = dependency.replace("/n", "");
                 if (dependency.contains(":")){
                     Pattern p = Pattern.compile("(\\w+.\\w+.?\\w+.\\w+:\\w+-?\\w*:\\d+.\\d+.\\d+-?\\w*\\d*)");
                     Matcher m = p.matcher(dependency);                
@@ -378,10 +379,10 @@ public class LibraryDownloader {
                         SketchwareUtil.toast("done");
                         status = 3;
                     }
-                } else if (dependency.contains(":") && dependency.contains(".")) {
+                } else if (!dependency.contains("http") & dependency.contains(":") | dependency.contains(".")) {
                     status = 3;
                 } else {
-                    status = 2;
+                    status = 3;
                 }
             } else {
                 status = 2;
