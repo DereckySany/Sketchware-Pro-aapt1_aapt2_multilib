@@ -379,10 +379,11 @@ public class LibraryDownloader {
                         SketchwareUtil.toast("done");
                         status = 3;
                     }
+                    status = 3;
                 } else if (!dependency.contains("http") & dependency.contains(":") | dependency.contains(".")) {
                     status = 3;
                 } else {
-                    status = 3;
+                    status = 2;
                 }
             } else {
                 status = 2;
