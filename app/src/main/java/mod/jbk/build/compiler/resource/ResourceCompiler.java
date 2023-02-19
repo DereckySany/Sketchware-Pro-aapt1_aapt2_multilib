@@ -686,7 +686,7 @@ public class ResourceCompiler {
                     throw new zy("aapt2 compilation failed with exit code " + exitCode);
                 }
             } catch (IOException | InterruptedException exception) {
-                throw new zy("aapt2 compilation failed", new Exception(exception));
+                throw new zy("aapt2 compilation failed: " + exception.getMessage());
             }
         }
 
