@@ -458,82 +458,52 @@ public class ManageLocalLibraryActivity extends Activity
         }
 
        private HashMap<String, Object> getLocalLibraryData(String libname) {
-           HashMap<String, Object> localLibrary = new HashMap<>();
+          HashMap<String, Object> localLibrary = new HashMap<>();
+          localLibrary.put("name", libname);
 
-           File configPath = new File(local_libs_path, libname + "/config");
-           File resPath = new File(local_libs_path, libname + "/res");
-           File jarPath = new File(local_libs_path, libname + "/classes.jar");
-           File dexPath = new File(local_libs_path, libname + "/classes.dex");
-           File manifestPath = new File(local_libs_path, libname + "/AndroidManifest.xml");
-           File pgRulesPath = new File(local_libs_path, libname + "/proguard.txt");
-           File assetsPath = new File(local_libs_path, libname + "/assets");
+          File configPathFile = new File(local_libs_path, libname + "/config");
+          if (configPathFile.exists()) {
+              String packageName = null;
+              try (BufferedReader reader = new BufferedReader(new FileReader(configPathFile))) {
+                   packageName = reader.readLine();
+              } catch (IOException e) {
+                // Handle exception
+              }
+              localLibrary.put("packageName", packageName);
+          }
 
-           localLibrary.put("name", libname);
+          File resPathFile = new File(local_libs_path, libname + "/res");
+          if (resPathFile.exists()) {
+              localLibrary.put("resPath", resPathFile.getPath());
+          }
 
-           if (configPath.exists()) {
-               localLibrary.put("packageName", FileUtil.readFile(configPath.getPath()));
-            }
-           if (resPath.exists()) {
-               localLibrary.put("resPath", resPath.getPath());
-            }
-            if (jarPath.exists()) {
-               localLibrary.put("jarPath", jarPath.getPath());
-            }
-            if (dexPath.exists()) {
-               localLibrary.put("dexPath", dexPath.getPath());
-            }
-            if (manifestPath.exists()) {
-               localLibrary.put("manifestPath", manifestPath.getPath());
-            }
-            if (pgRulesPath.exists()) {
-               localLibrary.put("pgRulesPath", pgRulesPath.getPath());
-            }
-            if (assetsPath.exists()) {
-               localLibrary.put("assetsPath", assetsPath.getPath());
-            }
-            return localLibrary;
+          File jarPathFile = new File(local_libs_path, libname + "/classes.jar");
+          if (jarPathFile.exists()) {
+              localLibrary.put("jarPath", jarPathFile.getPath());
+          }
+
+          File dexPathFile = new File(local_libs_path, libname + "/classes.dex");
+          if (dexPathFile.exists()) {
+              localLibrary.put("dexPath", dexPathFile.getPath());
+          }
+
+          File manifestPathFile = new File(local_libs_path, libname + "/AndroidManifest.xml");
+          if (manifestPathFile.exists()) {
+              localLibrary.put("manifestPath", manifestPathFile.getPath());
+          }
+
+          File pgRulesPathFile = new File(local_libs_path, libname + "/proguard.txt");
+          if (pgRulesPathFile.exists()) {
+              localLibrary.put("pgRulesPath", pgRulesPathFile.getPath());
+          }
+
+          File assetsPathFile = new File(local_libs_path, libname + "/assets");
+          if (assetsPathFile.exists()) {
+              localLibrary.put("assetsPath", assetsPathFile.getPath());
+          }
+
+          return localLibrary;
         }
-
-
-        /*
-        // original 
-        private HashMap<String, Object> getLocalLibraryData(String libname) {
-            HashMap<String, Object> localLibrary = new HashMap<>();
-
-            String configPath = local_libs_path + libname + "/config";
-            String resPath = local_libs_path + libname + "/res";
-            String jarPath = local_libs_path + libname + "/classes.jar";
-            String dexPath = local_libs_path + libname + "/classes.dex";
-            String manifestPath = local_libs_path + libname + "/AndroidManifest.xml";
-            String pgRulesPath = local_libs_path + libname + "/proguard.txt";
-            String assetsPath = local_libs_path + libname + "/assets";
-
-            localLibrary.put("name", libname);
-
-            if (FileUtil.isExistFile(configPath)) {
-                localLibrary.put("packageName", FileUtil.readFile(configPath));
-            }
-            if (FileUtil.isExistFile(resPath)) {
-                localLibrary.put("resPath", resPath);
-             }
-            if (FileUtil.isExistFile(jarPath)) {
-                localLibrary.put("jarPath", jarPath);
-             }
-            if (FileUtil.isExistFile(dexPath)) {
-                localLibrary.put("dexPath", dexPath);
-             }
-            if (FileUtil.isExistFile(manifestPath)) {
-                localLibrary.put("manifestPath", manifestPath);
-             }
-            if (FileUtil.isExistFile(pgRulesPath)) {
-                localLibrary.put("pgRulesPath", pgRulesPath);
-             }
-            if (FileUtil.isExistFile(assetsPath)) {
-                localLibrary.put("assetsPath", assetsPath);
-             }
-            return localLibrary;
-        }
-        */
 
         private void setColorIdicator(LinearLayout indicator, String configname) {
             if (FileUtil.isExistFile(configname)) {
