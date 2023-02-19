@@ -15,7 +15,7 @@ jobs:
         java-version: 1.8
 
     - name: Executa o Gradle
-      run: ./gradlew build --scan --stacktrace
+      run: ./gradlew assembleMinApi26Debug --scan --stacktrace
 
     - name: Verifica se há erros
       run: |
