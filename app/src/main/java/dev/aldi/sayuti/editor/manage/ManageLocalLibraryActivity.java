@@ -457,6 +457,46 @@ public class ManageLocalLibraryActivity extends Activity
             return convertView;
         }
 
+       private HashMap<String, Object> getLocalLibraryData(String libname) {
+           HashMap<String, Object> localLibrary = new HashMap<>();
+
+           File configPath = new File(local_libs_path, libname + "/config");
+           File resPath = new File(local_libs_path, libname + "/res");
+           File jarPath = new File(local_libs_path, libname + "/classes.jar");
+           File dexPath = new File(local_libs_path, libname + "/classes.dex");
+           File manifestPath = new File(local_libs_path, libname + "/AndroidManifest.xml");
+           File pgRulesPath = new File(local_libs_path, libname + "/proguard.txt");
+           File assetsPath = new File(local_libs_path, libname + "/assets");
+
+           localLibrary.put("name", libname);
+
+           if (configPath.exists()) {
+               localLibrary.put("packageName", FileUtil.readFile(configPath.getPath()));
+            }
+           if (resPath.exists()) {
+               localLibrary.put("resPath", resPath.getPath());
+            }
+            if (jarPath.exists()) {
+               localLibrary.put("jarPath", jarPath.getPath());
+            }
+            if (dexPath.exists()) {
+               localLibrary.put("dexPath", dexPath.getPath());
+            }
+            if (manifestPath.exists()) {
+               localLibrary.put("manifestPath", manifestPath.getPath());
+            }
+            if (pgRulesPath.exists()) {
+               localLibrary.put("pgRulesPath", pgRulesPath.getPath());
+            }
+            if (assetsPath.exists()) {
+               localLibrary.put("assetsPath", assetsPath.getPath());
+            }
+            return localLibrary;
+        }
+
+
+        /*
+        // original 
         private HashMap<String, Object> getLocalLibraryData(String libname) {
             HashMap<String, Object> localLibrary = new HashMap<>();
 
@@ -493,6 +533,7 @@ public class ManageLocalLibraryActivity extends Activity
              }
             return localLibrary;
         }
+        */
 
         private void setColorIdicator(LinearLayout indicator, String configname) {
             if (FileUtil.isExistFile(configname)) {
