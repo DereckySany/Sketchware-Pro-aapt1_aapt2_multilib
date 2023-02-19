@@ -109,7 +109,75 @@ public class ResourceCompiler {
             this.buildAppBundle = buildAppBundle;
             compiledBuiltInLibraryResourcesDirectory = new File(SketchApplication.getContext().getCacheDir(), "compiledLibs");
         }
+    }
 
+        //
+    static class Aapt2Compiler implements Compiler {
+
+        private final boolean buildAppBundle;
+        private final File aapt2;
+        private final Dp buildHelper;
+        private ProgressListener progressListener;
+
+        public Aapt2Compiler(final Dp buildHelper, final File aapt2, final boolean buildAppBundle) {
+            this.buildHelper = buildHelper;
+            this.aapt2 = aapt2;
+            this.buildAppBundle = buildAppBundle;
+        }
+
+        private File getCompiledBuiltInLibraryResourcesDirectory() {
+            return new File(SketchApplication.getContext().getCacheDir(), "compiledLibs");
+        }
+        // Restante do código
+
+        @Override
+        public void compile() throws zy, MissingFileException {
+            String outputPath = buildHelper.yq.binDirectoryPath + File.separator + "res";
+            emptyOrCreateDirectory(outputPath);
+
+            long startTime = System.currentTimeMillis();
+
+            ExecutorService executor = Executors.newFixedThreadPool(4);
+
+            List<Future<Void>> futures = new ArrayList<>();
+
+            futures.add(executor.submit(() -> {
+                compileBuiltInLibraryResources();
+                return null;
+            }));
+
+            futures.add(executor.submit(() -> {
+                compileLocalLibraryResources(outputPath);
+                return null;
+            }));
+
+            futures.add(executor.submit(() -> {
+                compileProjectResources(outputPath);
+                return null;
+            }));
+
+            futures.add(executor.submit(() -> {
+                compileImportedResources(outputPath);
+                return null;
+            }));
+
+            for (Future<Void> future : futures) {
+                try {
+                    future.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    // Handle exception
+                }
+            }
+
+            executor.shutdown();
+
+            long totalTime = System.currentTimeMillis() - startTime;
+            LogUtil.d(TAG + ":c", "Resource compilation completed in " + totalTime + " ms");
+            link();
+        }
+
+        /*
+        // original
         @Override
         public void compile() throws zy, MissingFileException {
             String outputPath = buildHelper.yq.binDirectoryPath + File.separator + "res";
@@ -134,7 +202,7 @@ public class ResourceCompiler {
             savedTimeMillis = System.currentTimeMillis();
             link();
             LogUtil.d(TAG + ":c", "Linking resources took " + (System.currentTimeMillis() - savedTimeMillis) + " ms");
-        }
+        }*/
 
         /**
          * Links the project's resources using AAPT2.
@@ -149,7 +217,7 @@ public class ResourceCompiler {
             ArrayList<String> args = new ArrayList<>();
             args.add(aapt2.getAbsolutePath());
             args.add("link");
-            
+
             if (buildAppBundle) {
                 args.add("--proto-format");
             }
@@ -213,7 +281,7 @@ public class ResourceCompiler {
             /* Include compiled built-in library resources */
             for (Jp library : buildHelper.builtInLibraryManager.a()) {
                 if (library.c()) {
-                    args.addAll(Arrays.asList("-R", new File(compiledBuiltInLibraryResourcesDirectory, library.a() + ".zip").getAbsolutePath()));
+                    args.addAll(Arrays.asList("-R", new File(getCompiledBuiltInLibraryResourcesDirectory(), library.a() + ".zip").getAbsolutePath()));
                 }
             }
 
@@ -398,7 +466,7 @@ public class ResourceCompiler {
         }
 
         private void compileBuiltInLibraryResources() throws zy, MissingFileException {
-            compiledBuiltInLibraryResourcesDirectory.mkdirs();
+            getCompiledBuiltInLibraryResourcesDirectory().mkdirs();
             List<Thread> threads = new ArrayList<>();
 
             for (Jp builtInLibrary : buildHelper.builtInLibraryManager.a()) {
@@ -406,7 +474,7 @@ public class ResourceCompiler {
                     String libraryName = builtInLibrary.a();
                     String libraryResources = BuiltInLibraries.getLibraryResourcesPath(libraryName);
                     Context context = SketchApplication.getContext();
-                    File cachedCompiledResources = new File(compiledBuiltInLibraryResourcesDirectory, libraryName + ".zip");
+                    File cachedCompiledResources = new File(getCompiledBuiltInLibraryResourcesDirectory(), libraryName + ".zip");
                     
                     compilingAssertDirectoryExists(libraryResources);
                     
