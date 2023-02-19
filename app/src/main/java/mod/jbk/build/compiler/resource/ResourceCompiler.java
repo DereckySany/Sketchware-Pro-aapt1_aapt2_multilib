@@ -47,7 +47,13 @@ public class ResourceCompiler {
         progressReceiver = receiver;
         this.dp = dp;
     }
+    public void compile() throws IOException, zy, MissingFileException {
+        Compiler resourceCompiler = new Aapt2Compiler(dp, aaptFile, willBuildAppBundle);
+        resourceCompiler.setProgressListener(progressReceiver::onProgress);
+        resourceCompiler.compile();
+    }
 
+    /*
     public void compile() throws IOException, zy, MissingFileException {
         Compiler resourceCompiler;
         resourceCompiler = new Aapt2Compiler(dp, aaptFile, willBuildAppBundle);
@@ -59,7 +65,7 @@ public class ResourceCompiler {
             }
         });
         resourceCompiler.compile();
-    }
+    }*/
 
     /**
      * A base class of a resource compiler.
@@ -91,9 +97,8 @@ public class ResourceCompiler {
         }
     }
 
-    /**
-     * A {@link Compiler} implementing AAPT2.
-     */
+    /*
+    // original
     static class Aapt2Compiler implements Compiler {
 
         private final boolean buildAppBundle;
@@ -110,8 +115,11 @@ public class ResourceCompiler {
             compiledBuiltInLibraryResourcesDirectory = new File(SketchApplication.getContext().getCacheDir(), "compiledLibs");
         }
     }
+    */
 
-        //
+    /**
+     * A {@link Compiler} implementing AAPT2.
+     */
     static class Aapt2Compiler implements Compiler {
 
         private final boolean buildAppBundle;
