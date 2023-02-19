@@ -25,7 +25,10 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.sketchware.remod.R;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -237,7 +240,7 @@ public class ManageLocalLibraryActivity extends Activity
        }
 
        List<String> localLibraryNames = new LinkedList<>();
-       FileUtil.listDir(local_libs_path, localLibraryNames);
+       FileUtil.listDir(local_libs_path, (ArrayList<String>) localLibraryNames);
 
        List<String> directories = new LinkedList<>();
        for (String filename : localLibraryNames) {

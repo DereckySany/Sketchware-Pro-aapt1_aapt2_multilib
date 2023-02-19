@@ -5,9 +5,19 @@ import android.content.pm.PackageManager;
 
 import com.besome.sketch.SketchApplication;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import a.a.a.Dp;
 import a.a.a.Jp;
@@ -49,7 +59,13 @@ public class ResourceCompiler {
     }
     public void compile() throws IOException, zy, MissingFileException {
         Compiler resourceCompiler = new Aapt2Compiler(dp, aaptFile, willBuildAppBundle);
-        resourceCompiler.setProgressListener(progressReceiver::onProgress);
+        //resourceCompiler.setProgressListener(progressReceiver::onProgress);
+        resourceCompiler.setProgressListener(new Compiler.ProgressListener() {
+            @Override
+            void onProgressUpdate(String newProgress) {
+                if (progressReceiver != null) progressReceiver.onProgress(newProgress);
+            }
+        });
         resourceCompiler.compile();
     }
 
@@ -397,8 +413,8 @@ public class ResourceCompiler {
         //
 
         private void emptyOrCreateDirectory(String path) {
-            FileUtil.deleteDirectory(path);
-            FileUtil.makeDirs(path);
+            FileUtil.deleteFile(path);
+            FileUtil.makeDir(path);
         }
 
         /*
@@ -498,7 +514,8 @@ public class ResourceCompiler {
                         LogUtil.d(TAG + ":cBILR", "Now executing: " + commands);
                         
                         Thread thread = new Thread(() -> {
-                            try (BinaryExecutor executor = new BinaryExecutor()) {
+                            try {
+                                BinaryExecutor executor = new BinaryExecutor();
                                 executor.setCommands(commands);
                                 String log = executor.execute();
                                 
@@ -506,8 +523,8 @@ public class ResourceCompiler {
                                     LogUtil.e(TAG + ":cBILR", log);
                                     throw new zy(log);
                                 }
-                            } catch (IOException e) {
-                                LogUtil.e(TAG + ":cBILR", "Error while executing command: " + e.getMessage(), e);
+                            } catch (zy e) {
+                                throw new RuntimeException(e);
                             }
                         });
                         
@@ -625,11 +642,11 @@ public class ResourceCompiler {
             if (FileUtil.isExistFile(buildHelper.fpu.getPathResource(buildHelper.yq.sc_id))
                     && new File(buildHelper.fpu.getPathResource(buildHelper.yq.sc_id)).length() != 0) {
                 //String aapt2 = "path/to/aapt2/binary";
-                String aapt2 = aapt2.getAbsolutePath();
+                String binAapt2 = aapt2.getAbsolutePath();
                 String resourceDir = buildHelper.fpu.getPathResource(buildHelper.yq.sc_id);
                 String outputZip = outputPath + File.separator + "project-imported.zip";
                 try {
-                    ProcessBuilder processBuilder = new ProcessBuilder(aapt2, "compile", "--dir", resourceDir, "-o", outputZip);
+                    ProcessBuilder processBuilder = new ProcessBuilder(binAapt2, "compile", "--dir", resourceDir, "-o", outputZip);
                     Process process = processBuilder.start();
                     int exitCode = process.waitFor();
                     if (exitCode != 0) {
@@ -668,8 +685,8 @@ public class ResourceCompiler {
                 if (exitCode != 0) {
                     throw new zy("aapt2 compilation failed with exit code " + exitCode);
                 }
-            } catch (IOException | InterruptedException e) {
-                throw new zy("aapt2 compilation failed", e);
+            } catch (IOException | InterruptedException exception) {
+                throw new zy("aapt2 compilation failed",exception);
             }
         }
 
