@@ -240,7 +240,7 @@ public class ManageLocalLibraryActivity extends Activity
        }
 
        List<String> localLibraryNames = new LinkedList<>();
-       FileUtil.listDir(local_libs_path, (ArrayList<String>) localLibraryNames);
+       FileUtil.listDir(local_libs_path, localLibraryNames);
 
        List<String> directories = new LinkedList<>();
        for (String filename : localLibraryNames) {

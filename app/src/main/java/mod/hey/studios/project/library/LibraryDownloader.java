@@ -1148,11 +1148,12 @@ public class LibraryDownloader {
             if (success) {
                 // make a Toast 
                 bB.a(context, "The library has been downloaded and imported to local libraries successfully.\n"  + libName, 60).show();
-                Snackbar snackbar = Snackbar.a(context.getParent().findViewById(R.id.managepermissionLinearLayout1), "Library: " + libName, -2 ); /* BaseTransientBottomBar.LENGTH_INDEFINITE */
+                
+                Snackbar snackbar = Snackbar.a(context.getParent().findViewById(R.id.managepermissionLinearLayout1), "Library: " + libName, -2 ); // BaseTransientBottomBar.LENGTH_INDEFINITE 
                 snackbar.a(Helper.getResString(R.string.common_word_show), v -> {
                   snackbar.c();
                     bB.a(context, "The library has been downloaded and imported to local libraries successfully.\n"  + libName, 60).show();
-                    /* to imprementation go to library add recently */
+                    // to imprementation go to library add recently 
                 });
                 //Set the text color to green
                 snackbar.f(Color.GREEN);

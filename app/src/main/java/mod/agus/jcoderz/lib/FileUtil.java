@@ -257,7 +257,18 @@ public class FileUtil {
             }
         }
     }
-
+    
+    public static void listDir(String local_libs_path, List<String> localLibraryNames) {
+        File[] listFiles;
+        File dir = new File(local_libs_path);
+        if (dir.exists() && !dir.isFile() && (listFiles = dir.listFiles()) != null && listFiles.length > 0 && localLibraryNames != null) {
+            localLibraryNames.clear();
+            for (File file : listFiles) {
+                localLibraryNames.add(file.getAbsolutePath());
+            }
+        }
+    }
+    
     /**
      * @return List of files that have the filename extension {@code extension}.
      */
