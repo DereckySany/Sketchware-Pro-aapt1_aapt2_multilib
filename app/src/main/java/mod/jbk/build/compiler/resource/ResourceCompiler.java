@@ -379,7 +379,7 @@ public class ResourceCompiler {
             }
             return true;
         }
-
+        /*
         private void compileImportedResources(String outputPath) throws zy {
             if (FileUtil.isExistFile(buildHelper.fpu.getPathResource(buildHelper.yq.sc_id))
                     && new File(buildHelper.fpu.getPathResource(buildHelper.yq.sc_id)).length() != 0) {
@@ -396,6 +396,26 @@ public class ResourceCompiler {
                 if (!executor.execute().isEmpty()) {
                     LogUtil.e(TAG, executor.getLog());
                     throw new zy(executor.getLog());
+                }
+            }
+        } */
+
+        private void compileImportedResources(String outputPath) throws zy {
+            if (FileUtil.isExistFile(buildHelper.fpu.getPathResource(buildHelper.yq.sc_id))
+                    && new File(buildHelper.fpu.getPathResource(buildHelper.yq.sc_id)).length() != 0) {
+                //String aapt2 = "path/to/aapt2/binary";
+                String aapt2 = aapt2.getAbsolutePath();
+                String resourceDir = buildHelper.fpu.getPathResource(buildHelper.yq.sc_id);
+                String outputZip = outputPath + File.separator + "project-imported.zip";
+                try {
+                    ProcessBuilder processBuilder = new ProcessBuilder(aapt2, "compile", "--dir", resourceDir, "-o", outputZip);
+                    Process process = processBuilder.start();
+                    int exitCode = process.waitFor();
+                    if (exitCode != 0) {
+                        throw new zy("aapt2 compilation failed with exit code " + exitCode);
+                    }
+                } catch (IOException | InterruptedException e) {
+                    throw new zy("aapt2 compilation failed", e);
                 }
             }
         }
