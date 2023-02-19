@@ -459,8 +459,38 @@ public class ManageLocalLibraryActivity extends Activity
 
         private HashMap<String, Object> getLocalLibraryData(String libname) {
             HashMap<String, Object> localLibrary = new HashMap<>();
+
+            String configPath = local_libs_path + libname + "/config";
+            String resPath = local_libs_path + libname + "/res";
+            String jarPath = local_libs_path + libname + "/classes.jar";
+            String dexPath = local_libs_path + libname + "/classes.dex";
+            String manifestPath = local_libs_path + libname + "/AndroidManifest.xml";
+            String pgRulesPath = local_libs_path + libname + "/proguard.txt";
+            String assetsPath = local_libs_path + libname + "/assets";
+
             localLibrary.put("name", libname);
-            localLibrary.put("config", local_libs_path + libname + "/config");
+
+            if (FileUtil.isExistFile(configPath)) {
+                localLibrary.put("packageName", FileUtil.readFile(configPath));
+            }
+            if (FileUtil.isExistFile(resPath)) {
+                localLibrary.put("resPath", resPath);
+             }
+            if (FileUtil.isExistFile(jarPath)) {
+                localLibrary.put("jarPath", jarPath);
+             }
+            if (FileUtil.isExistFile(dexPath)) {
+                localLibrary.put("dexPath", dexPath);
+             }
+            if (FileUtil.isExistFile(manifestPath)) {
+                localLibrary.put("manifestPath", manifestPath);
+             }
+            if (FileUtil.isExistFile(pgRulesPath)) {
+                localLibrary.put("pgRulesPath", pgRulesPath);
+             }
+            if (FileUtil.isExistFile(assetsPath)) {
+                localLibrary.put("assetsPath", assetsPath);
+             }
             return localLibrary;
         }
 
