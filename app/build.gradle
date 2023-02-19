@@ -93,6 +93,13 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"], exclude: "proguard-base-7.2.2.jar")
 
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    //implementation "androidx.recyclerview:recyclerview:1.2.1"
+    //implementation "androidx.cardview:cardview:1.0.0"
+    //implementation "androidx.viewpager:viewpager:1.0.0"
+    //implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation 'androidx.fragment:fragment:1.4.1'
+
     implementation "androidx.annotation:annotation:1.5.0"
     implementation "com.android.tools:annotations:30.4.1"
     //implementation "com.google.guava:guava:31.1-jre"

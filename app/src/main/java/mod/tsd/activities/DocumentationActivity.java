@@ -65,7 +65,7 @@ public class DocumentationActivity extends AppCompatActivity {
 	private RequestNetwork.RequestListener _FetchFile_request_listener;
 	
 	@Override
-	protected void onCreate(Bundle _savedInstanceState) {
+	public void onCreate(Bundle _savedInstanceState) {
 		super.onCreate(_savedInstanceState);
 		setContentView(R.layout.documentation);
 		initialize(_savedInstanceState);
