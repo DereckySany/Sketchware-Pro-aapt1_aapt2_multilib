@@ -317,6 +317,12 @@
         <activity
             android:name="mod.khaled.logcat.LogReaderActivity"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize" />
+            
+        <activity
+            android:name="mod.tsd.activities.DocumentationActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.Translucent"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
 
     </application>
 </manifest>
