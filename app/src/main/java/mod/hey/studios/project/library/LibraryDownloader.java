@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ClipboardManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import com.android.tools.r8.D8;
 import com.android.tools.r8.R8;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.sketchware.remod.R;
@@ -1145,16 +1147,17 @@ public class LibraryDownloader {
         protected void onPostExecute(String s) {
             if (success) {
                 // make a Toast 
-                bB.a(context, "The library has been downloaded and imported to local libraries successfully.\n"  + libName.toString(), 60).show();
-              //  Snackbar snackbar = Snackbar.a(View, "Library: " + libName.toString(), -2 ); /* BaseTransientBottomBar.LENGTH_INDEFINITE */
-              //  snackbar.a(Helper.getResString(R.string.common_word_show), v -> {
-              //    snackbar.c();
-              //      /* to imprementation go to library add recently */
-              //  });
-              //   Set the text color to green
-              //  snackbar.f(Color.GREEN);
-              //  snackbar.n();
-              //
+                bB.a(context, "The library has been downloaded and imported to local libraries successfully.\n"  + libName, 60).show();
+                Snackbar snackbar = Snackbar.a(context.getParent().findViewById(R.id.managepermissionLinearLayout1), "Library: " + libName, -2 ); /* BaseTransientBottomBar.LENGTH_INDEFINITE */
+                snackbar.a(Helper.getResString(R.string.common_word_show), v -> {
+                  snackbar.c();
+                    bB.a(context, "The library has been downloaded and imported to local libraries successfully.\n"  + libName, 60).show();
+                    /* to imprementation go to library add recently */
+                });
+                //Set the text color to green
+                snackbar.f(Color.GREEN);
+                snackbar.n();
+
                 listener.onComplete();
             } else {
                 bB.a(context, "Dexing failed: " + s, 60).show();
