@@ -125,7 +125,7 @@ dependencies {
 
 
     //noinspection GradleDependency
-    implementation "com.squareup.okhttp3:okhttp:4.10.0"
+    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.11"
     //noinspection GradleDependency
     implementation 'com.squareup.okio:okio:3.3.0'
 
