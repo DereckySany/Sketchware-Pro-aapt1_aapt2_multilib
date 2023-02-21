@@ -1,5 +1,6 @@
 package dev.derecky.sany.editor.tools.translateapi;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -38,6 +39,7 @@ public class TranslateAPI {
         this.listener = listener;
     }
 
+    @SuppressLint("StaticFieldLeak")
     public void execute() {
         new AsyncTask<Void, Void, String>() {
             @Override

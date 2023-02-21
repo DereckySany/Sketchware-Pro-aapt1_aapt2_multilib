@@ -236,14 +236,14 @@ public class ManageLocalLibraryActivity extends Activity
     */
     private void loadFiles() {
         arrayList.clear();
-        if (notAssociatedWithProject) {
-            return;
+        if (!notAssociatedWithProject) {
+            if (!FileUtil.isExistFile(configurationFilePath) || FileUtil.readFile(configurationFilePath).equals("")) {
+                FileUtil.writeFile(configurationFilePath, "[]");
+            } else {
+                project_used_libs = new Gson().fromJson(FileUtil.readFile(configurationFilePath), Helper.TYPE_MAP_LIST);
+            }
         }
-        if (!FileUtil.isExistFile(configurationFilePath) || FileUtil.readFile(configurationFilePath).equals("")) {
-            FileUtil.writeFile(configurationFilePath, "[]");
-        } else {
-            project_used_libs = new Gson().fromJson(FileUtil.readFile(configurationFilePath), Helper.TYPE_MAP_LIST);
-        }
+        
         List<String> localLibraryNames = new LinkedList<>();
         FileUtil.listDir(local_libs_path, localLibraryNames);
 

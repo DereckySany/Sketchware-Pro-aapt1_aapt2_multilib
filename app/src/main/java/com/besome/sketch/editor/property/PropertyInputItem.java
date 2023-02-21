@@ -347,15 +347,11 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
                                 targetLanguageCode = "pt";
                                 break;
                         }
-
                         // Obtém o texto de entrada
                         String text = input.getText().toString();
 
-                        // Traduz o texto
-                        String translatedText;
                         try {
-                            translatedText = String.valueOf(new TranslateAPI("auto", targetLanguageCode, text));
-                            translator.setTranslateListener(new TranslateAPI.TranslateListener() {
+                            new TranslateAPI("auto", targetLanguageCode, text).setTranslateListener(new TranslateAPI.TranslateListener() {
                                 @Override
                                 public void onSuccess(String translatedText) {
                                     //Log.d(TAG, "Translated text: " + translatedText);
