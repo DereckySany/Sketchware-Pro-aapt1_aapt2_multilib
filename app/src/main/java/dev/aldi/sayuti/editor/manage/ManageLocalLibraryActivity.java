@@ -253,7 +253,7 @@ public class ManageLocalLibraryActivity extends Activity
 
        adapter = new LibraryAdapter(localLibraryNames);
        arrayList.addAll(directories);
-       Collections.sort(arrayList, String.CASE_INSENSITIVE_ORDER);
+       Collections.sort(arrayList, String.CASE_INSENSITIVE_ORDER);]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
        listview.setAdapter(adapter);
     }
 
