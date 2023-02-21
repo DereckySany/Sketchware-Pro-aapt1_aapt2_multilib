@@ -156,14 +156,11 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
     @Override
     public void onBackPressed() {
         if (drawer.isShown()) {
-            // DrawerLayout#closeDrawers()
+            //drawerLayout.closeDrawers();
             drawerLayout.b();
         } else {
-            if (Build.VERSION.SDK_INT < 23){
-                finish();
-            } else {
-                finishAndRemoveTask();
-            }
+            // API level 21
+            finishAndRemoveTask();
         }
     }
 
@@ -342,15 +339,20 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == (int)1) {
-            if (!mB.a()) showProjectSortingDialog();
+        switch (item.getItemId()) {
+            case 1:
+                if (!mB.a()) {
+                    showProjectSortingDialog();
+                    return true;
+                }
+                break;
+            default:
+                if (drawerToggle.a(item)) {
+                    return true;
+                }
+                break;
         }
-        //drawerToggle.onOptionsItemSelected(item)
-        if (drawerToggle.a(item)) {
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -364,14 +366,16 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
     public void onResume() {
         super.onResume();
         /* Check if the device is running low on storage space */
-        long freeMegabytes = GB.c();
+        long freeBytes = Environment.getExternalStorageDirectory().getFreeSpace();
+        long freeMegabytes = freeBytes / (1024 * 1024);
         if (freeMegabytes < 100 && freeMegabytes > 0) {
             showNoticeNotEnoughFreeStorageSpace();
         }
-        if (j() && storageAccessDenied != null && storageAccessDenied.j()) {
+        if (j() && storageAccessDenied != null) {
             storageAccessDenied.c();
         }
     }
+
 
     private void allFilesAccessCheck() {
         if (Build.VERSION.SDK_INT > 29) {
@@ -447,12 +451,11 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
     @Override
     // ViewPager.OnPageChangeListener#onPageSelected(int)
     public void b(int position) {
-        if (position == 0) {
-            if (j() && projectsFragment != null && projectsFragment.getProjectsCount() == 0) {
-                projectsFragment.refreshProjectsList();
-            }
+        if (position == 0 && j() && projectsFragment != null && projectsFragment.getProjectsCount() == 0) {
+            projectsFragment.refreshProjectsList();
             projectsFragment.showCreateNewProjectLayout();
         } else if (position == 1) {
+            //fab.hide()
             fab.c();
         }
     }
@@ -462,8 +465,8 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
         oB oB = new oB();
         try {
             File extractedStringsProvidedXml = new File(wq.m());
-            if (oB.a(getApplicationContext(), "localization/strings.xml") !=
-                    (extractedStringsProvidedXml.exists() ? extractedStringsProvidedXml.length() : 0)) {
+            long expectedLength = oB.a(getApplicationContext(), "localization/strings.xml");
+            if (extractedStringsProvidedXml.exists() && extractedStringsProvidedXml.length() != expectedLength) {
                 oB.a(extractedStringsProvidedXml);
                 oB.a(getApplicationContext(), "localization/strings.xml", wq.m());
             }
@@ -480,7 +483,7 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
                     0, 80, 0, 128).show();
         }
     }
-
+    /* //original
     private class PagerAdapter extends gg {
 
         public PagerAdapter(Xf xf) {
@@ -510,6 +513,36 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
         @Override
         // PagerAdapter#getPageTitle(int)
         public CharSequence a(int position) {
+            return Helper.getResString(R.string.main_tab_title_myproject);
+        }
+    } */
+    private class PagerAdapter extends FragmentPagerAdapter {
+
+        public PagerAdapter(Xf xf) {
+            super(xf);
+        }
+
+        @Override
+        public int getCount() {
+            return 1;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return new ProjectsFragment();
+        }
+
+        @Override
+        public void instantiateItem(ViewGroup container, int position) {
+            super.instantiateItem(container, position);
+            ProjectsFragment fragment = (ProjectsFragment) getItem(position);
+            if (fragment != null) {
+                projectsFragment = fragment;
+            }
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
             return Helper.getResString(R.string.main_tab_title_myproject);
         }
     }
