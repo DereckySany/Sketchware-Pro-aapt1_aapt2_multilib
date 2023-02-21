@@ -1,5 +1,6 @@
 package dev.derecky.sany.editor.tools.translateapi;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -17,109 +18,84 @@ import java.net.URLEncoder;
 
 import static android.content.ContentValues.TAG;
 
-/**
- * Created by hello on 16-Aug-18.
- */
-
 public class TranslateAPI {
 
-    String resp = null;
-    String url = null;
-    String langFrom = null;
-    String langTo = null;
-    String word = null;
+    private static final String API_BASE_URL = "https://translate.googleapis.com/translate_a/single";
+    private static final String USER_AGENT = "Mozilla/5.0";
 
-    public TranslateAPI(String langFrom, String langTo, String text){
-        this.langFrom=langFrom;
-        this.langTo=langTo;
-        this.word=text;
-
-        Async async = new Async();
-        async.execute();
-    }
-
-
-    class Async extends AsyncTask<String,String,String>{
-        @Override
-        protected String doInBackground(String... strings) {
-            try {
-                url = "https://translate.googleapis.com/translate_a/single?"+"client=gtx&"+"sl="+
-                        langFrom +"&tl=" + langTo +"&dt=t&q=" + URLEncoder.encode(word, "UTF-8");
-                URL obj = new URL(url);
-                HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-                con.setRequestProperty("User-Agent", "Mozilla/5.0");
-                BufferedReader in = new BufferedReader(     new InputStreamReader(con.getInputStream()));
-                String inputLine;
-                StringBuffer response = new StringBuffer();
-                while ((inputLine = in.readLine()) != null)
-                {    response.append(inputLine);   }
-                in.close();
-                resp = response.toString();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            String temp = "";
-
-            if(resp==null){listener.onFailure("Network Error");}else {
-            try {
-                JSONArray main = new JSONArray(resp);
-                JSONArray total = (JSONArray) main.get(0);
-                for (int i = 0; i < total.length(); i++) {
-                    JSONArray currentLine = (JSONArray) total.get(i);
-                    temp = temp + currentLine.get(0).toString();
-                }
-                Log.d(TAG, "onPostExecute: "+temp);
-
-                if(temp.length()>2)
-                {
-                    listener.onSuccess(temp);
-                }else {listener.onFailure("Invalid Input String");}
-            } catch (JSONException e) {
-                listener.onFailure(e.getLocalizedMessage());
-                e.printStackTrace();
-            }}
-            super.onPostExecute(s);
-        }
-
-        @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected void onCancelled(String s) {
-            super.onCancelled(s);
-        }
-    }
-
+    private final String langFrom;
+    private final String langTo;
+    private final String word;
     private TranslateListener listener;
 
-    public void setTranslateListener(TranslateListener listener)
-    {
-        this.listener=listener;
+    public TranslateAPI(String langFrom, String langTo, String text) {
+        this.langFrom = langFrom;
+        this.langTo = langTo;
+        this.word = text;
     }
 
-    public interface TranslateListener
-    {
-        public void onSuccess(String translatedText);
-
-        public void onFailure(String ErrorText);
+    public void setTranslateListener(TranslateListener listener) {
+        this.listener = listener;
     }
 
+    public void execute() {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                try {
+                    Uri.Builder builder = Uri.parse(API_BASE_URL).buildUpon()
+                            .appendQueryParameter("client", "gtx")
+                            .appendQueryParameter("sl", langFrom)
+                            .appendQueryParameter("tl", langTo)
+                            .appendQueryParameter("dt", "t")
+                            .appendQueryParameter("q", URLEncoder.encode(word, "UTF-8"));
+                    URL url = new URL(builder.toString());
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestProperty("User-Agent", USER_AGENT);
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                    reader.close();
+                    return response.toString();
+                } catch (IOException e) {
+                    Log.e(TAG, "Failed to execute translation API request", e);
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String response) {
+                if (response == null) {
+                    listener.onFailure("Network error");
+                    return;
+                }
+                try {
+                    JSONArray main = new JSONArray(response);
+                    JSONArray total = main.getJSONArray(0);
+                    StringBuilder builder = new StringBuilder();
+                    for (int i = 0; i < total.length(); i++) {
+                        JSONArray currentLine = total.getJSONArray(i);
+                        builder.append(currentLine.getString(0));
+                    }
+                    String translatedText = builder.toString();
+                    if (translatedText.length() > 2) {
+                        listener.onSuccess(translatedText);
+                    } else {
+                        listener.onFailure("Invalid input string");
+                    }
+                } catch (JSONException e) {
+                    listener.onFailure(e.getLocalizedMessage());
+                }
+            }
+        }.execute();
+    }
+
+	public interface TranslateListener {
+		void onSuccess(String translatedText);
+
+		void onFailure(String ErrorText);
+    }
 }
