@@ -53,7 +53,7 @@ import mod.hilal.saif.asd.AsdDialog;
 import mod.hilal.saif.asd.asdforall.AsdAllEditor;
 import mod.hilal.saif.asd.old.AsdOldDialog;
 // new
-import com.github.iammannan.translate.TranslateAPI;
+import dev.derecky.sany.editor.tools.translateapi.TranslationAPI;
 
 
 @SuppressLint("ViewConstructor")
@@ -321,10 +321,10 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             String translatedText;
             String text = input.getText().toString();
             try {
-                translatedText = new TranslationAPI().translate("auto", "pt", text);
+                translatedText = TranslationAPI.translate("auto", "pt", text);
                 input.setText(translatedText);
                 Toast.makeText(context, "Conteúdo traduzido para o Português!", Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
+            } catch (IOException | JSONException e) {
                 String errorMessage = "Erro ao traduzir o texto: " + e.getMessage();
                 showTranslationErrorDialog(errorMessage);
             }
