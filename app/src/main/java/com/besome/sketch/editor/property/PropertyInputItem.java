@@ -21,6 +21,11 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.lang.InterruptedException;
 
+import java.net.ConnectException;
+import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+
 import com.besome.sketch.beans.ProjectFileBean;
 import com.besome.sketch.editor.LogicEditorActivity;
 import com.sketchware.remod.R;
