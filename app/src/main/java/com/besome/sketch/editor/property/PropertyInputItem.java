@@ -356,7 +356,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
                         try {
                             translatedText = String.valueOf(new TranslateAPI("auto", targetLanguageCode, text));
                             input.setText(translatedText);
-                            Toast.makeText(context, "Conteúdo traduzido para o " + selectedLanguage + "!", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(context, "Conteúdo traduzido para o " + selectedLanguage + "!", Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
                             String errorMessage = "Erro ao traduzir o texto: " + e.getMessage();
                             showTranslationErrorDialog(errorMessage);
