@@ -113,26 +113,6 @@ public class ResourceCompiler {
         }
     }
 
-    /*
-    // original
-    static class Aapt2Compiler implements Compiler {
-
-        private final boolean buildAppBundle;
-
-        private final File aapt2;
-        private final Dp buildHelper;
-        private final File compiledBuiltInLibraryResourcesDirectory;
-        private ProgressListener progressListener;
-
-        public Aapt2Compiler(Dp buildHelper, File aapt2, boolean buildAppBundle) {
-            this.buildHelper = buildHelper;
-            this.aapt2 = aapt2;
-            this.buildAppBundle = buildAppBundle;
-            compiledBuiltInLibraryResourcesDirectory = new File(SketchApplication.getContext().getCacheDir(), "compiledLibs");
-        }
-    }
-    */
-
     /**
      * A {@link Compiler} implementing AAPT2.
      */
@@ -199,34 +179,6 @@ public class ResourceCompiler {
             LogUtil.d(TAG + ":c", "Resource compilation completed in " + totalTime + " ms");
             link();
         }
-
-        /*
-        // original
-        @Override
-        public void compile() throws zy, MissingFileException {
-            String outputPath = buildHelper.yq.binDirectoryPath + File.separator + "res";
-            emptyOrCreateDirectory(outputPath);
-
-            long savedTimeMillis = System.currentTimeMillis();
-            if (progressListener != null) {
-                progressListener.onProgressUpdate("Compiling resources with AAPT2...");
-            }
-            compileBuiltInLibraryResources();
-            LogUtil.d(TAG + ":c", "Compiling built-in library resources took " + (System.currentTimeMillis() - savedTimeMillis) + " ms");
-            savedTimeMillis = System.currentTimeMillis();
-            compileLocalLibraryResources(outputPath);
-            LogUtil.d(TAG + ":c", "Compiling local library resources took " + (System.currentTimeMillis() - savedTimeMillis) + " ms");
-            savedTimeMillis = System.currentTimeMillis();
-            compileProjectResources(outputPath);
-            LogUtil.d(TAG + ":c", "Compiling project generated resources took " + (System.currentTimeMillis() - savedTimeMillis) + " ms");
-            savedTimeMillis = System.currentTimeMillis();
-            compileImportedResources(outputPath);
-            LogUtil.d(TAG + ":c", "Compiling project imported resources took " + (System.currentTimeMillis() - savedTimeMillis) + " ms");
-
-            savedTimeMillis = System.currentTimeMillis();
-            link();
-            LogUtil.d(TAG + ":c", "Linking resources took " + (System.currentTimeMillis() - savedTimeMillis) + " ms");
-        }*/
 
         /**
          * Links the project's resources using AAPT2.
@@ -366,28 +318,6 @@ public class ResourceCompiler {
             }
         }
 
-        /*
-        // original
-        private void compileProjectResources(String outputPath) throws zy, MissingFileException {
-            compilingAssertDirectoryExists(buildHelper.yq.resDirectoryPath);
-
-            ArrayList<String> commands = new ArrayList<>();
-            commands.add(aapt2.getAbsolutePath());
-            commands.add("compile");
-            commands.add("--dir");
-            commands.add(buildHelper.yq.resDirectoryPath);
-            commands.add("-o");
-            commands.add(outputPath + File.separator + "project.zip");
-            LogUtil.d(TAG + ":cPR", "Now executing: " + commands);
-            BinaryExecutor executor = new BinaryExecutor();
-            executor.setCommands(commands);
-            if (!executor.execute().isEmpty()) {
-                LogUtil.e(TAG, executor.getLog());
-                throw new zy(executor.getLog());
-            }
-        } */
-
-        //
         private void compileProjectResources(String outputPath) throws zy, MissingFileException {
             ArrayList<String> commands = generateAapt2CompileCommand(buildHelper.yq.resDirectoryPath, outputPath + File.separator + "project.zip");
             LogUtil.d(TAG + ":cPR", "Now executing: " + commands);
@@ -410,53 +340,11 @@ public class ResourceCompiler {
             return commands;
         }
 
-        //
-
         private void emptyOrCreateDirectory(String path) {
             FileUtil.deleteFile(path);
             FileUtil.makeDir(path);
         }
 
-        /*
-        // original
-        private void emptyOrCreateDirectory(String path) {
-            if (FileUtil.isExistFile(path)) {
-                FileUtil.deleteFile(path);
-            }
-            FileUtil.makeDir(path);
-        }
-        */
-        /*
-        // original
-        private void compileLocalLibraryResources(String outputPath) throws zy, MissingFileException {
-            int localLibrariesCount = buildHelper.mll.getResLocalLibrary().size();
-            LogUtil.d(TAG + ":cLLR", "About to compile " + localLibrariesCount
-                    + " local " + (localLibrariesCount == 1 ? "library" : "libraries"));
-            for (String localLibraryResDirectory : buildHelper.mll.getResLocalLibrary()) {
-                File localLibraryDirectory = new File(localLibraryResDirectory).getParentFile();
-                if (localLibraryDirectory != null) {
-                    compilingAssertDirectoryExists(localLibraryResDirectory);
-
-                    ArrayList<String> commands = new ArrayList<>();
-                    commands.add(aapt2.getAbsolutePath());
-                    commands.add("compile");
-                    commands.add("--dir");
-                    commands.add(localLibraryResDirectory);
-                    commands.add("-o");
-                    commands.add(outputPath + File.separator + localLibraryDirectory.getName() + ".zip");
-
-                    LogUtil.d(TAG + ":cLLR", "Now executing: " + commands);
-                    BinaryExecutor executor = new BinaryExecutor();
-                    executor.setCommands(commands);
-                    if (!executor.execute().isEmpty()) {
-                        LogUtil.e(TAG, executor.getLog());
-                        throw new zy(executor.getLog());
-                    }
-                }
-            }
-        }
-        */
-        //
         private void compileLocalLibraryResources(String outputPath) throws zy, MissingFileException {
             List<String> localLibraryResDirectories = buildHelper.mll.getResLocalLibrary();
             int localLibrariesCount = localLibraryResDirectories.size();
@@ -547,42 +435,6 @@ public class ResourceCompiler {
             }
         }
 
-        //
-        /*
-        private void compileBuiltInLibraryResources() throws zy, MissingFileException {
-            compiledBuiltInLibraryResourcesDirectory.mkdirs();
-            for (Jp builtInLibrary : buildHelper.builtInLibraryManager.a()) {
-                if (builtInLibrary.c()) {
-                    Context context = SketchApplication.getContext();
-                    File cachedCompiledResources = new File(compiledBuiltInLibraryResourcesDirectory, builtInLibrary.a() + ".zip");
-                    String libraryResources = BuiltInLibraries.getLibraryResourcesPath(builtInLibrary.a());
-
-                    compilingAssertDirectoryExists(libraryResources);
-
-                    if (isBuiltInLibraryRecompilingNeeded(cachedCompiledResources,context)) {
-                        ArrayList<String> commands = new ArrayList<>();
-                        commands.add(aapt2.getAbsolutePath());
-                        commands.add("compile");
-                        commands.add("--dir");
-                        commands.add(libraryResources);
-                        commands.add("-o");
-                        commands.add(cachedCompiledResources.getAbsolutePath());
-
-                        LogUtil.d(TAG + ":cBILR", "Now executing: " + commands);
-                        BinaryExecutor executor = new BinaryExecutor();
-                        executor.setCommands(commands);
-                        if (!executor.execute().isEmpty()) {
-                            LogUtil.e(TAG + ":cBILR", executor.getLog());
-                            throw new zy(executor.getLog());
-                        }
-                    } else {
-                        LogUtil.d(TAG + ":cBILR", "Skipped resource recompilation for built-in library " + builtInLibrary.a());
-                    }
-                }
-            }
-        }
-        */
-
         private boolean isBuiltInLibraryRecompilingNeeded(File cachedCompiledResources, Context context) {
             if (cachedCompiledResources.exists()) {
                 try {
@@ -597,67 +449,7 @@ public class ResourceCompiler {
             }
             return true;
         }
-        /*
-        //original
-        private boolean isBuiltInLibraryRecompilingNeeded(File cachedCompiledResources) {
-            if (cachedCompiledResources.exists()) {
-                try {
-                    Context context = SketchApplication.getContext();
-                    return context.getPackageManager().getPackageInfo(context.getPackageName(), 0)
-                            .lastUpdateTime > cachedCompiledResources.lastModified();
-                } catch (PackageManager.NameNotFoundException e) {
-                    LogUtil.e(TAG + ":iBILRN", "Couldn't get package info about ourselves: " + e.getMessage(), e);
-                }
-            } else {
-                LogUtil.d(TAG + ":iBILRN", "File " + cachedCompiledResources.getAbsolutePath()
-                        + " doesn't exist, forcing compilation");
-            }
-            return true;
-        }
-        */
-
-        /*
-        // original
-        private void compileImportedResources(String outputPath) throws zy {
-            if (FileUtil.isExistFile(buildHelper.fpu.getPathResource(buildHelper.yq.sc_id))
-                    && new File(buildHelper.fpu.getPathResource(buildHelper.yq.sc_id)).length() != 0) {
-                ArrayList<String> commands = new ArrayList<>();
-                commands.add(aapt2.getAbsolutePath());
-                commands.add("compile");
-                commands.add("--dir");
-                commands.add(buildHelper.fpu.getPathResource(buildHelper.yq.sc_id));
-                commands.add("-o");
-                commands.add(outputPath + File.separator + "project-imported.zip");
-                LogUtil.d(TAG + ":cIR", "Now executing: " + commands);
-                BinaryExecutor executor = new BinaryExecutor();
-                executor.setCommands(commands);
-                if (!executor.execute().isEmpty()) {
-                    LogUtil.e(TAG, executor.getLog());
-                    throw new zy(executor.getLog());
-                }
-            }
-        } 
-        // new
-        private void compileImportedResources(String outputPath) throws zy {
-            if (FileUtil.isExistFile(buildHelper.fpu.getPathResource(buildHelper.yq.sc_id))
-                    && new File(buildHelper.fpu.getPathResource(buildHelper.yq.sc_id)).length() != 0) {
-                //String aapt2 = "path/to/aapt2/binary";
-                String binAapt2 = aapt2.getAbsolutePath();
-                String resourceDir = buildHelper.fpu.getPathResource(buildHelper.yq.sc_id);
-                String outputZip = outputPath + File.separator + "project-imported.zip";
-                try {
-                    ProcessBuilder processBuilder = new ProcessBuilder(binAapt2, "compile", "--dir", resourceDir, "-o", outputZip);
-                    Process process = processBuilder.start();
-                    int exitCode = process.waitFor();
-                    if (exitCode != 0) {
-                        throw new zy("aapt2 compilation failed with exit code " + exitCode);
-                    }
-                } catch (IOException | InterruptedException e) {
-                    throw new zy("aapt2 compilation failed", e);
-                }
-            }
-        }
-        */
+        
         private void compileImportedResources(String outputPath) throws zy {
             String resourceDir = buildHelper.fpu.getPathResource(buildHelper.yq.sc_id);
             if (!FileUtil.isExistFile(resourceDir) || new File(resourceDir).length() == 0) {
