@@ -52,6 +52,9 @@ import mod.hilal.saif.activities.tools.ConfigActivity;
 import mod.hilal.saif.asd.AsdDialog;
 import mod.hilal.saif.asd.asdforall.AsdAllEditor;
 import mod.hilal.saif.asd.old.AsdOldDialog;
+// new
+import com.github.iammannan.translate.TranslateAPI;
+
 
 @SuppressLint("ViewConstructor")
 public class PropertyInputItem extends RelativeLayout implements View.OnClickListener {
@@ -336,38 +339,17 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         });
         dialog.show();
     }
-    // disablitada
-    /*
-    private String translate(String text) {
+    private String translate(String text) throws Exception {
+        String translatedText = null;
         try {
-            String encodedText = URLEncoder.encode(text, "UTF-8");
-            String urlStr = "https://translate.google.com/?sl=auto&tl=pt&text=" + encodedText;
-            URL url = new URL(urlStr);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestProperty("User-Agent", "Mozilla/5.0");
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-            String result = "";
-            String line;
-            while ((line = in.readLine()) != null) {
-                result += line;
-            }
-            in.close();
-            String translated = result.substring(result.indexOf("<span title=\"") + 13, result.indexOf("\">", result.indexOf("<span title=\"") + 13));
-            return translated;
-        } catch (IOException e) {
-//            e.printStackTrace();
-            String errorMessage = "Ocorreu um erro ao acessar o site para traduzir o texto: " + e.getMessage();
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("Erro");
-            builder.setMessage(errorMessage);
-            builder.setPositiveButton("OK", null);
-            AlertDialog translatederror = builder.create();
-            translatederror.show();
+            translatedText = new TranslationAPI().translate("auto", "pt", text);
+        } catch (Exception e) {
+            throw new Exception("Erro ao traduzir o texto: " + e.getMessage());
         }
-        return null;
+        return translatedText;
     }
-    */
 
+    /* // metodo original
     private String translate(String text) {
         try {
             String encodedText = URLEncoder.encode(text, "UTF-8");
@@ -412,7 +394,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         }
         return null;
     }
-
+    */
 
     private void showNumberDecimalInputDialog(int minValue, int maxValue) {
         aB dialog = new aB((Activity) getContext());
