@@ -351,7 +351,9 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
                         String text = input.getText().toString();
 
                         try {
-                            new TranslateAPI("auto", targetLanguageCode, text).setTranslateListener(new TranslateAPI.TranslateListener() {
+                            TranslateAPI translator = new TranslateAPI("auto", targetLanguageCode, text);
+
+                            translator.setTranslateListener(new TranslateAPI.TranslateListener() {
                                 @Override
                                 public void onSuccess(String translatedText) {
                                     //Log.d(TAG, "Translated text: " + translatedText);
@@ -364,6 +366,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
                                     showTranslationErrorDialog(errorText);
                                 }
                             });
+                            translator.execute();
                             //Toast.makeText(context, "Conteúdo traduzido para o " + selectedLanguage + "!", Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
                             String errorMessage = "Erro ao traduzir o texto: " + e.getMessage();
