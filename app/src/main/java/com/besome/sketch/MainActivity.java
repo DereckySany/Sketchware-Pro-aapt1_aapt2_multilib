@@ -516,12 +516,12 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
             return Helper.getResString(R.string.main_tab_title_myproject);
         }
     } */
-    private class PagerAdapter extends FragmentPagerAdapter {
+    private class PagerAdapter extends gg {
 
         private ProjectsFragment projectsFragment;
 
         public PagerAdapter(FragmentManager xf) {
-            super(xf, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+            super(xf, gg.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
         @Override
