@@ -287,6 +287,15 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         dialog.show();
     }
 
+    private void showTranslationErrorDialog(String errorMessage) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Erro");
+        builder.setMessage(errorMessage);
+        builder.setPositiveButton("OK", null);
+        AlertDialog errorDialog = builder.create();
+        errorDialog.show();
+    }
+
     private void showTextInputDialog(int minValue, int maxValue) {
         aB dialog = new aB((Activity) getContext());
         dialog.b(tvName.getText().toString());
@@ -298,26 +307,26 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         dialog.a(view);
         dialog.b(Helper.getResString(R.string.common_word_save), v -> {
             if (lengthValidator.b()) {
-                setValue(input.getText().toString());
-                if (valueChangeListener != null) valueChangeListener.a(key, value);
-                dialog.dismiss();
+                try {
+                    setValue(input.getText().toString());
+                    if (valueChangeListener != null) valueChangeListener.a(key, value);
+                    dialog.dismiss();
+                } catch (Exception e) {
+                    String errorMessage = "Erro ao salvar valor: " + e.getMessage();
+                    showSavingErrorDialog(errorMessage);
+                }
             }
         });
         dialog.a(v ->{
             String translatedText;
             String text = input.getText().toString();
             try {
-                translatedText = translate(text);
+                translatedText = new TranslationAPI().translate("auto", "pt", text);
                 input.setText(translatedText);
                 Toast.makeText(context, "Conteúdo traduzido para o Português!", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
-                String errorMessage = "Ocorreu um erro ao traduzir o texto: " + e.getMessage();
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("Erro");
-                builder.setMessage(errorMessage);
-                builder.setPositiveButton("OK", null);
-                AlertDialog errorlog = builder.create();
-                errorlog.show();
+                String errorMessage = "Erro ao traduzir o texto: " + e.getMessage();
+                showTranslationErrorDialog(errorMessage);
             }
         });
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
@@ -338,15 +347,6 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             dialog.dismiss();
         });
         dialog.show();
-    }
-    private String translate(String text) throws Exception {
-        String translatedText = null;
-        try {
-            translatedText = new TranslationAPI().translate("auto", "pt", text);
-        } catch (Exception e) {
-            throw new Exception("Erro ao traduzir o texto: " + e.getMessage());
-        }
-        return translatedText;
     }
 
     /* // metodo original
