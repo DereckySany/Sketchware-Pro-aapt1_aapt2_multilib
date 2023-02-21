@@ -48,7 +48,6 @@ public class ManageLocalLibraryActivity extends Activity
     private static final String RESET_LOCAL_LIBRARIES_TAG = "reset_local_libraries";
 
     private LibraryAdapter adapter;
-    //    private List<String> arrayList = new ArrayList<>();
     private ArrayList<String> arrayList = new ArrayList<>();
     private boolean notAssociatedWithProject = false;
     private ListView listview;
@@ -121,11 +120,12 @@ public class ManageLocalLibraryActivity extends Activity
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.ig_toolbar_load_file) {
+            if (Build.VERSION.SDK_INT > 26){
             new AlertDialog.Builder(this)
-                    .setTitle("Escolha o compilador")
-                    .setMessage("Você gostaria de usar DX, D8 ou R8 para compilar a biblioteca?\n" +
-                            "D8 suporta Java 8, enquanto que o DX não suporta. Limitação: o D8 só funciona no Android 8 e acima.\n" +
-                            "O R8 é o novo compilador oficial do Android Studio.")
+                    .setTitle("Choose compiler")
+                    .setMessage("Would you like to use DX, D8 or R8 to compile the library?\n" +
+                             "D8 supports Java 8, while DX does not. Limitation: D8 only works on Android 8 and above.\n" +
+                             "R8 is the new official Android Studio compiler.(but in alpha here!)")
                     .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
                             "D8").showDialog(ManageLocalLibraryActivity.this))
                     .setNegativeButton("DX", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, false,
@@ -135,9 +135,9 @@ public class ManageLocalLibraryActivity extends Activity
                     .setCancelable(true)
                     .show();
 
-            /*
+            } else {
             new AlertDialog.Builder(this)
-                    .setTitle("Dexer")
+                    .setTitle("Choose compiler")
                     .setMessage("Would you like to use Dx or D8 to dex the library?\n" +
                             "D8 supports Java 8, whereas Dx does not. Limitation: D8 only works on Android 8 and above.")
                     .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this,
@@ -146,7 +146,7 @@ public class ManageLocalLibraryActivity extends Activity
                             false).showDialog(ManageLocalLibraryActivity.this))
                     .setNeutralButton("Cancel", null)
                     .show();
-            */
+            }
         } else if (RESET_LOCAL_LIBRARIES_TAG.equals(v.getTag())) {
             if (!notAssociatedWithProject) {
                 aB dialog = new aB(this);
@@ -204,34 +204,6 @@ public class ManageLocalLibraryActivity extends Activity
     // original
     /*
     private void loadFiles() {
-        if (!notAssociatedWithProject) {
-            if (!FileUtil.isExistFile(configurationFilePath)
-                    || FileUtil.readFile(configurationFilePath).equals("")) {
-                FileUtil.writeFile(configurationFilePath, "[]");
-            } else {
-                project_used_libs = new Gson().fromJson(FileUtil.readFile(configurationFilePath), Helper.TYPE_MAP_LIST);
-            }
-        }
-
-        List<String> localLibraryNames = new LinkedList<>();
-        FileUtil.listDir(local_libs_path, localLibraryNames);
-
-        List<String> directories = new LinkedList<>();
-        for (String filename : localLibraryNames) {
-            if (FileUtil.isDirectory(filename)) {
-                directories.add(Uri.parse(filename).getLastPathSegment());
-            }
-        }
-        Collections.sort(directories, String.CASE_INSENSITIVE_ORDER);
-
-        adapter = new LibraryAdapter(directories);
-        arrayList.addAll(directories);
-        Collections.sort(arrayList, String.CASE_INSENSITIVE_ORDER);
-        adapter.updateData(arrayList);
-        listview.setAdapter(adapter);
-    }
-    */
-    private void loadFiles() {
         if (notAssociatedWithProject) {
             return;
         }
@@ -241,7 +213,6 @@ public class ManageLocalLibraryActivity extends Activity
         } else {
             project_used_libs = new Gson().fromJson(FileUtil.readFile(configurationFilePath), Helper.TYPE_MAP_LIST);
         }
-
         List<String> localLibraryNames = new LinkedList<>();
         FileUtil.listDir(local_libs_path, localLibraryNames);
 
@@ -256,6 +227,40 @@ public class ManageLocalLibraryActivity extends Activity
         adapter = new LibraryAdapter(directories);
         arrayList.clear();
         arrayList.addAll(directories);
+        adapter.updateData(arrayList);
+        listview.setAdapter(adapter);
+    }
+    */
+    private void loadFiles() {
+        arrayList.clear();
+        if (notAssociatedWithProject) {
+            return;
+        }
+
+        if (!FileUtil.isExistFile(configurationFilePath) || FileUtil.readFile(configurationFilePath).equals("")) {
+            FileUtil.writeFile(configurationFilePath, "[]");
+        } else {
+            project_used_libs = new Gson().fromJson(FileUtil.readFile(configurationFilePath), Helper.TYPE_MAP_LIST);
+        }
+
+        List<String> localLibraryNames = new LinkedList<>();
+        FileUtil.listDir(local_libs_path, localLibraryNames);
+
+        Set<String> uniqueDirectories = new HashSet<>();
+        for (String filename : localLibraryNames) {
+            if (FileUtil.isDirectory(filename)) {
+                String directoryName = Uri.parse(filename).getLastPathSegment();
+                uniqueDirectories.add(directoryName);
+            }
+        }
+
+        List<String> directories = new LinkedList<>(uniqueDirectories);
+        Collections.sort(directories, String.CASE_INSENSITIVE_ORDER);
+
+        adapter = new LibraryAdapter(directories);
+        arrayList.clear(); // Limpa a lista antes de adicionar novos itens
+        arrayList.addAll(directories);
+        Collections.sort(arrayList, String.CASE_INSENSITIVE_ORDER);
         adapter.updateData(arrayList);
         listview.setAdapter(adapter);
     }
