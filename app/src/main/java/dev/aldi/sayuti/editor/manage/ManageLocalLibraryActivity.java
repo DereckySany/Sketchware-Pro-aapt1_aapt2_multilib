@@ -228,7 +228,7 @@ public class ManageLocalLibraryActivity extends Activity
         adapter = new LibraryAdapter(localLibraryNames);
         listview.setAdapter(adapter);
     }
-    */
+    // secunde
     private void loadFiles() {
        if (!notAssociatedWithProject) {
            if (!FileUtil.isExistFile(configurationFilePath)
@@ -253,8 +253,35 @@ public class ManageLocalLibraryActivity extends Activity
 
        adapter = new LibraryAdapter(localLibraryNames);
        arrayList.addAll(directories);
-       Collections.sort(arrayList, String.CASE_INSENSITIVE_ORDER);]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+       Collections.sort(arrayList, String.CASE_INSENSITIVE_ORDER);
        listview.setAdapter(adapter);
+    } */
+    
+    private void loadFiles() {
+        if (!notAssociatedWithProject) {
+            if (!FileUtil.isExistFile(configurationFilePath)
+                    || FileUtil.readFile(configurationFilePath).equals("")) {
+                FileUtil.writeFile(configurationFilePath, "[]");
+            } else {
+                project_used_libs = new Gson().fromJson(FileUtil.readFile(configurationFilePath), Helper.TYPE_MAP_LIST);
+            }
+        }
+
+        List<String> localLibraryNames = new LinkedList<>();
+        FileUtil.listDir(local_libs_path, localLibraryNames);
+
+        List<String> directories = new LinkedList<>();
+        for (String filename : localLibraryNames) {
+            if (FileUtil.isDirectory(filename)) {
+                directories.add(Uri.parse(filename).getLastPathSegment());
+            }
+        }
+        Collections.sort(directories, String.CASE_INSENSITIVE_ORDER);
+
+        adapter = new LibraryAdapter(directories);
+        arrayList.addAll(directories);
+        Collections.sort(arrayList, String.CASE_INSENSITIVE_ORDER);
+        listview.setAdapter(adapter);
     }
 
     private void applyFilter(String query) {
