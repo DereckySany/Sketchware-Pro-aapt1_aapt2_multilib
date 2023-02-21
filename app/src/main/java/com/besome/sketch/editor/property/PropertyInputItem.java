@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.text.InputType;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -30,6 +31,8 @@ import com.besome.sketch.beans.ProjectFileBean;
 import com.besome.sketch.editor.LogicEditorActivity;
 import com.sketchware.remod.R;
 
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -48,12 +51,9 @@ import a.a.a.mB;
 import a.a.a.uq;
 import a.a.a.wB;
 import mod.hey.studios.util.Helper;
-import mod.hilal.saif.activities.tools.ConfigActivity;
-import mod.hilal.saif.asd.AsdDialog;
 import mod.hilal.saif.asd.asdforall.AsdAllEditor;
-import mod.hilal.saif.asd.old.AsdOldDialog;
 // new
-import dev.derecky.sany.editor.tools.translateapi.TranslationAPI;
+import dev.derecky.sany.editor.tools.translateapi.*;
 
 
 @SuppressLint("ViewConstructor")
@@ -313,37 +313,66 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
                     dialog.dismiss();
                 } catch (Exception e) {
                     String errorMessage = "Erro ao salvar valor: " + e.getMessage();
-                    showSavingErrorDialog(errorMessage);
+                    showTranslationErrorDialog(errorMessage);
                 }
             }
         });
+        /*
         dialog.a(v ->{
+
             String translatedText;
             String text = input.getText().toString();
-            try {
-                translatedText = TranslationAPI.translate("auto", "pt", text);
-                input.setText(translatedText);
-                Toast.makeText(context, "Conteúdo traduzido para o Português!", Toast.LENGTH_SHORT).show();
-            } catch (IOException | JSONException e) {
-                String errorMessage = "Erro ao traduzir o texto: " + e.getMessage();
-                showTranslationErrorDialog(errorMessage);
-            }
+            translatedText = String.valueOf(new TranslateAPI("auto", "pt", text));
+            input.setText(translatedText);
+            Toast.makeText(context, "Conteúdo traduzido para o Português!", Toast.LENGTH_SHORT).show();
+        });
+        */
+            String[] languageOptions = {"Inglês", "Espanhol", "Português"};
+
+            // Cria o dialog para selecionar o idioma
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Selecione o idioma para tradução")
+                    .setItems(languageOptions, (dialog1, which) -> {
+                        // Obtém o idioma selecionado
+                        String selectedLanguage = languageOptions[which];
+                        String targetLanguageCode = "";
+                        switch (selectedLanguage) {
+                            case "Inglês":
+                                targetLanguageCode = "en";
+                                break;
+                            case "Espanhol":
+                                targetLanguageCode = "es";
+                                break;
+                            case "Português":
+                                targetLanguageCode = "pt";
+                                break;
+                        }
+
+                        // Obtém o texto de entrada
+                        String text = input.getText().toString();
+
+                        // Traduz o texto
+                        String translatedText;
+                        try {
+                            translatedText = String.valueOf(new TranslateAPI("auto", targetLanguageCode, text));
+                            input.setText(translatedText);
+                            Toast.makeText(context, "Conteúdo traduzido para o " + selectedLanguage + "!", Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            String errorMessage = "Erro ao traduzir o texto: " + e.getMessage();
+                            showTranslationErrorDialog(errorMessage);
+                        }
+                    });
+        dialog.a(v ->{
+            // Abre o dialog para selecionar o idioma
+            builder.show();
         });
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.configureDefaultButton("Code Editor", v -> {
-            if (ConfigActivity.isLegacyCeEnabled()) {
-                AsdOldDialog asdOldDialog = new AsdOldDialog((Activity) this.getContext());
-                asdOldDialog.setCon(input.getText().toString());
-                asdOldDialog.show();
-                asdOldDialog.saveLis(logicEditor, false, null, asdOldDialog);
-                asdOldDialog.cancelLis(logicEditor, asdOldDialog);
-            } else {
-                AsdDialog asdDialog = new AsdDialog((Activity) context.getApplicationContext());
-                asdDialog.setCon(input.getText().toString());
-                asdDialog.show();
-                asdDialog.saveLis(logicEditor, false, null, asdDialog);
-                asdDialog.cancelLis(asdDialog);
-            }
+            AsdAllEditor editor = new AsdAllEditor((Activity) this.getContext());
+            editor.setCon(input.getText().toString());
+            editor.show();
+            editor.saveLis(logicEditor, null, editor);
+            editor.cancelLis(logicEditor, editor);
             dialog.dismiss();
         });
         dialog.show();
