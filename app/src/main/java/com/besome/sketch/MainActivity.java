@@ -1,6 +1,7 @@
 package com.besome.sketch;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -35,7 +36,6 @@ import java.io.File;
 import java.io.IOException;
 
 import a.a.a.DB;
-import a.a.a.GB;
 import a.a.a.Xf;
 import a.a.a.aB;
 import a.a.a.bB;
@@ -189,6 +189,7 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
             u.a("U1I0", Integer.valueOf(u1I0 + 1));
         }
 
+        @SuppressLint("WrongViewCast")
         Toolbar toolbar = findViewById(R.id.toolbar);
         a(toolbar);
         d().d(true);
@@ -483,59 +484,21 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
                     0, 80, 0, 128).show();
         }
     }
-    /* //original
-    private class PagerAdapter extends gg {
 
+    private class PagerAdapter extends gg {
         public PagerAdapter(Xf xf) {
             super(xf);
         }
-
         @Override
-        // PagerAdapter#getCount()
         public int a() {
             return 1;
         }
-
         @Override
-        // FragmentPagerAdapter#instantiateItem(ViewGroup, int)
-        public Object a(ViewGroup container, int position) {
+        public Fragment a(ViewGroup container, int position) {
             Fragment fragment = (Fragment) super.a(container, position);
             projectsFragment = (ProjectsFragment) fragment;
             return fragment;
         }
-
-        @Override
-        // FragmentPagerAdapter#getItem(int)
-        public Fragment c(int position) {
-            return new ProjectsFragment();
-        }
-
-        @Override
-        // PagerAdapter#getPageTitle(int)
-        public CharSequence a(int position) {
-            return Helper.getResString(R.string.main_tab_title_myproject);
-        }
-    } */
-    private class PagerAdapter extends gg {
-
-        private ProjectsFragment projectsFragment;
-
-        public PagerAdapter(FragmentManager xf) {
-            super(xf, gg.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        }
-
-        @Override
-        public int a() {
-            return 1;
-        }
-
-        @Override
-        public Fragment a(ViewGroup container, int position) {
-            Fragment fragment = (Fragment) super.instantiateItem(container, position);
-            projectsFragment = (ProjectsFragment) fragment;
-            return fragment;
-        }
-
         @Override
         public Fragment c(int position) {
             return new ProjectsFragment();
@@ -546,5 +509,4 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
             return Helper.getResString(R.string.main_tab_title_myproject);
         }
     }
-
 }
