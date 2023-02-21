@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -32,8 +33,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import a.a.a.aB;
 import a.a.a.xB;
@@ -140,10 +143,10 @@ public class ManageLocalLibraryActivity extends Activity
                     .setTitle("Choose compiler")
                     .setMessage("Would you like to use Dx or D8 to dex the library?\n" +
                             "D8 supports Java 8, whereas Dx does not. Limitation: D8 only works on Android 8 and above.")
-                    .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this,
-                            true).showDialog(ManageLocalLibraryActivity.this))
-                    .setNegativeButton("Dx", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this,
-                            false).showDialog(ManageLocalLibraryActivity.this))
+                    .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
+                            "D8").showDialog(ManageLocalLibraryActivity.this))
+                    .setNegativeButton("DX", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, false,
+                            "Dx").showDialog(ManageLocalLibraryActivity.this))
                     .setNeutralButton("Cancel", null)
                     .show();
             }
@@ -236,13 +239,11 @@ public class ManageLocalLibraryActivity extends Activity
         if (notAssociatedWithProject) {
             return;
         }
-
         if (!FileUtil.isExistFile(configurationFilePath) || FileUtil.readFile(configurationFilePath).equals("")) {
             FileUtil.writeFile(configurationFilePath, "[]");
         } else {
             project_used_libs = new Gson().fromJson(FileUtil.readFile(configurationFilePath), Helper.TYPE_MAP_LIST);
         }
-
         List<String> localLibraryNames = new LinkedList<>();
         FileUtil.listDir(local_libs_path, localLibraryNames);
 

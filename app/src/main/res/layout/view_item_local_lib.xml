@@ -8,8 +8,9 @@
     android:paddingBottom="1.0pt"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/bg_rectangle_white"
     xmlns:android="http://schemas.android.com/apk/res/android">
- <!-- android:background="@drawable/bg_rectangle_white" -->
+ <!--  -->
     <LinearLayout
         android:gravity="center"
         android:padding="3.0pt"
