@@ -337,7 +337,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             editor.saveLis(logicEditor, null, editor);
             editor.cancelLis(logicEditor, editor);
             dialog.dismiss(); */
-            final Intent intent = new Intent();
+            Intent intent = new Intent();
 
             if (ConfigActivity.isLegacyCeEnabled()) {
                 intent.setClass(context.getApplicationContext(), SrcCodeEditorLegacy.class);
