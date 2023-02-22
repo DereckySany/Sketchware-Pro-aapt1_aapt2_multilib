@@ -297,7 +297,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         });
         dialog.a(v -> {
             // Abre o dialog para selecionar o idioma
-            showTranslationDialog(input).show();
+            showTranslationDialog(input).create().show();
         });
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.configureDefaultButton("Code Editor", v -> {
