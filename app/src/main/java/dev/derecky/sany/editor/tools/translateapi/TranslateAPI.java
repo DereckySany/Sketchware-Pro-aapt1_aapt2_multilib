@@ -16,6 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.URLDecoder;
 
 import static android.content.ContentValues.TAG;
 
@@ -62,7 +63,8 @@ public class TranslateAPI {
                     }
                     reader.close();
                     //return response.toString();
-                    return response.substring(response.indexOf("<span title=\"") + 13, response.indexOf("\">", response.indexOf("<span title=\"") + 13));
+                    //return URLDecoder.decode(response.substring(response.indexOf("<span title=\"") + 13, response.indexOf("\">", response.indexOf("<span title=\"") + 13)), "UTF-8");
+                    return URLDecoder.decode(response.toString(), "UTF-8");
                 } catch (IOException e) {
                     Log.e(TAG, "Failed to execute translation API request", e);
                     return null;
@@ -87,7 +89,7 @@ public class TranslateAPI {
                     if (translatedText.length() > 2) {
                         listener.onSuccess(translatedText);
                     } else {
-                        listener.onFailure("Invalid input string");
+                        listener.onFailure("Failed to translate the input text.");
                     }
                 } catch (JSONException e) {
                     listener.onFailure(e.getLocalizedMessage());
