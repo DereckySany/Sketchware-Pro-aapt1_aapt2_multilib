@@ -34,7 +34,7 @@
         android:id="@+id/dialog_radio_filetype"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:paddingLeft="20dp"
         android:paddingTop="5dp">
 

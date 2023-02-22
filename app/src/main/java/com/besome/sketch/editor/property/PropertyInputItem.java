@@ -42,7 +42,7 @@ import dev.derecky.sany.editor.tools.translateapi.*;
 
 @SuppressLint("ViewConstructor")
 public class PropertyInputItem extends RelativeLayout implements View.OnClickListener {
-
+    private static final int SRC_CODE_EDITOR_RESULT = 1;
     private Context context;
     private String key = "";
     private String value = "";
@@ -289,6 +289,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         SB lengthValidator = new SB(context, view.findViewById(R.id.ti_input), minValue, maxValue);
         lengthValidator.a(value);
         dialog.a(view);
+        String tempFile = wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/" + "edit.txt";
         dialog.b(Helper.getResString(R.string.common_word_save), v -> {
             if (lengthValidator.b()) {
                 try {
@@ -302,7 +303,6 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             }
         });
         dialog.a(v -> {
-            // Abre o dialog para selecionar o idioma
             showTranslationDialog(input).create().show();
         });
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
@@ -314,7 +314,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             editor.saveLis(logicEditor, null, editor);
             editor.cancelLis(logicEditor, editor);
             dialog.dismiss(); */
-            String tempFile = wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/" + "edit.txt";
+            
             FileUtil.writeFile(tempFile,input.getText().toString());
 
             Intent intent = new Intent();
@@ -328,10 +328,12 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             intent.putExtra("content", tempFile);
 
             //((Activity) context).startActivityForResult(intent, REQUEST_CODE);
-            ((Activity) this.getContext()).startActivity(intent);
-            String editedContent = FileUtil.readFile(tempFile);
-            input.setText(editedContent);
+            //((Activity) this.getContext()).startActivityForResult(intent, SRC_CODE_EDITOR_RESULT);
+
+            this.getContext().startActivity(intent);
         });
+        String editedContent = FileUtil.readFile(tempFile);
+        input.setText(editedContent);
         dialog.show();
     }
 
@@ -458,4 +460,5 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.show();
     }
+
 }
