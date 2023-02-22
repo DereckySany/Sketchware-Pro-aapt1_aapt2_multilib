@@ -316,6 +316,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             dialog.dismiss(); */
             String tempEdit = wq.getAbsolutePathOf(wq.i) + sc_id + "/.editor/" + "edit.txt";
             FileUtil.writeFile(tempEdit,input.getText().toString());
+
             Intent intent = new Intent();
             if (ConfigActivity.isLegacyCeEnabled()) {
                 intent.setClass((Activity) this.getContext(), SrcCodeEditorLegacy.class);
@@ -328,6 +329,8 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
 
             //((Activity) context).startActivityForResult(intent, REQUEST_CODE);
             ((Activity) this.getContext()).startActivity(intent);
+            String editedContent = FileUtil.readFile(tempFile);
+            input.setText(editedContent);
         });
         dialog.show();
     }
