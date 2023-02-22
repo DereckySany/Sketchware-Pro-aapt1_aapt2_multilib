@@ -1,10 +1,13 @@
 package com.besome.sketch.editor.property;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.InputType;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -13,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -50,7 +55,9 @@ import a.a.a.jC;
 import a.a.a.mB;
 import a.a.a.uq;
 import a.a.a.wB;
+import mod.hey.studios.code.SrcCodeEditorLegacy;
 import mod.hey.studios.util.Helper;
+import mod.hilal.saif.activities.tools.ConfigActivity;
 import mod.hilal.saif.asd.asdforall.AsdAllEditor;
 // new
 import dev.derecky.sany.editor.tools.translateapi.*;
@@ -317,76 +324,93 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
                 }
             }
         });
-        /*
-        dialog.a(v ->{
-
-            String translatedText;
-            String text = input.getText().toString();
-            translatedText = String.valueOf(new TranslateAPI("auto", "pt", text));
-            input.setText(translatedText);
-            Toast.makeText(context, "Conteúdo traduzido para o Português!", Toast.LENGTH_SHORT).show();
-        });
-        */
-            String[] languageOptions = {"Inglês", "Espanhol", "Português"};
-
-            // Cria o dialog para selecionar o idioma
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("Selecione o idioma para tradução")
-                    .setItems(languageOptions, (dialog1, which) -> {
-                        // Obtém o idioma selecionado
-                        String selectedLanguage = languageOptions[which];
-                        String targetLanguageCode = "";
-                        switch (selectedLanguage) {
-                            case "Inglês":
-                                targetLanguageCode = "en";
-                                break;
-                            case "Espanhol":
-                                targetLanguageCode = "es";
-                                break;
-                            case "Português":
-                                targetLanguageCode = "pt";
-                                break;
-                        }
-                        // Obtém o texto de entrada
-                        String text = input.getText().toString();
-
-                        try {
-                            TranslateAPI translator = new TranslateAPI("auto", targetLanguageCode, text);
-
-                            translator.setTranslateListener(new TranslateAPI.TranslateListener() {
-                                @Override
-                                public void onSuccess(String translatedText) {
-                                    //Log.d(TAG, "Translated text: " + translatedText);
-                                    input.setText(translatedText);
-                                }
-
-                                @Override
-                                public void onFailure(String errorText) {
-                                    //Log.e(TAG, "Translation failed: " + errorText);
-                                    showTranslationErrorDialog(errorText);
-                                }
-                            });
-                            translator.execute();
-                            //Toast.makeText(context, "Conteúdo traduzido para o " + selectedLanguage + "!", Toast.LENGTH_SHORT).show();
-                        } catch (Exception e) {
-                            String errorMessage = "Erro ao traduzir o texto: " + e.getMessage();
-                            showTranslationErrorDialog(errorMessage);
-                        }
-                    });
-        dialog.a(v ->{
+        dialog.a(v -> {
             // Abre o dialog para selecionar o idioma
-            builder.show();
+            showTranslationDialog(input);
         });
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.configureDefaultButton("Code Editor", v -> {
+            /*
             AsdAllEditor editor = new AsdAllEditor((Activity) this.getContext());
             editor.setCon(input.getText().toString());
             editor.show();
             editor.saveLis(logicEditor, null, editor);
             editor.cancelLis(logicEditor, editor);
-            dialog.dismiss();
+            dialog.dismiss(); */
+            final Intent intent = new Intent();
+
+            if (ConfigActivity.isLegacyCeEnabled()) {
+                intent.setClass(context.getApplicationContext(), SrcCodeEditorLegacy.class);
+            } else {
+                intent.setClass(context.getApplicationContext(), mod.hey.studios.code.SrcCodeEditor.class);
+            }
+            intent.putExtra("java", "");
+            intent.putExtra("title", tvName.getText().toString() + ".java");
+            intent.putExtra("content", input.getText());
+            startActivity(intent);
         });
         dialog.show();
+    }
+
+    private void showTranslationDialog(EditText input) {
+        /*
+            String translatedText;
+            String text = input.getText().toString();
+            translatedText = String.valueOf(new TranslateAPI("auto", "pt", text));
+            input.setText(translatedText);
+            Toast.makeText(context, "Conteúdo traduzido para o Português!", Toast.LENGTH_SHORT).show();
+        }); */
+        String[] languageOptions = {"Inglês", "Espanhol", "Português"};
+
+        // Cria o dialog para selecionar o idioma
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Selecione o idioma para tradução")
+                .setItems(languageOptions, (dialog1, which) -> {
+                    // Obtém o idioma selecionado
+                    String selectedLanguage = languageOptions[which];
+                    String targetLanguageCode = "";
+                    switch (selectedLanguage) {
+                        case "Inglês":
+                            targetLanguageCode = "en";
+                            break;
+                        case "Espanhol":
+                            targetLanguageCode = "es";
+                            break;
+                        case "Português":
+                            targetLanguageCode = "pt";
+                            break;
+                    }
+                    // Obtém o texto de entrada
+                    String text = input.getText().toString();
+
+                    try {
+                        TranslateAPI translator = new TranslateAPI("auto", targetLanguageCode, text);
+
+                        translator.setTranslateListener(new TranslateAPI.TranslateListener() {
+                            @Override
+                            public void onSuccess(String translatedText) {
+                                //Log.d(TAG, "Translated text: " + translatedText);
+                                input.setText(translatedText);
+                            }
+
+                            @Override
+                            public void onFailure(String errorText) {
+                                //Log.e(TAG, "Translation failed: " + errorText);
+                                showTranslationErrorDialog(errorText);
+                            }
+                        });
+                        translator.execute();
+                        //Toast.makeText(context, "Conteúdo traduzido para o " + selectedLanguage + "!", Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        String errorMessage = "Erro ao traduzir o texto: " + e.getMessage();
+                        showTranslationErrorDialog(errorMessage);
+                    }
+                });
+        builder.show();
+    }
+
+    public void startActivity(Intent intent) {
+        throw new RuntimeException("Stub!");
     }
 
     /* // metodo original

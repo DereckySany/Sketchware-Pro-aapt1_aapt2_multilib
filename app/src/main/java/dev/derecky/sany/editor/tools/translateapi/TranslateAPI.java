@@ -61,7 +61,8 @@ public class TranslateAPI {
                         response.append(line);
                     }
                     reader.close();
-                    return response.toString();
+                    //return response.toString();
+                    return response.substring(response.indexOf("<span title=\"") + 13, response.indexOf("\">", response.indexOf("<span title=\"") + 13));
                 } catch (IOException e) {
                     Log.e(TAG, "Failed to execute translation API request", e);
                     return null;
@@ -95,9 +96,9 @@ public class TranslateAPI {
         }.execute();
     }
 
-	public interface TranslateListener {
-		void onSuccess(String translatedText);
+    public interface TranslateListener {
+        void onSuccess(String translatedText);
 
-		void onFailure(String ErrorText);
+        void onFailure(String ErrorText);
     }
 }
