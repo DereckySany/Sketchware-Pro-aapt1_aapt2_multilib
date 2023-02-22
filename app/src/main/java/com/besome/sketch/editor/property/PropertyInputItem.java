@@ -1,12 +1,9 @@
 package com.besome.sketch.editor.property;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.InputType;
 import android.view.View;
@@ -15,35 +12,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.core.content.ContextCompat;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.lang.InterruptedException;
-
-import java.net.ConnectException;
-import java.net.MalformedURLException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
 
 import com.besome.sketch.beans.ProjectFileBean;
 import com.besome.sketch.editor.LogicEditorActivity;
 import com.sketchware.remod.R;
-
-import org.json.JSONException;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 
 import a.a.a.Kw;
 import a.a.a.OB;
@@ -58,7 +30,6 @@ import a.a.a.wB;
 import mod.hey.studios.code.SrcCodeEditorLegacy;
 import mod.hey.studios.util.Helper;
 import mod.hilal.saif.activities.tools.ConfigActivity;
-import mod.hilal.saif.asd.asdforall.AsdAllEditor;
 // new
 import dev.derecky.sany.editor.tools.translateapi.*;
 
@@ -326,7 +297,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         });
         dialog.a(v -> {
             // Abre o dialog para selecionar o idioma
-            showTranslationDialog(input);
+            showTranslationDialog(input).show();
         });
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.configureDefaultButton("Code Editor", v -> {
@@ -338,34 +309,28 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             editor.cancelLis(logicEditor, editor);
             dialog.dismiss(); */
             Intent intent = new Intent();
-
             if (ConfigActivity.isLegacyCeEnabled()) {
-                intent.setClass(context.getApplicationContext(), SrcCodeEditorLegacy.class);
+                intent.setClass((Activity) this.getContext(), SrcCodeEditorLegacy.class);
             } else {
-                intent.setClass(context.getApplicationContext(), mod.hey.studios.code.SrcCodeEditor.class);
+                intent.setClass((Activity) this.getContext(), mod.hey.studios.code.SrcCodeEditor.class);
             }
             intent.putExtra("java", "");
             intent.putExtra("title", tvName.getText().toString() + ".java");
             intent.putExtra("content", input.getText());
-            startActivity(intent);
+
+            //((Activity) context).startActivityForResult(intent, REQUEST_CODE);
+            ((Activity) this.getContext()).startActivity(intent);
         });
         dialog.show();
     }
 
-    private void showTranslationDialog(EditText input) {
-        /*
-            String translatedText;
-            String text = input.getText().toString();
-            translatedText = String.valueOf(new TranslateAPI("auto", "pt", text));
-            input.setText(translatedText);
-            Toast.makeText(context, "Conteúdo traduzido para o Português!", Toast.LENGTH_SHORT).show();
-        }); */
+    private AlertDialog.Builder showTranslationDialog(EditText input) {
         String[] languageOptions = {"Inglês", "Espanhol", "Português"};
 
         // Cria o dialog para selecionar o idioma
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Selecione o idioma para tradução")
-                .setItems(languageOptions, (dialog1, which) -> {
+        builder.setTitle("Select language for translation");
+        builder.setItems(languageOptions, (dialog1, which) -> {
                     // Obtém o idioma selecionado
                     String selectedLanguage = languageOptions[which];
                     String targetLanguageCode = "";
@@ -381,7 +346,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
                             break;
                     }
                     // Obtém o texto de entrada
-                    String text = input.getText().toString();
+                    final String text = input.getText().toString();
 
                     try {
                         TranslateAPI translator = new TranslateAPI("auto", targetLanguageCode, text);
@@ -406,7 +371,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
                         showTranslationErrorDialog(errorMessage);
                     }
                 });
-        builder.show();
+        return builder;
     }
 
     public void startActivity(Intent intent) {
