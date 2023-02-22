@@ -316,7 +316,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             }
             intent.putExtra("java", "");
             intent.putExtra("title", tvName.getText().toString() + ".java");
-            intent.putExtra("content", input.getText());
+            intent.putExtra("content", input.getText().toString());
 
             //((Activity) context).startActivityForResult(intent, REQUEST_CODE);
             ((Activity) this.getContext()).startActivity(intent);
