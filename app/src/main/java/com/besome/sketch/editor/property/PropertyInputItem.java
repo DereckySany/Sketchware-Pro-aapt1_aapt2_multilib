@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Environment;
 import android.text.InputType;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -17,6 +19,9 @@ import com.besome.sketch.beans.ProjectFileBean;
 import com.besome.sketch.editor.LogicEditorActivity;
 import com.sketchware.remod.R;
 
+import java.io.File;
+
+import a.a.a.wq;
 import a.a.a.Kw;
 import a.a.a.OB;
 import a.a.a.SB;
@@ -27,6 +32,7 @@ import a.a.a.jC;
 import a.a.a.mB;
 import a.a.a.uq;
 import a.a.a.wB;
+import mod.agus.jcoderz.lib.FileUtil;
 import mod.hey.studios.code.SrcCodeEditorLegacy;
 import mod.hey.studios.util.Helper;
 import mod.hilal.saif.activities.tools.ConfigActivity;
@@ -308,6 +314,8 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             editor.saveLis(logicEditor, null, editor);
             editor.cancelLis(logicEditor, editor);
             dialog.dismiss(); */
+            String tempEdit = wq.getAbsolutePathOf(wq.i) + sc_id + "/.editor/" + "edit.txt";
+            FileUtil.writeFile(tempEdit,input.getText().toString());
             Intent intent = new Intent();
             if (ConfigActivity.isLegacyCeEnabled()) {
                 intent.setClass((Activity) this.getContext(), SrcCodeEditorLegacy.class);
@@ -316,7 +324,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             }
             intent.putExtra("java", "");
             intent.putExtra("title", tvName.getText().toString() + ".java");
-            intent.putExtra("content", input.getText().toString());
+            intent.putExtra("content", tempEdit);
 
             //((Activity) context).startActivityForResult(intent, REQUEST_CODE);
             ((Activity) this.getContext()).startActivity(intent);
