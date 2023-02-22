@@ -289,7 +289,6 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         SB lengthValidator = new SB(context, view.findViewById(R.id.ti_input), minValue, maxValue);
         lengthValidator.a(value);
         dialog.a(view);
-        String tempFile = wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/" + "edit.txt";
         dialog.b(Helper.getResString(R.string.common_word_save), v -> {
             if (lengthValidator.b()) {
                 try {
@@ -314,7 +313,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             editor.saveLis(logicEditor, null, editor);
             editor.cancelLis(logicEditor, editor);
             dialog.dismiss(); */
-            
+            String tempFile = wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/" + "edit.txt";
             FileUtil.writeFile(tempFile,input.getText().toString());
 
             Intent intent = new Intent();
@@ -331,9 +330,10 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             //((Activity) this.getContext()).startActivityForResult(intent, SRC_CODE_EDITOR_RESULT);
 
             this.getContext().startActivity(intent);
+
+            String editedContent = FileUtil.readFile(tempFile);
+            input.setText(editedContent);
         });
-        String editedContent = FileUtil.readFile(tempFile);
-        input.setText(editedContent);
         dialog.show();
     }
 
