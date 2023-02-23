@@ -63,10 +63,10 @@ public class ManageLocalLibraryActivity extends Activity
 
     private void setUpSearchView() {
 //        searchview.setActivated(true);
-//        searchview.setQueryHint("Search for a library");
-//        searchview.onActionViewExpanded();
-//        searchview.setIconifiedByDefault(false);
-//        searchview.clearFocus();
+        searchview.setQueryHint("Search for a library");
+        searchview.onActionViewExpanded();
+        searchview.setIconifiedByDefault(false);
+        searchview.clearFocus();
         searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -118,15 +118,17 @@ public class ManageLocalLibraryActivity extends Activity
             reset.setOnClickListener(this);
         }
         searchview = new SearchView(ManageLocalLibraryActivity.this);
-        //toolbar.addView(searchview, toolbar.getBaselineAlignedChildIndex() - 1);
-        toolbar.addView(searchview, 3);
+        toolbar.addView(searchview, toolbar.getBaselineAlignedChildIndex() + 1);
+        //toolbar.addView(searchview, 2);
+        /*
         {
             ViewGroup.LayoutParams layoutParams = importLibrary_icon.getLayoutParams();
             if (layoutParams != null) {
                 searchview.setLayoutParams(layoutParams);
             }
         }
-        searchview.setOnClickListener(this);
+        */
+        //searchview.setOnClickListener(this);
     }
 
     @Override
@@ -207,8 +209,8 @@ public class ManageLocalLibraryActivity extends Activity
             // Carregar arquivos
             loadFiles();
             // Inicializar o SearchView
-            setUpSearchView();
             initToolbar();
+            setUpSearchView();
         } else {
             finish();
         }
