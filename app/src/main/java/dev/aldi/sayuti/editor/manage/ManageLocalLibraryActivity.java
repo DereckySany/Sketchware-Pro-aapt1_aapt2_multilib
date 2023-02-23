@@ -68,47 +68,20 @@ public class ManageLocalLibraryActivity extends Activity
         searchview.setIconifiedByDefault(false);
         searchview.clearFocus();
         searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-              @Override
-              public boolean onQueryTextSubmit(String query) {
-                  return false;
-              }
+                                              @Override
+                                              public boolean onQueryTextSubmit(String query) {
+                                                  return false;
+                                              }
 
-              @Override
-              public boolean onQueryTextChange(String newText) {
-                  applyFilter(newText);
-                  return true;
-              }
-          }
+                                              @Override
+                                              public boolean onQueryTextChange(String newText) {
+                                                  applyFilter(newText);
+                                                  return true;
+                                              }
+                                          }
         );
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_search, menu);
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.search) {
-            SearchView searchView = (SearchView) item.getActionView();
-            searchView.setQueryHint(getString(R.string.search_hint));
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    // Implementar ação de busca
-                    return true;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    // Implementar busca em tempo real
-                    return true;
-                }
-            });
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
+    
     private void initToolbar() {
         ImageView back_icon = findViewById(R.id.ig_toolbar_back);
         TextView title = findViewById(R.id.tx_toolbar_title);
@@ -146,11 +119,12 @@ public class ManageLocalLibraryActivity extends Activity
             reset.setOnClickListener(this);
         }
         LinearLayout toolbar = (LinearLayout) back_icon.getParent();
-        toolbar.addView(searchView, 3);
+        //toolbar.addView(searchview, toolbar.getBaselineAlignedChildIndex() - 1);
+        toolbar.addView(searchview, 3);
         {
             ViewGroup.LayoutParams layoutParams = importLibrary_icon.getLayoutParams();
             if (layoutParams != null) {
-                searchView.setLayoutParams(layoutParams);
+                searchview.setLayoutParams(layoutParams);
             }
         }
     }
@@ -159,31 +133,31 @@ public class ManageLocalLibraryActivity extends Activity
     public void onClick(View v) {
         if (v.getId() == R.id.ig_toolbar_load_file) {
             if (Build.VERSION.SDK_INT > 26){
-            new AlertDialog.Builder(this)
-                    .setTitle("Choose compiler")
-                    .setMessage("Would you like to use DX, D8 or R8 to compile the library?\n" +
-                             "D8 supports Java 8, while DX does not. Limitation: D8 only works on Android 8 and above.\n" +
-                             "R8 is the new official Android Studio compiler.(but in alpha here!)")
-                    .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
-                            "D8").showDialog(ManageLocalLibraryActivity.this))
-                    .setNegativeButton("DX", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, false,
-                            "Dx").showDialog(ManageLocalLibraryActivity.this))
-                    .setNeutralButton("R8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
-                            "R8").showDialog(ManageLocalLibraryActivity.this))
-                    .setCancelable(true)
-                    .show();
+                new AlertDialog.Builder(this)
+                        .setTitle("Choose compiler")
+                        .setMessage("Would you like to use DX, D8 or R8 to compile the library?\n" +
+                                "D8 supports Java 8, while DX does not. Limitation: D8 only works on Android 8 and above.\n" +
+                                "R8 is the new official Android Studio compiler.(but in alpha here!)")
+                        .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
+                                "D8").showDialog(ManageLocalLibraryActivity.this))
+                        .setNegativeButton("DX", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, false,
+                                "Dx").showDialog(ManageLocalLibraryActivity.this))
+                        .setNeutralButton("R8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
+                                "R8").showDialog(ManageLocalLibraryActivity.this))
+                        .setCancelable(true)
+                        .show();
 
             } else {
-            new AlertDialog.Builder(this)
-                    .setTitle("Choose compiler")
-                    .setMessage("Would you like to use Dx or D8 to dex the library?\n" +
-                            "D8 supports Java 8, whereas Dx does not. Limitation: D8 only works on Android 8 and above.")
-                    .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
-                            "D8").showDialog(ManageLocalLibraryActivity.this))
-                    .setNegativeButton("DX", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, false,
-                            "Dx").showDialog(ManageLocalLibraryActivity.this))
-                    .setNeutralButton("Cancel", null)
-                    .show();
+                new AlertDialog.Builder(this)
+                        .setTitle("Choose compiler")
+                        .setMessage("Would you like to use Dx or D8 to dex the library?\n" +
+                                "D8 supports Java 8, whereas Dx does not. Limitation: D8 only works on Android 8 and above.")
+                        .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
+                                "D8").showDialog(ManageLocalLibraryActivity.this))
+                        .setNegativeButton("DX", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, false,
+                                "Dx").showDialog(ManageLocalLibraryActivity.this))
+                        .setNeutralButton("Cancel", null)
+                        .show();
             }
         } else if (RESET_LOCAL_LIBRARIES_TAG.equals(v.getTag())) {
             if (!notAssociatedWithProject) {
@@ -216,8 +190,10 @@ public class ManageLocalLibraryActivity extends Activity
 
         LinearLayout searchViewContainer = findViewById(R.id.managepermissionLinearLayout1);
         searchViewContainer.setVisibility(View.VISIBLE);
-        searchViewContainer.setBackground(getDrawable(R.drawable.bg_rectangle_white));
+        //searchViewContainer.setBackground(getDrawable(R.drawable.bg_rectangle_white));
+        //searchViewContainer.setBackground(null);
         //searchview = findViewById(R.id.search_perm);
+        searchview = findViewById(R.id.searchBarView);
         listview = findViewById(R.id.main_content);
         ViewGroup mainContent = (ViewGroup) searchViewContainer.getParent();
         ViewGroup root = (ViewGroup) mainContent.getParent();
@@ -533,52 +509,52 @@ public class ManageLocalLibraryActivity extends Activity
             return convertView;
         }
 
-       private HashMap<String, Object> getLocalLibraryData(String libname) {
-          HashMap<String, Object> localLibrary = new HashMap<>();
-          localLibrary.put("name", libname);
+        private HashMap<String, Object> getLocalLibraryData(String libname) {
+            HashMap<String, Object> localLibrary = new HashMap<>();
+            localLibrary.put("name", libname);
 
-          File configPathFile = new File(local_libs_path, libname + "/config");
-          if (configPathFile.exists()) {
-              String packageName = null;
-              try (BufferedReader reader = new BufferedReader(new FileReader(configPathFile))) {
-                   packageName = reader.readLine();
-              } catch (IOException e) {
-                // Handle exception
-              }
-              localLibrary.put("packageName", packageName);
-          }
+            File configPathFile = new File(local_libs_path, libname + "/config");
+            if (configPathFile.exists()) {
+                String packageName = null;
+                try (BufferedReader reader = new BufferedReader(new FileReader(configPathFile))) {
+                    packageName = reader.readLine();
+                } catch (IOException e) {
+                    // Handle exception
+                }
+                localLibrary.put("packageName", packageName);
+            }
 
-          File resPathFile = new File(local_libs_path, libname + "/res");
-          if (resPathFile.exists()) {
-              localLibrary.put("resPath", resPathFile.getPath());
-          }
+            File resPathFile = new File(local_libs_path, libname + "/res");
+            if (resPathFile.exists()) {
+                localLibrary.put("resPath", resPathFile.getPath());
+            }
 
-          File jarPathFile = new File(local_libs_path, libname + "/classes.jar");
-          if (jarPathFile.exists()) {
-              localLibrary.put("jarPath", jarPathFile.getPath());
-          }
+            File jarPathFile = new File(local_libs_path, libname + "/classes.jar");
+            if (jarPathFile.exists()) {
+                localLibrary.put("jarPath", jarPathFile.getPath());
+            }
 
-          File dexPathFile = new File(local_libs_path, libname + "/classes.dex");
-          if (dexPathFile.exists()) {
-              localLibrary.put("dexPath", dexPathFile.getPath());
-          }
+            File dexPathFile = new File(local_libs_path, libname + "/classes.dex");
+            if (dexPathFile.exists()) {
+                localLibrary.put("dexPath", dexPathFile.getPath());
+            }
 
-          File manifestPathFile = new File(local_libs_path, libname + "/AndroidManifest.xml");
-          if (manifestPathFile.exists()) {
-              localLibrary.put("manifestPath", manifestPathFile.getPath());
-          }
+            File manifestPathFile = new File(local_libs_path, libname + "/AndroidManifest.xml");
+            if (manifestPathFile.exists()) {
+                localLibrary.put("manifestPath", manifestPathFile.getPath());
+            }
 
-          File pgRulesPathFile = new File(local_libs_path, libname + "/proguard.txt");
-          if (pgRulesPathFile.exists()) {
-              localLibrary.put("pgRulesPath", pgRulesPathFile.getPath());
-          }
+            File pgRulesPathFile = new File(local_libs_path, libname + "/proguard.txt");
+            if (pgRulesPathFile.exists()) {
+                localLibrary.put("pgRulesPath", pgRulesPathFile.getPath());
+            }
 
-          File assetsPathFile = new File(local_libs_path, libname + "/assets");
-          if (assetsPathFile.exists()) {
-              localLibrary.put("assetsPath", assetsPathFile.getPath());
-          }
+            File assetsPathFile = new File(local_libs_path, libname + "/assets");
+            if (assetsPathFile.exists()) {
+                localLibrary.put("assetsPath", assetsPathFile.getPath());
+            }
 
-          return localLibrary;
+            return localLibrary;
         }
 
         private void setColorIdicator(LinearLayout indicator, String configname) {
