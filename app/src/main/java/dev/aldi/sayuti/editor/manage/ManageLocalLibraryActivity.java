@@ -62,26 +62,25 @@ public class ManageLocalLibraryActivity extends Activity
 
 
     private void setUpSearchView() {
-        //searchview.setActivated(true);
-        searchview.setQueryHint("Search for a library");
-        searchview.onActionViewExpanded();
-        searchview.setIconifiedByDefault(false);
-        searchview.clearFocus();
+//        searchview.setActivated(true);
+//        searchview.setQueryHint("Search for a library");
+//        searchview.onActionViewExpanded();
+//        searchview.setIconifiedByDefault(false);
+//        searchview.clearFocus();
         searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                                              @Override
-                                              public boolean onQueryTextSubmit(String query) {
-                                                  return false;
-                                              }
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
-                                              @Override
-                                              public boolean onQueryTextChange(String newText) {
-                                                  applyFilter(newText);
-                                                  return true;
-                                              }
-                                          }
-        );
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                applyFilter(newText);
+                return true;
+            }
+        });
     }
-    
+
     private void initToolbar() {
         ImageView back_icon = findViewById(R.id.ig_toolbar_back);
         TextView title = findViewById(R.id.tx_toolbar_title);
@@ -118,6 +117,7 @@ public class ManageLocalLibraryActivity extends Activity
             Helper.applyRippleToToolbarView(reset);
             reset.setOnClickListener(this);
         }
+        androidx.appcompat.widget.SearchView searchview = new androidx.appcompat.widget.SearchView(ManageLocalLibraryActivity.this);
         LinearLayout toolbar = (LinearLayout) back_icon.getParent();
         //toolbar.addView(searchview, toolbar.getBaselineAlignedChildIndex() - 1);
         toolbar.addView(searchview, 3);
@@ -127,12 +127,13 @@ public class ManageLocalLibraryActivity extends Activity
                 searchview.setLayoutParams(layoutParams);
             }
         }
+
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.ig_toolbar_load_file) {
-            if (Build.VERSION.SDK_INT > 26){
+            if (Build.VERSION.SDK_INT > 26) {
                 new AlertDialog.Builder(this)
                         .setTitle("Choose compiler")
                         .setMessage("Would you like to use DX, D8 or R8 to compile the library?\n" +
@@ -215,36 +216,6 @@ public class ManageLocalLibraryActivity extends Activity
             finish();
         }
     }
-    // original
-    /*
-    private void loadFiles() {
-        if (notAssociatedWithProject) {
-            return;
-        }
-
-        if (!FileUtil.isExistFile(configurationFilePath) || FileUtil.readFile(configurationFilePath).equals("")) {
-            FileUtil.writeFile(configurationFilePath, "[]");
-        } else {
-            project_used_libs = new Gson().fromJson(FileUtil.readFile(configurationFilePath), Helper.TYPE_MAP_LIST);
-        }
-        List<String> localLibraryNames = new LinkedList<>();
-        FileUtil.listDir(local_libs_path, localLibraryNames);
-
-        List<String> directories = new ArrayList<>();
-        for (String filename : localLibraryNames) {
-            if (FileUtil.isDirectory(filename)) {
-                directories.add(Uri.parse(filename).getLastPathSegment());
-            }
-        }
-        Collections.sort(directories, String.CASE_INSENSITIVE_ORDER);
-
-        adapter = new LibraryAdapter(directories);
-        arrayList.clear();
-        arrayList.addAll(directories);
-        adapter.updateData(arrayList);
-        listview.setAdapter(adapter);
-    }
-    */
     private void loadFiles() {
         arrayList.clear();
         if (!notAssociatedWithProject) {
@@ -254,7 +225,7 @@ public class ManageLocalLibraryActivity extends Activity
                 project_used_libs = new Gson().fromJson(FileUtil.readFile(configurationFilePath), Helper.TYPE_MAP_LIST);
             }
         }
-        
+
         List<String> localLibraryNames = new LinkedList<>();
         FileUtil.listDir(local_libs_path, localLibraryNames);
 
@@ -337,8 +308,9 @@ public class ManageLocalLibraryActivity extends Activity
             enabled.setOnClickListener(v -> {
                 HashMap<String, Object> localLibrary = getLocalLibraryData(libname);
                 if (!enabled.isChecked()) {
-                    int i = project_used_libs.indexOf(localLibrary);
-                    project_used_libs.remove(i);
+                    //int i = project_used_libs.indexOf(localLibrary);
+                    //project_used_libs.remove(i);
+                    project_used_libs.remove(localLibrary);
                 } else {
                     project_used_libs.remove(localLibrary);
                     project_used_libs.add(localLibrary);
