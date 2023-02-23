@@ -85,6 +85,7 @@ public class ManageLocalLibraryActivity extends Activity
         ImageView back_icon = findViewById(R.id.ig_toolbar_back);
         TextView title = findViewById(R.id.tx_toolbar_title);
         ImageView importLibrary_icon = findViewById(R.id.ig_toolbar_load_file);
+        LinearLayout toolbar = (LinearLayout) back_icon.getParent();
 
         Helper.applyRippleToToolbarView(back_icon);
         back_icon.setOnClickListener(Helper.getBackPressedClickListener(this));
@@ -102,7 +103,6 @@ public class ManageLocalLibraryActivity extends Activity
 
         if (!notAssociatedWithProject) {
             ImageView reset = new ImageView(ManageLocalLibraryActivity.this);
-            LinearLayout toolbar = (LinearLayout) back_icon.getParent();
             toolbar.addView(reset, 2);
 
             reset.setTag(RESET_LOCAL_LIBRARIES_TAG);
@@ -117,8 +117,7 @@ public class ManageLocalLibraryActivity extends Activity
             Helper.applyRippleToToolbarView(reset);
             reset.setOnClickListener(this);
         }
-        androidx.appcompat.widget.SearchView searchview = new androidx.appcompat.widget.SearchView(ManageLocalLibraryActivity.this);
-        LinearLayout toolbar = (LinearLayout) back_icon.getParent();
+        searchview = new SearchView(ManageLocalLibraryActivity.this);
         //toolbar.addView(searchview, toolbar.getBaselineAlignedChildIndex() - 1);
         toolbar.addView(searchview, 3);
         {
@@ -127,7 +126,7 @@ public class ManageLocalLibraryActivity extends Activity
                 searchview.setLayoutParams(layoutParams);
             }
         }
-
+        searchview.setOnClickListener(this);
     }
 
     @Override
@@ -190,11 +189,9 @@ public class ManageLocalLibraryActivity extends Activity
         setContentView(R.layout.manage_permission);
 
         LinearLayout searchViewContainer = findViewById(R.id.managepermissionLinearLayout1);
-        searchViewContainer.setVisibility(View.VISIBLE);
+        searchViewContainer.setVisibility(View.GONE);
         //searchViewContainer.setBackground(getDrawable(R.drawable.bg_rectangle_white));
-        //searchViewContainer.setBackground(null);
         //searchview = findViewById(R.id.search_perm);
-        searchview = findViewById(R.id.searchBarView);
         listview = findViewById(R.id.main_content);
         ViewGroup mainContent = (ViewGroup) searchViewContainer.getParent();
         ViewGroup root = (ViewGroup) mainContent.getParent();
