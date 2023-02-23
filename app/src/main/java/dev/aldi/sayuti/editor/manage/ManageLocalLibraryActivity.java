@@ -62,7 +62,7 @@ public class ManageLocalLibraryActivity extends Activity
 
 
     private void setUpSearchView() {
-        searchview.setActivated(true);
+        //searchview.setActivated(true);
         searchview.setQueryHint("Search for a library");
         searchview.onActionViewExpanded();
         searchview.setIconifiedByDefault(false);
