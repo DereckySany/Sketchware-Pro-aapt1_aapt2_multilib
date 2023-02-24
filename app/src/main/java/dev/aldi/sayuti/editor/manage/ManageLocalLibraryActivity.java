@@ -128,7 +128,6 @@ private void setUpSearchView() {
     });
 }
 */
-//
 
     private void initToolbar() {
         ImageView back_icon = findViewById(R.id.ig_toolbar_back);
@@ -170,8 +169,7 @@ private void setUpSearchView() {
         searchview = new SearchView(ManageLocalLibraryActivity.this);
         toolbar.addView(searchview, toolbar.getBaselineAlignedChildIndex() + 3);*/
     }
-    //
-    @Override
+    
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         super.onCreateOptionsMenu(menu);
         menuInflater.inflate(R.menu.menu_search, menu);
