@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -48,8 +49,10 @@ import mod.agus.jcoderz.lib.FileUtil;
 import mod.hey.studios.project.library.LibraryDownloader;
 import mod.hey.studios.util.Helper;
 
+/*public class ManageLocalLibraryActivity extends Activity
+        implements View.OnClickListener, LibraryDownloader.OnCompleteListener {*/
 public class ManageLocalLibraryActivity extends Activity
-        implements View.OnClickListener, LibraryDownloader.OnCompleteListener {
+        implements LibraryDownloader.OnCompleteListener {
 
     private static final String RESET_LOCAL_LIBRARIES_TAG = "reset_local_libraries";
 
@@ -57,7 +60,7 @@ public class ManageLocalLibraryActivity extends Activity
     private ArrayList<String> arrayList = new ArrayList<>();
     private boolean notAssociatedWithProject = false;
     private ListView listview;
-    private SearchView searchview;
+//    private SearchView searchview;
     private String configurationFilePath = "";
     private String local_libs_path = "";
     private ArrayList<HashMap<String, Object>> lookup_list = new ArrayList<>();
@@ -83,7 +86,8 @@ public class ManageLocalLibraryActivity extends Activity
             }
         });
     }
-*/
+    */
+    /*
 private void setUpSearchView() {
     // set hint text color
     int hintColor = Color.parseColor("#888888");
@@ -121,23 +125,25 @@ private void setUpSearchView() {
         }
     });
 }
+*/
 //
 
     private void initToolbar() {
         ImageView back_icon = findViewById(R.id.ig_toolbar_back);
         TextView title = findViewById(R.id.tx_toolbar_title);
-        ImageView importLibrary_icon = findViewById(R.id.ig_toolbar_load_file);
+        //ImageView importLibrary_icon = findViewById(R.id.ig_toolbar_load_file);
         LinearLayout toolbar = (LinearLayout) back_icon.getParent();
 
         Helper.applyRippleToToolbarView(back_icon);
         back_icon.setOnClickListener(Helper.getBackPressedClickListener(this));
 
         title.setText("Local library Manager");
-        importLibrary_icon.setPadding(
-                (int) getDip(2),
-                (int) getDip(2),
-                (int) getDip(2),
-                (int) getDip(2));
+        // importLibrary_icon.setPadding(
+        //         (int) getDip(2),
+        //         (int) getDip(2),
+        //         (int) getDip(2),
+        //         (int) getDip(2));
+/*
         importLibrary_icon.setImageResource(R.drawable.download_80px);
         importLibrary_icon.setVisibility(View.VISIBLE);
         Helper.applyRippleToToolbarView(importLibrary_icon);
@@ -160,19 +166,124 @@ private void setUpSearchView() {
             reset.setOnClickListener(this);
         }
         searchview = new SearchView(ManageLocalLibraryActivity.this);
-        toolbar.addView(searchview, toolbar.getBaselineAlignedChildIndex() + 3);
-        //toolbar.addView(searchview, 2);
-        /*
-        {
-            ViewGroup.LayoutParams layoutParams = importLibrary_icon.getLayoutParams();
-            if (layoutParams != null) {
-                searchview.setLayoutParams(layoutParams);
+        toolbar.addView(searchview, toolbar.getBaselineAlignedChildIndex() + 3);*/
+    }
+    //
+    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.manage_local_library_menu, menu);
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        // Configurações do SearchView
+        // set hint text color
+        int hintColor = Color.parseColor("#888888");
+        EditText editText = searchView.findViewById(R.id.search_src_text);
+        editText.setHintTextColor(hintColor);
+
+        // set text color
+        int textColor = Color.parseColor("#FFFFFF");
+        editText.setTextColor(textColor);
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    editText.setTextColor(textColor);
+                } else {
+                    editText.setTextColor(hintColor);
+                }
             }
-        }
-        */
-        //searchview.setOnClickListener(this);
+        });
+
+        searchView.setQueryHint("Search for a library");
+        searchView.onActionViewExpanded();
+        searchView.setIconifiedByDefault(true);
+        searchView.clearFocus();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                applyFilter(newText);
+                return true;
+            }
+        });
+        //
+        MenuItem resetItem = menu.findItem(R.id.action_reset);
+//        resetItem.setIcon(R.drawable.ic_restore_white_24dp);
+
+        MenuItem importItem = menu.findItem(R.id.action_import);
+//        importItem.setIcon(R.drawable.download_80px);
+
+        return true;
     }
 
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_reset:
+                // Ação do botão reset
+                if (!notAssociatedWithProject) {
+                    aB dialog = new aB(this);
+                    dialog.a(R.drawable.rollback_96);
+                    dialog.b("Reset libraries?");
+                    dialog.a("This will reset all used local libraries for this project. Are you sure?");
+                    dialog.a(xB.b().a(getApplicationContext(), R.string.common_word_cancel),
+                            Helper.getDialogDismissListener(dialog));
+                    dialog.b(xB.b().a(getApplicationContext(), R.string.common_word_reset), view -> {
+                        FileUtil.writeFile(configurationFilePath, "[]");
+                        SketchwareUtil.toast("Successfully reset local libraries");
+                        loadFiles();
+                        dialog.dismiss();
+                    });
+                    dialog.show();
+                }
+                return true;
+            case R.id.action_import:
+                // Ação do botão import
+                if (Build.VERSION.SDK_INT > 26) {
+                    new AlertDialog.Builder(this)
+                            .setTitle("Choose compiler")
+                            .setMessage("Would you like to use DX, D8 or R8 to compile the library?\n" +
+                                    "D8 supports Java 8, while DX does not. Limitation: D8 only works on Android 8 and above.\n" +
+                                    "R8 is the new official Android Studio compiler.(but in alpha here!)")
+                            .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
+                                    "D8").showDialog(ManageLocalLibraryActivity.this))
+                            .setNegativeButton("DX", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, false,
+                                    "Dx").showDialog(ManageLocalLibraryActivity.this))
+                            .setNeutralButton("R8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
+                                    "R8").showDialog(ManageLocalLibraryActivity.this))
+                            .setCancelable(true)
+                            .show();
+
+                } else {
+                    new AlertDialog.Builder(this)
+                            .setTitle("Choose compiler")
+                            .setMessage("Would you like to use Dx or D8 to dex the library?\n" +
+                                    "D8 supports Java 8, whereas Dx does not. Limitation: D8 only works on Android 8 and above.")
+                            .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
+                                    "D8").showDialog(ManageLocalLibraryActivity.this))
+                            .setNegativeButton("DX", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, false,
+                                    "Dx").showDialog(ManageLocalLibraryActivity.this))
+                            .setNeutralButton("Cancel", null)
+                            .show();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem resetItem = menu.findItem(R.id.action_reset);
+        resetItem.setVisible(!notAssociatedWithProject);
+        return true;
+    }
+
+    //
+
+/*
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.ig_toolbar_load_file) {
@@ -221,6 +332,7 @@ private void setUpSearchView() {
             }
         }
     }
+*/
 
     @Override
     public void onComplete() {
@@ -252,7 +364,7 @@ private void setUpSearchView() {
             loadFiles();
             // Inicializar o SearchView
             initToolbar();
-            setUpSearchView();
+//            setUpSearchView();
         } else {
             finish();
         }
