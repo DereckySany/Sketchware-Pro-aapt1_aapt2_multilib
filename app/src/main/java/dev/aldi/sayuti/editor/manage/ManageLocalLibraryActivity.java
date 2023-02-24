@@ -2,7 +2,7 @@ package dev.aldi.sayuti.editor.manage;
 
 import static mod.SketchwareUtil.getDip;
 
-import androidx.appcompat.widget.SearchView;
+//import androidx.appcompat.widget.SearchView;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -23,7 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-//import android.widget.SearchView;
+import android.widget.SearchView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -65,7 +65,7 @@ public class ManageLocalLibraryActivity extends Activity
     private ArrayList<HashMap<String, Object>> lookup_list = new ArrayList<>();
     private ArrayList<HashMap<String, Object>> project_used_libs = new ArrayList<>();
 
-/*
+
     private void setUpSearchView() {
 //        searchview.setActivated(true);
         searchview.setQueryHint("Search for a library");
@@ -85,7 +85,7 @@ public class ManageLocalLibraryActivity extends Activity
             }
         });
     }
-*/
+/*
 private void setUpSearchView() {
     // set hint text color
     int hintColor = Color.parseColor("#888888");
@@ -123,7 +123,7 @@ private void setUpSearchView() {
         }
     });
 }
-
+*/
 
     private void initToolbar() {
         ImageView back_icon = findViewById(R.id.ig_toolbar_back);
