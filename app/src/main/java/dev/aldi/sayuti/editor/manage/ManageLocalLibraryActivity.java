@@ -1,17 +1,17 @@
 package dev.aldi.sayuti.editor.manage;
 
-import static mod.SketchwareUtil.getDip;
-
 //import androidx.appcompat.widget.SearchView;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +25,8 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -171,16 +173,16 @@ private void setUpSearchView() {
     //
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        super.onCreateOptionsMenu(menu, menuInflater);
+        super.onCreateOptionsMenu(menu);
         menuInflater.inflate(R.menu.menu_search, menu);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
-        android.widget.SearchView searchView = (android.widget.SearchView) searchItem.getActionView();
+        SearchView searchView = (SearchView) searchItem.getActionView();
         
         // Configurações do SearchView
         // set hint text color
         int hintColor = Color.parseColor("#888888");
-        EditText editText = searchView.findViewById(android.widget.SearchView.getContext().getResources()
+        EditText editText = searchView.findViewById(searchView.getContext().getResources()
                 .getIdentifier("android:id/search_src_text", null, null));
         editText.setHintTextColor(hintColor);
 
@@ -202,7 +204,7 @@ private void setUpSearchView() {
         searchView.onActionViewExpanded();
         searchView.setIconifiedByDefault(true);
         searchView.clearFocus();
-        searchView.setOnQueryTextListener(new android.widget.SearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -224,13 +226,13 @@ private void setUpSearchView() {
         importItem.setVisible(true);
 
         // set icons
-        Drawable searchIcon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_search_white_24dp);
+        Drawable searchIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_search_white_24dp);
         searchItem.setIcon(searchIcon);
 
-        Drawable resetIcon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_restore_white_24dp);
+        Drawable resetIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_restore_white_24dp);
         resetItem.setIcon(resetIcon);
 
-        Drawable importIcon = ContextCompat.getDrawable(getActivity(), R.drawable.download_80px);
+        Drawable importIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.download_80px);
         importItem.setIcon(importIcon);
     }
 
@@ -374,13 +376,13 @@ private void setUpSearchView() {
             configurationFilePath = FileUtil.getExternalStorageDir().concat("/.sketchware/data/")
                     .concat(sc_id.concat("/local_library"));
             local_libs_path = FileUtil.getExternalStorageDir().concat("/.sketchware/libs/local_libs/");
-            // Carregar arquivos
-            loadFiles();
             // Inicializar o SearchView
             initToolbar();
-//            setUpSearchView();
+            // Carregar arquivos
+            loadFiles();
+            // setUpSearchView();
         } else {
-            finish();
+            finishAfterTransition();
         }
     }
     private void loadFiles() {
