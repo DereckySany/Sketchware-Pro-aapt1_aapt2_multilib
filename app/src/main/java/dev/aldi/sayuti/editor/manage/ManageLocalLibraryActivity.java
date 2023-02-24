@@ -2,6 +2,11 @@ package dev.aldi.sayuti.editor.manage;
 
 import static mod.SketchwareUtil.getDip;
 
+import androidx.appcompat.widget.SearchView;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.graphics.drawable.GradientDrawable;
@@ -60,7 +65,7 @@ public class ManageLocalLibraryActivity extends Activity
     private ArrayList<HashMap<String, Object>> lookup_list = new ArrayList<>();
     private ArrayList<HashMap<String, Object>> project_used_libs = new ArrayList<>();
 
-
+/*
     private void setUpSearchView() {
 //        searchview.setActivated(true);
         searchview.setQueryHint("Search for a library");
@@ -80,6 +85,45 @@ public class ManageLocalLibraryActivity extends Activity
             }
         });
     }
+*/
+private void setUpSearchView() {
+    // set hint text color
+    int hintColor = Color.parseColor("#888888");
+    EditText editText = searchview.findViewById(androidx.appcompat.R.id.search_src_text);
+    editText.setHintTextColor(hintColor);
+
+    // set text color
+    int textColor = Color.parseColor("#FFFFFF");
+    editText.setTextColor(textColor);
+    editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (hasFocus) {
+                editText.setTextColor(textColor);
+            } else {
+                editText.setTextColor(hintColor);
+            }
+        }
+    });
+
+    searchview.setQueryHint("Search for a library");
+    searchview.onActionViewExpanded();
+    searchview.setIconifiedByDefault(true);
+    searchview.clearFocus();
+    searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String newText) {
+            applyFilter(newText);
+            return true;
+        }
+    });
+}
+
 
     private void initToolbar() {
         ImageView back_icon = findViewById(R.id.ig_toolbar_back);
@@ -118,7 +162,7 @@ public class ManageLocalLibraryActivity extends Activity
             reset.setOnClickListener(this);
         }
         searchview = new SearchView(ManageLocalLibraryActivity.this);
-        toolbar.addView(searchview, toolbar.getBaselineAlignedChildIndex() + 2);
+        toolbar.addView(searchview, toolbar.getBaselineAlignedChildIndex() + 3);
         //toolbar.addView(searchview, 2);
         /*
         {
