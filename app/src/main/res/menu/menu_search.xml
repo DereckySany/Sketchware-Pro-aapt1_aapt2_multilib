@@ -1,9 +1,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/searchBarView"
-        android:title="@string/search_menu_title"
-        android:icon="@drawable/ic_search_white_24dp"
-        android:actionViewClass="androidx.appcompat.widget.SearchView"
+        android:id="@+id/action_search"
+        android:icon="@drawable/search_icon_white"
+        android:title="search"
+        android:showAsAction="always"
+        android:actionViewClass="androidx.appcompat.widget.SearchView" />
+    <item
+        android:id="@+id/action_reset"
+        android:icon="@drawable/ic_restore_white_24dp"
+        android:title="reset"
+        android:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_import"
+        android:icon="@drawable/download_80px"
+        android:title="import_library"
         android:showAsAction="ifRoom" />
 </menu>

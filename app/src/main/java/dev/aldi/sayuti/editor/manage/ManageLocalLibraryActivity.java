@@ -3,12 +3,10 @@ package dev.aldi.sayuti.editor.manage;
 import static mod.SketchwareUtil.getDip;
 
 //import androidx.appcompat.widget.SearchView;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -65,7 +63,7 @@ public class ManageLocalLibraryActivity extends Activity
     private ArrayList<HashMap<String, Object>> lookup_list = new ArrayList<>();
     private ArrayList<HashMap<String, Object>> project_used_libs = new ArrayList<>();
 
-
+/*
     private void setUpSearchView() {
 //        searchview.setActivated(true);
         searchview.setQueryHint("Search for a library");
@@ -85,11 +83,11 @@ public class ManageLocalLibraryActivity extends Activity
             }
         });
     }
-/*
+*/
 private void setUpSearchView() {
     // set hint text color
     int hintColor = Color.parseColor("#888888");
-    EditText editText = searchview.findViewById(androidx.appcompat.R.id.search_src_text);
+    EditText editText = searchview.findViewById(R.id.search_src_text);
     editText.setHintTextColor(hintColor);
 
     // set text color
@@ -123,7 +121,7 @@ private void setUpSearchView() {
         }
     });
 }
-*/
+//
 
     private void initToolbar() {
         ImageView back_icon = findViewById(R.id.ig_toolbar_back);
@@ -361,7 +359,7 @@ private void setUpSearchView() {
                 FileUtil.writeFile(configurationFilePath, new Gson().toJson(project_used_libs));
             });
 
-            setColorIdicator(indicator, libconfig);
+            setColorIndicator(indicator, libconfig);
 
             enabled.setChecked(false);
             if (!notAssociatedWithProject) {
@@ -572,7 +570,7 @@ private void setUpSearchView() {
             return localLibrary;
         }
 
-        private void setColorIdicator(LinearLayout indicator, String configname) {
+        private void setColorIndicator(LinearLayout indicator, String configname) {
             if (FileUtil.isExistFile(configname)) {
                 if (FileUtil.readFile(configname).getBytes().length > 0) {
                     indicator.setBackground(new GradientDrawable() {
