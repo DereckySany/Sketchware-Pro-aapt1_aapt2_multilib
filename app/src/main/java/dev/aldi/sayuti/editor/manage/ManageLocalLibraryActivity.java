@@ -177,7 +177,7 @@ private void setUpSearchView() {
         // Configurações do SearchView
         // set hint text color
         int hintColor = Color.parseColor("#888888");
-        EditText editText = searchView.findViewById(R.id.search_src_text);
+        EditText editText = searchView.findViewById(SearchView.generateViewId());
         editText.setHintTextColor(hintColor);
 
         // set text color
