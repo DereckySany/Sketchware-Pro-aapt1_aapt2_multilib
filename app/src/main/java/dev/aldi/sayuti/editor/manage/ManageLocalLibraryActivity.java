@@ -65,7 +65,7 @@ public class ManageLocalLibraryActivity extends Activity
 //        searchview.setActivated(true);
         searchview.setQueryHint("Search for a library");
         searchview.onActionViewExpanded();
-        searchview.setIconifiedByDefault(false);
+        searchview.setIconifiedByDefault(true);
         searchview.clearFocus();
         searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -118,7 +118,7 @@ public class ManageLocalLibraryActivity extends Activity
             reset.setOnClickListener(this);
         }
         searchview = new SearchView(ManageLocalLibraryActivity.this);
-        toolbar.addView(searchview, toolbar.getBaselineAlignedChildIndex() + 1);
+        toolbar.addView(searchview, toolbar.getBaselineAlignedChildIndex() + 2);
         //toolbar.addView(searchview, 2);
         /*
         {
