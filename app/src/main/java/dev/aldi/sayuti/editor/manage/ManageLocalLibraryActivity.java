@@ -169,15 +169,19 @@ private void setUpSearchView() {
         toolbar.addView(searchview, toolbar.getBaselineAlignedChildIndex() + 3);*/
     }
     //
-    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.manage_local_library_menu, menu);
-        getMenuInflater().inflate(R.menu.menu_search, menu);
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        super.onCreateOptionsMenu(menu, menuInflater);
+        menuInflater.inflate(R.menu.menu_search, menu);
+
         MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
+        android.widget.SearchView searchView = (android.widget.SearchView) searchItem.getActionView();
+        
         // Configurações do SearchView
         // set hint text color
         int hintColor = Color.parseColor("#888888");
-        EditText editText = searchView.findViewById(SearchView.generateViewId());
+        EditText editText = searchView.findViewById(android.widget.SearchView.getContext().getResources()
+                .getIdentifier("android:id/search_src_text", null, null));
         editText.setHintTextColor(hintColor);
 
         // set text color
@@ -198,7 +202,7 @@ private void setUpSearchView() {
         searchView.onActionViewExpanded();
         searchView.setIconifiedByDefault(true);
         searchView.clearFocus();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextListener(new android.widget.SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -210,14 +214,24 @@ private void setUpSearchView() {
                 return true;
             }
         });
-        //
+
         MenuItem resetItem = menu.findItem(R.id.action_reset);
-//        resetItem.setIcon(R.drawable.ic_restore_white_24dp);
+        if (!notAssociatedWithProject) {
+            resetItem.setVisible(true);
+        }
 
         MenuItem importItem = menu.findItem(R.id.action_import);
-//        importItem.setIcon(R.drawable.download_80px);
+        importItem.setVisible(true);
 
-        return true;
+        // set icons
+        Drawable searchIcon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_search_white_24dp);
+        searchItem.setIcon(searchIcon);
+
+        Drawable resetIcon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_restore_white_24dp);
+        resetItem.setIcon(resetIcon);
+
+        Drawable importIcon = ContextCompat.getDrawable(getActivity(), R.drawable.download_80px);
+        importItem.setIcon(importIcon);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
