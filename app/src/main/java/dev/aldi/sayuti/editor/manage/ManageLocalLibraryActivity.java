@@ -53,7 +53,7 @@ import mod.hey.studios.util.Helper;
 
 /*public class ManageLocalLibraryActivity extends Activity
         implements View.OnClickListener, LibraryDownloader.OnCompleteListener {*/
-public class ManageLocalLibraryActivity extends Activity
+public abstract class ManageLocalLibraryActivity extends Activity
         implements LibraryDownloader.OnCompleteListener {
 
     private static final String RESET_LOCAL_LIBRARIES_TAG = "reset_local_libraries";
@@ -174,8 +174,8 @@ private void setUpSearchView() {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }*/
-    public boolean onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        menuInflater.inflate(R.menu.menu_search, menu);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_search, menu);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
