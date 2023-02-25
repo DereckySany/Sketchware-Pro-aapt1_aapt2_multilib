@@ -54,7 +54,7 @@ import mod.hey.studios.util.Helper;
 /*public class ManageLocalLibraryActivity extends Activity
         implements View.OnClickListener, LibraryDownloader.OnCompleteListener {*/
 public class ManageLocalLibraryActivity extends Activity
-        implements View.OnClickListener, LibraryDownloader.OnCompleteListener {
+         LibraryDownloader.OnCompleteListener {
 
     private static final String RESET_LOCAL_LIBRARIES_TAG = "reset_local_libraries";
 
@@ -173,7 +173,7 @@ private void setUpSearchView() {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
-    }*//*
+    }*/
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_search, menu);
 
@@ -300,8 +300,7 @@ private void setUpSearchView() {
         return true;
     }
 
-    */
-
+/*
     private void initToolbar() {
         ImageView back_icon = findViewById(R.id.ig_toolbar_back);
         TextView title = findViewById(R.id.tx_toolbar_title);
@@ -394,6 +393,7 @@ private void setUpSearchView() {
             }
         }
     }
+    */
     @Override
     public void onComplete() {
         loadFiles();
@@ -421,7 +421,7 @@ private void setUpSearchView() {
                     .concat(sc_id.concat("/local_library"));
             local_libs_path = FileUtil.getExternalStorageDir().concat("/.sketchware/libs/local_libs/");
             // Inicializar o SearchView
-            initToolbar();
+            //initToolbar();
             // Carregar arquivos
             loadFiles();
             // setUpSearchView();
