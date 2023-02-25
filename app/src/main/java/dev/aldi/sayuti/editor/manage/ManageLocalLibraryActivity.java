@@ -53,8 +53,8 @@ import mod.hey.studios.util.Helper;
 
 /*public class ManageLocalLibraryActivity extends Activity
         implements View.OnClickListener, LibraryDownloader.OnCompleteListener {*/
-public abstract class ManageLocalLibraryActivity extends Activity
-        implements LibraryDownloader.OnCompleteListener {
+public class ManageLocalLibraryActivity extends Activity
+        implements View.OnClickListener, LibraryDownloader.OnCompleteListener {
 
     private static final String RESET_LOCAL_LIBRARIES_TAG = "reset_local_libraries";
 
@@ -62,7 +62,7 @@ public abstract class ManageLocalLibraryActivity extends Activity
     private ArrayList<String> arrayList = new ArrayList<>();
     private boolean notAssociatedWithProject = false;
     private ListView listview;
-//    private SearchView searchview;
+    //    private SearchView searchview;
     private String configurationFilePath = "";
     private String local_libs_path = "";
     private ArrayList<HashMap<String, Object>> lookup_list = new ArrayList<>();
@@ -128,7 +128,7 @@ private void setUpSearchView() {
     });
 }
 */
-
+/*
     private void initToolbar() {
         ImageView back_icon = findViewById(R.id.ig_toolbar_back);
         TextView title = findViewById(R.id.tx_toolbar_title);
@@ -144,7 +144,7 @@ private void setUpSearchView() {
         //         (int) getDip(2),
         //         (int) getDip(2),
         //         (int) getDip(2));
-/*
+
         importLibrary_icon.setImageResource(R.drawable.download_80px);
         importLibrary_icon.setVisibility(View.VISIBLE);
         Helper.applyRippleToToolbarView(importLibrary_icon);
@@ -167,19 +167,19 @@ private void setUpSearchView() {
             reset.setOnClickListener(this);
         }
         searchview = new SearchView(ManageLocalLibraryActivity.this);
-        toolbar.addView(searchview, toolbar.getBaselineAlignedChildIndex() + 3);*/
-    }
-/*    @Override
+        toolbar.addView(searchview, toolbar.getBaselineAlignedChildIndex() + 3);
+    } *//*
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
-    }*/
+    }*//*
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_search, menu);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
-        
+
         // Configurações do SearchView
         // set hint text color
         int hintColor = Color.parseColor("#888888");
@@ -235,7 +235,7 @@ private void setUpSearchView() {
 
         Drawable importIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.download_80px);
         importItem.setIcon(importIcon);
-        
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -300,10 +300,53 @@ private void setUpSearchView() {
         return true;
     }
 
-    //
+    */
 
-/*
-    @Override
+    private void initToolbar() {
+        ImageView back_icon = findViewById(R.id.ig_toolbar_back);
+        TextView title = findViewById(R.id.tx_toolbar_title);
+        LinearLayout toolbar = (LinearLayout) back_icon.getParent();
+
+        // Adiciona o ícone de busca
+        SearchView searchView = new SearchView(this);
+        searchView.setQueryHint("Search for a library");
+        searchView.setIconifiedByDefault(true);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                applyFilter(newText);
+                return true;
+            }
+        });
+        searchView.setIconified(false);
+        searchView.clearFocus();
+        toolbar.addView(searchView, 0);
+        if (!notAssociatedWithProject) {
+            // Adiciona o ícone de reset
+            ImageView reset = new ImageView(this);
+            reset.setImageResource(R.drawable.ic_restore_white_24dp);
+            reset.setTag(RESET_LOCAL_LIBRARIES_TAG);
+            reset.setOnClickListener(this);
+            reset.setVisibility(View.GONE); // Torna o ícone invisível inicialmente
+            toolbar.addView(reset);
+        }
+        // Adiciona o ícone de importação
+        ImageView importIcon = new ImageView(this);
+        importIcon.setImageResource(R.drawable.download_80px);
+        importIcon.setOnClickListener(this);
+        toolbar.addView(importIcon);
+
+        Helper.applyRippleToToolbarView(back_icon);
+        back_icon.setOnClickListener(Helper.getBackPressedClickListener(this));
+
+        title.setText("Local library Manager");
+    }
+
     public void onClick(View v) {
         if (v.getId() == R.id.ig_toolbar_load_file) {
             if (Build.VERSION.SDK_INT > 26) {
@@ -351,8 +394,6 @@ private void setUpSearchView() {
             }
         }
     }
-*/
-
     @Override
     public void onComplete() {
         loadFiles();
