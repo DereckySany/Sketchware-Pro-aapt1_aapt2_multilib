@@ -169,9 +169,12 @@ private void setUpSearchView() {
         searchview = new SearchView(ManageLocalLibraryActivity.this);
         toolbar.addView(searchview, toolbar.getBaselineAlignedChildIndex() + 3);*/
     }
-    
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        super.onCreateOptionsMenu(menu);
+/*    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }*/
+    public boolean onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.menu_search, menu);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
@@ -232,6 +235,8 @@ private void setUpSearchView() {
 
         Drawable importIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.download_80px);
         importItem.setIcon(importIcon);
+        
+        return super.onCreateOptionsMenu(menu);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
