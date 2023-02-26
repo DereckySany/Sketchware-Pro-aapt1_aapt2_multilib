@@ -245,7 +245,8 @@ public class ManageLocalLibraryActivity extends Activity
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        int id = item.getItemId();
+        switch (id) {
             case R.id.action_reset:
                     // Ação do botão reset
                     showDialogResetLibrary();
