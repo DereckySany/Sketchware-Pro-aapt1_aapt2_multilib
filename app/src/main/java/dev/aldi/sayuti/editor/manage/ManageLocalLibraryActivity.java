@@ -199,6 +199,7 @@ public class ManageLocalLibraryActivity extends Activity
         //setContentView(R.layout.manage_permission);
         setContentView(R.layout.manage_local_library);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         toolbar.setSubtitle("Local library Manager");
         findViewById(R.id.layout_main_logo).setVisibility(View.GONE);
         toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
