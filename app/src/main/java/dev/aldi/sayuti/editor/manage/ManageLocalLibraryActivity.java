@@ -1,5 +1,6 @@
 package dev.aldi.sayuti.editor.manage;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.graphics.Color;
@@ -198,8 +199,7 @@ public class ManageLocalLibraryActivity extends Activity
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.manage_permission);
         setContentView(R.layout.manage_local_library);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        @SuppressLint("WrongViewCast") Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setSubtitle("Local library Manager");
         findViewById(R.id.layout_main_logo).setVisibility(View.GONE);
         toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
@@ -247,20 +247,14 @@ public class ManageLocalLibraryActivity extends Activity
 
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.action_reset:
-                    // Ação do botão reset
-                    showDialogResetLibrary();
-                return true;
-            case R.id.action_import:
-                // Ação do botão import
-                    showDialogImportLibrary();
-                return true;
-            case R.id.action_search:
-                    showSearchOnActionBar(item);
-                return true;
-            default:
-                return true;
+        if (id == R.id.action_reset) {
+            showDialogResetLibrary();
+        }
+        if (id == R.id.action_import) {
+            showDialogImportLibrary();
+        }
+        if (id == R.id.action_search) {
+            showSearchOnActionBar(item);
         }
         return super.onOptionsItemSelected(item);
     }
