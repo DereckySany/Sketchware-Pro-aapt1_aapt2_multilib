@@ -355,7 +355,8 @@ public class ManageLocalLibraryActivity extends Activity
 
     List<String> directories = new LinkedList<>(uniqueDirectories);
     Collections.sort(directories, String.CASE_INSENSITIVE_ORDER);
-
+    
+    adapter = new LibraryAdapter(directories);
     arrayList.addAll(directories);
     adapter.updateData(arrayList);
     listview.setAdapter(adapter);
