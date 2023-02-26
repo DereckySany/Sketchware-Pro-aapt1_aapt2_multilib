@@ -1,12 +1,12 @@
 package dev.aldi.sayuti.editor.manage;
 
-//import androidx.appcompat.widget.SearchView;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.app.SearchManager;
 import android.content.Context;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 //import androidx.appcompat.widget.AlertDialogLayout;
 //import androidx.appcompat.widget.SearchView;
 import android.graphics.drawable.Drawable;
@@ -50,6 +50,7 @@ import java.util.Set;
 
 import a.a.a.aB;
 import a.a.a.xB;
+import com.sketchware.remod.R;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.hey.studios.project.library.LibraryDownloader;
@@ -61,6 +62,8 @@ public class ManageLocalLibraryActivity extends Activity
         implements LibraryDownloader.OnCompleteListener {
 
     private static final String RESET_LOCAL_LIBRARIES_TAG = "reset_local_libraries";
+
+    private CoordinatorLayout coordinatorLayout;
 
     private LibraryAdapter adapter;
     private ArrayList<String> arrayList = new ArrayList<>();
@@ -335,7 +338,12 @@ public class ManageLocalLibraryActivity extends Activity
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.manage_permission);
         setContentView(R.layout.manage_local_library);
-
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setSubtitle("Local library Manager");
+        findViewById(R.id.layout_main_logo).setVisibility(View.GONE);
+        toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
+        toolbar.setPopupTheme(R.style.ThemeOverlay_ToolbarMenu);
+        coordinatorLayout = findViewById(R.id.layout_manage_coordinator);
         //LinearLayout searchViewContainer = findViewById(R.id.managepermissionLinearLayout1);
         //searchViewContainer.setVisibility(View.GONE);
         //searchViewContainer.setBackground(getDrawable(R.drawable.bg_rectangle_white));
@@ -346,6 +354,7 @@ public class ManageLocalLibraryActivity extends Activity
         //ViewGroup root = (ViewGroup) mainContent.getParent();
         //root.removeView(mainContent);
         //root.addView(mainContent);
+
 
         if (getIntent().hasExtra("sc_id")) {
             String sc_id = getIntent().getStringExtra("sc_id");

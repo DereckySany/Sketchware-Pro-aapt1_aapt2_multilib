@@ -23,7 +23,7 @@
                 app:layout_scrollFlags="enterAlways|scroll"
                 app:titleEnabled="true">
 
-                <include layout="@layout/toolbar_improved" />
+                <include layout="@layout/toolbar" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
