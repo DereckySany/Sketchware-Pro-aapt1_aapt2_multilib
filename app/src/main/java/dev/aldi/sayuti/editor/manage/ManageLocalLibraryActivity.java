@@ -199,11 +199,11 @@ public class ManageLocalLibraryActivity extends Activity
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.manage_permission);
         setContentView(R.layout.manage_local_library);
-        @SuppressLint("WrongViewCast") Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setSubtitle("Local library Manager");
-        findViewById(R.id.layout_main_logo).setVisibility(View.GONE);
-        toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
-        toolbar.setPopupTheme(R.style.ThemeOverlay_ToolbarMenu);
+        //@SuppressLint("WrongViewCast") Toolbar toolbar = findViewById(R.id.toolbar);
+        //toolbar.setSubtitle("Local library Manager");
+        //findViewById(R.id.layout_main_logo).setVisibility(View.GONE);
+        //toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
+        //toolbar.setPopupTheme(R.style.ThemeOverlay_ToolbarMenu);
         coordinatorLayout = findViewById(R.id.layout_manage_coordinator);
         //LinearLayout searchViewContainer = findViewById(R.id.managepermissionLinearLayout1);
         //searchViewContainer.setVisibility(View.GONE);
@@ -333,38 +333,6 @@ public class ManageLocalLibraryActivity extends Activity
         }
     }
     private void loadFiles() {
-    arrayList.clear();
-    if (!notAssociatedWithProject) {
-        if (!FileUtil.isExistFile(configurationFilePath) || FileUtil.readFile(configurationFilePath).equals("")) {
-            FileUtil.writeFile(configurationFilePath, "[]");
-        } else {
-            project_used_libs = new Gson().fromJson(FileUtil.readFile(configurationFilePath), Helper.TYPE_MAP_LIST);
-        }
-    }
-
-    List<String> localLibraryNames = new LinkedList<>();
-    FileUtil.listDir(local_libs_path, localLibraryNames);
-
-    Set<String> uniqueDirectories = new HashSet<>();
-    for (String filename : localLibraryNames) {
-        if (FileUtil.isDirectory(filename)) {
-            String directoryName = Uri.parse(filename).getLastPathSegment();
-            uniqueDirectories.add(directoryName);
-        }
-    }
-
-    List<String> directories = new LinkedList<>(uniqueDirectories);
-    Collections.sort(directories, String.CASE_INSENSITIVE_ORDER);
-    
-    adapter = new LibraryAdapter(directories);
-    arrayList.addAll(directories);
-    adapter.updateData(arrayList);
-    listview.setAdapter(adapter);
-}
-
-    /*
-    // original
-    private void loadFiles() {
         arrayList.clear();
         if (!notAssociatedWithProject) {
             if (!FileUtil.isExistFile(configurationFilePath) || FileUtil.readFile(configurationFilePath).equals("")) {
@@ -389,13 +357,11 @@ public class ManageLocalLibraryActivity extends Activity
         Collections.sort(directories, String.CASE_INSENSITIVE_ORDER);
 
         adapter = new LibraryAdapter(directories);
-        arrayList.clear(); // Limpa a lista antes de adicionar novos itens
         arrayList.addAll(directories);
-        Collections.sort(arrayList, String.CASE_INSENSITIVE_ORDER);
         adapter.updateData(arrayList);
         listview.setAdapter(adapter);
     }
-    */
+
     private void applyFilter(String query) {
         if (query.isEmpty()) {
             adapter.updateData(arrayList);

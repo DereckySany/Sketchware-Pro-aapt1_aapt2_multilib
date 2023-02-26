@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ManageLocalLibraryActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/layout_manage_coordinator"
@@ -22,8 +23,6 @@
                 android:fitsSystemWindows="true"
                 app:layout_scrollFlags="enterAlways|scroll"
                 app:titleEnabled="true">
-
-                <include layout="@layout/toolbar" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
