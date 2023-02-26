@@ -336,7 +336,37 @@ public class ManageLocalLibraryActivity extends Activity
             dialog.show();
         }
     }
-    
+    private void loadFiles() {
+    arrayList.clear();
+    if (!notAssociatedWithProject) {
+        if (!FileUtil.isExistFile(configurationFilePath) || FileUtil.readFile(configurationFilePath).equals("")) {
+            FileUtil.writeFile(configurationFilePath, "[]");
+        } else {
+            project_used_libs = new Gson().fromJson(FileUtil.readFile(configurationFilePath), Helper.TYPE_MAP_LIST);
+        }
+    }
+
+    List<String> localLibraryNames = new LinkedList<>();
+    FileUtil.listDir(local_libs_path, localLibraryNames);
+
+    Set<String> uniqueDirectories = new HashSet<>();
+    for (String filename : localLibraryNames) {
+        if (FileUtil.isDirectory(filename)) {
+            String directoryName = Uri.parse(filename).getLastPathSegment();
+            uniqueDirectories.add(directoryName);
+        }
+    }
+
+    List<String> directories = new LinkedList<>(uniqueDirectories);
+    Collections.sort(directories, String.CASE_INSENSITIVE_ORDER);
+
+    arrayList.addAll(directories);
+    adapter.updateData(arrayList);
+    listview.setAdapter(adapter);
+}
+
+    /*
+    // original
     private void loadFiles() {
         arrayList.clear();
         if (!notAssociatedWithProject) {
@@ -368,7 +398,7 @@ public class ManageLocalLibraryActivity extends Activity
         adapter.updateData(arrayList);
         listview.setAdapter(adapter);
     }
-
+    */
     private void applyFilter(String query) {
         if (query.isEmpty()) {
             adapter.updateData(arrayList);
