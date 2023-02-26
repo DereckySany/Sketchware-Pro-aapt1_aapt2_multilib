@@ -1,6 +1,5 @@
 package dev.aldi.sayuti.editor.manage;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.graphics.Color;
@@ -31,8 +30,6 @@ import android.widget.SearchView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
-
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.sketchware.remod.R;
@@ -51,14 +48,11 @@ import java.util.Set;
 
 import a.a.a.aB;
 import a.a.a.xB;
-import com.sketchware.remod.R;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.hey.studios.project.library.LibraryDownloader;
 import mod.hey.studios.util.Helper;
 
-/*public class ManageLocalLibraryActivity extends Activity
-        implements View.OnClickListener, LibraryDownloader.OnCompleteListener {*/
 public class ManageLocalLibraryActivity extends Activity
         implements LibraryDownloader.OnCompleteListener {
 
@@ -204,7 +198,6 @@ public class ManageLocalLibraryActivity extends Activity
         //findViewById(R.id.layout_main_logo).setVisibility(View.GONE);
         //toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
         //toolbar.setPopupTheme(R.style.ThemeOverlay_ToolbarMenu);
-        coordinatorLayout = findViewById(R.id.layout_manage_coordinator);
         //LinearLayout searchViewContainer = findViewById(R.id.managepermissionLinearLayout1);
         //searchViewContainer.setVisibility(View.GONE);
         //searchViewContainer.setBackground(getDrawable(R.drawable.bg_rectangle_white));
