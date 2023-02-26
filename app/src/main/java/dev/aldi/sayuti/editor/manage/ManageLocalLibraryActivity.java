@@ -5,6 +5,10 @@ package dev.aldi.sayuti.editor.manage;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.graphics.Color;
+import android.app.SearchManager;
+import android.content.Context;
+//import androidx.appcompat.widget.AlertDialogLayout;
+//import androidx.appcompat.widget.SearchView;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
@@ -54,7 +58,7 @@ import mod.hey.studios.util.Helper;
 /*public class ManageLocalLibraryActivity extends Activity
         implements View.OnClickListener, LibraryDownloader.OnCompleteListener {*/
 public class ManageLocalLibraryActivity extends Activity
-         LibraryDownloader.OnCompleteListener {
+        implements LibraryDownloader.OnCompleteListener {
 
     private static final String RESET_LOCAL_LIBRARIES_TAG = "reset_local_libraries";
 
@@ -87,48 +91,73 @@ public class ManageLocalLibraryActivity extends Activity
                 return true;
             }
         });
-    }
-    */
-    /*
-private void setUpSearchView() {
-    // set hint text color
-    int hintColor = Color.parseColor("#888888");
-    EditText editText = searchview.findViewById(R.id.search_src_text);
-    editText.setHintTextColor(hintColor);
-
-    // set text color
-    int textColor = Color.parseColor("#FFFFFF");
-    editText.setTextColor(textColor);
-    editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-        @Override
-        public void onFocusChange(View v, boolean hasFocus) {
-            if (hasFocus) {
-                editText.setTextColor(textColor);
-            } else {
-                editText.setTextColor(hintColor);
+    } */
+    private void showSearchOnActionBar(MenuItem item) {
+//        MenuItem menuIMenu1 = menu.findItem(R.id.search_menu_item);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) item.getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setQueryHint("Search for a library");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
             }
-        }
-    });
 
-    searchview.setQueryHint("Search for a library");
-    searchview.onActionViewExpanded();
-    searchview.setIconifiedByDefault(true);
-    searchview.clearFocus();
-    searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-        @Override
-        public boolean onQueryTextSubmit(String query) {
-            return false;
-        }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                applyFilter(newText);
+                return false;
+            }
+        });
+    }
+    private void showDialogImportLibrary() {
+        if (Build.VERSION.SDK_INT > 26) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Choose compiler")
+                    .setMessage("Would you like to use DX, D8 or R8 to compile the library?\n" +
+                            "D8 supports Java 8, while DX does not. Limitation: D8 only works on Android 8 and above.\n" +
+                            "R8 is the new official Android Studio compiler.(but in alpha here!)")
+                    .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
+                            "D8").showDialog(ManageLocalLibraryActivity.this))
+                    .setNegativeButton("DX", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, false,
+                            "Dx").showDialog(ManageLocalLibraryActivity.this))
+                    .setNeutralButton("R8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
+                            "R8").showDialog(ManageLocalLibraryActivity.this))
+                    .setCancelable(true)
+                    .show();
 
-        @Override
-        public boolean onQueryTextChange(String newText) {
-            applyFilter(newText);
-            return true;
+        } else {
+            new AlertDialog.Builder(this)
+                    .setTitle("Choose compiler")
+                    .setMessage("Would you like to use Dx or D8 to dex the library?\n" +
+                            "D8 supports Java 8, whereas Dx does not. Limitation: D8 only works on Android 8 and above.")
+                    .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
+                            "D8").showDialog(ManageLocalLibraryActivity.this))
+                    .setNegativeButton("DX", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, false,
+                            "Dx").showDialog(ManageLocalLibraryActivity.this))
+                    .setNeutralButton("Cancel", null)
+                    .show();
         }
-    });
-}
-*/
-/*
+    }
+    private void showDialogResetLibrary() {
+        if (!notAssociatedWithProject) {
+            aB dialog = new aB(this);
+            dialog.a(R.drawable.rollback_96);
+            dialog.b("Reset libraries?");
+            dialog.a("This will reset all used local libraries for this project. Are you sure?");
+            dialog.a(xB.b().a(getApplicationContext(), R.string.common_word_cancel),
+                    Helper.getDialogDismissListener(dialog));
+            dialog.b(xB.b().a(getApplicationContext(), R.string.common_word_reset), view -> {
+                FileUtil.writeFile(configurationFilePath, "[]");
+                SketchwareUtil.toast("Successfully reset local libraries");
+                loadFiles();
+                dialog.dismiss();
+            });
+            dialog.show();
+        }
+    }
+    /*
     private void initToolbar() {
         ImageView back_icon = findViewById(R.id.ig_toolbar_back);
         TextView title = findViewById(R.id.tx_toolbar_title);
@@ -168,126 +197,28 @@ private void setUpSearchView() {
         }
         searchview = new SearchView(ManageLocalLibraryActivity.this);
         toolbar.addView(searchview, toolbar.getBaselineAlignedChildIndex() + 3);
-    } *//*
+    } 
+    */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }*/
-    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
-
-        // Configurações do SearchView
-        // set hint text color
-        int hintColor = Color.parseColor("#888888");
-        EditText editText = searchView.findViewById(searchView.getContext().getResources()
-                .getIdentifier("android:id/search_src_text", null, null));
-        editText.setHintTextColor(hintColor);
-
-        // set text color
-        int textColor = Color.parseColor("#FFFFFF");
-        editText.setTextColor(textColor);
-        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    editText.setTextColor(textColor);
-                } else {
-                    editText.setTextColor(hintColor);
-                }
-            }
-        });
-
-        searchView.setQueryHint("Search for a library");
-        searchView.onActionViewExpanded();
-        searchView.setIconifiedByDefault(true);
-        searchView.clearFocus();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                applyFilter(newText);
-                return true;
-            }
-        });
-
-        MenuItem resetItem = menu.findItem(R.id.action_reset);
-        if (!notAssociatedWithProject) {
-            resetItem.setVisible(true);
-        }
-
-        MenuItem importItem = menu.findItem(R.id.action_import);
-        importItem.setVisible(true);
-
-        // set icons
-        Drawable searchIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_search_white_24dp);
-        searchItem.setIcon(searchIcon);
-
-        Drawable resetIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_restore_white_24dp);
-        resetItem.setIcon(resetIcon);
-
-        Drawable importIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.download_80px);
-        importItem.setIcon(importIcon);
-
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_reset:
-                // Ação do botão reset
-                if (!notAssociatedWithProject) {
-                    aB dialog = new aB(this);
-                    dialog.a(R.drawable.rollback_96);
-                    dialog.b("Reset libraries?");
-                    dialog.a("This will reset all used local libraries for this project. Are you sure?");
-                    dialog.a(xB.b().a(getApplicationContext(), R.string.common_word_cancel),
-                            Helper.getDialogDismissListener(dialog));
-                    dialog.b(xB.b().a(getApplicationContext(), R.string.common_word_reset), view -> {
-                        FileUtil.writeFile(configurationFilePath, "[]");
-                        SketchwareUtil.toast("Successfully reset local libraries");
-                        loadFiles();
-                        dialog.dismiss();
-                    });
-                    dialog.show();
-                }
+                    // Ação do botão reset
+                    showDialogResetLibrary();
                 return true;
             case R.id.action_import:
                 // Ação do botão import
-                if (Build.VERSION.SDK_INT > 26) {
-                    new AlertDialog.Builder(this)
-                            .setTitle("Choose compiler")
-                            .setMessage("Would you like to use DX, D8 or R8 to compile the library?\n" +
-                                    "D8 supports Java 8, while DX does not. Limitation: D8 only works on Android 8 and above.\n" +
-                                    "R8 is the new official Android Studio compiler.(but in alpha here!)")
-                            .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
-                                    "D8").showDialog(ManageLocalLibraryActivity.this))
-                            .setNegativeButton("DX", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, false,
-                                    "Dx").showDialog(ManageLocalLibraryActivity.this))
-                            .setNeutralButton("R8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
-                                    "R8").showDialog(ManageLocalLibraryActivity.this))
-                            .setCancelable(true)
-                            .show();
-
-                } else {
-                    new AlertDialog.Builder(this)
-                            .setTitle("Choose compiler")
-                            .setMessage("Would you like to use Dx or D8 to dex the library?\n" +
-                                    "D8 supports Java 8, whereas Dx does not. Limitation: D8 only works on Android 8 and above.")
-                            .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
-                                    "D8").showDialog(ManageLocalLibraryActivity.this))
-                            .setNegativeButton("DX", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, false,
-                                    "Dx").showDialog(ManageLocalLibraryActivity.this))
-                            .setNeutralButton("Cancel", null)
-                            .show();
-                }
+                    showDialogImportLibrary();
+                return true;
+            case R.id.action_search:
+                    showSearchOnActionBar(item);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -402,17 +333,19 @@ private void setUpSearchView() {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.manage_permission);
+        //setContentView(R.layout.manage_permission);
+        setContentView(R.layout.manage_local_library);
 
-        LinearLayout searchViewContainer = findViewById(R.id.managepermissionLinearLayout1);
-        searchViewContainer.setVisibility(View.GONE);
+        //LinearLayout searchViewContainer = findViewById(R.id.managepermissionLinearLayout1);
+        //searchViewContainer.setVisibility(View.GONE);
         //searchViewContainer.setBackground(getDrawable(R.drawable.bg_rectangle_white));
         //searchview = findViewById(R.id.search_perm);
-        listview = findViewById(R.id.main_content);
-        ViewGroup mainContent = (ViewGroup) searchViewContainer.getParent();
-        ViewGroup root = (ViewGroup) mainContent.getParent();
-        root.removeView(mainContent);
-        root.addView(mainContent);
+        //listview = findViewById(R.id.main_content);
+        listview = findViewById(R.id.list_local_librarys);
+        //ViewGroup mainContent = (ViewGroup) searchViewContainer.getParent();
+        //ViewGroup root = (ViewGroup) mainContent.getParent();
+        //root.removeView(mainContent);
+        //root.addView(mainContent);
 
         if (getIntent().hasExtra("sc_id")) {
             String sc_id = getIntent().getStringExtra("sc_id");
