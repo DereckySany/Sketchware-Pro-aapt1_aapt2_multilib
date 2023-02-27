@@ -25,7 +25,8 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import android.widget.SearchView;
-import android.widget.Toolbar;
+//import android.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -71,6 +72,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         setContentView(R.layout.manage_local_library);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         listview = findViewById(R.id.list_local_librarys);
         //getSupportActionBar();
 
