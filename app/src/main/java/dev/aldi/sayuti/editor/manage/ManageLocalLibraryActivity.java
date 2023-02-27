@@ -2,16 +2,20 @@ package dev.aldi.sayuti.editor.manage;
 
 //import android.app.AlertDialog;
 import android.app.SearchManager;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
+
 import android.os.Build;
 import android.os.Bundle;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -20,10 +24,10 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.widget.SearchView;
 import android.widget.Toolbar;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
