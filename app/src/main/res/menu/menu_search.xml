@@ -10,10 +10,10 @@
         android:id="@+id/action_reset"
         android:icon="@drawable/ic_restore_white_24dp"
         android:title="reset"
-        android:showAsAction="ifRoom" />
+        android:showAsAction="always" />
     <item
         android:id="@+id/action_import"
         android:icon="@drawable/download_80px"
         android:title="import_library"
-        android:showAsAction="ifRoom" />
+        android:showAsAction="always" />
 </menu>
