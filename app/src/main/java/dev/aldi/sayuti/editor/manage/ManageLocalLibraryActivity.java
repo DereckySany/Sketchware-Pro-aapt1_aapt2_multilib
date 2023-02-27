@@ -195,6 +195,7 @@ public class ManageLocalLibraryActivity extends Activity
         //setContentView(R.layout.manage_permission);
         setContentView(R.layout.manage_local_library);
         @SuppressLint("WrongViewCast") Toolbar toolbar = findViewById(R.id._toolbar);
+        getSuportActionBar(toolbar);
         toolbar.setSubtitle("Local library Manager");
         //findViewById(R.id._app_bar).setVisibility(View.GONE);
         toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
