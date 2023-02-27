@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:theme="@style/Theme.MaterialComponents.Light"
-    tools:context="dev.derecky.sany.manager.ManageLocalLibraryActivity">
+    tools:context="dev.aldi.sayuti.editor.manage.ManageLocalLibraryActivity">
             <com.google.android.material.appbar.AppBarLayout
                     android:id="@+id/app_bar"
                     android:fitsSystemWindows="true"
