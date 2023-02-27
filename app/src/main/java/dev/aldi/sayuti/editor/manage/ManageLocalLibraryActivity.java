@@ -1,22 +1,23 @@
 package dev.aldi.sayuti.editor.manage;
 
-import android.annotation.SuppressLint;
+//import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.graphics.Color;
+//import android.graphics.Color;
 import android.app.SearchManager;
 import android.content.Context;
-import androidx.appcompat.widget.Toolbar;
+
+//import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 //import androidx.appcompat.widget.AlertDialogLayout;
 //import androidx.appcompat.widget.SearchView;
-import android.graphics.drawable.Drawable;
+//import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
+//import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +25,13 @@ import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
+//import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -58,8 +60,6 @@ public class ManageLocalLibraryActivity extends Activity
         implements LibraryDownloader.OnCompleteListener {
 
     private static final String RESET_LOCAL_LIBRARIES_TAG = "reset_local_libraries";
-
-    private CoordinatorLayout coordinatorLayout;
 
     private LibraryAdapter adapter;
     private ArrayList<String> arrayList = new ArrayList<>();
@@ -194,9 +194,9 @@ public class ManageLocalLibraryActivity extends Activity
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.manage_permission);
         setContentView(R.layout.manage_local_library);
-        @SuppressLint("WrongViewCast") Toolbar toolbar = findViewById(R.id._toolbar);
-        getSuportActionBar(toolbar);
-        toolbar.setSubtitle("Local library Manager");
+        Toolbar toolbar = findViewById(R.id._toolbar);
+        setActionBar(toolbar);
+        //toolbar.setSubtitle("Local library Manager");
         //findViewById(R.id._app_bar).setVisibility(View.GONE);
         toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
         //toolbar.setPopupTheme(R.style.ThemeOverlay_ToolbarMenu);
@@ -205,7 +205,7 @@ public class ManageLocalLibraryActivity extends Activity
         //searchViewContainer.setBackground(getDrawable(R.drawable.bg_rectangle_white));
         //searchview = findViewById(R.id.search_perm);
         //listview = findViewById(R.id.main_content);
-        coordinatorLayout = findViewById(R.id._coordinator);
+        CoordinatorLayout coordinatorLayout = findViewById(R.id._coordinator);
         listview = findViewById(R.id.list_local_librarys);
         //ViewGroup mainContent = (ViewGroup) searchViewContainer.getParent();
         //ViewGroup root = (ViewGroup) mainContent.getParent();
