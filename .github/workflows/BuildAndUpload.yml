@@ -1,0 +1,71 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# Original at https://github.com/tyron12233/CodeAssist/blob/main/.github/workflows/build-apk.yml
+# Changes: Minor adjustments, removal of Cancel previous runs step, but every change can be found with a simple diff.
+
+name: Build and Upload APKs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  buildMinApi26:
+    name: Build minApi26 debug APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Build and Upload Debug APK
+        env:
+          CRASH_REPORT_WEBHOOK_URL: ${{ secrets.CRASH_REPORT_WEBHOOK_URL }}
+        run: |
+          ./gradlew clean assembleMinApi26Debug -PnewPackageName=com.sketchware.remod.kax
+          ls -l app/build/outputs/apk/minApi26/debug/
+          echo "::set-output name=apk_file_path::app/build/outputs/apk/minApi26/debug/app-minApi26-debug.apk"
+
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v2
+        if: success()
+        with:
+          name: apk-minApi26-debug
+          path: ${{ steps.build_and_upload.outputs.apk_file_path }}
+
+  buildMinApi21:
+    name: Build minApi21 debug APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Build and Upload Debug APK
+        env:
+          CRASH_REPORT_WEBHOOK_URL: ${{ secrets.CRASH_REPORT_WEBHOOK_URL }}
+        run: |
+          ./gradlew clean assembleMinApi21Debug -PnewPackageName=com.sketchware.remod.kax
+          ls -l app/build/outputs/apk/minApi21/debug/
+          echo "::set-output name=apk_file_path::app/build/outputs/apk/minApi21/debug/app-minApi21-debug.apk"
+
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v2
+        if: success()
+        with:
+          name: apk-minApi21-debug
+          path: ${{ steps.build_and_upload.outputs.apk_file_path }}
