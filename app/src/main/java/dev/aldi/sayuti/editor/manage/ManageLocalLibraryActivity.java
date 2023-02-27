@@ -56,7 +56,7 @@ import mod.agus.jcoderz.lib.FileUtil;
 import mod.hey.studios.project.library.LibraryDownloader;
 import mod.hey.studios.util.Helper;
 
-public class ManageLocalLibraryActivity extends Activity
+public class ManageLocalLibraryActivity extends AppCompatActivity
         implements LibraryDownloader.OnCompleteListener {
 
     private static final String RESET_LOCAL_LIBRARIES_TAG = "reset_local_libraries";
