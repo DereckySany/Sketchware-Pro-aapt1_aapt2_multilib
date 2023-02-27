@@ -16,7 +16,5 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    - name: remove files in cache
-      run: remove /repos/{owner}/{repo}/actions/caches
     - name: list files in cache
       run: ls /home/runner/work/{repo}/{repo}/
