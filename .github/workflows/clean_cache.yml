@@ -17,4 +17,4 @@ jobs:
         cache: gradle
 
     - name: list files in cache
-      run: ls /home/runner/.gradle/caches/
+      run: ls /repos/{owner}/{repo}/actions/caches
