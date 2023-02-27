@@ -92,11 +92,11 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"], exclude: "proguard-base-7.2.2.jar")
-    minApi21Implementation 'com.android.support:appcompat-v7:28.0.0'
+    
     minApi26Implementation 'androidx.appcompat:appcompat:1.5.0'
-    implementation 'androidx.activity:activity:1.5.0'
-    implementation 'com.google.android.material:material:1.5.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    minApi26Implementation 'androidx.activity:activity:1.5.0'
+    minApi21Implementation 'com.google.android.material:material:1.5.0'
+    minApi26Implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     implementation "androidx.annotation:annotation:1.5.0"
     implementation "com.android.tools:annotations:30.4.1"
