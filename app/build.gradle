@@ -95,7 +95,7 @@ dependencies {
     
     minApi26Implementation 'androidx.appcompat:appcompat:1.5.0'
     minApi26Implementation 'androidx.activity:activity:1.5.0'
-    minApi21Implementation 'com.google.android.material:material:1.5.0'
+    
     minApi26Implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     implementation "androidx.annotation:annotation:1.5.0"
