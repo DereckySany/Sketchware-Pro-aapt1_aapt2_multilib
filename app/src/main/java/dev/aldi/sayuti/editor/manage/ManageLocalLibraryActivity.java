@@ -103,6 +103,9 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
+        menu.findItem(R.id.action_search).setIcon(R.drawable.search_icon_white);
+        menu.findItem(R.id.action_reset).setIcon(R.drawable.ic_restore_white_24dp);
+        menu.findItem(R.id.action_import).setIcon(R.drawable.download_80px);
         return true;
     }
 
