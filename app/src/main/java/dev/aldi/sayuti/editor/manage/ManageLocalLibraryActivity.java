@@ -1,5 +1,6 @@
 package dev.aldi.sayuti.editor.manage;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.graphics.Color;
@@ -193,16 +194,17 @@ public class ManageLocalLibraryActivity extends Activity
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.manage_permission);
         setContentView(R.layout.manage_local_library);
-        //@SuppressLint("WrongViewCast") Toolbar toolbar = findViewById(R.id.toolbar);
-        //toolbar.setSubtitle("Local library Manager");
-        //findViewById(R.id.layout_main_logo).setVisibility(View.GONE);
-        //toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
+        @SuppressLint("WrongViewCast") Toolbar toolbar = findViewById(R.id._toolbar);
+        toolbar.setSubtitle("Local library Manager");
+        //findViewById(R.id._app_bar).setVisibility(View.GONE);
+        toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
         //toolbar.setPopupTheme(R.style.ThemeOverlay_ToolbarMenu);
         //LinearLayout searchViewContainer = findViewById(R.id.managepermissionLinearLayout1);
         //searchViewContainer.setVisibility(View.GONE);
         //searchViewContainer.setBackground(getDrawable(R.drawable.bg_rectangle_white));
         //searchview = findViewById(R.id.search_perm);
         //listview = findViewById(R.id.main_content);
+        coordinatorLayout = findViewById(R.id._coordinator);
         listview = findViewById(R.id.list_local_librarys);
         //ViewGroup mainContent = (ViewGroup) searchViewContainer.getParent();
         //ViewGroup root = (ViewGroup) mainContent.getParent();

@@ -1,21 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    android:theme="@style/AppTheme"
     tools:context="dev.aldi.sayuti.editor.manage.ManageLocalLibraryActivity">
 
-        <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.Toolbar
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:id="@+id/_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="Local library Manager"
+            app:titleTextColor="@color/white"
+            android:scrollbarSize="@dimen/mtrl_toolbar_default_height"
+            app:navigationIcon="@drawable/ic_action_arrow_back_white">
+<!--            <androidx.appcompat.widget.SearchView-->
+<!--                app:searchIcon="@drawable/search_icon_white"-->
+<!--                app:closeIcon="@drawable/close_gray_48dp"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="match_parent"/>-->
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/list_local_librarys"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/LinearLayout_manager">
-
-            <ListView
-                android:id="@+id/list_local_librarys"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:divider="@color/transparent"
-                android:dividerHeight="2.0dip" />
-        </LinearLayout>
-</LinearLayout>
+            android:divider="@color/transparent"
+            android:dividerHeight="2.0dip" />
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
