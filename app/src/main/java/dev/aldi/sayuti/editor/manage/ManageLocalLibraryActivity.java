@@ -1,13 +1,13 @@
 package dev.aldi.sayuti.editor.manage;
 
 //import android.annotation.SuppressLint;
-import android.app.Activity;
+//import android.app.Activity;
 import android.app.AlertDialog;
 //import android.graphics.Color;
 import android.app.SearchManager;
 import android.content.Context;
 
-//import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 //import androidx.appcompat.widget.AlertDialogLayout;
 //import androidx.appcompat.widget.SearchView;
@@ -194,24 +194,24 @@ public class ManageLocalLibraryActivity extends Activity
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.manage_permission);
         setContentView(R.layout.manage_local_library);
-        Toolbar toolbar = findViewById(R.id._toolbar);
-        setActionBar(toolbar);
+        //Toolbar toolbar = findViewById(R.id._toolbar);
+        //setActionBar(toolbar);
         //toolbar.setSubtitle("Local library Manager");
         //findViewById(R.id._app_bar).setVisibility(View.GONE);
-        toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
+        //toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
         //toolbar.setPopupTheme(R.style.ThemeOverlay_ToolbarMenu);
         //LinearLayout searchViewContainer = findViewById(R.id.managepermissionLinearLayout1);
         //searchViewContainer.setVisibility(View.GONE);
         //searchViewContainer.setBackground(getDrawable(R.drawable.bg_rectangle_white));
         //searchview = findViewById(R.id.search_perm);
         //listview = findViewById(R.id.main_content);
-        CoordinatorLayout coordinatorLayout = findViewById(R.id._coordinator);
+        //CoordinatorLayout coordinatorLayout = findViewById(R.id._coordinator);
         listview = findViewById(R.id.list_local_librarys);
         //ViewGroup mainContent = (ViewGroup) searchViewContainer.getParent();
         //ViewGroup root = (ViewGroup) mainContent.getParent();
         //root.removeView(mainContent);
         //root.addView(mainContent);
-
+        getSupportActionBar();
 
         if (getIntent().hasExtra("sc_id")) {
             String sc_id = getIntent().getStringExtra("sc_id");
