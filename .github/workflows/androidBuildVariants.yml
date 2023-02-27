@@ -32,7 +32,9 @@ jobs:
           distribution: temurin
 
       - name: Clear Gradle Build Cache
-        run: ./gradlew cleanBuildCache
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: cleanBuildCache
 
       - name: Build debug APK
         uses: gradle/gradle-build-action@v2
@@ -72,7 +74,9 @@ jobs:
           distribution: temurin
 
       - name: Clear Gradle Build Cache
-        run: ./gradlew cleanBuildCache
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: cleanBuildCache
 
       - name: Build debug APK
         uses: gradle/gradle-build-action@v2
