@@ -22,6 +22,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.AsyncTask;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -235,6 +236,31 @@ public class FileUtil {
         }
 
         file.delete();
+    }
+
+    // Classe interna para excluir arquivos em segundo plano
+    private class DeleteFileTask extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... paths) {
+            for (String path : paths) {
+                deleteFile(path);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            // Atualize a interface do usuário aqui se necessário
+        }
+    }
+
+    // Novos métodos que utilizam a classe DeleteFileTask
+    public void deleteFilesInBackground(String... paths) {
+        new DeleteFileTask().execute(paths);
+    }
+
+    public void deleteFileInBackground(String path) {
+        deleteFilesInBackground(path);
     }
 
     public static boolean isExistFile(String path) {

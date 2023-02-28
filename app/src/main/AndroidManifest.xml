@@ -237,8 +237,8 @@
         <activity
             android:name="dev.aldi.sayuti.editor.manage.ManageLocalLibraryActivity"
             android:configChanges="orientation|screenSize"
+            android:theme="Base.V21.Theme.AppCompat.Light"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-            <!-- android:theme="@style/Base.V7.Theme.AppCompat.Light" -->
         <activity
             android:name="mod.agus.jcoderz.editor.manage.permission.ManagePermissionActivity"
             android:configChanges="orientation|screenSize" />
