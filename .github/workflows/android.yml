@@ -36,6 +36,7 @@ jobs:
   buildMinApi26:
     name: Build minApi26 debug APK
     runs-on: ubuntu-latest
+    needs: buildMinApi21
     steps:
       - uses: actions/checkout@v3
         with:
