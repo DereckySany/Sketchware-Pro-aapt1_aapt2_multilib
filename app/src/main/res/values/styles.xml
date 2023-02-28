@@ -2880,7 +2880,7 @@
         <item name="colorSwitchThumbNormal">@color/switch_thumb_material_light</item>
         <item name="controlBackground">?selectableItemBackgroundBorderless</item>
         <item name="editTextColor">?android:textColorPrimary</item>
-        <item name="isLightTheme">true</item>
+        <item name="isLightTheme">false</item>
         <item name="searchViewStyle">@style/SearchView</item>
         <item name="textAppearanceSearchResultSubtitle">
             @style/TextAppearance.AppCompat.SearchResult.Subtitle
