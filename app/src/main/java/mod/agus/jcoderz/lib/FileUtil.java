@@ -239,7 +239,7 @@ public class FileUtil {
     }
 
     // Classe interna para excluir arquivos em segundo plano
-    private class DeleteFileTask extends AsyncTask<String, Void, Void> {
+    public static class DeleteFileTask extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... paths) {
             for (String path : paths) {
@@ -783,6 +783,7 @@ public class FileUtil {
             throw new AssertionError("Not on an API level 30 or higher device!");
         }
     }
+
 
     /**
      * Checks if a provided file is image or not. I don't know if it throws any exceptions

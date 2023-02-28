@@ -441,7 +441,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                                         final String lib = local_libs_path.concat(enabled.getText().toString());
                                         //FileUtil.deleteFile(lib);
                                         //
-                                        DeleteFileTask deleteFileTask = new DeleteFileTask();
+                                        FileUtil.DeleteFileTask deleteFileTask = new FileUtil.DeleteFileTask();
                                         deleteFileTask.execute(lib);
 
                                         //
