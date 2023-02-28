@@ -19,9 +19,9 @@
             app:titleTextColor="@color/white"
             android:background="@color/colorPrimaryDark"
             app:navigationIcon="@drawable/ic_action_arrow_back_white"/>
-            <!-- <SearchView
+            <SearchView
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/mtrl_toolbar_default_height"/>   -->
+                android:layout_height="@dimen/mtrl_toolbar_default_height"/>   
         </androidx.appcompat.widget.ActionBarContainer>
  -->
 
