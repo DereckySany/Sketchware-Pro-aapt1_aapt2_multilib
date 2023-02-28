@@ -135,7 +135,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     }
 
     private void showSearchOnActionBar(MenuItem item) {
-//        MenuItem menuIMenu1 = menu.findItem(R.id.search_menu_item);
+        //MenuItem menuIMenu1 = menu.findItem(R.id.search_menu_item);
         // SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) item.getActionView();
         // searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
