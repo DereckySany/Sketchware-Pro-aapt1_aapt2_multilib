@@ -27,9 +27,9 @@ import android.widget.PopupMenu;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
-//import android.widget.SearchView;
+import android.widget.SearchView;
 import android.widget.Toolbar;
-import androidx.appcompat.widget.SearchView;
+//import androidx.appcompat.widget.SearchView;
 //import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -146,30 +146,31 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
        SearchView searchView = (SearchView) item.getActionView();
         // searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setQueryHint("Search for a library");
-        searchView.setOnQueryTextListener(new SearchView.c() {
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                applyFilter(s);
-                return false;
-            }
-        });
-        // searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        // searchView.setOnQueryTextListener(new SearchView.c() {
         //     @Override
-        //     public boolean onQueryTextSubmit(String query) {
+        //     public boolean onQueryTextChange(String s) {
         //         return false;
         //     }
 
         //     @Override
-        //     public boolean onQueryTextChange(String newText) {
-        //         applyFilter(newText);
+        //     public boolean onQueryTextSubmit(String s) {
+        //         applyFilter(s);
         //         return false;
         //     }
         // });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                applyFilter(newText);
+                return false;
+            }
+        });
     }
 
     private void showDialogImportLibrary() {
