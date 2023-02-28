@@ -439,7 +439,12 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                                     .setOnClickListener(view -> {
                                         enabled.setChecked(false);
                                         final String lib = local_libs_path.concat(enabled.getText().toString());
-                                        FileUtil.deleteFile(lib);
+                                        //FileUtil.deleteFile(lib);
+                                        //
+                                        DeleteFileTask deleteFileTask = new DeleteFileTask();
+                                        deleteFileTask.execute(lib);
+
+                                        //
                                         if (FileUtil.isExistFile(lib)) {
                                             SketchwareUtil.toastError("Failed to remove library");
                                         }
