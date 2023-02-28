@@ -2865,7 +2865,7 @@
         <item name="colorControlNormal">@color/color_primary</item>
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
-        <item name="statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         <item name="rippleColor">@color/color_primary</item>
         <item name="android:minHeight">@dimen/mtrl_toolbar_default_height</item>
         <item name="subtitleTextAppearance">?textAppearanceSubtitle1</item>
