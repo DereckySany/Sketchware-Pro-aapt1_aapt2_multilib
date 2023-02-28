@@ -115,7 +115,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_search) {
-            showSearchOnActionBar(id);
+            showSearchOnActionBar(item);
         }
         if (id == R.id.action_reset) {
             showDialogResetLibrary();
