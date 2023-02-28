@@ -3,17 +3,20 @@
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/search_icon_white"
-        android:title="search"
-        android:showAsAction="always"
-        android:actionViewClass="androidx.appcompat.widget.SearchView" />
+        android:orderInCategory="10"
+        android:title=""
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_reset"
         android:icon="@drawable/ic_restore_white_24dp"
-        android:title="reset"
-        android:showAsAction="always" />
+        android:orderInCategory="11"
+        android:title=""
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_import"
         android:icon="@drawable/download_80px"
-        android:title="import_library"
-        android:showAsAction="always" />
+        android:orderInCategory="12"
+        android:title=""
+        app:showAsAction="ifRoom" />
 </menu>
