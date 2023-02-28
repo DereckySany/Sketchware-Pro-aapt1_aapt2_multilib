@@ -8,14 +8,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  buildMinApi26:
-    name: Build minApi26 debug APK
+  configureBuild:
+    name: Configuring Project
     runs-on: ubuntu-latest
-    needs: buildMinApi21
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -24,49 +21,47 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
+          
+#      - name: Cache
+#        uses: actions/cache@v3.2.5
+#        with:
+#          # A list of files, directories, and wildcard patterns to cache and restore
+#          path: app
+#          key: /repos/{owner}/{repo}/actions/caches
 
-      - name: Build and Upload Debug APK
-        env:
-          CRASH_REPORT_WEBHOOK_URL: ${{ secrets.CRASH_REPORT_WEBHOOK_URL }}
-        run: |
-          ./gradlew clean assembleMinApi26Debug -PnewPackageName=com.sketchware.remod.kax
-          ls -l app/build/outputs/apk/minApi26/debug
-          echo "::set-output name=apk_file_path::app/build/outputs/apk/minApi26/debug"
-
-      - name: Upload Debug APK
-        uses: actions/upload-artifact@v2
-        if: success()
+      - name: Clear Gradle Build Cache
+        uses: gradle/gradle-build-action@v2
         with:
-          name: apk-minApi26-debug
-          path: ${{ steps.build_and_upload.outputs.apk_file_path }}
+          arguments: clean
+          
+  buildMinApi26:
+        name: Build minApi26 debug APK
+        runs-on: configureBuild
+        needs: configureBuild
+        steps:
+        - uses: gradle/gradle-build-action@v2
+          with:
+            arguments: assembleMinApi26Debug -PnewPackageName=com.sketchware.remod.kax
+          env:
+            CRASH_REPORT_WEBHOOK_URL: ${{ secrets.CRASH_REPORT_WEBHOOK_URL }}
+        - name: Upload debug APK
+          uses: actions/upload-artifact@v3
+          with:
+                name: apk-minApi26-debug
+                path: app/build/outputs/apk/minApi26/debug
 
   buildMinApi21:
-    name: Build minApi21 debug APK
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: 17
-          distribution: temurin
-
-      - name: Build and Upload Debug APK
-        env:
-          CRASH_REPORT_WEBHOOK_URL: ${{ secrets.CRASH_REPORT_WEBHOOK_URL }}
-        run: |
-          ./gradlew clean assembleMinApi21Debug -PnewPackageName=com.sketchware.remod.kax
-          ls -l app/build/outputs/apk/minApi26/debug
-          echo "::set-output name=apk_file_path::app/build/outputs/apk/minApi26/debug"
-
-      - name: Upload Debug APK
-        uses: actions/upload-artifact@v2
-        if: success()
-        with:
-          name: apk-minApi21-debug
-          path: ${{ steps.build_and_upload.outputs.apk_file_path }}
+        name: Build minApi21 debug APK
+        runs-on: configureBuild
+        needs: configureBuild
+        steps:
+        - uses: gradle/gradle-build-action@v2
+          with:
+            arguments: assembleMinApi21Debug -PnewPackageName=com.sketchware.remod.kax
+          env:
+            CRASH_REPORT_WEBHOOK_URL: ${{ secrets.CRASH_REPORT_WEBHOOK_URL }}
+        - name: Upload debug APK
+          uses: actions/upload-artifact@v3
+          with:
+                name: apk-minApi21-debug
+                path: app/build/outputs/apk/minApi21/debug
