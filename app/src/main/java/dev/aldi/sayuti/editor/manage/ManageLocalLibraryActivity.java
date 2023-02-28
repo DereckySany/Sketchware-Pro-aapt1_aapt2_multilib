@@ -107,6 +107,9 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         menu.findItem(R.id.action_search).setIcon(R.drawable.search_icon_white);
         menu.findItem(R.id.action_reset).setIcon(R.drawable.ic_restore_white_24dp);
         menu.findItem(R.id.action_import).setIcon(R.drawable.download_80px);
+        menu.findItem(R.id.action_search).setEnabled(true);
+        menu.findItem(R.id.action_reset).setEnabled(true);
+        menu.findItem(R.id.action_import).setEnabled(true);
         return true;
     }
 
@@ -136,18 +139,18 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         SearchView searchView = (SearchView) item.getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setQueryHint("Search for a library");
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                applyFilter(newText);
-                return false;
-            }
-        });
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                applyFilter(newText);
+//                return false;
+//            }
+//        });
     }
 
     private void showDialogImportLibrary() {
