@@ -119,7 +119,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_search) {
-            showSearchOnActionBar(item);
+            showSearchOnActionBar();
         }
         if (id == R.id.action_reset) {
             showDialogResetLibrary();
@@ -136,25 +136,26 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         return true;
     }
 
-    private void showSearchOnActionBar(MenuItem item) {
+    private void showSearchOnActionBar() {
         //MenuItem menuIMenu1 = menu.findItem(R.id.search_menu_item);
         // SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) item;
+        SearchView searchView = findViewById(R.id.action_search);
+        // SearchView searchView = (SearchView) item.getItemId();
 //        SearchView searchView = (SearchView) item.getActionView();
         // searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setQueryHint("Search for a library");
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                applyFilter(newText);
-//                return false;
-//            }
-//        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                applyFilter(newText);
+                return false;
+            }
+        });
     }
 
     private void showDialogImportLibrary() {
