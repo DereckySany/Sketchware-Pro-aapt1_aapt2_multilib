@@ -2902,10 +2902,12 @@
         <item name="windowFixedWidthMinor">@null</item>
         <item name="windowNoTitle">false</item>
     </style>
-    <style name="SearchView" parent="@style/Widget.AppCompat.SearchView">
+    <style name="SearchView" parent="@style/Base.Widget.AppCompat.SearchView.ActionBar">
         <item name="layout">@layout/abc_search_view</item>
         <item name="queryBackground">@drawable/abc_textfield_search_material</item>
         <item name="searchHintIcon">@drawable/search_icon_white</item>
         <item name="searchIcon">@drawable/search_icon_white</item>
+        <item name="isLightTheme">false</item>
+        <item name="defaultQueryHint">@string/abc_search_hint</item>
     </style>
 </resources>
