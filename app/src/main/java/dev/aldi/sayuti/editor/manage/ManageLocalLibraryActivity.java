@@ -113,14 +113,16 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         // menu.findItem(R.id.action_search).setEnabled(true);
         // menu.findItem(R.id.action_reset).setEnabled(true);
         // menu.findItem(R.id.action_import).setEnabled(true);
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        showSearchOnActionBar(menuItem);
         return true;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_search) {
-            showSearchOnActionBar();
-        }
+        // if (id == R.id.action_search) {
+        //     showSearchOnActionBar(id);
+        // }
         if (id == R.id.action_reset) {
             showDialogResetLibrary();
         }
@@ -136,12 +138,12 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         return true;
     }
 
-    private void showSearchOnActionBar() {
+    private void showSearchOnActionBar(MenuItem item) {
         //MenuItem menuIMenu1 = menu.findItem(R.id.search_menu_item);
         // SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = findViewById(R.id.action_search);
+        // SearchView searchView = findViewById(R.id.action_search);
         // SearchView searchView = (SearchView) item.getItemId();
-//        SearchView searchView = (SearchView) item.getActionView();
+       SearchView searchView = (SearchView) item.getActionView();
         // searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setQueryHint("Search for a library");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
