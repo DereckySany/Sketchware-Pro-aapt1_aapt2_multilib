@@ -2860,8 +2860,11 @@
 
     </style>
         <style name="Theme.MyApplication" parent="Base.V21.Theme.AppCompat.Light">
-        <item name="colorPrimary">@color/colorPrimaryDark</item>
-        <item name="colorSecondary">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/color_accent</item>
+        <item name="colorControlHighlight">@color/color_control_highlight</item>
+        <item name="colorControlNormal">@color/color_primary</item>
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="android:windowNoTitle">false</item>
         <item name="android:windowActionBar">true</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
