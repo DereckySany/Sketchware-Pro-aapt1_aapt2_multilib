@@ -2868,9 +2868,9 @@
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         <item name="rippleColor">@color/color_primary</item>
         <item name="subtitleTextAppearance">?textAppearanceSubtitle1</item>
-        <item name="subtitleTextColor">?android:textColorSecondary</item>
+        <item name="subtitleTextColor">@color/nowhite_bg</item>
         <item name="titleTextAppearance">?textAppearanceHeadline6</item>
-        <item name="titleTextColor">?android:textColorPrimary</item>
+        <item name="titleTextColor">@color/white</item>
         <item name="actionMenuTextColor">?android:textColorPrimary</item>
         <item name="autoCompleteTextViewStyle">@style/Widget.AppCompat.AutoCompleteTextView</item>
         <item name="colorBackgroundFloating">@color/background_floating_material_light</item>
