@@ -2859,14 +2859,58 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
 
     </style>
-        <style name="Theme.MyApplication" parent="Base.V21.Theme.AppCompat.Light">
+        <style name="Theme.MyApplication" parent="Base.V7.Theme.AppCompat.Light">
         <item name="colorAccent">@color/color_accent</item>
         <item name="colorControlHighlight">@color/color_control_highlight</item>
         <item name="colorControlNormal">@color/color_primary</item>
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
-        <item name="android:windowNoTitle">false</item>
-        <item name="android:windowActionBar">true</item>
-        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="statusBarColor">@color/colorPrimaryDark</item>
+        <item name="rippleColor">@color/color_primary</item>
+        <item name="android:minHeight">@dimen/mtrl_toolbar_default_height</item>
+        <item name="subtitleTextAppearance">?textAppearanceSubtitle1</item>
+        <item name="subtitleTextColor">?android:textColorSecondary</item>
+        <item name="titleTextAppearance">?textAppearanceHeadline6</item>
+        <item name="titleTextColor">?android:textColorPrimary</item>
+        <item name="actionMenuTextColor">?android:textColorPrimary</item>
+        <item name="actionModeStyle">@style/Widget.AppCompat.ActionMode</item>
+        <item name="autoCompleteTextViewStyle">@style/Widget.AppCompat.AutoCompleteTextView</item>
+        <item name="colorBackgroundFloating">@color/background_floating_material_light</item>
+        <item name="colorButtonNormal">@color/button_material_light</item>
+        <item name="colorControlActivated">?colorAccent</item>
+        <item name="colorError">@color/error_color_material_light</item>
+        <item name="colorSwitchThumbNormal">@color/switch_thumb_material_light</item>
+        <item name="controlBackground">?selectableItemBackgroundBorderless</item>
+        <item name="dialogTheme">@style/ThemeOverlay.AppCompat.Dialog</item>
+        <item name="editTextBackground">@drawable/abc_edit_text_material</item>
+        <item name="editTextColor">?android:textColorPrimary</item>
+        <item name="editTextStyle">@style/Widget.AppCompat.EditText</item>
+        <item name="isLightTheme">true</item>
+        <item name="popupMenuStyle">@style/Widget.AppCompat.Light.PopupMenu</item>
+        <item name="searchViewStyle">@style/Widget.AppCompat.Light.SearchView</item>
+        <item name="selectableItemBackground">@drawable/abc_item_background_holo_light</item>
+        <item name="selectableItemBackgroundBorderless">?selectableItemBackground</item>
+        <item name="textAppearanceSearchResultSubtitle">
+            @style/TextAppearance.AppCompat.SearchResult.Subtitle
+        </item>
+        <item name="textAppearanceSearchResultTitle">
+            @style/TextAppearance.AppCompat.SearchResult.Title
+        </item>
+        <item name="textColorSearchUrl">@color/abc_search_url_text</item>
+        <item name="toolbarNavigationButtonStyle">
+            @style/Widget.AppCompat.Toolbar.Button.Navigation
+        </item>
+        <item name="toolbarStyle">@style/Widget.AppCompat.Toolbar</item>
+        <item name="tooltipForegroundColor">@color/foreground_material_dark</item>
+        <item name="tooltipFrameBackground">@drawable/tooltip_frame_dark</item>
+        <item name="viewInflaterClass">androidx.appcompat.app.AppCompatViewInflater</item>
+        <item name="windowActionBar">true</item>
+        <item name="windowActionBarOverlay">false</item>
+        <item name="windowActionModeOverlay">false</item>
+        <item name="windowFixedHeightMajor">@null</item>
+        <item name="windowFixedHeightMinor">@null</item>
+        <item name="windowFixedWidthMajor">@null</item>
+        <item name="windowFixedWidthMinor">@null</item>
+        <item name="windowNoTitle">false</item>
     </style>
 </resources>
