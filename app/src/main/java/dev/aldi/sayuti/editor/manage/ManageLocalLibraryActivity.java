@@ -1,9 +1,11 @@
 package dev.aldi.sayuti.editor.manage;
 
 //import android.app.AlertDialog;
+import android.app.ActionBar;
 import android.app.SearchManager;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 
@@ -22,10 +24,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
-import android.widget.SearchView;
+//import android.widget.SearchView;
 //import android.widget.Toolbar;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -70,10 +74,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manage_local_library);
-        //Toolbar toolbar = findViewById(R.id.toolbar_lib);
-        //setSupportActionBar(toolbar);
-        //toolbar.setTitle("Manage Local Library");
-
+        Toolbar toolbar = new Toolbar(getApplicationContext());
+        toolbar.setTitle("Manage Local Library");
         listview = findViewById(R.id.list_local_librarys);
         //getSupportActionBar();
 
@@ -137,21 +139,22 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     private void showSearchOnActionBar(MenuItem item) {
         //MenuItem menuIMenu1 = menu.findItem(R.id.search_menu_item);
         // SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) item.getActionView();
+        SearchView searchView = (SearchView) item;
+//        SearchView searchView = (SearchView) item.getActionView();
         // searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setQueryHint("Search for a library");
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                applyFilter(newText);
-                return false;
-            }
-        });
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                applyFilter(newText);
+//                return false;
+//            }
+//        });
     }
 
     private void showDialogImportLibrary() {

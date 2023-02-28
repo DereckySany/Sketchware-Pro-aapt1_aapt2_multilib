@@ -4,27 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:fitsSystemWindows="true"
     tools:context="dev.aldi.sayuti.editor.manage.ManageLocalLibraryActivity">
-        <!-- <androidx.appcompat.widget.ActionBarContainer
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/mtrl_toolbar_default_height">
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_lib"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_width="match_parent"
-            app:layout_collapseMode="parallax"
-            app:title="Local Library Manager"
-            app:menu="@menu/menu_search"
-            app:titleTextColor="@color/white"
-            android:background="@color/colorPrimaryDark"
-            app:navigationIcon="@drawable/ic_action_arrow_back_white"/>
-            <SearchView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/mtrl_toolbar_default_height"/>   
-        </androidx.appcompat.widget.ActionBarContainer>
- -->
-
         <ListView
             android:id="@+id/list_local_librarys"
             android:layout_width="match_parent"
