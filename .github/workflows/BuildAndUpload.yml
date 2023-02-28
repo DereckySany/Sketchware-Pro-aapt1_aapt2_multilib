@@ -33,17 +33,21 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: clean
+        continue-on-error: false
           
   buildMinApi26:
         name: Build minApi26 debug APK
-        runs-on: configureBuild
+        runs-on: ubuntu-latest
         needs: configureBuild
+        continue-on-error: false
         steps:
         - uses: gradle/gradle-build-action@v2
           with:
             arguments: assembleMinApi26Debug -PnewPackageName=com.sketchware.remod.kax
           env:
             CRASH_REPORT_WEBHOOK_URL: ${{ secrets.CRASH_REPORT_WEBHOOK_URL }}
+          continue-on-error: false
+          
         - name: Upload debug APK
           uses: actions/upload-artifact@v3
           with:
@@ -51,17 +55,19 @@ jobs:
                 path: app/build/outputs/apk/minApi26/debug
 
   buildMinApi21:
-        name: Build minApi21 debug APK
-        runs-on: configureBuild
-        needs: configureBuild
-        steps:
-        - uses: gradle/gradle-build-action@v2
-          with:
-            arguments: assembleMinApi21Debug -PnewPackageName=com.sketchware.remod.kax
-          env:
-            CRASH_REPORT_WEBHOOK_URL: ${{ secrets.CRASH_REPORT_WEBHOOK_URL }}
-        - name: Upload debug APK
-          uses: actions/upload-artifact@v3
-          with:
-                name: apk-minApi21-debug
-                path: app/build/outputs/apk/minApi21/debug
+          name: Build minApi21 debug APK
+          runs-on: ubuntu-latest
+          needs: configureBuild
+          continue-on-error: false
+          steps:
+          - uses: gradle/gradle-build-action@v2
+            with:
+              arguments: assembleMinApi21Debug -PnewPackageName=com.sketchware.remod.kax
+            env:
+              CRASH_REPORT_WEBHOOK_URL: ${{ secrets.CRASH_REPORT_WEBHOOK_URL }}
+          
+          - name: Upload debug APK
+            uses: actions/upload-artifact@v3
+            with:
+                  name: apk-minApi21-debug
+                  path: app/build/outputs/apk/minApi21/debug
