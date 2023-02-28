@@ -30,8 +30,8 @@ jobs:
           CRASH_REPORT_WEBHOOK_URL: ${{ secrets.CRASH_REPORT_WEBHOOK_URL }}
         run: |
           ./gradlew clean assembleMinApi26Debug -PnewPackageName=com.sketchware.remod.kax
-          ls -l app/build/outputs/apk/minApi26/debug/
-          echo "::set-output name=apk_file_path::app/build/outputs/apk/minApi26/debug/app-minApi26-debug.apk"
+          ls -l app/build/outputs/apk/minApi26/debug
+          echo "::set-output name=apk_file_path::app/build/outputs/apk/minApi26/debug"
 
       - name: Upload Debug APK
         uses: actions/upload-artifact@v2
@@ -61,8 +61,8 @@ jobs:
           CRASH_REPORT_WEBHOOK_URL: ${{ secrets.CRASH_REPORT_WEBHOOK_URL }}
         run: |
           ./gradlew clean assembleMinApi21Debug -PnewPackageName=com.sketchware.remod.kax
-          ls -l app/build/outputs/apk/minApi21/debug/
-          echo "::set-output name=apk_file_path::app/build/outputs/apk/minApi21/debug/app-minApi21-debug.apk"
+          ls -l app/build/outputs/apk/minApi26/debug
+          echo "::set-output name=apk_file_path::app/build/outputs/apk/minApi26/debug"
 
       - name: Upload Debug APK
         uses: actions/upload-artifact@v2
