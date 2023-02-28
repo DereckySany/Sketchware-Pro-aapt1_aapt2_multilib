@@ -2859,11 +2859,11 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
 
     </style>
-        <style name="Theme.MyApplication" parent="@style/AppTheme">
-        <item name="colorPrimary">?colorPrimaryDark</item>
-        <item name="colorSecondary">?colorPrimaryDark</item>
+        <style name="Theme.MyApplication" parent="Base.V21.Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorSecondary">@color/colorPrimaryDark</item>
         <item name="android:windowNoTitle">false</item>
         <item name="android:windowActionBar">true</item>
-        <item name="android:statusBarColor">?colorPrimaryDark</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
     </style>
 </resources>

@@ -72,7 +72,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         setContentView(R.layout.manage_local_library);
         //Toolbar toolbar = findViewById(R.id.toolbar_lib);
         //setSupportActionBar(toolbar);
-        toolbar.setTitle("Manage Local Library");
+        //toolbar.setTitle("Manage Local Library");
 
         listview = findViewById(R.id.list_local_librarys);
         //getSupportActionBar();
