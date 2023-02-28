@@ -2867,13 +2867,11 @@
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         <item name="rippleColor">@color/color_primary</item>
-        <item name="android:minHeight">@dimen/mtrl_toolbar_default_height</item>
         <item name="subtitleTextAppearance">?textAppearanceSubtitle1</item>
         <item name="subtitleTextColor">?android:textColorSecondary</item>
         <item name="titleTextAppearance">?textAppearanceHeadline6</item>
         <item name="titleTextColor">?android:textColorPrimary</item>
         <item name="actionMenuTextColor">?android:textColorPrimary</item>
-        <item name="actionModeStyle">@style/Widget.AppCompat.ActionMode</item>
         <item name="autoCompleteTextViewStyle">@style/Widget.AppCompat.AutoCompleteTextView</item>
         <item name="colorBackgroundFloating">@color/background_floating_material_light</item>
         <item name="colorButtonNormal">@color/button_material_light</item>
@@ -2881,15 +2879,9 @@
         <item name="colorError">@color/error_color_material_light</item>
         <item name="colorSwitchThumbNormal">@color/switch_thumb_material_light</item>
         <item name="controlBackground">?selectableItemBackgroundBorderless</item>
-        <item name="dialogTheme">@style/ThemeOverlay.AppCompat.Dialog</item>
-        <item name="editTextBackground">@drawable/abc_edit_text_material</item>
         <item name="editTextColor">?android:textColorPrimary</item>
-        <item name="editTextStyle">@style/Widget.AppCompat.EditText</item>
         <item name="isLightTheme">true</item>
-        <item name="popupMenuStyle">@style/Widget.AppCompat.Light.PopupMenu</item>
-        <item name="searchViewStyle">@style/Widget.AppCompat.Light.SearchView</item>
-        <item name="selectableItemBackground">@drawable/abc_item_background_holo_light</item>
-        <item name="selectableItemBackgroundBorderless">?selectableItemBackground</item>
+        <item name="searchViewStyle">@style/SearchView</item>
         <item name="textAppearanceSearchResultSubtitle">
             @style/TextAppearance.AppCompat.SearchResult.Subtitle
         </item>
@@ -2897,9 +2889,6 @@
             @style/TextAppearance.AppCompat.SearchResult.Title
         </item>
         <item name="textColorSearchUrl">@color/abc_search_url_text</item>
-        <item name="toolbarNavigationButtonStyle">
-            @style/Widget.AppCompat.Toolbar.Button.Navigation
-        </item>
         <item name="toolbarStyle">@style/Widget.AppCompat.Toolbar</item>
         <item name="tooltipForegroundColor">@color/foreground_material_dark</item>
         <item name="tooltipFrameBackground">@drawable/tooltip_frame_dark</item>
@@ -2912,5 +2901,11 @@
         <item name="windowFixedWidthMajor">@null</item>
         <item name="windowFixedWidthMinor">@null</item>
         <item name="windowNoTitle">false</item>
+    </style>
+    <style name="SearchView" parent="@style/Widget.AppCompat.SearchView">
+        <item name="layout">@layout/abc_search_view</item>
+        <item name="queryBackground">@drawable/abc_textfield_search_material</item>
+        <item name="searchHintIcon">@drawable/search_icon_white</item>
+        <item name="searchIcon">@drawable/search_icon_white</item>
     </style>
 </resources>
