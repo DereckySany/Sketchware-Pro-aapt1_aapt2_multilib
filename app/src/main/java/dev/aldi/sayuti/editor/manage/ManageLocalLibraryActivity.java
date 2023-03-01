@@ -161,6 +161,21 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                 return false;
             }
         });
+        searchView.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                setDisplayShowTitleEnabled(false);
+                // getSupportActionBar().setDisplayShowTitleEnabled(false);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                setDisplayShowTitleEnabled(true);
+                // getSupportActionBar().setDisplayShowTitleEnabled(true);
+                return true;
+            }
+        });
     }
 
     private void showDialogImportLibrary() {
