@@ -78,10 +78,12 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manage_local_library);
-        Toolbar toolbar = new Toolbar(getApplicationContext());
-        toolbar.setTitle("Manage Local Library");
+        // Toolbar toolbar = new Toolbar(getApplicationContext());
+        // toolbar.setTitle("Manage Local Library");
+        ActionBar actionBar = (ActionBar) getActionBar();
+        actionBar.setTitle("Manage Local Library");
+        actionBar.isHideOnContentScrollEnabled();
         listview = findViewById(R.id.list_local_librarys);
-        //getSupportActionBar();
 
         if (getIntent().hasExtra("sc_id")) {
             String sc_id = getIntent().getStringExtra("sc_id");
@@ -211,7 +213,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             dialog.show();
         }
     }
-    
+
     private void deleteLibrary(String lib) {
         ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage("Removing library...");
