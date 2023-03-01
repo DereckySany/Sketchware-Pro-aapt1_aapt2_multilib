@@ -77,11 +77,10 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manage_local_library);
-        // Toolbar toolbar = new Toolbar(getApplicationContext());
-        // toolbar.setTitle("Manage Local Library");
-        ActionBar actionBar = (ActionBar) getActionBar();
-        actionBar.setTitle("Manage Local Library");
-        actionBar.isHideOnContentScrollEnabled();
+        setTitle("Manage Local Library");
+        setTitleColor(R.color.white);
+        this.getActionBar().isHideOnContentScrollEnabled();
+        
         listview = findViewById(R.id.list_local_librarys);
 
         if (getIntent().hasExtra("sc_id")) {
