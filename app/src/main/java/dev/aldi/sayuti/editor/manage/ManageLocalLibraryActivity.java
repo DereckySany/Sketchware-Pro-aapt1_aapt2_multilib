@@ -11,6 +11,7 @@ import android.net.Uri;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.AsyncTask;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,7 +27,7 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-
+import android.support.*;
 import android.widget.SearchView;
 //import android.widget.Toolbar;
 //import androidx.appcompat.widget.SearchView;
@@ -54,8 +55,10 @@ import a.a.a.aB;
 import a.a.a.xB;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+//import mod.hey.studios.util.SketchwareUtil;
 import mod.hey.studios.project.library.LibraryDownloader;
 import mod.hey.studios.util.Helper;
+
 public class ManageLocalLibraryActivity extends AppCompatActivity implements LibraryDownloader.OnCompleteListener {
 
     private static final String RESET_LOCAL_LIBRARIES_TAG = "reset_local_libraries";
@@ -88,7 +91,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             // Inicializar o SearchView
             //initToolbar();
             // Carregar arquivos
-            loadFiles();
+            loadLocalLibraryList();
             // setUpSearchView();
 
         } else {
@@ -100,7 +103,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
     @Override
     public void onComplete() {
-        loadFiles();
+        loadLocalLibraryList();
     }
 
     @Override
@@ -201,13 +204,30 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             dialog.b(xB.b().a(getApplicationContext(), R.string.common_word_reset), view -> {
                 FileUtil.writeFile(configurationFilePath, "[]");
                 SketchwareUtil.toast("Successfully reset local libraries");
-                loadFiles();
+                loadLocalLibraryList();
                 dialog.dismiss();
             });
             dialog.show();
         }
     }
-    private void loadFiles() {
+    private void deleteLibrary(String lib) {
+        ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("Removing library...");
+        dialog.setCancelable(false);
+        dialog.show();
+
+        new DeleteFileTask() {
+            @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+                dialog.dismiss();
+                SketchwareUtil.toast("Library removed successfully");
+                loadLocalLibraryList();
+                // loadFiles();
+            }
+        }.execute(lib);
+    }
+    private void loadLocalLibraryList() {
         arrayList.clear();
         if (!notAssociatedWithProject) {
             if (!FileUtil.isExistFile(configurationFilePath) || FileUtil.readFile(configurationFilePath).equals("")) {
@@ -410,7 +430,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                                             SketchwareUtil.toastError("Failed to rename library");
                                         }
                                         SketchwareUtil.toast("NOTE: Removed library from used local libraries");
-                                        loadFiles();
+                                        loadLocalLibraryList();
                                         realog.dismiss();
                                     });
                             realog.getWindow()
@@ -445,17 +465,17 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                                     .setOnClickListener(view -> {
                                         enabled.setChecked(false);
                                         final String lib = local_libs_path.concat(enabled.getText().toString());
-                                        //FileUtil.deleteFile(lib);
-                                        //
-                                        FileUtil.DeleteFileTask deleteFileTask = new FileUtil.DeleteFileTask();
-                                        deleteFileTask.execute(lib);
 
-                                        //
-                                        if (FileUtil.isExistFile(lib)) {
-                                            SketchwareUtil.toastError("Failed to remove library");
-                                        }
-                                        SketchwareUtil.toast("NOTE: Removed library from local libraries");
-                                        loadFiles();
+                                        // new method off return
+                                        // FileUtil.DeleteFileTask deleteFileTask = new FileUtil.DeleteFileTask();
+                                        // deleteFileTask.execute(lib);
+                                        // old method
+                                        //FileUtil.deleteFile(lib);
+                                        // if (FileUtil.isExistFile(lib)) {
+                                        //     SketchwareUtil.toastError("Failed to remove library");
+                                        // }
+                                        // SketchwareUtil.toast("NOTE: Removed library from local libraries");
+                                        deleteLibrary(lib);
                                         deleteDialog.dismiss();
                                     });
                             deleteDialog.getWindow()
