@@ -161,18 +161,24 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                 return false;
             }
         });
-        searchView.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+    //    searchView.setOnSystemUiVisibilityChangeListener(i -> {
+    //        if (i == 0){
+    //            getActionBar().setDisplayShowTitleEnabled(true);
+    //        } else {
+    //            getActionBar().setDisplayShowTitleEnabled(false);
+    //        }
+    //    });
+
+        item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-                setDisplayShowTitleEnabled(false);
-                // getSupportActionBar().setDisplayShowTitleEnabled(false);
+                 getActionBar().setDisplayShowTitleEnabled(false);
                 return true;
             }
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                setDisplayShowTitleEnabled(true);
-                // getSupportActionBar().setDisplayShowTitleEnabled(true);
+                 getActionBar().setDisplayShowTitleEnabled(true);
                 return true;
             }
         });
