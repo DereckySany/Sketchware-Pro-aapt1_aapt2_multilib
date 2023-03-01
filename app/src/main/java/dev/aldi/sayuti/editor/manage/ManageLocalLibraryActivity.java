@@ -2,6 +2,7 @@ package dev.aldi.sayuti.editor.manage;
 
 //import android.app.AlertDialog;
 import android.app.ActionBar;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -210,13 +211,14 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             dialog.show();
         }
     }
+    
     private void deleteLibrary(String lib) {
         ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage("Removing library...");
         dialog.setCancelable(false);
         dialog.show();
 
-        new DeleteFileTask() {
+        new FileUtil.DeleteFileTask() {
             @Override
             protected void onPostExecute(Void result) {
                 super.onPostExecute(result);
@@ -227,6 +229,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             }
         }.execute(lib);
     }
+
     private void loadLocalLibraryList() {
         arrayList.clear();
         if (!notAssociatedWithProject) {
