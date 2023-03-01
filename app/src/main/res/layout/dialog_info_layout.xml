@@ -22,7 +22,7 @@
         <TextView
             android:textSize="18.0sp"
             android:textStyle="bold"
-            android:textColor="#ff142fbc"
+            android:textColor="?colorPrimaryDark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Information Library"
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content">
         <EditText
             android:textSize="18.0sp"
-            android:textColorHint="#ff142fbc"
+            android:textColorHint="?colorPrimaryDark"
             android:id="@+id/edittext_info_name"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -58,7 +58,7 @@
         android:layout_height="wrap_content">
         <EditText
             android:textSize="18.0sp"
-            android:textColorHint="#ff142fbc"
+            android:textColorHint="?colorPrimaryDark"
             android:id="@+id/edittext_info_import"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -82,7 +82,7 @@
         android:layout_height="fill_parent">
         <EditText
             android:textSize="18.0sp"
-            android:textColorHint="#ff142fbc"
+            android:textColorHint="?colorPrimaryDark"
             android:id="@+id/edittext_info_manifast"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"

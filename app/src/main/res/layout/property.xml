@@ -23,7 +23,7 @@
                 android:layout_height="fill_parent"
                 android:splitMotionEvents="false" />
             <View
-                android:background="#ff142fbc"
+                android:background="?colorPrimaryDark"
                 android:layout_width="1.0dip"
                 android:layout_height="fill_parent" />
             <com.besome.sketch.lib.ui.CustomScrollView
