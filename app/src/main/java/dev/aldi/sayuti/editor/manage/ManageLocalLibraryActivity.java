@@ -107,6 +107,12 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
+        // menu.findItem(R.id.action_search).setIcon(R.drawable.search_icon_white);
+        // menu.findItem(R.id.action_reset).setIcon(R.drawable.ic_restore_white_24dp);
+        // menu.findItem(R.id.action_import).setIcon(R.drawable.download_80px);
+        // menu.findItem(R.id.action_search).setEnabled(true);
+        // menu.findItem(R.id.action_reset).setEnabled(true);
+        // menu.findItem(R.id.action_import).setEnabled(true);
         MenuItem menuItem = menu.findItem(R.id.action_search);
         showSearchOnActionBar(menuItem);
         return true;
@@ -115,7 +121,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         // if (id == R.id.action_search) {
-        //     showSearchOnActionBar(item);
+        //     showSearchOnActionBar(id);
         // }
         if (id == R.id.action_reset) {
             showDialogResetLibrary();
@@ -133,21 +139,19 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     }
 
     private void showSearchOnActionBar(MenuItem item) {
-        // SearchView searchView = findViewById(R.id.action_search);
-        SearchView searchView = (SearchView) item.getActionView();
-
-        // searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        // MenuItem menuIMenu1 = menu.findItem(R.id.search_menu_item);
+        //MenuItem menuIMenu1 = menu.findItem(R.id.search_menu_item);
         // SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         // SearchView searchView = findViewById(R.id.action_search);
         // SearchView searchView = (SearchView) item.getItemId();
-        
+       SearchView searchView = (SearchView) item.getActionView();
+        // searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setQueryHint("Search for a library");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 applyFilter(newText);
