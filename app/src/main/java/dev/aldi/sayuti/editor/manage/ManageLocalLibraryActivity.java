@@ -28,7 +28,6 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-import android.support.*;
 import android.widget.SearchView;
 //import android.widget.Toolbar;
 //import androidx.appcompat.widget.SearchView;
