@@ -107,8 +107,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
-        // MenuItem menuItem = menu.findItem(R.id.action_search);
-        showSearchOnActionBar();
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        showSearchOnActionBar(menuItem);
         return true;
     }
 
@@ -132,9 +132,9 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         return true;
     }
 
-    private void showSearchOnActionBar() {
-        SearchView searchView = findViewById(R.id.action_search);
-        // SearchView searchView = (SearchView) item.getActionView();
+    private void showSearchOnActionBar(MenuItem item) {
+        // SearchView searchView = findViewById(R.id.action_search);
+        SearchView searchView = (SearchView) item.getActionView();
 
         // searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         // MenuItem menuIMenu1 = menu.findItem(R.id.search_menu_item);
@@ -148,7 +148,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 applyFilter(newText);
