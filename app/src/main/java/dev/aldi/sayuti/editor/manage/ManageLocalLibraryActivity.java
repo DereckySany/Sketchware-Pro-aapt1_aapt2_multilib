@@ -79,7 +79,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         setContentView(R.layout.manage_local_library);
         setTitle("Manage Local Library");
         setTitleColor(R.color.white);
-        this.getActionBar().isHideOnContentScrollEnabled();
         
         listview = findViewById(R.id.list_local_librarys);
 
