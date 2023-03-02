@@ -142,11 +142,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     }
 
     private void showSearchOnActionBar(MenuItem item) {
-        //MenuItem menuIMenu1 = menu.findItem(R.id.search_menu_item);
         // SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        // SearchView searchView = findViewById(R.id.action_search);
-        // SearchView searchView = (SearchView) item.getItemId();
-       SearchView searchView = (SearchView) item.getActionView();
+        SearchView searchView = (SearchView) item.getActionView();
         // searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setQueryHint("Search for a library");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -184,7 +181,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         //     }
         // });
 
-            searchView.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
                 private CharSequence originalTitle = null;
 
                 @Override
