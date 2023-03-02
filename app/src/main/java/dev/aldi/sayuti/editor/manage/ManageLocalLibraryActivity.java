@@ -160,7 +160,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         });
 
         searchView.setOnSystemUiVisibilityChangeListener(i -> {
-            private CharSequence originalTitle = null;
+            CharSequence originalTitle = null;
             if ( i == 0 ){
                     originalTitle = getTitle();
                     // Define o título vazio para ocultá-lo
