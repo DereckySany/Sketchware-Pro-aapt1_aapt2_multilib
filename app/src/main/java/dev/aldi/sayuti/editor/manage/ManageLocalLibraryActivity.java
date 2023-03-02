@@ -116,9 +116,9 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         // menu.findItem(R.id.action_search).setEnabled(true);
         // menu.findItem(R.id.action_reset).setEnabled(true);
         // menu.findItem(R.id.action_import).setEnabled(true);
-        CharSequence originalTitle = null;
         MenuItem menuItem = menu.findItem(R.id.action_search);
         menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            CharSequence originalTitle = null;
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
                  // Armazena o título original
