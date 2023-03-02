@@ -99,7 +99,7 @@
     <LinearLayout
         android:gravity="right"
         android:orientation="horizontal"
-        android:background="#FF142FBC"
+        android:background="?colorPrimaryDark"
         android:paddingTop="10.0dip"
         android:paddingRight="18.0dip"
         android:paddingBottom="10.0dip"

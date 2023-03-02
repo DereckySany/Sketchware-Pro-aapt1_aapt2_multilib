@@ -161,27 +161,28 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                 return false;
             }
         });
-    //    searchView.setOnSystemUiVisibilityChangeListener(i -> {
-    //        if (i == 0){
-    //            getActionBar().setDisplayShowTitleEnabled(true);
-    //        } else {
-    //            getActionBar().setDisplayShowTitleEnabled(false);
-    //        }
-    //    });
 
-        item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                 getActionBar().setDisplayShowTitleEnabled(false);
-                return true;
-            }
+       searchView.setOnSystemUiVisibilityChangeListener(i -> {
+           if ( i == 0 ){
+               getActionBar().setDisplayShowTitleEnabled(true);
+           } else {
+               getActionBar().setDisplayShowTitleEnabled(false);
+           }
+       });
 
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                 getActionBar().setDisplayShowTitleEnabled(true);
-                return true;
-            }
-        });
+        // item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+        //     @Override
+        //     public boolean onMenuItemActionExpand(MenuItem item) {
+        //          getActionBar().setDisplayShowTitleEnabled(false);
+        //         return true;
+        //     }
+
+        //     @Override
+        //     public boolean onMenuItemActionCollapse(MenuItem item) {
+        //          getActionBar().setDisplayShowTitleEnabled(true);
+        //         return true;
+        //     }
+        // });
     }
 
     private void showDialogImportLibrary() {

@@ -24,7 +24,7 @@
 				android:layout_height="wrap_content"
 				android:src="@drawable/ic_arrow_drop_down_black"
 				android:scaleType="center"
-				android:tint="#0084C2" />
+				android:tint="?colorPrimaryDark" />
 			<androidx.cardview.widget.CardView
 				android:id="@+id/cardview1"
 				android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
 				android:padding="4dp"
 				android:text="Main Page"
 				android:textSize="12sp"
-				android:textColor="#0084C2" />
+				android:textColor="?colorPrimaryDark" />
 		</LinearLayout>
 		<LinearLayout
 			android:id="@+id/linear3"
