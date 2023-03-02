@@ -116,17 +116,25 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         // menu.findItem(R.id.action_search).setEnabled(true);
         // menu.findItem(R.id.action_reset).setEnabled(true);
         // menu.findItem(R.id.action_import).setEnabled(true);
+        CharSequence originalTitle = null;
         MenuItem menuItem = menu.findItem(R.id.action_search);
-        menuItem.setOnSystemUiVisibilityChangeListener(i -> {
-            CharSequence originalTitle = null;
-            if ( i == 0 ){
+        menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                 // Armazena o título original
                     originalTitle = getTitle();
-                    // Define o título vazio para ocultá-lo
+                 // Define o título vazio para ocultá-lo
                     setTitle("");
-            } else {
-                    setTitle(originalTitle);
+                return true;
             }
-        });
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                 // Restaura o título original
+                    setTitle(originalTitle);
+                return true;
+            }
+        });        
         showSearchOnActionBar(menuItem);
         return true;
     }
@@ -168,20 +176,16 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                 return false;
             }
         });
-
-        // item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
-        //     @Override
-        //     public boolean onMenuItemActionExpand(MenuItem item) {
-        //          getActionBar().setDisplayShowTitleEnabled(false);
-        //         return true;
-        //     }
-
-        //     @Override
-        //     public boolean onMenuItemActionCollapse(MenuItem item) {
-        //          getActionBar().setDisplayShowTitleEnabled(true);
-        //         return true;
-        //     }
-        // });
+//        menuItem.setOnSystemUiVisibilityChangeListener(i -> {
+//            CharSequence originalTitle = null;
+//            if ( i == 0 ){
+//                    originalTitle = getTitle();
+//                    // Define o título vazio para ocultá-lo
+//                    setTitle("");
+//            } else {
+//                    setTitle(originalTitle);
+//            }
+//        });
 
             // item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             //     private CharSequence originalTitle = null;
