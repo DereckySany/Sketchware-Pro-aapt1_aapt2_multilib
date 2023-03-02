@@ -97,7 +97,7 @@
     </com.google.android.material.textfield.TextInputLayout>
     </ScrollView>
     <LinearLayout
-        android:gravity="right"
+        android:gravity="right|center_vertical"
         android:orientation="horizontal"
         android:background="?colorPrimaryDark"
         android:paddingTop="10.0dip"
@@ -107,6 +107,7 @@
         android:layout_height="wrap_content"
         tools:ignore="RtlHardcoded">
         <TextView
+            android:gravity="right|center_vertical"
             android:textStyle="bold"
             android:textColor="#ffffffff"
             android:id="@+id/text_info_ok"
