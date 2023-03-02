@@ -162,13 +162,13 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             }
         });
 
-       searchView.setOnSystemUiVisibilityChangeListener(i -> {
-           if ( i == 0 ){
-               getActionBar().setDisplayShowTitleEnabled(true);
-           } else {
-               getActionBar().setDisplayShowTitleEnabled(false);
-           }
-       });
+        // searchView.setOnSystemUiVisibilityChangeListener(i -> {
+        //     if ( i == 0 ){
+        //         getActionBar().setDisplayShowTitleEnabled(true);
+        //     } else {
+        //         getActionBar().setDisplayShowTitleEnabled(false);
+        //     }
+        // });
 
         // item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
         //     @Override
@@ -183,7 +183,27 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         //         return true;
         //     }
         // });
-    }
+
+            searchView.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+                private CharSequence originalTitle = null;
+
+                @Override
+                public boolean onMenuItemActionExpand(MenuItem item) {
+                    // Armazena o título original
+                    originalTitle = getTitle();
+                    // Define o título vazio para ocultá-lo
+                    setTitle("");
+                    return true;
+                }
+
+                @Override
+                public boolean onMenuItemActionCollapse(MenuItem item) {
+                    // Restaura o título original
+                    setTitle(originalTitle);
+                    return true;
+                }
+            });
+        }
 
     private void showDialogImportLibrary() {
         if (Build.VERSION.SDK_INT > 26) {
