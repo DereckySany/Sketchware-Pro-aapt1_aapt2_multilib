@@ -117,6 +117,16 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         // menu.findItem(R.id.action_reset).setEnabled(true);
         // menu.findItem(R.id.action_import).setEnabled(true);
         MenuItem menuItem = menu.findItem(R.id.action_search);
+        menuItem.setOnSystemUiVisibilityChangeListener(i -> {
+            CharSequence originalTitle = null;
+            if ( i == 0 ){
+                    originalTitle = getTitle();
+                    // Define o título vazio para ocultá-lo
+                    setTitle("");
+            } else {
+                    setTitle(originalTitle);
+            }
+        });
         showSearchOnActionBar(menuItem);
         return true;
     }
@@ -156,17 +166,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             public boolean onQueryTextChange(String newText) {
                 applyFilter(newText);
                 return false;
-            }
-        });
-
-        searchView.setOnSystemUiVisibilityChangeListener(i -> {
-            CharSequence originalTitle = null;
-            if ( i == 0 ){
-                    originalTitle = getTitle();
-                    // Define o título vazio para ocultá-lo
-                    setTitle("");
-            } else {
-                    setTitle(originalTitle);
             }
         });
 
