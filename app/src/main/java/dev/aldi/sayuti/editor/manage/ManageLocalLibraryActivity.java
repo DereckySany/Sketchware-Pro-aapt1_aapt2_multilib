@@ -59,6 +59,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
     private static final String RESET_LOCAL_LIBRARIES_TAG = "reset_local_libraries";
     private CharSequence originalTitle = "Manage Local Library";
+    private ImageView iconSearch;
     private LibraryAdapter adapter;
     private ArrayList<String> arrayList = new ArrayList<>();
     private boolean notAssociatedWithProject = false;
@@ -102,7 +103,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
         MenuItem menuItem = menu.findItem(R.id.action_search);
-        menuItem.setIcon(R.drawable.search_icon_white);  
+        iconSearch = findViewById(R.id.search_button);
+        iconSearch.setImageResource(R.drawable.search_icon_white);
         showSearchOnActionBar(menuItem);
         return true;
     }
