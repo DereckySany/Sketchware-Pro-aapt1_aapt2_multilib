@@ -887,6 +887,8 @@ public class LibraryDownloader {
                                 start.setOnClickListener(startView -> {
                                     use_d8 = Build.VERSION.SDK_INT >= 26;
                                     onDownloadComplete();
+                                    String[] test = new String[]{libName.concat("/classes.jar")};
+                                    new BackTask().execute(test);
                                     //startView.isPressed();
                                     //PRDownloader.resume(downloadId);
                                 });
