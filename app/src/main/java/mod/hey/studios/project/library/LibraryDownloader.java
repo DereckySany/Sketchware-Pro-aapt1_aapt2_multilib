@@ -879,13 +879,18 @@ public class LibraryDownloader {
                             } else {
                                 message.setText("This jar is not supported by Dx since Dx only supports up to Java 1.7.\nIn order to proceed, " + 
                                 (Build.VERSION.SDK_INT < 26 ? "D8 (Only supported by Android version is 8+)" : "you need Press Start to switch to D8") + ".");
-                                //use_d8 = Build.VERSION.SDK_INT >= 26;
+                                
                                 if (Build.VERSION.SDK_INT < 26){
                                     start.setEnabled(false);
                                     start.setVisibility(View.GONE);
                                 }
-                                FileUtil.deleteFile(libName);
-                                FileUtil.deleteFile(path2.toString());
+                                start.setOnClickListener(view -> {
+                                    use_d8 = Build.VERSION.SDK_INT >= 26;
+                                });
+                                cancel.setOnClickListener(view -> {
+                                    FileUtil.deleteFile(libName);
+                                    FileUtil.deleteFile(path2.toString());
+                                });
                                 cancel.setEnabled(true);
                                 cancel.setVisibility(View.VISIBLE);
                             }
