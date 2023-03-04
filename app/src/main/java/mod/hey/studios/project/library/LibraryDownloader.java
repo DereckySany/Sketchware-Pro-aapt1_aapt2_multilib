@@ -885,12 +885,22 @@ public class LibraryDownloader {
                                 (Build.VERSION.SDK_INT < 26 ? "D8 (Only supported by Android version is 8+)" : "you need Press Start to switch to D8") + ".");
                                 use_d8 = Build.VERSION.SDK_INT >= 26;
                                 if (use_d8 || JarCheck.checkJarFast(libName.concat("/classes.jar"), 44, 51)) {
+
+                                    message.setText("Download completed!");
+
                                     String[] test = new String[]{libName.concat("/classes.jar")};
                                     new BackTask().execute(test);
-                                }
-                                FileUtil.deleteFile(libName);
-                                FileUtil.deleteFile(path2.toString());
+                                    FileUtil.deleteFile(path2.toString());
 
+                                    FileUtil.writeFile(libName + "/config", findPackageName(libName + "/", library.getText().toString()));
+                                    FileUtil.writeFile(libName + "/version", library.getText().toString());
+
+                                    checkLibsDirectory(libName + "/");
+                                    deleteUnnecessaryFiles(libName + "/");
+                                } else {
+                                    FileUtil.deleteFile(libName);
+                                    FileUtil.deleteFile(path2.toString());
+                                }
                                 cancel.setEnabled(true);
                                 cancel.setVisibility(View.VISIBLE);
                             }
