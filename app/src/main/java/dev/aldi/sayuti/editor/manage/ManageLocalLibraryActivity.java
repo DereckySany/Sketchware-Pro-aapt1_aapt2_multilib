@@ -103,32 +103,21 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
         MenuItem menuItem = menu.findItem(R.id.action_search);
-        menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
-            // Armazena o título original
-            CharSequence originalTitle = getTitle();
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                 // Define o título vazio para ocultá-lo
-                    setTitle("");
-                return true;
-            }
-
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                 // Restaura o título original
-                    setTitle(originalTitle);
-                return true;
-            }
-        });        
+        menuItem.setIcon(R.drawable.search_icon_white);  
         showSearchOnActionBar(menuItem);
         return true;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        // if (id == R.id.action_search) {
-        //     showSearchOnActionBar(id);
-        // }
+        if (id == R.id.action_search) {
+             CharSequence originalTitle = getTitle();
+             if (item.expandActionView()){
+                 setTitle("");
+             } else {
+                 setTitle(originalTitle);
+             }
+        }
         if (id == R.id.action_reset) {
             showDialogResetLibrary();
         }
