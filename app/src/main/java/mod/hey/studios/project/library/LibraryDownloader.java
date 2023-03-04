@@ -886,9 +886,16 @@ public class LibraryDownloader {
                                 }
                                 start.setOnClickListener(startView -> {
                                     use_d8 = Build.VERSION.SDK_INT >= 26;
+                                try {
+                                        _jar2dex(libName.concat("/classes.jar"));
+                                        //success = true;
+                                    } catch (Exception e) {
+                                        //success = false;
+                                        return e.toString();
+                                    }
+                                    // String[] test = new String[]{libName.concat("/classes.jar")};
+                                    // new BackTask().execute(test);
                                     onDownloadComplete();
-                                    String[] test = new String[]{libName.concat("/classes.jar")};
-                                    new BackTask().execute(test);
                                     //startView.isPressed();
                                     //PRDownloader.resume(downloadId);
                                 });
@@ -965,31 +972,6 @@ public class LibraryDownloader {
                                             progressbar1
                                     );
 
-                                /*                                    
-                                    currentRepo = repoUrls.get(counter);
-                                    String name = repoNames.get(counter);
-
-                                    counter++;
-                                    message.setText("Searching... " + counter + "/" + repoUrls.size() + " [" + name + "]");
-
-                                    downloadId = _download(
-                                            currentRepo.concat(_getDownloadLink(library.getText().toString())),
-                                            downloadPath,
-                                            _getLibName(library.getText().toString()) + ".zip",
-                                            library,
-                                            message,
-                                            progressBarContainer,
-                                            libraryContainer,
-                                            start,
-                                            pause,
-                                            resume,
-                                            cancel,
-                                            acao,
-                                            useAar,
-                                            useJar,
-                                            progressbar1
-                                    );
-                                */
                                 } else {
                                     FileUtil.deleteFile(libName);
                                     message.setText("Library was not found in loaded repositories");
