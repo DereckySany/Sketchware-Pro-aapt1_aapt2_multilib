@@ -1,6 +1,5 @@
 package dev.aldi.sayuti.editor.manage;
 
-//import android.app.AlertDialog;
 import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
@@ -29,8 +28,6 @@ import android.widget.PopupMenu;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.SearchView;
-//import android.widget.Toolbar;
-//import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,7 +52,6 @@ import a.a.a.aB;
 import a.a.a.xB;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
-//import mod.hey.studios.util.SketchwareUtil;
 import mod.hey.studios.project.library.LibraryDownloader;
 import mod.hey.studios.util.Helper;
 
@@ -67,7 +63,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     private ArrayList<String> arrayList = new ArrayList<>();
     private boolean notAssociatedWithProject = false;
     private ListView listview;
-    //    private SearchView searchview;
     private String configurationFilePath = "";
     private String local_libs_path = "";
     private ArrayList<HashMap<String, Object>> lookup_list = new ArrayList<>();
@@ -88,11 +83,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             configurationFilePath = FileUtil.getExternalStorageDir().concat("/.sketchware/data/")
                     .concat(sc_id.concat("/local_library"));
             local_libs_path = FileUtil.getExternalStorageDir().concat("/.sketchware/libs/local_libs/");
-            // Inicializar o SearchView
-            //initToolbar();
-            // Carregar arquivos
+            // Carregar lista de arquivos
             loadLocalLibraryList();
-            // setUpSearchView();
 
         } else {
             finishAfterTransition();
@@ -110,19 +102,12 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
-        // menu.findItem(R.id.action_search).setIcon(R.drawable.search_icon_white);
-        // menu.findItem(R.id.action_reset).setIcon(R.drawable.ic_restore_white_24dp);
-        // menu.findItem(R.id.action_import).setIcon(R.drawable.download_80px);
-        // menu.findItem(R.id.action_search).setEnabled(true);
-        // menu.findItem(R.id.action_reset).setEnabled(true);
-        // menu.findItem(R.id.action_import).setEnabled(true);
         MenuItem menuItem = menu.findItem(R.id.action_search);
         menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
-            CharSequence originalTitle = null;
+            // Armazena o título original
+            CharSequence originalTitle = getTitle();
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-                 // Armazena o título original
-                    originalTitle = getTitle();
                  // Define o título vazio para ocultá-lo
                     setTitle("");
                 return true;
@@ -176,37 +161,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                 return false;
             }
         });
-//        menuItem.setOnSystemUiVisibilityChangeListener(i -> {
-//            CharSequence originalTitle = null;
-//            if ( i == 0 ){
-//                    originalTitle = getTitle();
-//                    // Define o título vazio para ocultá-lo
-//                    setTitle("");
-//            } else {
-//                    setTitle(originalTitle);
-//            }
-//        });
-
-            // item.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
-            //     private CharSequence originalTitle = null;
-
-            //     @Override
-            //     public boolean onMenuItemActionExpand(MenuItem item) {
-            //         // Armazena o título original
-            //         originalTitle = getTitle();
-            //         // Define o título vazio para ocultá-lo
-            //         setTitle("");
-            //         return true;
-            //     }
-
-            //     @Override
-            //     public boolean onMenuItemActionCollapse(MenuItem item) {
-            //         // Restaura o título original
-            //         setTitle(originalTitle);
-            //         return true;
-            //     }
-            // });
-        }
+    }
 
     private void showDialogImportLibrary() {
         if (Build.VERSION.SDK_INT > 26) {
@@ -364,8 +319,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             enabled.setOnClickListener(v -> {
                 HashMap<String, Object> localLibrary = getLocalLibraryData(libname);
                 if (!enabled.isChecked()) {
-                    //int i = project_used_libs.indexOf(localLibrary);
-                    //project_used_libs.remove(i);
                     project_used_libs.remove(localLibrary);
                 } else {
                     project_used_libs.remove(localLibrary);
@@ -512,16 +465,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                                     .setOnClickListener(view -> {
                                         enabled.setChecked(false);
                                         final String lib = local_libs_path.concat(enabled.getText().toString());
-
-                                        // new method off return
-                                        // FileUtil.DeleteFileTask deleteFileTask = new FileUtil.DeleteFileTask();
-                                        // deleteFileTask.execute(lib);
-                                        // old method
-                                        //FileUtil.deleteFile(lib);
-                                        // if (FileUtil.isExistFile(lib)) {
-                                        //     SketchwareUtil.toastError("Failed to remove library");
-                                        // }
-                                        // SketchwareUtil.toast("NOTE: Removed library from local libraries");
                                         deleteLibrary(lib);
                                         deleteDialog.dismiss();
                                     });
