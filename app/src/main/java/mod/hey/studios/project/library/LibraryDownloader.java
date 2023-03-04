@@ -884,13 +884,14 @@ public class LibraryDownloader {
                                     start.setEnabled(false);
                                     start.setVisibility(View.GONE);
                                 }
-                                start.setOnClickListener(view -> {
+                                start.setOnClickListener(startView -> {
                                     use_d8 = Build.VERSION.SDK_INT >= 26;
+                                    onDownloadComplete();
+                                    //startView.isPressed();
+                                    //PRDownloader.resume(downloadId);
                                 });
-                                cancel.setOnClickListener(view -> {
-                                    FileUtil.deleteFile(libName);
-                                    FileUtil.deleteFile(path2.toString());
-                                });
+                                FileUtil.deleteFile(libName);
+                                FileUtil.deleteFile(path2.toString());
                                 cancel.setEnabled(true);
                                 cancel.setVisibility(View.VISIBLE);
                             }
