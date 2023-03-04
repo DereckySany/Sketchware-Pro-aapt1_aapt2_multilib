@@ -58,7 +58,7 @@ import mod.hey.studios.util.Helper;
 public class ManageLocalLibraryActivity extends AppCompatActivity implements LibraryDownloader.OnCompleteListener {
 
     private static final String RESET_LOCAL_LIBRARIES_TAG = "reset_local_libraries";
-
+    private CharSequence originalTitle = "Manage Local Library";
     private LibraryAdapter adapter;
     private ArrayList<String> arrayList = new ArrayList<>();
     private boolean notAssociatedWithProject = false;
@@ -72,9 +72,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manage_local_library);
-        setTitle("Manage Local Library");
+        setTitle(originalTitle);
         setTitleColor(R.color.white);
-        
         listview = findViewById(R.id.list_local_librarys);
 
         if (getIntent().hasExtra("sc_id")) {
@@ -111,7 +110,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_search) {
-             CharSequence originalTitle = getTitle();
              if (item.expandActionView()){
                  setTitle("");
              } else {
