@@ -890,8 +890,8 @@ public class LibraryDownloader {
                                     //startView.isPressed();
                                     //PRDownloader.resume(downloadId);
                                 });
-                                FileUtil.deleteFile(libName);
-                                FileUtil.deleteFile(path2.toString());
+                                //FileUtil.deleteFile(libName);
+                                //FileUtil.deleteFile(path2.toString());
                                 cancel.setEnabled(true);
                                 cancel.setVisibility(View.VISIBLE);
                             }
