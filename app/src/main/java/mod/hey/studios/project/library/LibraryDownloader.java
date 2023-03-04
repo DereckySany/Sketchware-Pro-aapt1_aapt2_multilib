@@ -7,8 +7,11 @@ import android.app.ProgressDialog;
 import android.content.ClipboardManager;
 import android.graphics.Color;
 import android.net.Uri;
+
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -878,11 +881,11 @@ public class LibraryDownloader {
                                 checkLibsDirectory(libName + "/");
                                 deleteUnnecessaryFiles(libName + "/");
                             } else {
-                                if (Build.VERSION.SDK_INT < 21) {
+                                if (Build.VERSION.SDK_INT < 26) {
                                     message.setText("This jar is not supported by Dx since Dx only supports up to Java 1.7.\nIn order to proceed, you need to switch to D8 (if your Android version is 8+)");
-                                    use_d8 = true;
                                 } else {
                                     message.setText("This jar is not supported by Dx since Dx only supports up to Java 1.7.\nIn order to proceed, you need Press Start to switch to D8 (if your Android version is 8+)");
+                                    use_d8 = true;
                                 }
                                 FileUtil.deleteFile(libName);
                                 FileUtil.deleteFile(path2.toString());
