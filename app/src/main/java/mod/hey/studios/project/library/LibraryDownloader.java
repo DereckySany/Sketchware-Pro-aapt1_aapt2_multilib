@@ -864,7 +864,7 @@ public class LibraryDownloader {
                             }
                         }
                         if (FileUtil.isExistFile(libName.concat("/classes.jar"))) {
-                            if (use_d8 || JarCheck.checkJar(libName.concat("/classes.jar"), 44, 51)) {
+                            if (use_d8 || JarCheck.checkJarFast(libName.concat("/classes.jar"), 44, 51)) {
 
                                 message.setText("Download completed!");
 

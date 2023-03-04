@@ -104,8 +104,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
         MenuItem menuItem = menu.findItem(R.id.action_search);
-        iconSearch = findViewById(R.id.search_button);
-        iconSearch.setImageResource(R.drawable.search_icon_white);
         showSearchOnActionBar(menuItem);
         return true;
     }
@@ -135,6 +133,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     }
 
     private void showSearchOnActionBar(MenuItem item) {
+        iconSearch = findViewById(R.id.search_button);
+        iconSearch.setImageResource(R.drawable.search_icon_white);
         // SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) item.getActionView();
         // searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
