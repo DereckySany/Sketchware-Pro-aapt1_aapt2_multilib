@@ -886,12 +886,12 @@ public class LibraryDownloader {
                                 }
                                 start.setOnClickListener(startView -> {
                                     use_d8 = Build.VERSION.SDK_INT >= 26;
-                                try {
+                                    try {
                                         _jar2dex(libName.concat("/classes.jar"));
                                         //success = true;
                                     } catch (Exception e) {
                                         //success = false;
-                                        return e.toString();
+                                        message.setText(e.toString());
                                     }
                                     // String[] test = new String[]{libName.concat("/classes.jar")};
                                     // new BackTask().execute(test);
