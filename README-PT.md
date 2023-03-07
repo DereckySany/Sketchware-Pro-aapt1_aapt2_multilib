@@ -73,7 +73,7 @@ Você também pode verificar o pacote [`mod`](app/src/main/java/mod) que contém
 ## Contribuindo
 
 Bifurque este repositório e contribua de volta usando
-[solicitações pull](https://github.com/Sketchware-Pro/Sketchware-Pro/pulls).
+[`solicitações pull`](https://github.com/Sketchware-Pro/Sketchware-Pro/pulls).
 
 Quaisquer contribuições, grandes ou pequenas, recursos importantes ou correções de bugs são bem-vindas e apreciadas, mas serão
 ser minuciosamente revisado.
