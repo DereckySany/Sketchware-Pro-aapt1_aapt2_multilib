@@ -68,6 +68,8 @@ or use the appropriate build Gradle command.
 | [`a.a.a.yq`](app/src/main/java/a/a/a/yq.java) | Arrange File Paths in Sketchware Projects |
 | [`a.a.a.ZA`](app/src/main/java/a/a/a/ZA.java) | Resource Caching Manager |
 
+* ***more in [`Classe Index`](ClassIndex.md).***
+
 You can also check the [`mod`](app/src/main/java/mod) package that has the majority of contributors' changes.
 
 ## Contributing
