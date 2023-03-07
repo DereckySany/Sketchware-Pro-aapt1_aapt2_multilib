@@ -28,16 +28,16 @@ or use the appropriate build Gradle command.
 
 | Class | Role |
 | ----- | ---- |
-| `a.a.a.Dp` | Helper for compiling an entire project |
-| `a.a.a.Ix` | Responsible for generating AndroidManifest.xml |
-| `a.a.a.Jx` | Generates source code of activities |
-| `a.a.a.Lx` | Generates source code of components, such as listeners, etc. |
-| `a.a.a.Ox` | Responsible for generating XML files of layouts |
-| `a.a.a.qq` | Registry of built-in libraries' dependencies |
-| `a.a.a.tq` | Responsible for the compiling dialog's quizzes |
-| `a.a.a.yq` | Organizes Sketchware projects' file paths |
+| [`a.a.a.Dp`](app/src/main/java/a/a/a/Dp.java) | Helper for compiling an entire project |
+| [`a.a.a.Ix`](app/src/main/java/a/a/a/Ix.java) | Responsible for generating AndroidManifest.xml |
+| [`a.a.a.Jx`](app/src/main/java/a/a/a/Jx.java) | Generates source code of activities |
+| [`a.a.a.Lx`](app/src/main/java/a/a/a/Lx.java) | Generates source code of components, such as listeners, etc. |
+| [`a.a.a.Ox`](app/src/main/java/a/a/a/Ox.java) | Responsible for generating XML files of layouts |
+| [`a.a.a.qq`](app/src/main/java/a/a/a/qq.java) | Registry of built-in libraries' dependencies |
+| [`a.a.a.tq`](app/src/main/java/a/a/a/tq.java) | Responsible for the compiling dialog's quizzes |
+| [`a.a.a.yq`](app/src/main/java/a/a/a/yq.java) | Organizes Sketchware projects' file paths |
 
-You can also check the `mod` package that has the majority of contributors' changes.
+You can also check the [`mod`](app/src/main/java/mod) package that has the majority of contributors' changes.
 
 ## Contributing
 
