@@ -68,7 +68,7 @@ ou use o comando build Gradle apropriado.
 | [`a.a.a.yq`](app/src/main/java/a/a/a/yq.java) | Organiza os caminhos de arquivos dos projetos do Sketchware |
 | [`a.a.a.ZA`](app/src/main/java/a/a/a/ZA.java) | Gerenciador de armazenamento em cache de recursos |
 
-Você também pode verificar o pacote `mod` que contém a maioria das alterações dos contribuidores.
+Você também pode verificar o pacote [`mod`](app/src/main/java/mod) que contém a maioria das alterações dos contribuidores.
 
 ## Contribuindo
 
