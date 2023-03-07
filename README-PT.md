@@ -3,6 +3,8 @@
 </p>
 
 # Sketchware Pro
+*Leia isto em outros idiomas: [English](README.md), [Português](README-PT.md).*
+
 ![GitHub contributors](https://img.shields.io/github/contributors/Sketchware-Pro/Sketchware-Pro) ![GitHub last commit](https://img.shields.io/github/last-commit/Sketchware-Pro/Sketchware-Pro) ![Discord server stats](https://img.shields.io/discord/790686719753846785)
 [![Android CI](https://github.com/DereckySany/Sketchware-Pro-aapt1_aapt2_multilib/actions/workflows/android.yml/badge.svg)](https://github.com/DereckySany/Sketchware-Pro-aapt1_aapt2_multilib/actions/workflows/android.yml)
 
