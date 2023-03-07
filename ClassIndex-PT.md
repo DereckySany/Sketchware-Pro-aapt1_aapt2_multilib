@@ -1,5 +1,5 @@
-Essa lista contém várias classes  utilizadas pelo Sketchware-Pro, um ambiente de desenvolvimento integrado para a criação de aplicativos Android.
-* Esta lista não é definitiva podendo sofrer modificaçoes e correções constantes para melhor refletir o estado atual no código.
+### Essa lista contém várias classes  utilizadas pelo Sketchware-Pro, um ambiente de desenvolvimento integrado para a criação de aplicativos Android.
+* ***Esta lista não é definitiva podendo sofrer modificaçoes e correções constantes para melhor refletir o estado atual no código.***
 
 | classes | Index |
 |---|---| 
