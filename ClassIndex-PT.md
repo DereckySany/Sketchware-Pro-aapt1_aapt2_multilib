@@ -1,6 +1,8 @@
 ### Essa lista contém várias classes  utilizadas pelo Sketchware-Pro, um ambiente de desenvolvimento integrado para a criação de aplicativos Android.
 * ***Esta lista não é definitiva podendo sofrer modificaçoes e correções constantes para melhor refletir o estado atual no código.***
 
+*Read this in other languages: [English](ClassIndex.md).*
+
 | classes | Index |
 |---|---| 
 | `a.a.a.Ab` | Classe para lidar com o editor de blocos. | 
