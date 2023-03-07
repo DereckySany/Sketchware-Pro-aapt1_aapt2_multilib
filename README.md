@@ -42,7 +42,7 @@ You can also check the [`mod`](app/src/main/java/mod) package that has the major
 ## Contributing
 
 Fork this repository and contribute back using
-[pull requests](https://github.com/Sketchware-Pro/Sketchware-Pro/pulls).
+[`pull requests`](https://github.com/Sketchware-Pro/Sketchware-Pro/pulls).
 
 Any contributions, large or small, major features, or bug fixes, are welcomed and appreciated, but will
 be thoroughly reviewed.
