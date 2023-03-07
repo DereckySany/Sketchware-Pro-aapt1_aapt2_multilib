@@ -26,7 +26,6 @@ ou use o comando build Gradle apropriado.
 
 ### Mapa do código-fonte
 
-
 *Algumas classes não estão disponiveis em todas as versões do código, pois podem ter sido substituidas ou não usadas na versão!*
 | Classe | Descrição |
 |---|---|
