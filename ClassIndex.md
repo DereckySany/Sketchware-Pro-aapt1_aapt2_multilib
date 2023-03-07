@@ -1,7 +1,7 @@
 ### This list contains several classes used by Sketchware-Pro, an integrated development environment for creating Android applications.
 * ***This list is not definitive and may undergo constant modifications and corrections to better reflect the current status of the code.***
 
-*Read this in other languages: [English](ClassIndex-PT.md).*
+*Read this in other languages: [Português](ClassIndex-PT.md).*
 
 | classes | Index |
 |---|---|
