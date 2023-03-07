@@ -26,16 +26,48 @@ ou use o comando build Gradle apropriado.
 
 ### Mapa do código-fonte
 
-| Classe | Função |
-| ----- | ---- |
-| `a.a.a.Dp` | Auxiliar para compilar um projeto inteiro |
-| `a.a.a.Ix` | Responsável pela geração do AndroidManifest.xml |
-| `a.a.a.Jx` | Gera o código fonte das atividades |
-| `a.a.a.Lx` | Gera código-fonte de componentes, como ouvintes, etc. |
+
+*Algumas classes não estão disponiveis em todas as versões do código, pois podem ter sido substituidas ou não usadas na versão!*
+| Classe | Descrição |
+|---|---|
+| [`a.a.a.Dp`](app/src/main/java/a/a/a/Dp.java) | Auxiliar para compilar um projeto inteiro |
+| [`a.a.a.aB`](app/src/main/java/a/a/a/aB.java) | Gerenciador de arquivo de áudio |
+| [`a.a.a.bB`](app/src/main/java/a/a/a/bB.java) | Gerenciador de arquivo de vídeo |
 | `a.a.a.Boi` | Responsável pela geração dos arquivos XML dos layouts |
-| `a.a.a.qq` | Registro das dependências das bibliotecas internas |
-| `a.a.a.tq` | Responsável pela compilação dos questionários do diálogo |
-| `a.a.a.yq` | Organiza os caminhos de arquivos dos projetos do Sketchware |
+| [`a.a.a.dt`](app/src/main/java/a/a/a/dt.java) | Responsável pelo processamento de recursos |
+| [`a.a.a.Fw`](app/src/main/java/a/a/a/Fw.java) | Auxiliar para gerenciamento de tarefas do aplicativo |
+| `a.a.a.GC` | Gerenciador de arquivo de imagem |
+| [`a.a.a.Gx`](app/src/main/java/a/a/a/Gx.java) | Responsável pela geração de recursos e compilação de projetos |
+| [`a.a.a.gt`](app/src/main/java/a/a/a/gt.java) | Auxiliar para gerenciamento de recursos de biblioteca |
+| [`a.a.a.Hx`](app/src/main/java/a/a/a/Hx.java) | Auxiliar para execução de código do projeto |
+| [`a.a.a.Ix`](app/src/main/java/a/a/a/Ix.java) | Responsável pela geração do AndroidManifest.xml |
+| [`a.a.a.jC`](app/src/main/java/a/a/a/jC.java) | Gerenciador de arquivo de projeto |
+| [`a.a.a.Jp`](app/src/main/java/a/a/a/Jp.java) | Gerenciador de tema de projeto |
+| [`a.a.a.jq`](app/src/main/java/a/a/a/jq.java) | Gerenciador de modelo de projeto |
+| [`a.a.a.jr`](app/src/main/java/a/a/a/jr.java) | Responsável pelo gerenciamento de recursos de biblioteca |
+| [`a.a.a.Jx`](app/src/main/java/a/a/a/Jx.java) | Responsável pela geração do código fonte das atividades |
+| [`a.a.a.Kp`](app/src/main/java/a/a/a/Kp.java) | Gerenciador de arquivo de texto |
+| [`a.a.a.Lx`](app/src/main/java/a/a/a/Lx.java) | Gerador de código-fonte de componentes, como ouvintes, etc. |
+| [`a.a.a.MB`](app/src/main/java/a/a/a/MB.java) | Gerenciador de arquivo de backup |
+| [`a.a.a.mq`](app/src/main/java/a/a/a/mq.java) | Gerenciador de arquivo de biblioteca |
+| [`a.a.a.Mx`](app/src/main/java/a/a/a/Mx.java) | Gerenciador de arquivo de pacote |
+| `a.a.a.Nx` | Auxiliar para gerenciamento de arquivos |
+| [`a.a.a.oq`](app/src/main/java/a/a/a/oq.java) | Gerenciador de arquivo de imagem de tema |
+| [`a.a.a.Ox`](app/src/main/java/a/a/a/Ox.java) | Gerenciador de arquivo de arquivo HTML |
+| [`a.a.a.qA`](app/src/main/java/a/a/a/qA.java) | Gerenciador de arquivo de manifesto de tema |
+| [`a.a.a.qq`](app/src/main/java/a/a/a/qq.java) | Registro das dependências das bibliotecas internas |
+| [`a.a.a.rs`](app/src/main/java/a/a/a/rs.java) | Auxiliar para gerenciamento de bibliotecas |
+| [`a.a.a.sB`](app/src/main/java/a/a/a/sB.java) | Gerenciador de arquivo de tema |
+| [`a.a.a.sq`](app/src/main/java/a/a/a/sq.java) | Responsável pela geração do código fonte de provedor de conteúdo |
+| [`a.a.a.tq`](app/src/main/java/a/a/a/tq.java) | Responsável pela compilação dos questionários do diálogo |
+| [`a.a.a.tx`](app/src/main/java/a/a/a/tx.java) | Gerenciador de arquivo de animação |
+| [`a.a.a.uq`](app/src/main/java/a/a/a/uq.java) | Gerenciador de arquivo de fonte |
+| [`a.a.a.Ws`](app/src/main/java/a/a/a/Ws.java) | Gerenciador de arquivo de texto simples |
+| [`a.a.a.wB`](app/src/main/java/a/a/a/wB.java) | Gerenciador de arquivo de imagem SVG |
+| [`a.a.a.wq`](app/src/main/java/a/a/a/wq.java) | Gerenciador de arquivo de imagem |
+| [`a.a.a.xo`](app/src/main/java/a/a/a/xo.java) | Gerenciador de arquivo de imagem vetorizada |
+| [`a.a.a.yq`](app/src/main/java/a/a/a/yq.java) | Organiza os caminhos de arquivos dos projetos do Sketchware |
+| [`a.a.a.ZA`](app/src/main/java/a/a/a/ZA.java) | Gerenciador de armazenamento em cache de recursos |
 
 Você também pode verificar o pacote `mod` que contém a maioria das alterações dos contribuidores.
 
