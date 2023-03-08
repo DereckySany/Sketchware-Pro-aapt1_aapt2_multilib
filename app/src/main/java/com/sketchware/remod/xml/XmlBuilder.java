@@ -119,7 +119,7 @@ public class XmlBuilder {
                 g = "\r\n" + addIndent(1);
             }
             for (AttributeBuilder attr : e) {
-                resultCode.append(g).append(attr.toCode2());
+                resultCode.append(g).append(attr.toCode());
             }
         }
         int fSize = f.size();
@@ -128,7 +128,7 @@ public class XmlBuilder {
         } else {
             resultCode.append(">\r\n");
             for (XmlBuilder xmlBuilder : f) {
-                resultCode.append(xmlBuilder.toCode2());
+                resultCode.append(xmlBuilder.toCode());
             }
             resultCode.append(addZeroIndent()).append("</").append(a).append(">");
         }
