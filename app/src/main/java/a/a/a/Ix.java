@@ -3,10 +3,12 @@ package a.a.a;
 import static android.text.TextUtils.isEmpty;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Pair;
 
 import com.besome.sketch.beans.ProjectFileBean;
@@ -16,6 +18,7 @@ import com.sketchware.remod.xml.XmlBuilder;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import mod.agus.jcoderz.handle.component.ConstVarManifest;
 import mod.agus.jcoderz.lib.FilePathUtil;
@@ -237,6 +240,7 @@ public class Ix {
      *
      * @return The AndroidManifest as {@link String}
      */
+    @SuppressLint("WrongConstant")
     public String a() {
         // boolean addRequestLegacyExternalStorage = false;
         // a.addAttribute("", "package", c.packageName);
@@ -286,7 +290,7 @@ public class Ix {
         a.addAttribute("", "package", c.packageName);
 
         // Cria um mapa com as permissões necessárias
-        Map<String, String> permissionsMap = new HashMap<>();
+        Map<Integer, String> permissionsMap = new HashMap<>();
         permissionsMap.put(jq.PERMISSION_CALL_PHONE, Manifest.permission.CALL_PHONE);
         permissionsMap.put(jq.PERMISSION_INTERNET, Manifest.permission.INTERNET);
         permissionsMap.put(jq.PERMISSION_VIBRATE, Manifest.permission.VIBRATE);
@@ -305,7 +309,7 @@ public class Ix {
         permissionsMap.put(jq.PERMISSION_ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
 
         // Adiciona as permissões necessárias
-        for (Map.Entry<String, String> entry : permissionsMap.entrySet()) {
+        for (Map.Entry<Integer, String> entry : permissionsMap.entrySet()) {
             if (c.hasPermission(entry.getKey())) {
                 writePermission(a, entry.getValue());
             }
@@ -482,7 +486,8 @@ public class Ix {
             }
         }
         if (!specifiedActivityName) {
-            activityTag = new XmlBuilder("activity", "android:name", activityName);
+//            activityTag = new XmlBuilder("activity", "android:name", activityName);
+            activityTag.addAttribute("activity", "name", activityName);
         }
         if (!specifiedConfigChanges) {
             activityTag.addAttribute("android", "configChanges", "orientation|screenSize");
