@@ -91,6 +91,7 @@
 | `a.a.a.gx` | Auxiliar para gerenciamento de projetos. | 
 | `a.a.a.hx` | Gerenciador de arquivo de projeto. | 
 | `a.a.a.iB` | Gerenciador de arquivo de layout de atividade. | 
+| `a.a.a.Ix` | Utilitária para manipulação de arquivos APK no contexto do Sketchware. |
 | `a.a.a.jw` | Responsável pela geração de código fonte de provedor de conteúdo. | 
 | `a.a.a.lx` | Auxiliar para gerenciamento de projeto. | 
 | `a.a.a.mq` | Gerenciador de arquivo de biblioteca. | 
