@@ -1,5 +1,3 @@
-package mod.hilal.saif.components;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -62,10 +60,6 @@ public class ComponentExtraCode {
                 }
             } catch (JSONException e) {
                 throw new RuntimeException(e);
-            } catch (NullPointerException e) {
-                throw new RuntimeException("NullPointerException while accessing JSONObject at index " + i, e);
-            } catch (IndexOutOfBoundsException e) {
-                throw new RuntimeException("IndexOutOfBoundsException while accessing JSONObject at index " + i, e);
             }
         }
 
