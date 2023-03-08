@@ -58,46 +58,94 @@ public class XmlBuilder {
     public void addAttributeValue(String value) {
         e.add(new AttributeBuilder(value));
     }
-
+    
     public String toCode() {
         StringBuilder resultCode = new StringBuilder();
-        resultCode.append(addZeroIndent());
+        StringBuilder indent = new StringBuilder();
+        for (int i = 0; i < b; i++) {
+            indent.append("\t");
+        }
+        resultCode.append(indent);
         resultCode.append("<");
         resultCode.append(a);
-        for (AttributeBuilder attr : e) {
-            if (e.size() <= 1 || d) {
-                resultCode.append(" ");
-            } else {
-                resultCode.append("\r\n");
-                resultCode.append(addIndent(1));
-                g = "\r\n" + addIndent(1);
+        int numAttributes = e.size();
+        if (numAttributes > 0) {
+            boolean useNewLine = numAttributes > 1 && !d;
+            String newLine = useNewLine ? "\r\n" : " ";
+            for (int i = 0; i < numAttributes; i++) {
+                AttributeBuilder attr = e.get(i);
+                if (useNewLine) {
+                    resultCode.append(newLine);
+                    resultCode.append(indent);
+                    resultCode.append("\t");
+                } else if (i > 0) {
+                    resultCode.append(" ");
+                }
+                resultCode.append(attr.toCode());
             }
-            resultCode.append(attr.toCode());
         }
-        if (f.size() <= 0) {
-            if (c == null || c.length() <= 0) {
-                resultCode.append(" />");
-            } else {
-                resultCode.append(">");
-                resultCode.append(c);
-                resultCode.append("</");
-                resultCode.append(a);
-                resultCode.append(">");
-            }
-        } else {
+        if (!f.isEmpty()) {
             resultCode.append(">");
             resultCode.append("\r\n");
             for (XmlBuilder xmlBuilder : f) {
                 resultCode.append(xmlBuilder.toCode());
             }
-            resultCode.append(addZeroIndent());
+            resultCode.append(indent);
             resultCode.append("</");
             resultCode.append(a);
             resultCode.append(">");
+        } else if (c != null && !c.isEmpty()) {
+            resultCode.append(">");
+            resultCode.append(c);
+            resultCode.append("</");
+            resultCode.append(a);
+            resultCode.append(">");
+        } else {
+            resultCode.append(" />");
         }
         resultCode.append("\r\n");
         return resultCode.toString();
     }
+
+    // public String toCode() {
+    //     StringBuilder resultCode = new StringBuilder();
+    //     resultCode.append(addZeroIndent());
+    //     resultCode.append("<");
+    //     resultCode.append(a);
+    //     for (AttributeBuilder attr : e) {
+    //         if (e.size() <= 1 || d) {
+    //             resultCode.append(" ");
+    //         } else {
+    //             resultCode.append("\r\n");
+    //             resultCode.append(addIndent(1));
+    //             g = "\r\n" + addIndent(1);
+    //         }
+    //         resultCode.append(attr.toCode());
+    //     }
+    //     if (f.size() <= 0) {
+    //         if (c == null || c.length() <= 0) {
+    //             resultCode.append(" />");
+    //         } else {
+    //             resultCode.append(">");
+    //             resultCode.append(c);
+    //             resultCode.append("</");
+    //             resultCode.append(a);
+    //             resultCode.append(">");
+    //         }
+    //     } else {
+    //         resultCode.append(">");
+    //         resultCode.append("\r\n");
+    //         for (XmlBuilder xmlBuilder : f) {
+    //             resultCode.append(xmlBuilder.toCode());
+    //         }
+    //         resultCode.append(addZeroIndent());
+    //         resultCode.append("</");
+    //         resultCode.append(a);
+    //         resultCode.append(">");
+    //     }
+    //     resultCode.append("\r\n");
+    //     return resultCode.toString();
+    // }
 
     public String c() {
         return Jx.WIDGET_NAME_PATTERN.matcher(a).replaceAll("");
