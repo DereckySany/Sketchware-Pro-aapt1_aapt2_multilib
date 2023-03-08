@@ -70,15 +70,15 @@ public class XmlBuilder {
         resultCode.append(a);
         int numAttributes = e.size();
         if (numAttributes > 0) {
-            boolean useNewLine = numAttributes >= 1 && !d;
+            boolean useNewLine = numAttributes > 1 && !d;
             String newLine = useNewLine ? "\r\n" : " ";
             for (int i = 0; i < numAttributes; i++) {
                 AttributeBuilder attr = e.get(i);
                 if (useNewLine) {
                     resultCode.append(newLine);
                     resultCode.append(indent);
-                    resultCode.append(" ");
-                } else if (i > 0) {
+                    resultCode.append("\t");
+                } else if (i >= 0) {
                     resultCode.append(" ");
                 }
                 resultCode.append(attr.toCode());
@@ -119,7 +119,7 @@ public class XmlBuilder {
                 g = "\r\n" + addIndent(1);
             }
             for (AttributeBuilder attr : e) {
-                resultCode.append(g).append(attr.toCode());
+                resultCode.append(g).append(attr.toCode2());
             }
         }
         int fSize = f.size();
@@ -128,7 +128,7 @@ public class XmlBuilder {
         } else {
             resultCode.append(">\r\n");
             for (XmlBuilder xmlBuilder : f) {
-                resultCode.append(xmlBuilder.toCode());
+                resultCode.append(xmlBuilder.toCode2());
             }
             resultCode.append(addZeroIndent()).append("</").append(a).append(">");
         }
