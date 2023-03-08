@@ -1,16 +1,19 @@
 package mod.hilal.saif.components;
 
 import org.json.JSONArray;
-import java.lang.StringBuilder;
+import org.json.JSONException;
+
 import a.a.a.Hx;
 import mod.agus.jcoderz.lib.FileUtil;
 
 public class ComponentExtraCode {
 
     private final StringBuilder b;
+    private final StringBuilder s = new StringBuilder();
     private final Hx hx;
     private final JSONArray listeners;
     private final int listenersLength;
+    
 
     public ComponentExtraCode(Hx h, StringBuilder st) {
         hx = h;
@@ -19,7 +22,7 @@ public class ComponentExtraCode {
         listenersLength = listeners.length();
     }
 
-    public void s(String str) {
+    public void s(String str) throws JSONException {
         // Aldi's original Components
         if (str.startsWith("DatePickerFragment")) {
             hx.l = str;
@@ -29,7 +32,8 @@ public class ComponentExtraCode {
             if (hx.k.isEmpty()) {
                 hx.k = str;
             } else {
-                hx.k = hx.k.append("\r\n\r\n").append(str);
+                s.append("\r\n\r\n").append(str);
+                hx.k = hx.k.concat(s.toString());
             }
             return;
         }
@@ -37,7 +41,8 @@ public class ComponentExtraCode {
             if (hx.k.isEmpty()) {
                 hx.k = str;
             } else {
-                hx.k = hx.k.append("\r\n\r\n").append(str);
+                s.append("\r\n\r\n").append(str);
+                hx.k = hx.k.concat(s.toString());
             }
             return;
         }
@@ -52,7 +57,7 @@ public class ComponentExtraCode {
                     if (hx.k.isEmpty()) {
                         hx.k = str.substring(firstLine.length());
                     } else {
-                        hx.k = hx.k.append("\r\n\r\n").append(str.substring(firstLine.length()));
+                        hx.k = hx.k.concat("\r\n\r\n").concat(str.substring(firstLine.length()));
                     }
                     return;
                 }
