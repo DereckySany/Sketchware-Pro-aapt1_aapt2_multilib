@@ -10,54 +10,52 @@ public class ComponentExtraCode {
     private final StringBuilder b;
     private final Hx hx;
     private final JSONArray listeners;
+    private final int listenersLength;
 
     public ComponentExtraCode(Hx h, StringBuilder st) {
         hx = h;
         b = st;
         listeners = getListenersJsonArray();
+        listenersLength = listeners.length();
     }
 
     public void s(String str) {
         // Aldi's original Components
-        if (str.contains("DatePickerFragment")) {
+        if (str.startsWith("DatePickerFragment")) {
             hx.l = str;
             return;
         }
-        if (str.contains("FragmentStatePagerAdapter")) {
+        if (str.startsWith("FragmentStatePagerAdapter")) {
             if (hx.k.isEmpty()) {
                 hx.k = str;
             } else {
-                hx.k = hx.k.concat("\r\n\r\n").concat(str);
+                hx.k = hx.k.append("\r\n\r\n").append(str);
             }
             return;
         }
-        if (str.contains("extends AsyncTask<String, Integer, String>")) {
+        if (str.startsWith("extends AsyncTask<String, Integer, String>")) {
             if (hx.k.isEmpty()) {
                 hx.k = str;
             } else {
-                hx.k = hx.k.concat("\r\n\r\n").concat(str);
+                hx.k = hx.k.append("\r\n\r\n").append(str);
             }
             return;
         }
 
         // Hilal's components
         String firstLine = getFirstLine(str);
-        for (int i = 0; i < listeners.length(); i++) {
-            try {
-                String c = listeners.getJSONObject(i).getString("code");
-                if (!listeners.getJSONObject(i).isNull("s") && str.contains(firstLine)) {
-                    String q = listeners.getJSONObject(i).getString("s");
-                    if (q.equals("true")) {
-                        if (hx.k.isEmpty()) {
-                            hx.k = str.replace(firstLine, "");
-                        } else {
-                            hx.k = hx.k.concat("\r\n\r\n").concat(str.replace(firstLine, ""));
-                        }
-                        return;
+        for (int i = 0; i < listenersLength; i++) {
+            String c = listeners.getJSONObject(i).optString("code");
+            if (c != null && str.startsWith(firstLine)) {
+                String q = listeners.getJSONObject(i).optString("s");
+                if ("true".equals(q)) {
+                    if (hx.k.isEmpty()) {
+                        hx.k = str.substring(firstLine.length());
+                    } else {
+                        hx.k = hx.k.append("\r\n\r\n").append(str.substring(firstLine.length()));
                     }
+                    return;
                 }
-            } catch (Exception e) {
-                // ignore
             }
         }
 
@@ -82,8 +80,9 @@ public class ComponentExtraCode {
     }
 
     private String getFirstLine(String str) {
-        if (str.contains("\n")) {
-            return str.substring(0, str.indexOf("\n")).trim();
+        int pos = str.indexOf('\n');
+        if (pos != -1) {
+            return str.substring(0, pos).trim();
         } else {
             return str.trim();
         }
