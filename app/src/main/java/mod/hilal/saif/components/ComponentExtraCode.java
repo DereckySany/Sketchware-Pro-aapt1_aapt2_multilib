@@ -12,7 +12,7 @@ public class ComponentExtraCode {
     private final Hx hx;
     private final JSONArray listeners;
     private final int listenersLength;
-    
+
 
     public ComponentExtraCode(Hx h, StringBuilder st) {
         hx = h;
@@ -47,17 +47,21 @@ public class ComponentExtraCode {
         // Hilal's components
         String firstLine = getFirstLine(str);
         for (int i = 0; i < listenersLength; i++) {
-            String c = listeners.getJSONObject(i).optString("code");
-            if (c != null && str.startsWith(firstLine)) {
-                String q = listeners.getJSONObject(i).optString("s");
-                if ("true".equals(q)) {
-                    if (hx.k.isEmpty()) {
-                        hx.k = str.substring(firstLine.length());
-                    } else {
-                        hx.k = hx.k.concat("\r\n\r\n").concat(str.substring(firstLine.length()));
+            try {
+                String c = listeners.getJSONObject(i).optString("code");
+                if (c != null && str.startsWith(firstLine)) {
+                    String q = listeners.getJSONObject(i).optString("s");
+                    if ("true".equals(q)) {
+                        if (hx.k.isEmpty()) {
+                            hx.k = str.substring(firstLine.length());
+                        } else {
+                            hx.k = hx.k.concat("\r\n\r\n").concat(str.substring(firstLine.length()));
+                        }
+                        return;
                     }
-                    return;
                 }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
         }
 
