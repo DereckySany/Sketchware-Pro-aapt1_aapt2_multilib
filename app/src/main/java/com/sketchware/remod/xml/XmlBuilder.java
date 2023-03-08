@@ -70,14 +70,14 @@ public class XmlBuilder {
         resultCode.append(a);
         int numAttributes = e.size();
         if (numAttributes > 0) {
-            boolean useNewLine = numAttributes > 1 && !d;
+            boolean useNewLine = numAttributes >= 1 && !d;
             String newLine = useNewLine ? "\r\n" : " ";
             for (int i = 0; i < numAttributes; i++) {
                 AttributeBuilder attr = e.get(i);
                 if (useNewLine) {
                     resultCode.append(newLine);
                     resultCode.append(indent);
-                    resultCode.append("\t");
+                    resultCode.append(" ");
                 } else if (i > 0) {
                     resultCode.append(" ");
                 }
@@ -107,7 +107,36 @@ public class XmlBuilder {
         return resultCode.toString();
     }
 
-    // public String toCode() {
+    public String toCode2() {
+        StringBuilder resultCode = new StringBuilder();
+        resultCode.append(addZeroIndent()).append("<").append(a);
+        int eSize = e.size();
+        String g = "";
+        if (eSize > 0) {
+            if (eSize <= 1 || d) {
+                resultCode.append(" ");
+            } else {
+                g = "\r\n" + addIndent(1);
+            }
+            for (AttributeBuilder attr : e) {
+                resultCode.append(g).append(attr.toCode());
+            }
+        }
+        int fSize = f.size();
+        if (fSize == 0) {
+            resultCode.append(c == null || c.isEmpty() ? " />" : ">" + c + "</" + a + ">");
+        } else {
+            resultCode.append(">\r\n");
+            for (XmlBuilder xmlBuilder : f) {
+                resultCode.append(xmlBuilder.toCode());
+            }
+            resultCode.append(addZeroIndent()).append("</").append(a).append(">");
+        }
+        resultCode.append("\r\n");
+        return resultCode.toString();
+    }
+
+    // public String toCode2() {
     //     StringBuilder resultCode = new StringBuilder();
     //     resultCode.append(addZeroIndent());
     //     resultCode.append("<");
@@ -153,10 +182,8 @@ public class XmlBuilder {
 
     private void b(int indentSize) {
         b = indentSize;
-        if (f != null) {
-            for (XmlBuilder nx : f) {
-                nx.b(indentSize + 1);
-            }
+        for (XmlBuilder nx : f) {
+            nx.b(indentSize + 1);
         }
     }
 
