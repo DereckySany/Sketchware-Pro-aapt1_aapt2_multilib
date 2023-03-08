@@ -1,3 +1,5 @@
+package mod.hilal.saif.components;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -19,7 +21,7 @@ public class ComponentExtraCode {
         listenersLength = listeners.length();
     }
 
-    public void s(String str) throws JSONException {
+    public void s(String str) {
         // Aldi's original Components
         if (str.startsWith("DatePickerFragment")) {
             hx.l = str;
@@ -58,8 +60,8 @@ public class ComponentExtraCode {
                         return;
                     }
                 }
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
+            } catch (Exception e) {
+                // ignore
             }
         }
 
