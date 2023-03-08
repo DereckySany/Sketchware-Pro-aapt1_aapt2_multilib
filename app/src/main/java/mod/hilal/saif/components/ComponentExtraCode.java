@@ -9,7 +9,6 @@ import mod.agus.jcoderz.lib.FileUtil;
 public class ComponentExtraCode {
 
     private final StringBuilder b;
-    private final StringBuilder s = new StringBuilder();
     private final Hx hx;
     private final JSONArray listeners;
     private final int listenersLength;
@@ -32,8 +31,7 @@ public class ComponentExtraCode {
             if (hx.k.isEmpty()) {
                 hx.k = str;
             } else {
-                s.append("\r\n\r\n").append(str);
-                hx.k = hx.k.concat(s.toString());
+                hx.k = hx.k.concat("\r\n\r\n").concat(str);
             }
             return;
         }
@@ -41,8 +39,7 @@ public class ComponentExtraCode {
             if (hx.k.isEmpty()) {
                 hx.k = str;
             } else {
-                s.append("\r\n\r\n").append(str);
-                hx.k = hx.k.concat(s.toString());
+                hx.k = hx.k.concat("\r\n\r\n").concat(str);
             }
             return;
         }
