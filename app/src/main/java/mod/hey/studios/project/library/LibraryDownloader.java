@@ -880,10 +880,12 @@ public class LibraryDownloader {
                                 message.setText("This jar is not supported by Dx since Dx only supports up to Java 1.7.\nIn order to proceed, " +
                                         (Build.VERSION.SDK_INT < 26 ? "D8 (Only supported by Android version is 8+)" : "you need Press Start to switch to D8") + ".");
                                 use_d8 = Build.VERSION.SDK_INT >= 26;
+                                tool = "D8";
                                 if (use_d8 || JarCheck.checkJarFast(libName.concat("/classes.jar"), 44, 51)) {
                                     try {
-                                        _jar2dex(libName.concat("/classes.jar"));
                                         message.setText("Download completed!");
+                                        String[] test = new String[]{libName.concat("/classes.jar")};
+                                        new BackTask().execute(test);
                                         FileUtil.deleteFile(path2.toString());
                                         FileUtil.writeFile(libName + "/config", findPackageName(libName + "/", library.getText().toString()));
                                         FileUtil.writeFile(libName + "/version", library.getText().toString());
@@ -893,12 +895,16 @@ public class LibraryDownloader {
                                         message.setText(e.getCause().toString());
                                         FileUtil.deleteFile(libName);
                                         FileUtil.deleteFile(path2.toString());
+                                        start.setEnabled(false);
+                                        start.setVisibility(View.GONE);
                                     }
                                 } else {
                                     message.setText("This jar is not supported by Dx since Dx only supports up to Java 1.7.\nIn order to proceed, " +
                                             (Build.VERSION.SDK_INT < 26 ? "D8 (Only supported by Android version is 8+)" : "you need Press Start to switch to D8") + ".");
                                     FileUtil.deleteFile(libName);
                                     FileUtil.deleteFile(path2.toString());
+                                    start.setEnabled(false);
+                                    start.setVisibility(View.GONE);
                                 }
                                 cancel.setEnabled(true);
                                 cancel.setVisibility(View.VISIBLE);
