@@ -2,6 +2,7 @@ package com.besome.sketch.design;
 
 import static mod.SketchwareUtil.getDip;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -14,6 +15,9 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Gravity;
@@ -28,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.FileProvider;
@@ -444,7 +449,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         r = new DB(getApplicationContext(), "P1");
         t = new DB(getApplicationContext(), "P12");
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        @SuppressLint("WrongViewCast") Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setSubtitle(sc_id);
         a(toolbar);
         findViewById(R.id.layout_main_logo).setVisibility(View.GONE);
@@ -728,7 +733,8 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
 
         new Thread(() -> {
 
-            final String source = FileUtil.readFile(new FilePathUtil().getLastDebugCompileLog());
+            new FilePathUtil();
+            final String source = FileUtil.readFile(FilePathUtil.getLastDebugCompileLog());
 
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(DesignActivity.this)
                     .setTitle("Compile Debug")
@@ -962,7 +968,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
     }
 
     @SafeVarargs
-    private final void launchActivity(Class<? extends Activity> toLaunch, Integer optionalRequestCode, Pair<String, String>... extras) {
+    private void launchActivity(Class<? extends Activity> toLaunch, Integer optionalRequestCode, Pair<String, String>... extras) {
         Intent intent = new Intent(getApplicationContext(), toLaunch);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.putExtra("sc_id", sc_id);
@@ -977,14 +983,35 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class BuildAsyncTask extends MA implements OnCancelListener, BuildProgressReceiver {
 
         private final BuildingDialog dialog;
+        private final Handler errorLogHandler;
         private boolean canceled = false;
 
         public BuildAsyncTask(Context context) {
             super(context);
             DesignActivity.this.a((MA) this);
+            errorLogHandler = new Handler(Looper.getMainLooper()) {
+                @Override
+                public void handleMessage(@NonNull Message msg) {
+                    if (msg.what == 'E') {
+                        Bundle data = msg.getData();
+                        String tag = data.getString("tag");
+                        String message = data.getString("message");
+                        Throwable throwable;
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                            throwable = (Throwable) data.getSerializable("throwable");
+                        } else {
+                            throwable = data.getSerializable("throwable", Throwable.class);
+                        }
+
+                        // TODO: Show warnings in UI
+                    }
+                }
+            };
+            LogUtil.addLogHandler('E', errorLogHandler);
             dialog = new BuildingDialog(DesignActivity.this);
             maybeShow();
             dialog.setIsCancelableOnBackPressed(false);
@@ -999,6 +1026,8 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
          */
         @Override
         public void a() {
+            // TODO: Remove errorLogHandler in other cases
+            LogUtil.removeLogHandler('E', errorLogHandler);
             dismiss();
             runProject.setText(Helper.getResString(R.string.common_word_run));
             runProject.setClickable(true);
@@ -1243,6 +1272,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class ProjectLoader extends MA {
 
         private final Bundle savedInstanceState;
@@ -1287,6 +1317,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class DiscardChangesProjectCloser extends MA {
 
         public DiscardChangesProjectCloser(Context context) {
@@ -1319,6 +1350,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class ProjectSaver extends MA {
 
         public ProjectSaver(Context context) {
@@ -1357,6 +1389,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class SaveChangesProjectCloser extends MA {
 
         public SaveChangesProjectCloser(Context context) {
@@ -1394,6 +1427,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class UnsavedChangesSaver extends MA {
 
         public UnsavedChangesSaver(Context context) {
