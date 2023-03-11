@@ -52,6 +52,7 @@ import com.besome.sketch.editor.view.ProjectFileSelector;
 import com.besome.sketch.lib.base.BaseAppCompatActivity;
 import com.besome.sketch.lib.ui.CustomViewPager;
 import com.besome.sketch.tools.CompileLogActivity;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.sketchware.remod.R;
@@ -191,11 +192,12 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         snackbar.a(Helper.getResString(R.string.common_word_show), v -> {
             if (!mB.a()) {
                 snackbar.c();
-                Intent intent = new Intent(getApplicationContext(), CompileLogActivity.class);
+                new CompileErrorSaver(sc_id).showDialog(getApplicationContext());
+             /* Intent intent = new Intent(getApplicationContext(), CompileLogActivity.class);
                 intent.putExtra("error", error);
                 intent.putExtra("sc_id", sc_id);
                 intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
+                startActivity(intent); */
             }
         });
         /* Set the text color to yellow */

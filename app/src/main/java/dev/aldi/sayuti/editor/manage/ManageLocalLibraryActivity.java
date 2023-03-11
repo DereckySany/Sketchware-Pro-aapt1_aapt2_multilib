@@ -1,5 +1,6 @@
 package dev.aldi.sayuti.editor.manage;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
@@ -201,6 +202,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private void deleteLibrary(String lib) {
         ProgressDialog dialog = new ProgressDialog(this);
         dialog.setMessage("Removing library...");
