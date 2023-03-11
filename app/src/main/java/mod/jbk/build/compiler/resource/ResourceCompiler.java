@@ -221,7 +221,7 @@ public class ResourceCompiler {
                 args.add(buildHelper.androidJarPath);
             } else {
                 linkingAssertFileExists(customAndroidSdk);
-                args.addAll(Arrays.asList("-J", customAndroidSdk));
+                args.addAll(Arrays.asList("-I", customAndroidSdk));
             }
 
             /* Add assets imported by vanilla method */
@@ -288,9 +288,9 @@ public class ResourceCompiler {
 
             /* Output AAPT's generated ProGuard rules to a.a.a.yq.aapt_rules */
             // Remove this line:
-            //args.add("--proguard");
+            args.add("-G");
             // And remove this line too:
-            //args.add(buildHelper.yq.aaptProGuardRules);
+            args.add(buildHelper.yq.aaptProGuardRules);
 
 
             /* Add AndroidManifest.xml */
@@ -306,7 +306,7 @@ public class ResourceCompiler {
             }
 
             /* Output the APK only with resources to a.a.a.yq.C */
-            args.add("-o");
+            args.add("-F");
             args.add(buildHelper.yq.resourcesApkPath);
 
             LogUtil.d(TAG + ":l", args.toString());
