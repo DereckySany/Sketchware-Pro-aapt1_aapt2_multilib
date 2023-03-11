@@ -125,7 +125,6 @@ public class ResourceCompiler {
         private File getCompiledBuiltInLibraryResourcesDirectory() {
             return new File(SketchApplication.getContext().getCacheDir(), "compiledLibs");
         }
-        // Restante do código
 
         @Override
         public void compile() throws zy, MissingFileException {
@@ -172,7 +171,6 @@ public class ResourceCompiler {
             LogUtil.d(TAG + ":c", "Resource compilation completed in " + totalTime + " ms");
             link();
         }
-        //
         public void link() throws zy, MissingFileException {
             String resourcesPath = buildHelper.yq.binDirectoryPath + File.separator + "res";
             if (progressListener != null)
@@ -180,31 +178,18 @@ public class ResourceCompiler {
 
             ArrayList<String> args = new ArrayList<>();
             args.add(aapt.getAbsolutePath());
-            args.add("link");
+            args.add("package");
 
             if (buildAppBundle) {
                 throw new UnsupportedOperationException("Build AppBundle not supported with AAPT");
             }
-            // Output the APK only with resources to a.a.a.yq.C 
-            args.add("-o");
-            args.add(buildHelper.yq.resourcesApkPath);
-            
-            args.addAll(Arrays.asList(
-                    "--auto-add-overlay",
-                    "--generate-dependencies",
-                    "-f",
-                    "-m",
-                    "--non-constant-id",
-                    "--skip-symbols-without-default-localization",
-                    "--no-version-vectors",
-                    "--no-version-transitions"
-            ));
 
-            args.addAll(Arrays.asList(
-                    "--output-text-symbols", buildHelper.yq.binDirectoryPath,
-                    "-J", buildHelper.yq.rJavaDirectoryPath,
-                    "-S", resourcesPath
-            ));
+            // Use the generated R.java for used libraries
+            String extraPackages = buildHelper.getLibraryPackageNames();
+            if (!extraPackages.isEmpty()) {
+                args.add("--extra-packages");
+                args.add(extraPackages);
+            }
 
             args.addAll(Arrays.asList(
                     "--min-sdk-version",
@@ -219,6 +204,33 @@ public class ResourceCompiler {
                     "--version-name",
                     Optional.ofNullable(buildHelper.yq.versionName).filter(s -> !s.isEmpty()).orElse("1.0")
             ));
+
+            args.addAll(Arrays.asList(
+                    "--auto-add-overlay",
+                    "--generate-dependencies"
+            ));
+
+            /* Force overwriting of existing files */
+            args.add("-f");
+
+            args.add("-m");
+
+            /* Don't generate final R.java ID fields */
+            args.add("--non-constant-id");
+
+            args.add("--output-text-symbols");
+            args.add(buildHelper.yq.binDirectoryPath);
+
+            if (buildHelper.yq.N.g) {
+                args.add("--no-version-vectors");
+            }
+
+            /* Specify resources directory */
+            args.add("-S");
+            args.add(buildHelper.yq.resDirectoryPath);
+
+            args.add("-S");
+            args.add(resourcesPath);
 
             String customAndroidSdk = buildHelper.build_settings.getValue(BuildSettings.SETTING_ANDROID_JAR_PATH, "");
             if (customAndroidSdk.isEmpty()) {
@@ -256,33 +268,33 @@ public class ResourceCompiler {
             }
 
             // Include compiled built-in library resources 
-            for (Jp library : buildHelper.builtInLibraryManager.a()) {
+           /* for (Jp library : buildHelper.builtInLibraryManager.a()) {
                 if (library.c()) {
                     args.addAll(Arrays.asList("-S", new File(getCompiledBuiltInLibraryResourcesDirectory(), library.a() + ".zip").getAbsolutePath()));
                 }
-            }
+            }*/
 
             // Include compiled local libraries' resources 
-            File[] filesInCompiledResourcesPath = new File(resourcesPath).listFiles();
+           /* File[] filesInCompiledResourcesPath = new File(resourcesPath).listFiles();
             if (filesInCompiledResourcesPath != null) {
                 for (File file : filesInCompiledResourcesPath) {
                     if (file.isFile() && (!file.getName().equals("project.zip") || !file.getName().equals("project-imported.zip"))) {
                         args.addAll(Arrays.asList("-S", file.getAbsolutePath()));
                     }
                 }
-            }
+            }*/
 
             // Include compiled project resources 
-            File projectArchive = new File(resourcesPath, "project.zip");
+            /*File projectArchive = new File(resourcesPath, "project.zip");
             if (projectArchive.exists()) {
                 args.addAll(Arrays.asList("-S", projectArchive.getAbsolutePath()));
-            }
+            }*/
 
             // Include compiled imported project resources 
-            File projectImportedArchive = new File(resourcesPath, "project-imported.zip");
+            /*File projectImportedArchive = new File(resourcesPath, "project-imported.zip");
             if (projectImportedArchive.exists()) {
                 args.addAll(Arrays.asList("-S", projectImportedArchive.getAbsolutePath()));
-            }
+            }*/
 
             // Add R.java 
             linkingAssertDirectoryExists(buildHelper.yq.rJavaDirectoryPath);
@@ -293,23 +305,21 @@ public class ResourceCompiler {
 
             // Output AAPT's generated ProGuard rules to a.a.a.yq.aapt_rules 
             // Remove this line:
-            args.add("-G");
-            // And remove this line too:
-            args.add(buildHelper.yq.aaptProGuardRules);
-
+            if (!buildHelper.yq.aaptProGuardRules.isEmpty()) {
+                args.add("-G");
+                // And remove this line too:
+                args.add(buildHelper.yq.aaptProGuardRules);
+            }
 
             // Add AndroidManifest.xml 
             linkingAssertFileExists(buildHelper.yq.androidManifestPath);
             args.add("-M");
             args.add(buildHelper.yq.androidManifestPath);
 
-            // Use the generated R.java for used libraries 
-            String extraPackages = buildHelper.getLibraryPackageNames();
-            if (!extraPackages.isEmpty()) {
-                args.add("--extra-packages");
-                args.add(extraPackages);
-            }
-        
+            // Output the APK only with resources to a.a.a.yq.C
+            args.add("-F");
+            args.add(buildHelper.yq.resourcesApkPath);
+
             LogUtil.d(TAG + ":l", args.toString());
             BinaryExecutor executor = new BinaryExecutor();
             executor.setCommands(args);
@@ -317,7 +327,7 @@ public class ResourceCompiler {
             if (!log.isEmpty()) {
                 LogUtil.e(TAG + ":l", log);
                 throw new zy(log);
-            }   
+            }
         }
 
         private void compileImportedResources(String outputPath) throws zy {
@@ -421,10 +431,14 @@ public class ResourceCompiler {
                         commands.add(aapt.getAbsolutePath()); // substitui AAPT por aapt
                         commands.add("package");
                         commands.add("-f");
-                        commands.add("-M");
-                        commands.add(libraryResources + "/AndroidManifest.xml");
-                        commands.add("-S");
-                        commands.add(libraryResources + "/res");
+                        if (FileUtil.isExistFile(libraryResources + "/AndroidManifest.xml")) {
+                            commands.add("-M");
+                            commands.add(libraryResources + "/AndroidManifest.xml");
+                        }
+                        if (FileUtil.isExistFile(libraryResources + "/res")) {
+                            commands.add("-S");
+                            commands.add(libraryResources + "/res");
+                        }
                         commands.add("-I");
                         commands.add(context.getApplicationInfo().sourceDir);
                         commands.add("-F");
