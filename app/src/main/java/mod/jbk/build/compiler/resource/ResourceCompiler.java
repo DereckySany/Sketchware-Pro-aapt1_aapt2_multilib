@@ -294,7 +294,7 @@ public class ResourceCompiler {
 
             /* Add AndroidManifest.xml */
             linkingAssertFileExists(buildHelper.yq.androidManifestPath);
-            args.add("--manifest-file");
+            args.add("-m");
             args.add(buildHelper.yq.androidManifestPath);
 
 
