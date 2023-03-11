@@ -185,8 +185,12 @@ public class LibraryDownloader {
             //android.content.ClipDescription description = clipboard.getPrimaryClipDescription();
             android.content.ClipData data = clipboard.getPrimaryClip();
             //if (data != null && description != null && description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN))
+            final String accepts[] = {"implementation", ".", ":"};
+            final String clipe = String.valueOf(data.getItemAt(0).getText());
             if (data != null) {
-                return String.valueOf(data.getItemAt(0).getText());
+                if (clipe.contains(accepts[0]) || clipe.contains(accepts[1]) || clipe.contains(accepts[2])) {
+                    return clipe; //return String.valueOf(data.getItemAt(0).getText());
+                }
             }
         }
         return null;
@@ -534,14 +538,14 @@ public class LibraryDownloader {
             } else if (tool.equals("R8")) {
                 // R8
                 //ArrayList<String> options = new ArrayList<>();
-                //options.add("--release"); 
-                //options.add("--intermediate"); 
-                //options.add("--no-desugaring"); 
-                //options.add("--min-api"); 
+                //options.add("--release");
+                //options.add("--intermediate");
+                //options.add("--no-desugaring");
+                //options.add("--min-api");
                 //options.add("26");
                 // Output
                 //options.add("--output");
-                //options.add(new File(_path, "classes.zip").getParentFile().getAbsolutePath());                  
+                //options.add(new File(_path, "classes.zip").getParentFile().getAbsolutePath());
                 //options.add("--lib");
                 //options.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
                 //options.add("--classpath");
@@ -879,28 +883,33 @@ public class LibraryDownloader {
                             } else {
                                 message.setText("This jar is not supported by Dx since Dx only supports up to Java 1.7.\nIn order to proceed, " +
                                         (Build.VERSION.SDK_INT < 26 ? "D8 (Only supported by Android version is 8+)" : "you need Press Start to switch to D8") + ".");
-
-                                if (Build.VERSION.SDK_INT < 26) {
+                                use_d8 = Build.VERSION.SDK_INT >= 26;
+                                tool = "D8";
+                                if (use_d8 || JarCheck.checkJarFast(libName.concat("/classes.jar"), 44, 51)) {
+                                    try {
+                                        message.setText("Download completed!");
+                                        String[] test = new String[]{libName.concat("/classes.jar")};
+                                        new BackTask().execute(test);
+                                        FileUtil.deleteFile(path2.toString());
+                                        FileUtil.writeFile(libName + "/config", findPackageName(libName + "/", library.getText().toString()));
+                                        FileUtil.writeFile(libName + "/version", library.getText().toString());
+                                        checkLibsDirectory(libName + "/");
+                                        deleteUnnecessaryFiles(libName + "/");
+                                    } catch (Exception e) {
+                                        message.setText(e.getCause().toString());
+                                        FileUtil.deleteFile(libName);
+                                        FileUtil.deleteFile(path2.toString());
+                                        start.setEnabled(false);
+                                        start.setVisibility(View.GONE);
+                                    }
+                                } else {
+                                    message.setText("This jar is not supported by Dx since Dx only supports up to Java 1.7.\nIn order to proceed, " +
+                                            (Build.VERSION.SDK_INT < 26 ? "D8 (Only supported by Android version is 8+)" : "you need Press Start to switch to D8") + ".");
+                                    FileUtil.deleteFile(libName);
+                                    FileUtil.deleteFile(path2.toString());
                                     start.setEnabled(false);
                                     start.setVisibility(View.GONE);
                                 }
-                                start.setOnClickListener(startView -> {
-                                    use_d8 = Build.VERSION.SDK_INT >= 26;
-                                    try {
-                                        _jar2dex(libName.concat("/classes.jar"));
-                                        //success = true;
-                                    } catch (Exception e) {
-                                        //success = false;
-                                        message.setText(e.toString());
-                                    }
-                                    // String[] test = new String[]{libName.concat("/classes.jar")};
-                                    // new BackTask().execute(test);
-                                    onDownloadComplete();
-                                    //startView.isPressed();
-                                    //PRDownloader.resume(downloadId);
-                                });
-                                //FileUtil.deleteFile(libName);
-                                //FileUtil.deleteFile(path2.toString());
                                 cancel.setEnabled(true);
                                 cancel.setVisibility(View.VISIBLE);
                             }
@@ -1140,19 +1149,8 @@ public class LibraryDownloader {
         @Override
         protected void onPostExecute(String s) {
             if (success) {
-                // make a Toast 
+                // make a Toast
                 bB.a(context, "The library has been downloaded and imported to local libraries successfully.\n" + libName, 60).show();
-                /*
-                Snackbar snackbar = Snackbar.a(context.getParent().findViewById(R.id.managepermissionLinearLayout1), "Library: " + libName, -2 ); // BaseTransientBottomBar.LENGTH_INDEFINITE 
-                snackbar.a(Helper.getResString(R.string.common_word_show), v -> {
-                  snackbar.c();
-                    bB.a(context, "The library has been downloaded and imported to local libraries successfully.\n"  + libName, 60).show();
-                    // to imprementation go to library add recently 
-                });
-                //Set the text color to green
-                snackbar.f(Color.GREEN);
-                snackbar.n(); */
-
                 listener.onComplete();
             } else {
                 bB.a(context, "Dexing failed: " + s, 60).show();
