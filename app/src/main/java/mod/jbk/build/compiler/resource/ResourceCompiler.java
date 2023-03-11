@@ -172,7 +172,7 @@ public class ResourceCompiler {
             LogUtil.d(TAG + ":c", "Resource compilation completed in " + totalTime + " ms");
             link();
         }
-
+        //
         public void link() throws zy, MissingFileException {
             String resourcesPath = buildHelper.yq.binDirectoryPath + File.separator + "res";
             if (progressListener != null)
@@ -180,14 +180,20 @@ public class ResourceCompiler {
 
             ArrayList<String> args = new ArrayList<>();
             args.add(aapt.getAbsolutePath());
-            args.add("package");
+            args.add("link");
 
             if (buildAppBundle) {
                 throw new UnsupportedOperationException("Build AppBundle not supported with AAPT");
             }
+            // Output the APK only with resources to a.a.a.yq.C 
+            args.add("-o");
+            args.add(buildHelper.yq.resourcesApkPath);
+            
             args.addAll(Arrays.asList(
                     "--auto-add-overlay",
                     "--generate-dependencies",
+                    "-f",
+                    "-m",
                     "--non-constant-id",
                     "--skip-symbols-without-default-localization",
                     "--no-version-vectors",
@@ -196,8 +202,6 @@ public class ResourceCompiler {
 
             args.addAll(Arrays.asList(
                     "--output-text-symbols", buildHelper.yq.binDirectoryPath,
-                    "-f",
-                    "-m",
                     "-J", buildHelper.yq.rJavaDirectoryPath,
                     "-S", resourcesPath
             ));
@@ -225,17 +229,17 @@ public class ResourceCompiler {
                 args.addAll(Arrays.asList("-I", customAndroidSdk));
             }
 
-            /* Add assets imported by vanilla method */
+            // Add assets imported by vanilla method 
             linkingAssertDirectoryExists(buildHelper.yq.assetsPath);
             args.addAll(Arrays.asList("-A", buildHelper.yq.assetsPath));
 
-            /* Add imported assets */
+            // Add imported assets 
             String importedAssetsPath = buildHelper.fpu.getPathAssets(buildHelper.yq.sc_id);
             if (FileUtil.isExistFile(importedAssetsPath)) {
                 args.addAll(Arrays.asList("-A", importedAssetsPath));
             }
 
-            /* Add built-in libraries' assets */
+            // Add built-in libraries' assets 
             for (Jp library : buildHelper.builtInLibraryManager.a()) {
                 if (library.d()) {
                     String assetsPath = BuiltInLibraries.getLibraryAssetsPath(library.a());
@@ -245,20 +249,20 @@ public class ResourceCompiler {
                 }
             }
 
-            /* Add local libraries' assets */
+            // Add local libraries' assets 
             for (String localLibraryAssetsDirectory : new ManageLocalLibrary(buildHelper.yq.sc_id).getAssets()) {
                 linkingAssertDirectoryExists(localLibraryAssetsDirectory);
                 args.addAll(Arrays.asList("-A", localLibraryAssetsDirectory));
             }
 
-            /* Include compiled built-in library resources */
+            // Include compiled built-in library resources 
             for (Jp library : buildHelper.builtInLibraryManager.a()) {
                 if (library.c()) {
                     args.addAll(Arrays.asList("-S", new File(getCompiledBuiltInLibraryResourcesDirectory(), library.a() + ".zip").getAbsolutePath()));
                 }
             }
 
-            /* Include compiled local libraries' resources */
+            // Include compiled local libraries' resources 
             File[] filesInCompiledResourcesPath = new File(resourcesPath).listFiles();
             if (filesInCompiledResourcesPath != null) {
                 for (File file : filesInCompiledResourcesPath) {
@@ -268,48 +272,44 @@ public class ResourceCompiler {
                 }
             }
 
-            /* Include compiled project resources */
+            // Include compiled project resources 
             File projectArchive = new File(resourcesPath, "project.zip");
             if (projectArchive.exists()) {
                 args.addAll(Arrays.asList("-S", projectArchive.getAbsolutePath()));
             }
 
-            /* Include compiled imported project resources */
+            // Include compiled imported project resources 
             File projectImportedArchive = new File(resourcesPath, "project-imported.zip");
             if (projectImportedArchive.exists()) {
                 args.addAll(Arrays.asList("-S", projectImportedArchive.getAbsolutePath()));
             }
 
-            /* Add R.java */
+            // Add R.java 
             linkingAssertDirectoryExists(buildHelper.yq.rJavaDirectoryPath);
             args.add("-m");
             args.add("-J");
             args.add(buildHelper.yq.rJavaDirectoryPath);
 
 
-            /* Output AAPT's generated ProGuard rules to a.a.a.yq.aapt_rules */
+            // Output AAPT's generated ProGuard rules to a.a.a.yq.aapt_rules 
             // Remove this line:
             args.add("-G");
             // And remove this line too:
             args.add(buildHelper.yq.aaptProGuardRules);
 
 
-            /* Add AndroidManifest.xml */
+            // Add AndroidManifest.xml 
             linkingAssertFileExists(buildHelper.yq.androidManifestPath);
             args.add("-M");
             args.add(buildHelper.yq.androidManifestPath);
 
-            /* Use the generated R.java for used libraries */
+            // Use the generated R.java for used libraries 
             String extraPackages = buildHelper.getLibraryPackageNames();
             if (!extraPackages.isEmpty()) {
                 args.add("--extra-packages");
                 args.add(extraPackages);
             }
-
-            /* Output the APK only with resources to a.a.a.yq.C */
-            args.add("-F");
-            args.add(buildHelper.yq.resourcesApkPath);
-
+        
             LogUtil.d(TAG + ":l", args.toString());
             BinaryExecutor executor = new BinaryExecutor();
             executor.setCommands(args);
