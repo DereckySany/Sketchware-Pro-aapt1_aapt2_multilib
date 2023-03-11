@@ -187,6 +187,8 @@ public class ResourceCompiler {
             }
             args.addAll(Arrays.asList(
                     "--auto-add-overlay",
+                    "--non-constant-id",
+                    "--skip-symbols-without-default-localization",
                     "--no-version-vectors",
                     "--no-version-transitions"
             ));
@@ -196,7 +198,6 @@ public class ResourceCompiler {
                     "-f",
                     "-m",
                     "-J", buildHelper.yq.rJavaDirectoryPath,
-                    "-M", buildHelper.yq.androidManifestPath,
                     "-S", resourcesPath
             ));
 
@@ -294,9 +295,8 @@ public class ResourceCompiler {
 
             /* Add AndroidManifest.xml */
             linkingAssertFileExists(buildHelper.yq.androidManifestPath);
-            args.add("-m");
+            args.add("-M");
             args.add(buildHelper.yq.androidManifestPath);
-
 
             /* Use the generated R.java for used libraries */
             String extraPackages = buildHelper.getLibraryPackageNames();
