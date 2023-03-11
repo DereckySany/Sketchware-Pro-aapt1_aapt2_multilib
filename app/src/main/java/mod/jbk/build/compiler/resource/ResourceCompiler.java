@@ -187,6 +187,7 @@ public class ResourceCompiler {
             }
             args.addAll(Arrays.asList(
                     "--auto-add-overlay",
+                    "--generate-dependencies",
                     "--non-constant-id",
                     "--skip-symbols-without-default-localization",
                     "--no-version-vectors",
@@ -194,7 +195,7 @@ public class ResourceCompiler {
             ));
 
             args.addAll(Arrays.asList(
-                    "-c", buildHelper.yq.binDirectoryPath,
+                    "--output-text-symbols"), buildHelper.yq.binDirectoryPath,
                     "-f",
                     "-m",
                     "-J", buildHelper.yq.rJavaDirectoryPath,
