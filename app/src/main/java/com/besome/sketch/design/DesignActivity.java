@@ -192,7 +192,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         snackbar.a(Helper.getResString(R.string.common_word_show), v -> {
             if (!mB.a()) {
                 snackbar.c();
-                new CompileErrorSaver(sc_id).showDialog(getApplicationContext());
+                new CompileErrorSaver(sc_id).showDialog(DesignActivity.this);
              /* Intent intent = new Intent(getApplicationContext(), CompileLogActivity.class);
                 intent.putExtra("error", error);
                 intent.putExtra("sc_id", sc_id);

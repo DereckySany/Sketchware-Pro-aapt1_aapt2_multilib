@@ -400,10 +400,6 @@ public class ResourceCompiler {
                 commands.add("-f");
                 commands.add("-S");
                 commands.add(localLibraryResDirectory);
-                if (FileUtil.isExistFile(buildHelper.mll.getManifestPath())) {
-                    commands.add("-M");
-                    commands.add(buildHelper.mll.getManifestPath());
-                }
                 commands.add("-F");
                 commands.add(outputPath + File.separator + localLibraryDirectory.getName() + ".zip");
 
