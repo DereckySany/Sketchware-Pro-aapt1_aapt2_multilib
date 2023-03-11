@@ -180,7 +180,7 @@ public class ResourceCompiler {
 
             ArrayList<String> args = new ArrayList<>();
             args.add(aapt.getAbsolutePath());
-            args.add("link");
+            args.add("package");
 
             if (buildAppBundle) {
                 throw new UnsupportedOperationException("Build AppBundle not supported with AAPT");
