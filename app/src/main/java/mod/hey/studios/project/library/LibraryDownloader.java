@@ -46,6 +46,7 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import a.a.a.Dp;
 import a.a.a.bB;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.dx.command.dexer.Main;
@@ -517,19 +518,17 @@ public class LibraryDownloader {
                 ArrayList<String> cmd = new ArrayList<>();
                 //  Compile without debugging information.
                 cmd.add("--release");
+                //  Compile an intermediate result intended for later merging
+                cmd.add("--intermediate");
                 //  Output result in <file>
                 cmd.add("--output");
                 cmd.add(new File(_path).getParentFile().getAbsolutePath());
                 //  Add <file|jdk-home> as a library resource
                 cmd.add("--lib");
                 cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
-                //  cmd.add(new File(libs, "android.jar").getAbsolutePath());
                 //  Add <file> as a classpath resource
-                cmd.add("--classpath");
-                cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
-                // cmd.add(new File(libs, "core-lambda-stubs.jar").getAbsolutePath());
-                //  Compile an intermediate result intended for later merging
-                cmd.add("--intermediate");
+                //cmd.add("--classpath");
+                //cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
                 // Input <file>
                 cmd.add(_path);
                 // run D8 with list commands
@@ -885,31 +884,33 @@ public class LibraryDownloader {
                                         (Build.VERSION.SDK_INT < 26 ? "D8 (Only supported by Android version is 8+)" : "you need Press Start to switch to D8") + ".");
                                 use_d8 = Build.VERSION.SDK_INT >= 26;
                                 tool = "D8";
-                                if (use_d8 || JarCheck.checkJarFast(libName.concat("/classes.jar"), 44, 51)) {
-                                    try {
-                                        message.setText("Download completed!");
-                                        String[] test = new String[]{libName.concat("/classes.jar")};
-                                        new BackTask().execute(test);
-                                        FileUtil.deleteFile(path2.toString());
-                                        FileUtil.writeFile(libName + "/config", findPackageName(libName + "/", library.getText().toString()));
-                                        FileUtil.writeFile(libName + "/version", library.getText().toString());
-                                        checkLibsDirectory(libName + "/");
-                                        deleteUnnecessaryFiles(libName + "/");
-                                    } catch (Exception e) {
-                                        message.setText(e.getCause().toString());
+                                start.setOnClickListener(view -> {
+                                    if (use_d8 || JarCheck.checkJarFast(libName.concat("/classes.jar"), 44, 51)) {
+                                        try {
+                                            message.setText("Download completed!");
+                                            String[] test = new String[]{libName.concat("/classes.jar")};
+                                            new BackTask().execute(test);
+                                            FileUtil.deleteFile(path2.toString());
+                                            FileUtil.writeFile(libName + "/config", findPackageName(libName + "/", library.getText().toString()));
+                                            FileUtil.writeFile(libName + "/version", library.getText().toString());
+                                            checkLibsDirectory(libName + "/");
+                                            deleteUnnecessaryFiles(libName + "/");
+                                        } catch (Exception e) {
+                                            message.setText(e.getCause().toString());
+                                            FileUtil.deleteFile(libName);
+                                            FileUtil.deleteFile(path2.toString());
+                                            start.setEnabled(false);
+                                            start.setVisibility(View.GONE);
+                                        }
+                                    } else {
+                                        message.setText("This jar is not supported by Dx since Dx only supports up to Java 1.7.\nIn order to proceed, " +
+                                                (Build.VERSION.SDK_INT < 26 ? "D8 (Only supported by Android version is 8+)" : "you need Press Start to switch to D8") + ".");
                                         FileUtil.deleteFile(libName);
                                         FileUtil.deleteFile(path2.toString());
                                         start.setEnabled(false);
                                         start.setVisibility(View.GONE);
                                     }
-                                } else {
-                                    message.setText("This jar is not supported by Dx since Dx only supports up to Java 1.7.\nIn order to proceed, " +
-                                            (Build.VERSION.SDK_INT < 26 ? "D8 (Only supported by Android version is 8+)" : "you need Press Start to switch to D8") + ".");
-                                    FileUtil.deleteFile(libName);
-                                    FileUtil.deleteFile(path2.toString());
-                                    start.setEnabled(false);
-                                    start.setVisibility(View.GONE);
-                                }
+                                });
                                 cancel.setEnabled(true);
                                 cancel.setVisibility(View.VISIBLE);
                             }
@@ -1066,53 +1067,6 @@ public class LibraryDownloader {
     private void writeFile(File file, String content) {
         FileUtil.writeFile(file.getAbsolutePath(), content);
     }
-
-
-    /*
-    private void _getRepository() {
-        repoUrls.clear();
-        repoMap.clear();
-        repoNames.clear();
-        counter = 0;
-
-        readRepositories:
-        {
-            String repositories;
-            if (CONFIGURED_REPOSITORIES_FILE.exists() && !(repositories = FileUtil.readFile(CONFIGURED_REPOSITORIES_FILE.getAbsolutePath())).isEmpty()) {
-                try {
-                    repoMap = new Gson().fromJson(repositories, Helper.TYPE_MAP_LIST);
-
-                    if (repoMap != null) {
-                        break readRepositories;
-                    }
-                } catch (JsonParseException ignored) {
-                    // fall-through to shared error toast
-                }
-
-                SketchwareUtil.toastError("Custom Repositories configuration file couldn't be read from. Using default repositories for now", Toast.LENGTH_LONG);
-            } else {
-                FileUtil.writeFile(CONFIGURED_REPOSITORIES_FILE.getAbsolutePath(), DEFAULT_REPOSITORIES_FILE_CONTENT);
-            }
-
-            repoMap = new Gson().fromJson(DEFAULT_REPOSITORIES_FILE_CONTENT, Helper.TYPE_MAP_LIST);
-        }
-
-        for (HashMap<String, Object> configuration : repoMap) {
-            Object repoUrl = configuration.get("url");
-
-            if (repoUrl instanceof String) {
-                Object repoName = configuration.get("name");
-
-                if (repoName instanceof String) {
-                    repoUrls.add((String) repoUrl);
-                    repoNames.add((String) repoName);
-                }
-            }
-
-            counter++;
-        }
-    }
-        */
     public interface OnCompleteListener {
         void onComplete();
     }
@@ -1132,6 +1086,20 @@ public class LibraryDownloader {
             progressDialog.setMessage(tool + " is running...");
             progressDialog.setCancelable(false);
             progressDialog.show();
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            progressDialog.setTitle(tool + " is running...");
+            progressDialog.setMessage(values.toString());
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onCancelled(String s) {
+            progressDialog.setTitle(tool + " is Cancelled...");
+            progressDialog.setMessage(s.toString());
+            super.onCancelled(s);
         }
 
         @Override

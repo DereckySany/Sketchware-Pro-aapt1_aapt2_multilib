@@ -82,6 +82,7 @@ import proguard.ProGuard;
 public class Dp {
 
     public static final String TAG = "AppBuilder";
+    private final File aaptBinary;
     private final File aapt2Binary;
     public BuildSettings build_settings;
     private BuildProgressReceiver progressReceiver;
@@ -124,6 +125,7 @@ public class Dp {
             LogUtil.e(TAG, "Somehow failed to get package info about us!", e);
         }
 
+        aaptBinary = new File(context.getCacheDir(), "aapt");
         aapt2Binary = new File(context.getCacheDir(), "aapt2");
         build_settings = new BuildSettings(yqVar.sc_id);
         this.context = context;
@@ -149,9 +151,14 @@ public class Dp {
      */
     public void compileResources() throws Exception {
         timestampResourceCompilationStarted = System.currentTimeMillis();
+        boolean useAapt2 = buildAppBundle || build_settings.getValue(
+                BuildSettings.SETTING_RESOURCE_PROCESSOR,
+                BuildSettings.SETTING_RESOURCE_PROCESSOR_AAPT
+        ).equals(BuildSettings.SETTING_RESOURCE_PROCESSOR_AAPT2);
         ResourceCompiler compiler = new ResourceCompiler(
+                useAapt2,
                 this,
-                aapt2Binary,
+                useAapt2 ? aapt2Binary : aaptBinary,
                 buildAppBundle,
                 progressReceiver);
         compiler.compile();
@@ -212,48 +219,6 @@ public class Dp {
      *
      * @throws Exception Thrown if the compiler had any problems compiling
      */
-     /*
-    public void createDexFilesFromClasses() throws Exception {
-        FileUtil.makeDir(yq.binDirectoryPath + File.separator + "dex");
-        if (proguard.isProguardEnabled() && isR8Enabled()) return;
-        if (isD8Enabled()) {
-            long savedTimeMillis = System.currentTimeMillis();
-            try {
-                DexCompiler.compileDexFiles(this);
-                LogUtil.d(TAG, "D8 took " + (System.currentTimeMillis() - savedTimeMillis) + " ms");
-            } catch (Exception e) {
-                LogUtil.e(TAG, "D8 failed to process .class files", e);
-                throw e;
-            }
-        } else {
-            long savedTimeMillis = System.currentTimeMillis();
-            List<String> args = Arrays.asList(
-                    "--debug",
-                    "--verbose",
-                    "--multi-dex",
-                    "--output=" + yq.binDirectoryPath + File.separator + "dex",
-                    proguard.isProguardEnabled() ? yq.classesProGuardPath : yq.compiledClassesPath
-            );
-
-            try {
-                LogUtil.d(TAG, "Running Dx with these arguments: " + args);
-
-                Main.clearInternTables();
-                Main.Arguments arguments = new Main.Arguments();
-                Method parseMethod = Main.Arguments.class.getDeclaredMethod("parse", String[].class);
-                parseMethod.setAccessible(true);
-                parseMethod.invoke(arguments, (Object) args.toArray(new String[0]));
-
-                Main.run(arguments);
-                LogUtil.d(TAG, "Dx took " + (System.currentTimeMillis() - savedTimeMillis) + " ms");
-            } catch (Exception e) {
-                LogUtil.e(TAG, "Dx failed to process .class files", e);
-                throw e;
-            }
-        }
-    }
-    */
-    //
     public void createDexFilesFromClasses() throws Exception {
     FileUtil.makeDir(yq.binDirectoryPath + File.separator + "dex");
         if (proguard.isProguardEnabled() && isR8Enabled()) {
@@ -290,7 +255,6 @@ public class Dp {
                 }
             }
     }
-    //
 
     public String getClasspath() {
         StringBuilder classpath = new StringBuilder();
@@ -791,6 +755,9 @@ public class Dp {
             if (hasFileChanged(aapt2PathInAssets, aapt2Binary.getAbsolutePath())) {
                 Os.chmod(aapt2Binary.getAbsolutePath(), S_IRUSR | S_IWUSR | S_IXUSR);
             }
+            if (hasFileChanged(aaptPathInAssets, aaptBinary.getAbsolutePath())) {
+                Os.chmod(aaptBinary.getAbsolutePath(), S_IRUSR | S_IWUSR | S_IXUSR);
+            }
         } catch (Exception e) {
             LogUtil.e(TAG, "Failed to extract AAPT2 binaries", e);
             throw new By("Couldn't extract AAPT2 binaries! Message: " + e.getMessage());
@@ -930,9 +897,7 @@ public class Dp {
                     config.add(f.getAbsolutePath());
                  }
             }
-            for (String localLibraryProGuardRule : mll.getPgRules()) {
-                config.add(localLibraryProGuardRule);
-            }
+            config.addAll(mll.getPgRules());
             ArrayList<String> jars = new ArrayList<>();
             jars.add(yq.compiledClassesPath + ".jar");
 

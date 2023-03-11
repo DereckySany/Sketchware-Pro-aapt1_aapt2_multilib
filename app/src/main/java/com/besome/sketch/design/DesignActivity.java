@@ -97,6 +97,7 @@ import mod.agus.jcoderz.lib.FileUtil;
 import mod.hey.studios.activity.managers.assets.ManageAssetsActivity;
 import mod.hey.studios.activity.managers.java.ManageJavaActivity;
 import mod.hey.studios.activity.managers.nativelib.ManageNativelibsActivity;
+import mod.hey.studios.build.BuildSettings;
 import mod.hey.studios.build.BuildSettingsDialog;
 import mod.hey.studios.compiler.kotlin.KotlinCompilerBridge;
 import mod.hey.studios.project.custom_blocks.CustomBlocksDialog;
@@ -1084,7 +1085,10 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                     generateProjectDebugFiles();
                     q.f();
                     q.e();
-
+                    boolean usingAapt2 = new BuildSettings(sc_id).getValue(
+                            BuildSettings.SETTING_RESOURCE_PROCESSOR,
+                            BuildSettings.SETTING_RESOURCE_PROCESSOR_AAPT
+                    ).equals(BuildSettings.SETTING_RESOURCE_PROCESSOR_AAPT2);
                     Dp mDp = new Dp(this, a, q);
 
                     mDp.maybeExtractAapt2();
@@ -1100,7 +1104,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                         return;
                     }
 
-                    publishProgress("AAPT2 is running...");
+                    publishProgress(usingAapt2 ? "AAPT2 is running..." : "AAPT is running...");
                     mDp.compileResources();
                     if (canceled) {
                         cancel(true);

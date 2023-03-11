@@ -46,7 +46,7 @@ public class BuildSettingsDialog {
         TextView save = inflate.findViewById(R.id.text_save);
 
         icon.setImageResource(R.drawable.side_menu_setting_icon_over);
-        title.setText("Build Settings");
+        title.setText(R.string.build_settings);
 
         setupSettings(contentView);
 
@@ -62,9 +62,10 @@ public class BuildSettingsDialog {
     }
     
     private void setupSettings(LinearLayout contentView) {
-        viewArr = new View[] {
+        viewArr = new View[]{
                 addInputPref(BuildSettings.SETTING_ANDROID_JAR_PATH, "", "Custom android.jar", EditorInfo.TYPE_CLASS_TEXT, contentView),
                 addInputPref(BuildSettings.SETTING_CLASSPATH, "", "Classpath (separated by :)", EditorInfo.TYPE_CLASS_TEXT, contentView),
+                addSingleChoicePref(BuildSettings.SETTING_RESOURCE_PROCESSOR, new String[]{"AAPT", "AAPT2"}, "AAPT2", "Resource processor", contentView),
                 addSingleChoicePref(BuildSettings.SETTING_DEXER, new String[]{"Dx", "D8"}, "Dx", "Dexer", contentView),
                 addSingleChoicePref(BuildSettings.SETTING_JAVA_VERSION, BuildSettingsDialogBridge.getAvailableJavaVersions(), "1.7", "Java version", contentView),
                 addSingleChoicePref(BuildSettings.SETTING_SHRINKER, BuildSettingsDialogBridge.getAvailableShrinkers(), BuildSettings.SETTING_SHRINKER_PROGUARD, "Code Shrinker", contentView),
