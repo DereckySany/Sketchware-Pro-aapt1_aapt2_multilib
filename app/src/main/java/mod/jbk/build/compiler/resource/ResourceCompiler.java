@@ -195,7 +195,7 @@ public class ResourceCompiler {
             ));
 
             args.addAll(Arrays.asList(
-                    "--output-text-symbols"), buildHelper.yq.binDirectoryPath,
+                    "--output-text-symbols", buildHelper.yq.binDirectoryPath,
                     "-f",
                     "-m",
                     "-J", buildHelper.yq.rJavaDirectoryPath,
@@ -317,7 +317,7 @@ public class ResourceCompiler {
             if (!log.isEmpty()) {
                 LogUtil.e(TAG + ":l", log);
                 throw new zy(log);
-            }
+            }   
         }
 
         private void compileImportedResources(String outputPath) throws zy {
