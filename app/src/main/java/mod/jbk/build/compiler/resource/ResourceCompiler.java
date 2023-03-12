@@ -436,21 +436,10 @@ public class ResourceCompiler {
 
                     if (isBuiltInLibraryRecompilingNeeded(cachedCompiledResources, context)) {
                         ArrayList<String> commands = new ArrayList<>();
-                        commands.add(aapt.getAbsolutePath()); // substitui AAPT por aapt
+                        commands.add(aapt.getAbsolutePath());
                         commands.add("package");
-                        commands.add("-f");
-                        if (FileUtil.isExistFile(libraryResources + "/AndroidManifest.xml")) {
-                            commands.add("-M");
-                            commands.add(libraryResources + "/AndroidManifest.xml");
-                        }
-                        if (FileUtil.isExistFile(libraryResources + "/res")) {
-                            commands.add("-S");
-                            commands.add(libraryResources + "/res");
-                        }
-                        commands.add("-I");
-                        commands.add(buildHelper.androidJarPath);
-                        commands.add("-I");
-                        commands.add(context.getApplicationInfo().sourceDir);
+                        commands.add("-S");
+                        commands.add(libraryResources);
                         commands.add("-F");
                         commands.add(cachedCompiledResources.getAbsolutePath());
 
