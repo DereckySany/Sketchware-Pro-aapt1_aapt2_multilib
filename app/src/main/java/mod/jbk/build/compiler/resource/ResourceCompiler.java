@@ -210,6 +210,15 @@ public class ResourceCompiler {
                     "--generate-dependencies"
             ));
 
+            String customAndroidSdk = buildHelper.build_settings.getValue(BuildSettings.SETTING_ANDROID_JAR_PATH, "");
+            if (customAndroidSdk.isEmpty()) {
+                args.add("-I");
+                args.add(buildHelper.androidJarPath);
+            } else {
+                linkingAssertFileExists(customAndroidSdk);
+                args.addAll(Arrays.asList("-I", customAndroidSdk));
+            }
+
             /* Force overwriting of existing files */
             args.add("-f");
 
@@ -232,15 +241,6 @@ public class ResourceCompiler {
             args.add("-S");
             args.add(resourcesPath);
 
-            String customAndroidSdk = buildHelper.build_settings.getValue(BuildSettings.SETTING_ANDROID_JAR_PATH, "");
-            if (customAndroidSdk.isEmpty()) {
-                args.add("-I");
-                args.add(buildHelper.androidJarPath);
-            } else {
-                linkingAssertFileExists(customAndroidSdk);
-                args.addAll(Arrays.asList("-I", customAndroidSdk));
-            }
-
             // Add assets imported by vanilla method 
             linkingAssertDirectoryExists(buildHelper.yq.assetsPath);
             args.addAll(Arrays.asList("-A", buildHelper.yq.assetsPath));
@@ -255,7 +255,6 @@ public class ResourceCompiler {
             for (Jp library : buildHelper.builtInLibraryManager.a()) {
                 if (library.d()) {
                     String assetsPath = BuiltInLibraries.getLibraryAssetsPath(library.a());
-
                     linkingAssertDirectoryExists(assetsPath);
                     args.addAll(Arrays.asList("-A", assetsPath));
                 }
@@ -332,6 +331,7 @@ public class ResourceCompiler {
 
         private void compileImportedResources(String outputPath) throws zy {
             String resourceDir = buildHelper.fpu.getPathResource(buildHelper.yq.sc_id);
+            String ManifestDir = buildHelper.yq.androidManifestPath;
             if (!FileUtil.isExistFile(resourceDir) || new File(resourceDir).length() == 0) {
                 return;
             }
@@ -340,9 +340,13 @@ public class ResourceCompiler {
                 ProcessBuilder processBuilder = new ProcessBuilder(
                         aapt.getAbsolutePath(),
                         "package",
+                        "-I",
+                        buildHelper.androidJarPath,
                         "-f",
                         "-S",
                         resourceDir,
+                        "-M",
+                        ManifestDir,
                         "-F",
                         outputZip
                 );
@@ -397,9 +401,13 @@ public class ResourceCompiler {
                 ArrayList<String> commands = new ArrayList<>();
                 commands.add(aapt.getAbsolutePath());
                 commands.add("package");
+                commands.add("-I");
+                commands.add(buildHelper.androidJarPath);
                 commands.add("-f");
                 commands.add("-S");
                 commands.add(localLibraryResDirectory);
+                commands.add("-M");
+                commands.add(buildHelper.mll.getManifestPath());
                 commands.add("-F");
                 commands.add(outputPath + File.separator + localLibraryDirectory.getName() + ".zip");
 
@@ -431,16 +439,18 @@ public class ResourceCompiler {
                         commands.add(aapt.getAbsolutePath()); // substitui AAPT por aapt
                         commands.add("package");
                         commands.add("-f");
-                        if (FileUtil.isExistFile(libraryResources + "/AndroidManifest.xml")) {
-                            commands.add("-M");
-                            commands.add(libraryResources + "/AndroidManifest.xml");
-                        }
                         if (FileUtil.isExistFile(libraryResources + "/res")) {
                             commands.add("-S");
                             commands.add(libraryResources + "/res");
                         }
                         commands.add("-I");
+                        commands.add(buildHelper.androidJarPath);
+                        commands.add("-I");
                         commands.add(context.getApplicationInfo().sourceDir);
+                        if (FileUtil.isExistFile(libraryResources + "/AndroidManifest.xml")) {
+                            commands.add("-M");
+                            commands.add(libraryResources + "/AndroidManifest.xml");
+                        }
                         commands.add("-F");
                         commands.add(cachedCompiledResources.getAbsolutePath());
 
@@ -512,9 +522,9 @@ public class ResourceCompiler {
             ArrayList<String> commands = new ArrayList<>();
             commands.add(aapt.getAbsolutePath());
             commands.add("package");
-            commands.add("-f");
             commands.add("-I");
             commands.add(buildHelper.androidJarPath);
+            commands.add("-f");
             commands.add("-S");
             commands.add(resDirectoryPath);
             commands.add("-M");

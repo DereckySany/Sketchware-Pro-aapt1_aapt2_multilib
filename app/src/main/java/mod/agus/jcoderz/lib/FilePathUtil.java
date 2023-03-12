@@ -64,6 +64,14 @@ public class FilePathUtil {
         return new File(SKETCHWARE_LOCAL_LIBS, libraryName + "/res").getAbsolutePath();
     }
 
+    public String getJniPathLocalLibrary(String libraryName) {
+        return new File(SKETCHWARE_LOCAL_LIBS, libraryName + "/jni").getAbsolutePath();
+    }
+
+    public String getManifestPathLocalLibrary(String libraryName) {
+        return new File(SKETCHWARE_LOCAL_LIBS, libraryName + "/AndroidManifest.xml").getAbsolutePath();
+    }
+
     public String getJarPathLocalLibraryUser(String sc_id) {
         return new File(SKETCHWARE_DATA, sc_id + "/files/library/jar").getAbsolutePath();
     }
