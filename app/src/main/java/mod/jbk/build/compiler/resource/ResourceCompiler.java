@@ -527,8 +527,8 @@ public class ResourceCompiler {
             commands.add("-f");
             commands.add("-S");
             commands.add(resDirectoryPath);
-            /*commands.add("-M");
-            commands.add(buildHelper.yq.androidManifestPath);*/
+            commands.add("-M");
+            commands.add(buildHelper.yq.androidManifestPath);
             commands.add("-F");
             commands.add(outputFilePath);
             return commands;
