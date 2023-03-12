@@ -439,6 +439,10 @@ public class ResourceCompiler {
                         commands.add(aapt.getAbsolutePath()); // substitui AAPT por aapt
                         commands.add("package");
                         commands.add("-f");
+                        if (FileUtil.isExistFile(libraryResources + "/AndroidManifest.xml")) {
+                            commands.add("-M");
+                            commands.add(libraryResources + "/AndroidManifest.xml");
+                        }
                         if (FileUtil.isExistFile(libraryResources + "/res")) {
                             commands.add("-S");
                             commands.add(libraryResources + "/res");
@@ -447,10 +451,6 @@ public class ResourceCompiler {
                         commands.add(buildHelper.androidJarPath);
                         commands.add("-I");
                         commands.add(context.getApplicationInfo().sourceDir);
-                        if (FileUtil.isExistFile(libraryResources + "/AndroidManifest.xml")) {
-                            commands.add("-M");
-                            commands.add(libraryResources + "/AndroidManifest.xml");
-                        }
                         commands.add("-F");
                         commands.add(cachedCompiledResources.getAbsolutePath());
 
@@ -527,8 +527,8 @@ public class ResourceCompiler {
             commands.add("-f");
             commands.add("-S");
             commands.add(resDirectoryPath);
-            commands.add("-M");
-            commands.add(buildHelper.yq.androidManifestPath);
+            /*commands.add("-M");
+            commands.add(buildHelper.yq.androidManifestPath);*/
             commands.add("-F");
             commands.add(outputFilePath);
             return commands;
