@@ -231,7 +231,7 @@ public class ResourceCompiler {
             args.add(buildHelper.yq.binDirectoryPath);
 
             if (buildHelper.yq.N.g) {
-                args.add("--no-version-vectors");
+                args.add("--no-version-transitions");
             }
 
             /* Specify resources directory */
