@@ -59,7 +59,7 @@ public class XmlBuilder {
         e.add(new AttributeBuilder(value));
     }
     
-    public String toCode() {
+/*    public String toCode() {
         StringBuilder resultCode = new StringBuilder();
         StringBuilder indent = new StringBuilder();
         for (int i = 0; i < b; i++) {
@@ -102,6 +102,40 @@ public class XmlBuilder {
             resultCode.append(">");
         } else {
             resultCode.append(" />");
+        }
+        resultCode.append("\r\n");
+        return resultCode.toString();
+    }*/
+
+    public String toCode() {
+        StringBuilder resultCode = new StringBuilder();
+        resultCode.append(addZeroIndent());
+        resultCode.append("<").append(a);
+        for (AttributeBuilder attr : e) {
+            resultCode.append(e.size() <= 1 || d ? " " : "\r\n" + addIndent(1));
+            resultCode.append(attr.toCode());
+            g = e.size() <= 1 || d ? " " : "\r\n" + addIndent(1);
+        }
+        if (f.size() <= 0) {
+            if (c == null || c.length() <= 0) {
+                resultCode.append(" />");
+            } else {
+                String resultString = ">";
+                if (c != null || c.length() > 0) {
+                    resultString += c;
+                }
+                resultString += "</" + a + ">";
+                resultCode.append(resultString);
+            }
+        } else {
+            resultCode.append(">\r\n");
+            for (XmlBuilder xmlBuilder : f) {
+                resultCode.append(xmlBuilder.toCode());
+            }
+            resultCode.append(addZeroIndent())
+                    .append("</")
+                    .append(a)
+                    .append(">");
         }
         resultCode.append("\r\n");
         return resultCode.toString();
