@@ -48,7 +48,6 @@
             android:layout_height="fill_parent"
             android:layout_margin="8.0dip"
             android:src="@drawable/text_width_96"/>
-        <!-- android:src="@drawable/selector_ic_format_size_white_24"-->
         <LinearLayout
             android:orientation="vertical"
             android:visibility="gone"

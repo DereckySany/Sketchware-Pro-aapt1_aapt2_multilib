@@ -4,9 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Environment;
 import android.text.InputType;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -19,9 +17,6 @@ import com.besome.sketch.beans.ProjectFileBean;
 import com.besome.sketch.editor.LogicEditorActivity;
 import com.sketchware.remod.R;
 
-import java.io.File;
-
-import a.a.a.wq;
 import a.a.a.Kw;
 import a.a.a.OB;
 import a.a.a.SB;
@@ -32,12 +27,12 @@ import a.a.a.jC;
 import a.a.a.mB;
 import a.a.a.uq;
 import a.a.a.wB;
+import a.a.a.wq;
+import dev.derecky.sany.editor.tools.translateapi.TranslateAPI;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.hey.studios.code.SrcCodeEditorLegacy;
 import mod.hey.studios.util.Helper;
 import mod.hilal.saif.activities.tools.ConfigActivity;
-// new
-import dev.derecky.sany.editor.tools.translateapi.*;
 
 
 @SuppressLint("ViewConstructor")
@@ -304,17 +299,13 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         dialog.a(v -> {
             showTranslationDialog(input).create().show();
         });
-        dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.configureDefaultButton("Code Editor", v -> {
-            /*
-            AsdAllEditor editor = new AsdAllEditor((Activity) this.getContext());
-            editor.setCon(input.getText().toString());
-            editor.show();
-            editor.saveLis(logicEditor, null, editor);
-            editor.cancelLis(logicEditor, editor);
-            dialog.dismiss(); */
+//            AsdAllEditor editor = new AsdAllEditor((Activity) this.getContext());
+//            editor.setCon(input.getText().toString());
+//            editor.show();
+//            editor.saveLis(logicEditor, null, editor);
+//            editor.cancelLis(logicEditor, editor);
             String tempFile = wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/" + "edit.txt";
-            FileUtil.writeFile(tempFile,input.getText().toString());
 
             Intent intent = new Intent();
             if (ConfigActivity.isLegacyCeEnabled()) {
@@ -330,10 +321,11 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             //((Activity) this.getContext()).startActivityForResult(intent, SRC_CODE_EDITOR_RESULT);
 
             this.getContext().startActivity(intent);
-
             String editedContent = FileUtil.readFile(tempFile);
             input.setText(editedContent);
+            dialog.dismiss();
         });
+        dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.show();
     }
 
@@ -390,54 +382,6 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
     public void startActivity(Intent intent) {
         throw new RuntimeException("Stub!");
     }
-
-    /* // metodo original
-    private String translate(String text) {
-        try {
-            String encodedText = URLEncoder.encode(text, "UTF-8");
-            String urlStr = "https://translate.google.com/?sl=auto&tl=pt&text=" + encodedText;
-            URL url = new URL(urlStr);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestProperty("User-Agent", "Mozilla/5.0");
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-            String result = "";
-            String line;
-            while ((line = in.readLine()) != null) {
-                result += line;
-            }
-            in.close();
-            String translated = result.substring(result.indexOf("<span title=\"") + 13, result.indexOf("\">", result.indexOf("<span title=\"") + 13));
-            return translated;
-        } catch (MalformedURLException e) {
-            // Tratar o erro de URL mal formada
-            String errorMessage = "A URL de conexão está mal formada: " + e.getMessage();
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("Erro");
-            builder.setMessage(errorMessage);
-            builder.setPositiveButton("OK", null);
-            AlertDialog translatederror = builder.create();
-            translatederror.show();
-        } catch (IOException e) {
-            // Tratar o erro de conexão
-            String errorMessage;
-            if (e instanceof UnknownHostException) {
-                errorMessage = "Não foi possível conectar ao site de tradução: Host desconhecido";
-            } else if (e instanceof ConnectException) {
-                errorMessage = "Não foi possível conectar ao site de tradução: Conexão recusada";
-            } else {
-                errorMessage = "Ocorreu um erro ao acessar o site para traduzir o texto: " + e.getMessage();
-            }
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("Erro");
-            builder.setMessage(errorMessage);
-            builder.setPositiveButton("OK", null);
-            AlertDialog translatederror = builder.create();
-            translatederror.show();
-        }
-        return null;
-    }
-    */
-
     private void showNumberDecimalInputDialog(int minValue, int maxValue) {
         aB dialog = new aB((Activity) getContext());
         dialog.b(tvName.getText().toString());

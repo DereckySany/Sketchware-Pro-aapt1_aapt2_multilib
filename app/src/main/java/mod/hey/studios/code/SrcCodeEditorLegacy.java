@@ -78,7 +78,6 @@ public class SrcCodeEditorLegacy extends Activity {
                     .show();
         } else {
             super.onBackPressed();
-
             FileUtil.writeFile(getIntent().getStringExtra("content"), codeEditor.getText());
             Toast.makeText(this, "File saved", Toast.LENGTH_SHORT).show();
         }

@@ -26,6 +26,7 @@ import a.a.a.jC;
 import a.a.a.yq;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import io.github.rosemoe.sora.widget.CodeEditor;
+import io.github.rosemoe.sora.widget.layout.Layout;
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme;
 import mod.hey.studios.util.Helper;
 import mod.jbk.code.CodeEditorColorSchemes;
@@ -61,7 +62,9 @@ public class SrcViewerActivity extends AppCompatActivity {
 
         LinearLayout contentLayout = (LinearLayout) (findViewById(R.id.pager_soruce_code).getParent());
         contentLayout.removeAllViews();
-        contentLayout.addView(codeViewer);
+        contentLayout.addView(codeViewer,new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT,Gravity.TOP));
 
         sc_id = (savedInstanceState != null) ? savedInstanceState.getString("sc_id") : getIntent().getStringExtra("sc_id");
 
