@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class SrcCodeBean implements Parcelable {
-    public static final Parcelable.Creator<SrcCodeBean> CREATOR = new Parcelable.Creator<>() {
+    public static final Creator<SrcCodeBean> CREATOR = new Creator<SrcCodeBean>() {
         @Override
         public SrcCodeBean createFromParcel(Parcel source) {
             return new SrcCodeBean(source);
@@ -16,26 +16,56 @@ public class SrcCodeBean implements Parcelable {
         }
     };
 
-    public String pkgName;
-    public String source;
-    public String srcFileName;
+    private String pkgName;
+    private String source;
+    private String srcFileName;
 
     public SrcCodeBean() {
     }
 
     public SrcCodeBean(String sourceFilename, String content) {
-        srcFileName = sourceFilename;
-        source = content;
+        this.srcFileName = sourceFilename;
+        this.source = content;
     }
 
-    public SrcCodeBean(Parcel other) {
-        pkgName = other.readString();
-        srcFileName = other.readString();
-        source = other.readString();
+    public SrcCodeBean(SrcCodeBean other) {
+        this.pkgName = other.pkgName;
+        this.source = other.source;
+        this.srcFileName = other.srcFileName;
     }
 
-    public static Parcelable.Creator<SrcCodeBean> getCreator() {
+    public SrcCodeBean(Parcel in) {
+        this.pkgName = in.readString();
+        this.srcFileName = in.readString();
+        this.source = in.readString();
+    }
+
+    public Creator<SrcCodeBean> getCreator() {
         return CREATOR;
+    }
+
+    public String getPkgName() {
+        return pkgName;
+    }
+
+    public void setPkgName(String pkgName) {
+        this.pkgName = pkgName;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public String getSrcFileName() {
+        return srcFileName;
+    }
+
+    public void setSrcFileName(String srcFileName) {
+        this.srcFileName = srcFileName;
     }
 
     @Override
