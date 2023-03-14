@@ -44,7 +44,7 @@ public class R8Compiler {
         }
 
         // Lista de classpaths
-        List<String> classpath = Arrays.asList(coreStubsJarPath.toString());
+        List<String> classpath = List.of(coreStubsJarPath.toString());
 
         // Lista de libs
         Collection<Path> library = Arrays.asList(androidJarPath,coreStubsJarPath);

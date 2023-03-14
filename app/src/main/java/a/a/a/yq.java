@@ -645,7 +645,7 @@ public class yq {
         }
 
         for (SrcCodeBean bean : srcCodeBeans) {
-            a(bean.srcFileName, bean.source);
+            a(bean.getSrcFileName(), bean.getSource());
         }
         if (N.isFirebaseEnabled || N.isAdMobEnabled || N.isMapUsed) {
             ProjectLibraryBean firebaseLibrary = projectLibraryManager.d();
