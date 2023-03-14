@@ -63,19 +63,19 @@ public class XmlBuilder {
         e.add(new AttributeBuilder(value));
     }
 
-    @SuppressLint("NewApi")
     public String toCode() {
         StringBuilder resultCode = new StringBuilder();
         StringBuilder resultString = new StringBuilder();
-        resultCode.append(addZeroIndent()).append("<").append(a);
-        boolean hasMultipleAttrs = e.size() > 1 && !d;
+        boolean hasMultipleAttrs = e.size() >= 1 && !d;
         String attrSeparator = hasMultipleAttrs ? "\r\n" + addIndent(1) : " ";
-
+        
+        resultCode.append(addZeroIndent()).append("<").append(a);
         for (AttributeBuilder attr : e) {
             resultCode.append(attrSeparator);
             resultCode.append(attr.toCode());
+            g = attrSeparator;
         }
-
+        
         if (f.size() <= 0) {
             if (c == null || c.length() <= 0) {
                 resultCode.append(" />");
@@ -94,7 +94,7 @@ public class XmlBuilder {
             }
             resultCode.append(addZeroIndent()).append("</").append(a).append(">");
         }
-
+        
         resultCode.append("\r\n");
         return resultCode.toString();
     }
