@@ -39,27 +39,27 @@ public class TextBean extends nA implements Parcelable {
     public static final int TEXT_TYPE_ITALIC = 2;
     public static final int TEXT_TYPE_NORMAL = 0;
     @Expose
-    private String text;
+    public String text;
     @Expose
-    private int textSize;
+    public int textSize;
     @Expose
-    private int textColor;
+    public int textColor;
     @Expose
-    private int textType;
+    public int textType;
     @Expose
-    private String textFont;
+    public String textFont;
     @Expose
-    private String hint;
+    public String hint;
     @Expose
-    private int hintColor;
+    public int hintColor;
     @Expose
-    private int singleLine;
+    public int singleLine;
     @Expose
-    private int line;
+    public int line;
     @Expose
-    private int inputType;
+    public int inputType;
     @Expose
-    private int imeOption;
+    public int imeOption;
 
     public TextBean() {
         this.text = "";

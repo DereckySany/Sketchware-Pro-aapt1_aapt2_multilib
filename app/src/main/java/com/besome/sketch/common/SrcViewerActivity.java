@@ -73,8 +73,8 @@ public class SrcViewerActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 SrcCodeBean bean = srcCodeBean.get(position);
-                codeViewer.setText(bean.source);
-                currentPageFileName = bean.srcFileName;
+                codeViewer.setText(bean.getSource());
+                currentPageFileName = bean.getSrcFileName();
                 setCorrectCodeEditorLanguage();
             }
 
@@ -107,12 +107,12 @@ public class SrcViewerActivity extends AppCompatActivity {
                     } else {
                         filesListSpinner.setAdapter(new FilesListSpinnerAdapter());
                         for (SrcCodeBean src : srcCodeBean) {
-                            if (src.srcFileName.equals(currentPageFileName)) {
+                            if (src.getSrcFileName().equals(currentPageFileName)) {
                                 filesListSpinner.setSelection(srcCodeBean.indexOf(src));
                                 break;
                             }
                         }
-                        codeViewer.setText(srcCodeBean.get(filesListSpinner.getSelectedItemPosition()).source);
+                        codeViewer.setText(srcCodeBean.get(filesListSpinner.getSelectedItemPosition()).getSource());
 
                         progressContainer.setVisibility(View.GONE);
                         filesListSpinner.setVisibility(View.VISIBLE);
@@ -171,7 +171,7 @@ public class SrcViewerActivity extends AppCompatActivity {
         private View getCustomSpinnerView(int position, View view, boolean isCurrentlyViewingFile) {
             CommonSpinnerItem spinnerItem = (view != null) ? (CommonSpinnerItem) view :
                     new CommonSpinnerItem(SrcViewerActivity.this);
-            spinnerItem.a((srcCodeBean.get(position)).srcFileName, isCurrentlyViewingFile);
+            spinnerItem.a((srcCodeBean.get(position)).getSrcFileName(), isCurrentlyViewingFile);
             return spinnerItem;
         }
 

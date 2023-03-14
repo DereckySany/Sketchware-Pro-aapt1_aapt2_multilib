@@ -27,6 +27,7 @@ import mod.agus.jcoderz.editor.view.item.ItemDigitalClock;
 import mod.agus.jcoderz.editor.view.item.ItemGridView;
 import mod.agus.jcoderz.editor.view.item.ItemMultiAutoCompleteTextView;
 import mod.agus.jcoderz.editor.view.item.ItemRadioButton;
+import mod.agus.jcoderz.editor.view.item.ItemRadioGroup;
 import mod.agus.jcoderz.editor.view.item.ItemRatingBar;
 import mod.agus.jcoderz.editor.view.item.ItemSearchView;
 import mod.agus.jcoderz.editor.view.item.ItemTimePicker;
@@ -90,8 +91,10 @@ public class ViewPanes {
             case ViewBeans.VIEW_TYPE_LAYOUT_COLLAPSINGTOOLBARLAYOUT:
             case ViewBeans.VIEW_TYPE_LAYOUT_TEXTINPUTLAYOUT:
             case ViewBeans.VIEW_TYPE_LAYOUT_SWIPEREFRESHLAYOUT:
-            case ViewBeans.VIEW_TYPE_LAYOUT_RADIOGROUP:
                 return new ItemLinearLayout(context);
+
+            case ViewBeans.VIEW_TYPE_LAYOUT_RADIOGROUP:
+                return new ItemRadioGroup(context);
 
             case ViewBeans.VIEW_TYPE_WIDGET_MATERIALBUTTON:
                 return new ItemMaterialButton(context);

@@ -612,7 +612,7 @@ public class Ox {
 
     private void writeTextAttributes(XmlBuilder nx, ViewBean viewBean) {
         Set<String> toNotAdd = readAttributesToReplace(viewBean);
-        String text = viewBean.text.text;
+        String text = viewBean.text.toString();
         if (text != null && text.length() > 0 && !toNotAdd.contains("android:text")) {
             if (text.startsWith("@")) {
                 nx.addAttribute("android", "text", text);
