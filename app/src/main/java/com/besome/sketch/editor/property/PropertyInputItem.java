@@ -306,7 +306,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
 //            editor.saveLis(logicEditor, null, editor);
 //            editor.cancelLis(logicEditor, editor);
             String tempFile = wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/" + "edit.txt";
-
+            FileUtil.writeFile(tempFile,input.getText().toString());
             Intent intent = new Intent();
             if (ConfigActivity.isLegacyCeEnabled()) {
                 intent.setClass((Activity) this.getContext(), SrcCodeEditorLegacy.class);
@@ -323,7 +323,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             this.getContext().startActivity(intent);
             String editedContent = FileUtil.readFile(tempFile);
             input.setText(editedContent);
-            dialog.dismiss();
+            //dialog.dismiss();
         });
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.show();
