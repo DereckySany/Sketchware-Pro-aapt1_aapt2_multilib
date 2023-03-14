@@ -1,6 +1,10 @@
 package com.sketchware.remod.xml;
 
+import android.annotation.SuppressLint;
+import android.os.Build;
+
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import a.a.a.Jx;
 
@@ -31,12 +35,9 @@ public class XmlBuilder {
     }
 
     private String addIndent(int indentSize) {
-        StringBuilder str = new StringBuilder();
-        for (int i = 0; i < b + indentSize; i++) {
-            str.append("\t");
-        }
-        return str.toString();
+        return "\t".repeat(b + indentSize);
     }
+
 
     public void addNamespaceDeclaration(int position, String namespace, String attr, String value) {
         e.add(position, new AttributeBuilder(namespace, attr, value));
@@ -58,114 +59,52 @@ public class XmlBuilder {
     public void addAttributeValue(String value) {
         e.add(new AttributeBuilder(value));
     }
-    
-/*    public String toCode() {
-        StringBuilder resultCode = new StringBuilder();
-        StringBuilder indent = new StringBuilder();
-        for (int i = 0; i < b; i++) {
-            indent.append("\t");
-        }
-        resultCode.append(indent);
-        resultCode.append("<");
-        resultCode.append(a);
-        int numAttributes = e.size();
-        if (numAttributes > 0) {
-            boolean useNewLine = numAttributes > 1 && !d;
-            String newLine = useNewLine ? "\r\n" : " ";
-            for (int i = 0; i < numAttributes; i++) {
-                AttributeBuilder attr = e.get(i);
-                if (useNewLine) {
-                    resultCode.append(newLine);
-                    resultCode.append(indent);
-                    resultCode.append("\t");
-                } else {
-                    resultCode.append(" ");
-                }
-                resultCode.append(attr.toCode());
-            }
-        }
-        if (!f.isEmpty()) {
-            resultCode.append(">");
-            resultCode.append("\r\n");
-            for (XmlBuilder xmlBuilder : f) {
-                resultCode.append(xmlBuilder.toCode());
-            }
-            resultCode.append(indent);
-            resultCode.append("</");
-            resultCode.append(a);
-            resultCode.append(">");
-        } else if (c != null && !c.isEmpty()) {
-            resultCode.append(">");
-            resultCode.append(c);
-            resultCode.append("</");
-            resultCode.append(a);
-            resultCode.append(">");
-        } else {
-            resultCode.append(" />");
-        }
-        resultCode.append("\r\n");
-        return resultCode.toString();
-    }*/
 
+    @SuppressLint("NewApi")
     public String toCode() {
         StringBuilder resultCode = new StringBuilder();
-        resultCode.append(addZeroIndent());
-        resultCode.append("<").append(a);
-        for (AttributeBuilder attr : e) {
-            resultCode.append(e.size() <= 1 || d ? " " : "\r\n" + addIndent(1));
-            resultCode.append(attr.toCode());
-            g = e.size() <= 1 || d ? " " : "\r\n" + addIndent(1);
+        StringBuilder resultString = new StringBuilder();
+        resultCode.append(addZeroIndent()).append("<").append(a);
+        boolean hasOreo = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
+        boolean hasMultipleAttrs = e.size() > 1 && !d;
+        String attrSeparator = hasMultipleAttrs ? "\r\n" + addIndent(1) : " ";
+
+//        for (AttributeBuilder attr : e) {
+//            resultCode.append(attrSeparator);
+//            resultCode.append(attr.toCode());
+//        }
+        if (hasOreo) {
+            e.forEach(attr -> {
+                resultCode.append(attrSeparator);
+                resultCode.append(attr.toCode());
+            });
+        } else {
+            String attrCode = String.join(attrSeparator, e.stream().map(AttributeBuilder::toCode).collect(Collectors.toList()));
+            resultCode.append(attrCode);
         }
         if (f.size() <= 0) {
             if (c == null || c.length() <= 0) {
                 resultCode.append(" />");
             } else {
-                String resultString = ">";
+                resultString.append(">");
                 if (c != null || c.length() > 0) {
-                    resultString += c;
+                    resultString.append(c);
                 }
-                resultString += "</" + a + ">";
+                resultString.append("</").append(a).append(">");
                 resultCode.append(resultString);
             }
         } else {
             resultCode.append(">\r\n");
-            for (XmlBuilder xmlBuilder : f) {
-                resultCode.append(xmlBuilder.toCode());
-            }
-            resultCode.append(addZeroIndent())
-                    .append("</")
-                    .append(a)
-                    .append(">");
-        }
-        resultCode.append("\r\n");
-        return resultCode.toString();
-    }
-
-    public String toCode2() {
-        StringBuilder resultCode = new StringBuilder();
-        resultCode.append(addZeroIndent()).append("<").append(a);
-        int eSize = e.size();
-        String g = "";
-        if (eSize > 0) {
-            if (eSize <= 1 || d) {
-                resultCode.append(" ");
+            if (hasOreo) {
+                f.forEach(xmlBuilder -> resultCode.append(xmlBuilder.toCode()));
             } else {
-                g = "\r\n" + addIndent(1);
-            }
-            for (AttributeBuilder attr : e) {
-                resultCode.append(g).append(attr.toCode());
-            }
-        }
-        int fSize = f.size();
-        if (fSize == 0) {
-            resultCode.append(c == null || c.isEmpty() ? " />" : ">" + c + "</" + a + ">");
-        } else {
-            resultCode.append(">\r\n");
-            for (XmlBuilder xmlBuilder : f) {
-                resultCode.append(xmlBuilder.toCode());
+                for (XmlBuilder xmlBuilder : f) {
+                    resultCode.append(xmlBuilder.toCode());
+                }
             }
             resultCode.append(addZeroIndent()).append("</").append(a).append(">");
         }
+
         resultCode.append("\r\n");
         return resultCode.toString();
     }
@@ -198,12 +137,12 @@ public class XmlBuilder {
         }
 
         private String toCode() {
-            if (namespace != null && namespace.length() > 0) {
-                return namespace + ":" + attr + "=" + "\"" + value + "\"";
-            } else if (attr == null || attr.length() <= 0) {
+            if (namespace != null && !namespace.isEmpty()) {
+                return namespace + ":" + attr + "=\"" + value + "\"";
+            } else if (attr == null || attr.isEmpty()) {
                 return value.replaceAll("\n", g);
             } else {
-                return attr + "=" + "\"" + value + "\"";
+                return attr + "=\"" + value + "\"";
             }
         }
     }
