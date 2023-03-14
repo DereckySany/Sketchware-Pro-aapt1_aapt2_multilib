@@ -20,59 +20,59 @@ public class TextBean extends nA implements Parcelable {
         }
     };
 
-    public static int IME_OPTION_DONE = 6;
-    public static int IME_OPTION_GO = 2;
-    public static int IME_OPTION_NEXT = 5;
-    public static int IME_OPTION_NONE = 1;
-    public static int IME_OPTION_NORMAL = 0;
-    public static int IME_OPTION_SEARCH = 3;
-    public static int IME_OPTION_SEND = 4;
-    public static int INPUT_TYPE_NUMBER_DECIMAL = 8194;
-    public static int INPUT_TYPE_NUMBER_SIGNED = 4098;
-    public static int INPUT_TYPE_NUMBER_SIGNED_DECIMAL = 12290;
-    public static int INPUT_TYPE_PASSWORD = 129;
-    public static int INPUT_TYPE_PHONE = 3;
-    public static int INPUT_TYPE_TEXT = 1;
-    public static String TEXT_FONT = "default_font";
-    public static int TEXT_TYPE_BOLD = 1;
-    public static int TEXT_TYPE_BOLDITALIC = 3;
-    public static int TEXT_TYPE_ITALIC = 2;
-    public static int TEXT_TYPE_NORMAL;
+    public static final int IME_OPTION_DONE = 6;
+    public static final int IME_OPTION_GO = 2;
+    public static final int IME_OPTION_NEXT = 5;
+    public static final int IME_OPTION_NONE = 1;
+    public static final int IME_OPTION_NORMAL = 0;
+    public static final int IME_OPTION_SEARCH = 3;
+    public static final int IME_OPTION_SEND = 4;
+    public static final int INPUT_TYPE_NUMBER_DECIMAL = 8194;
+    public static final int INPUT_TYPE_NUMBER_SIGNED = 4098;
+    public static final int INPUT_TYPE_NUMBER_SIGNED_DECIMAL = 12290;
+    public static final int INPUT_TYPE_PASSWORD = 129;
+    public static final int INPUT_TYPE_PHONE = 3;
+    public static final int INPUT_TYPE_TEXT = 1;
+    public static final String TEXT_FONT = "default_font";
+    public static final int TEXT_TYPE_BOLD = 1;
+    public static final int TEXT_TYPE_BOLDITALIC = 3;
+    public static final int TEXT_TYPE_ITALIC = 2;
+    public static final int TEXT_TYPE_NORMAL = 0;
     @Expose
-    public String hint;
+    private String text;
     @Expose
-    public int hintColor;
+    private int textSize;
     @Expose
-    public int imeOption;
+    private int textColor;
     @Expose
-    public int inputType;
+    private int textType;
     @Expose
-    public int line;
+    private String textFont;
     @Expose
-    public int singleLine;
+    private String hint;
     @Expose
-    public String text;
+    private int hintColor;
     @Expose
-    public int textColor;
+    private int singleLine;
     @Expose
-    public String textFont;
+    private int line;
     @Expose
-    public int textSize;
+    private int inputType;
     @Expose
-    public int textType;
+    private int imeOption;
 
     public TextBean() {
-        text = "";
-        textSize = 12;
-        textType = TEXT_TYPE_NORMAL;
-        textColor = 0xff000000;
-        hint = "";
-        hintColor = 0xff607d8b;
-        singleLine = 0;
-        line = 0;
-        inputType = INPUT_TYPE_TEXT;
-        imeOption = IME_OPTION_NORMAL;
-        textFont = TEXT_FONT;
+        this.text = "";
+        this.textSize = 12;
+        this.textType = TEXT_TYPE_NORMAL;
+        this.textColor = 0xff000000;
+        this.hint = "";
+        this.hintColor = 0xff607d8b;
+        this.singleLine = 0;
+        this.line = 0;
+        this.inputType = INPUT_TYPE_TEXT;
+        this.imeOption = IME_OPTION_NORMAL;
+        this.textFont = TEXT_FONT;
     }
 
     public TextBean(Parcel parcel) {
