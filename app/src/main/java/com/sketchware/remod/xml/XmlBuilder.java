@@ -65,14 +65,12 @@ public class XmlBuilder {
 
     public String toCode() {
         StringBuilder resultCode = new StringBuilder();
-        StringBuilder resultString = new StringBuilder();
-        boolean hasMultipleAttrs = e.size() >= 1 && !d;
+        boolean hasMultipleAttrs = e.size() > 1 && !d;
         String attrSeparator = hasMultipleAttrs ? "\r\n" + addIndent(1) : " ";
         
         resultCode.append(addZeroIndent()).append("<").append(a);
         for (AttributeBuilder attr : e) {
-            resultCode.append(attrSeparator);
-            resultCode.append(attr.toCode());
+            resultCode.append(attrSeparator).append(attr.toCode());
             g = attrSeparator;
         }
         
@@ -80,12 +78,11 @@ public class XmlBuilder {
             if (c == null || c.length() <= 0) {
                 resultCode.append(" />");
             } else {
-                resultString.append(">");
+                resultCode.append(">");
                 if (c != null || c.length() > 0) {
-                    resultString.append(c);
+                    resultCode.append(c);
                 }
-                resultString.append("</").append(a).append(">");
-                resultCode.append(resultString);
+                resultCode.append("</").append(a).append(">");
             }
         } else {
             resultCode.append(">\r\n");
