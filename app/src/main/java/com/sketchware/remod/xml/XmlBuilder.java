@@ -35,9 +35,17 @@ public class XmlBuilder {
     }
 
     private String addIndent(int indentSize) {
-        return "\t".repeat(b + indentSize);
+        StringBuilder str = new StringBuilder();
+        str.append("\t".repeat(b + indentSize));
+        return str.toString();
     }
-
+//    private String addIndent(int indentSize) {
+//        StringBuilder str = new StringBuilder();
+//        for (int i = 0; i < b + indentSize; i++) {
+//            str.append("\t");
+//        }
+//        return str.toString();
+//    }
 
     public void addNamespaceDeclaration(int position, String namespace, String attr, String value) {
         e.add(position, new AttributeBuilder(namespace, attr, value));
