@@ -68,17 +68,14 @@ public class XmlBuilder {
         boolean hasMultipleAttrs = e.size() > 1 && !d;
         String attrSeparator = hasMultipleAttrs ? "\r\n" + addIndent(1) : " ";
 
-//        for (AttributeBuilder attr : e) {
-//            resultCode.append(attrSeparator);
-//            resultCode.append(attr.toCode());
-//        }
-        e.forEach(attr -> {
+        for (AttributeBuilder attr : e) {
             resultCode.append(attrSeparator);
             resultCode.append(attr.toCode());
-        });
-//            String attrCode = String.join(attrSeparator, e.stream().map(AttributeBuilder::toCode).collect(Collectors.toList()));
-//            resultCode.append(attrCode);
-
+        }
+//        e.forEach(attr -> {
+//            resultCode.append(attrSeparator);
+//            resultCode.append(attr.toCode());
+//        });
         if (f.size() <= 0) {
             if (c == null || c.length() <= 0) {
                 resultCode.append(" />");
@@ -92,7 +89,6 @@ public class XmlBuilder {
             }
         } else {
             resultCode.append(">\r\n");
-//                f.forEach(xmlBuilder -> resultCode.append(xmlBuilder.toCode()));
             for (XmlBuilder xmlBuilder : f) {
                 resultCode.append(xmlBuilder.toCode());
             }
