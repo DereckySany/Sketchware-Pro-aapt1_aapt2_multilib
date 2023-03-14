@@ -65,7 +65,6 @@ public class XmlBuilder {
         StringBuilder resultCode = new StringBuilder();
         StringBuilder resultString = new StringBuilder();
         resultCode.append(addZeroIndent()).append("<").append(a);
-        boolean hasOreo = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
         boolean hasMultipleAttrs = e.size() > 1 && !d;
         String attrSeparator = hasMultipleAttrs ? "\r\n" + addIndent(1) : " ";
 
@@ -73,15 +72,13 @@ public class XmlBuilder {
 //            resultCode.append(attrSeparator);
 //            resultCode.append(attr.toCode());
 //        }
-        if (hasOreo) {
-            e.forEach(attr -> {
-                resultCode.append(attrSeparator);
-                resultCode.append(attr.toCode());
-            });
-        } else {
-            String attrCode = String.join(attrSeparator, e.stream().map(AttributeBuilder::toCode).collect(Collectors.toList()));
-            resultCode.append(attrCode);
-        }
+        e.forEach(attr -> {
+            resultCode.append(attrSeparator);
+            resultCode.append(attr.toCode());
+        });
+//            String attrCode = String.join(attrSeparator, e.stream().map(AttributeBuilder::toCode).collect(Collectors.toList()));
+//            resultCode.append(attrCode);
+
         if (f.size() <= 0) {
             if (c == null || c.length() <= 0) {
                 resultCode.append(" />");
@@ -95,12 +92,9 @@ public class XmlBuilder {
             }
         } else {
             resultCode.append(">\r\n");
-            if (hasOreo) {
-                f.forEach(xmlBuilder -> resultCode.append(xmlBuilder.toCode()));
-            } else {
-                for (XmlBuilder xmlBuilder : f) {
-                    resultCode.append(xmlBuilder.toCode());
-                }
+//                f.forEach(xmlBuilder -> resultCode.append(xmlBuilder.toCode()));
+            for (XmlBuilder xmlBuilder : f) {
+                resultCode.append(xmlBuilder.toCode());
             }
             resultCode.append(addZeroIndent()).append("</").append(a).append(">");
         }
