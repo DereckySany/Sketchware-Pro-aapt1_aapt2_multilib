@@ -17,8 +17,6 @@ import com.besome.sketch.beans.ProjectFileBean;
 import com.besome.sketch.editor.LogicEditorActivity;
 import com.sketchware.remod.R;
 
-import java.nio.charset.StandardCharsets;
-
 import a.a.a.Kw;
 import a.a.a.OB;
 import a.a.a.SB;
@@ -321,6 +319,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         intent.putExtra("title", tvName.getText().toString() + ".java");
         intent.putExtra("content", tempFile);
         this.getContext().startActivity(intent);
+        input.setText(FileUtil.readFile(tempFile));
         return FileUtil.readFile(tempFile);
     }
 
@@ -346,7 +345,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
                             break;
                     }
                     // Obtém o texto de entrada
-                    String text = input.getText().toString();
+                    final String text = input.getText().toString();
 
                     try {
                         TranslateAPI translator = new TranslateAPI("auto", targetLanguageCode, text);
@@ -362,6 +361,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
                             public void onFailure(String errorText) {
                                 //Log.e(TAG, "Translation failed: " + errorText);
                                 showTranslationErrorDialog(errorText);
+                                builder.create().dismiss();
                             }
                         });
                         translator.execute();

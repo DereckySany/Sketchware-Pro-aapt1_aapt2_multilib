@@ -542,17 +542,17 @@ public class LibraryDownloader {
                 //cmd.add("--input");
                 options.add(_path);
                 options.add("--release");
-                options.add("--intermediate");
+                //options.add("--intermediate");
                 //options.add("--no-desugaring");
-                options.add("--min-api");
-                options.add("26");
+                //options.add("--min-api");
+                //options.add("26");
                 options.add("--lib");
                 options.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
                 options.add("--classpath");
                 options.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
                 //Output
                 options.add("--output");
-                options.add(new File(_path, "classes.zip").getAbsolutePath());
+                options.add(new File(_path).getParentFile().getAbsolutePath() + "classes.zip");
                 //run D8 with list commands
                 R8.main(options.toArray(new String[0]));
 
