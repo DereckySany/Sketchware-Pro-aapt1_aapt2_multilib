@@ -514,72 +514,62 @@ public class LibraryDownloader {
         // 6.3.0
         if (use_d8) {
             if (tool.equals("D8")) {
+                // D8
                 // File libs = new File(context.getFilesDir(), "libs");
                 ArrayList<String> cmd = new ArrayList<>();
+                // Input <file>
+                cmd.add(_path);
                 //  Compile without debugging information.
                 cmd.add("--release");
                 //  Compile an intermediate result intended for later merging
                 cmd.add("--intermediate");
-                //  Output result in <file>
-                cmd.add("--output");
-                cmd.add(new File(_path).getParentFile().getAbsolutePath());
                 //  Add <file|jdk-home> as a library resource
                 cmd.add("--lib");
                 cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
                 //  Add <file> as a classpath resource
-                //cmd.add("--classpath");
-                //cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
-                // Input <file>
-                cmd.add(_path);
+                cmd.add("--classpath");
+                cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
+                //  Output result in <file>
+                cmd.add("--output");
+                cmd.add(new File(_path).getParentFile().getAbsolutePath());
                 // run D8 with list commands
                 D8.main(cmd.toArray(new String[0]));
 
             } else if (tool.equals("R8")) {
                 // R8
-                //ArrayList<String> options = new ArrayList<>();
-                //options.add("--release");
-                //options.add("--intermediate");
-                //options.add("--no-desugaring");
-                //options.add("--min-api");
-                //options.add("26");
-                // Output
-                //options.add("--output");
-                //options.add(new File(_path, "classes.zip").getParentFile().getAbsolutePath());
-                //options.add("--lib");
-                //options.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
-                //options.add("--classpath");
-                //options.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
+                ArrayList<String> options = new ArrayList<>();
                 // Input
                 //cmd.add("--input");
-                //options.add(_path);
+                options.add(_path);
+                options.add("--release");
+                options.add("--intermediate");
+                //options.add("--no-desugaring");
+                options.add("--min-api");
+                options.add("26");
+                options.add("--lib");
+                options.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
+                options.add("--classpath");
+                options.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
+                //Output
+                options.add("--output");
+                options.add(new File(_path, "classes.zip").getAbsolutePath());
                 //run D8 with list commands
-                //R8.main(options.toArray(new String[0]));
+                R8.main(options.toArray(new String[0]));
 
-                String[] cmd = new String[]{
-                        "--release",
-                        "--output", new File(_path, "classes.zip").getParentFile().getAbsolutePath(),
-                        _path,
-                };
-                R8.main(cmd);
-
-                //R8Compiler compiler = new R8Compiler(_path, new File(_path).getParentFile().getAbsolutePath());
+                //R8Compiler compiler = new R8Compiler(_path, new File(_path).getAbsolutePath());
                 //compiler.compile();
             }
         } else {
-            // 6.3.0 fix2
+            // DX 6.3.0 fix
             Main.clearInternTables();
-            // dx
-            // 6.3.0 fix1
-            //  "--keep-classes",
-            //  "--incremental",
-            //  "--dex",
-            Main.main(new String[]{
-                    "--debug",
-                    "--verbose",
-                    "--multi-dex",
-                    "--output=" + new File(_path).getParentFile().getAbsolutePath(),
-                    _path
-            });
+            ArrayList<String> paramets = new ArrayList<>();
+            paramets.add("--debug");
+            paramets.add("--verbose");
+            paramets.add("--multi-dex");
+            paramets.add("--output=");
+            paramets.add(new File(_path).getParentFile().getAbsolutePath());
+            paramets.add(_path);
+            Main.main(paramets.toArray(new String[0]));
         }
     }
 
