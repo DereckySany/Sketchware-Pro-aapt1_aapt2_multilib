@@ -17,6 +17,8 @@ import com.besome.sketch.beans.ProjectFileBean;
 import com.besome.sketch.editor.LogicEditorActivity;
 import com.sketchware.remod.R;
 
+import java.nio.charset.StandardCharsets;
+
 import a.a.a.Kw;
 import a.a.a.OB;
 import a.a.a.SB;
@@ -300,33 +302,26 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             showTranslationDialog(input).create().show();
         });
         dialog.configureDefaultButton("Code Editor", v -> {
-//            AsdAllEditor editor = new AsdAllEditor((Activity) this.getContext());
-//            editor.setCon(input.getText().toString());
-//            editor.show();
-//            editor.saveLis(logicEditor, null, editor);
-//            editor.cancelLis(logicEditor, editor);
-            String tempFile = wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/" + "edit.txt";
-            FileUtil.writeFile(tempFile,input.getText().toString());
-            Intent intent = new Intent();
-            if (ConfigActivity.isLegacyCeEnabled()) {
-                intent.setClass((Activity) this.getContext(), SrcCodeEditorLegacy.class);
-            } else {
-                intent.setClass((Activity) this.getContext(), mod.hey.studios.code.SrcCodeEditor.class);
-            }
-            intent.putExtra("java", "");
-            intent.putExtra("title", tvName.getText().toString() + ".java");
-            intent.putExtra("content", tempFile);
-
-            //((Activity) context).startActivityForResult(intent, REQUEST_CODE);
-            //((Activity) this.getContext()).startActivityForResult(intent, SRC_CODE_EDITOR_RESULT);
-
-            this.getContext().startActivity(intent);
-            String editedContent = FileUtil.readFile(tempFile);
-            input.setText(editedContent);
-            //dialog.dismiss();
+            input.setText(getCodeEditorValue(input));
         });
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.show();
+    }
+
+    private String getCodeEditorValue(EditText input) {
+        String tempFile = wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/" + "edit.txt";
+        FileUtil.writeFile(tempFile,input.getText().toString());
+        Intent intent = new Intent();
+        if (ConfigActivity.isLegacyCeEnabled()) {
+            intent.setClass((Activity) this.getContext(), SrcCodeEditorLegacy.class);
+        } else {
+            intent.setClass((Activity) this.getContext(), mod.hey.studios.code.SrcCodeEditor.class);
+        }
+        intent.putExtra("java", "");
+        intent.putExtra("title", tvName.getText().toString() + ".java");
+        intent.putExtra("content", tempFile);
+        this.getContext().startActivity(intent);
+        return FileUtil.readFile(tempFile);
     }
 
     private AlertDialog.Builder showTranslationDialog(EditText input) {
@@ -351,7 +346,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
                             break;
                     }
                     // Obtém o texto de entrada
-                    final String text = input.getText().toString();
+                    String text = input.getText().toString();
 
                     try {
                         TranslateAPI translator = new TranslateAPI("auto", targetLanguageCode, text);
@@ -372,7 +367,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
                         translator.execute();
                         //Toast.makeText(context, "Conteúdo traduzido para o " + selectedLanguage + "!", Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
-                        String errorMessage = "Erro ao traduzir o texto: " + e.getMessage();
+                        String errorMessage = "Erro ao traduzir o texto: " + e.getMessage() + "\nInfo: " + e.getCause() ;
                         showTranslationErrorDialog(errorMessage);
                     }
                 });
