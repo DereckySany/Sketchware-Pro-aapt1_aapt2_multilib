@@ -209,7 +209,7 @@ public class SrcCodeEditor extends AppCompatActivity {
 
     public void save() {
         beforeContent = editor.getText().toString();
-        FileUtil.writeFile(getIntent().getStringExtra("content"), beforeContent);
+        FileUtil.writeFile(getIntent().getStringExtra("content"), beforeContent.toString());
         SketchwareUtil.toast("Saved");
     }
 

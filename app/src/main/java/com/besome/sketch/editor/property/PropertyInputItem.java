@@ -3,6 +3,7 @@ package com.besome.sketch.editor.property;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.text.InputType;
@@ -285,9 +286,10 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         lengthValidator.a(value);
         dialog.a(view);
         dialog.b(Helper.getResString(R.string.common_word_save), v -> {
+            String content = input.getText().toString();
             if (lengthValidator.b()) {
                 try {
-                    setValue(input.getText().toString());
+                setValue(content);
                     if (valueChangeListener != null) valueChangeListener.a(key, value);
                     dialog.dismiss();
                 } catch (Exception e) {
@@ -300,16 +302,16 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             showTranslationDialog(input).create().show();
         });
         dialog.configureDefaultButton("Code Editor", v -> {
-        String code = getCodeEditorValue(input);
-        input.setText(code);
+            getCodeEditorValue(input,dialog);
         });
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.show();
     }
 
-    private String getCodeEditorValue(EditText input) {
+    private void getCodeEditorValue(EditText input, Dialog dialog) {
         String tempFile = wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/" + "edit.txt";
-        FileUtil.writeFile(tempFile,input.getText().toString());
+        String code;
+        FileUtil.writeFile(tempFile, input.getText().toString());
         Intent intent = new Intent();
         if (ConfigActivity.isLegacyCeEnabled()) {
             intent.setClass((Activity) this.getContext(), SrcCodeEditorLegacy.class);
@@ -320,11 +322,10 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         intent.putExtra("title", tvName.getText().toString() + ".java");
         intent.putExtra("content", tempFile);
         this.getContext().startActivity(intent);
-        //input.setText(FileUtil.readFile(tempFile));
-        return FileUtil.readFile(tempFile);
-        // Salva o novo conteúdo do arquivo no arquivo temporário
-        //FileUtil.writeFile(tempFile, code);
-        //return code;
+        code = FileUtil.readFile(tempFile);
+        input.setText(code);
+        setValue(code);
+        //dialog.dismiss();
     }
 
     private AlertDialog.Builder showTranslationDialog(EditText input) {

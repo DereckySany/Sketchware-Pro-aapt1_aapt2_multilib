@@ -69,7 +69,7 @@ public class SrcCodeEditorLegacy extends Activity {
                     .setTitle("Save Changes?")
                     .setMessage("Do you want to save your changes? If not, the file will be reverted.")
                     .setPositiveButton(R.string.common_word_save, (dialog, which) -> {
-                        FileUtil.writeFile(getIntent().getStringExtra("content"), codeEditor.getText());
+                        FileUtil.writeFile(getIntent().getStringExtra("content"), codeEditor.getText().toString());
                         Toast.makeText(this, "File saved", Toast.LENGTH_SHORT).show();
                         finish();
                     })
@@ -78,7 +78,7 @@ public class SrcCodeEditorLegacy extends Activity {
                     .show();
         } else {
             super.onBackPressed();
-            FileUtil.writeFile(getIntent().getStringExtra("content"), codeEditor.getText());
+            FileUtil.writeFile(getIntent().getStringExtra("content"), codeEditor.getText().toString());
             Toast.makeText(this, "File saved", Toast.LENGTH_SHORT).show();
         }
     }
