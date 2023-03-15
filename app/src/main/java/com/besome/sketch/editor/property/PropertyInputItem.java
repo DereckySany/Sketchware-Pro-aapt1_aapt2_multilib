@@ -300,7 +300,8 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             showTranslationDialog(input).create().show();
         });
         dialog.configureDefaultButton("Code Editor", v -> {
-            input.setText(getCodeEditorValue(input));
+        String code = getCodeEditorValue(input);
+        input.setText(code);
         });
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.show();
@@ -319,8 +320,11 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         intent.putExtra("title", tvName.getText().toString() + ".java");
         intent.putExtra("content", tempFile);
         this.getContext().startActivity(intent);
-        input.setText(FileUtil.readFile(tempFile));
+        //input.setText(FileUtil.readFile(tempFile));
         return FileUtil.readFile(tempFile);
+        // Salva o novo conteúdo do arquivo no arquivo temporário
+        //FileUtil.writeFile(tempFile, code);
+        //return code;
     }
 
     private AlertDialog.Builder showTranslationDialog(EditText input) {
