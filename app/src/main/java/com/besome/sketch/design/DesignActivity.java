@@ -257,27 +257,23 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             if (!mB.a()) {
                 snackbar.c();
                 new CompileErrorSaver(sc_id).showDialog(DesignActivity.this);
-              /*Intent intent = new Intent(getApplicationContext(), CompileLogActivity.class);
+                isTaskRunning = false;
+                currentNotificationCache.title = "Build Failed";
+                currentNotificationCache.description = "App build has been failed";
+                currentNotificationCache.ProjectStage = 2;
+                if (!isActivityForeground) {
+                    ProjectBuildingNotify(notificationId, "Build Failed", "App build has been failed!", false, true);
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), CompileLogActivity.class);
                     intent.putExtra("error", error);
                     intent.putExtra("sc_id", sc_id);
                     intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);*/
-
-                isTaskRunning = false;
-                currentNotificationCache.title = "Build Failed";
-                currentNotificationCache.description = "App build has been failed";
-                currentNotificationCache.ProjectStage = 2;
-                ProjectBuildingNotify(notificationId, "Build Failed", "App build has been failed", false, false, "Show Compile Log", null );
-            } else {
-                Intent intent = new Intent(getApplicationContext(), CompileLogActivity.class);
-                intent.putExtra("error", error);
-                intent.putExtra("sc_id", sc_id);
-                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                isTaskRunning = false;
-                currentNotificationCache.title = "Build Failed";
-                currentNotificationCache.description = "App build has been failed";
-                currentNotificationCache.ProjectStage = 2;
-                ProjectBuildingNotify(notificationId, "Build Failed", "App build has been failed", false, false, "Show Compile Log", intent);
+                    isTaskRunning = false;
+                    currentNotificationCache.title = "Build Failed";
+                    currentNotificationCache.description = "App build has been failed";
+                    currentNotificationCache.ProjectStage = 2;
+                    ProjectBuildingNotify(notificationId, "Build Failed", "App build has been failed", false, false, "Show Compile Log", intent);
+                }
             }
         });
         /* Set the text color to yellow */
