@@ -1372,14 +1372,16 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 } catch (Throwable tr) {
                     dismissNotification();
                     LogUtil.e("DesignActivity$BuildAsyncTask", "Failed to build project", tr);
-//                    new CompileErrorSaver(q.sc_id).writeLogsToFile(tr instanceof zy ? tr.getMessage() : Log.getStackTraceString(tr));
                     isTaskRunning = false;
                     currentNotificationCache.title = "Build Failed";
                     currentNotificationCache.description = "App build has been failed";
                     currentNotificationCache.ProjectStage = 2;
-//                    if (!isActivityForeground) {
-//                        ProjectBuildingNotify(notificationId, "Build Failed", "App build has been failed!", false, true);
-//                    }
+                    // Cria um Intent para iniciar a Activity principal
+                    Intent intent = new Intent(getApplicationContext(), DesignActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    if (!isActivityForeground) {
+                        ProjectBuildingNotify(notificationId, "Build Failed", "App build has been failed!", false, false, "Show DesignActivity", intent);
+                    }
                     indicateCompileErrorOccurred(tr instanceof zy ? tr.getMessage() : Log.getStackTraceString(tr));
                 }
             }
