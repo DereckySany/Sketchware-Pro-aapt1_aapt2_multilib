@@ -5,6 +5,7 @@ import static mod.SketchwareUtil.getDip;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -38,6 +39,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.NotificationCompatSideChannelService;
 import androidx.core.content.FileProvider;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -55,7 +57,6 @@ import com.besome.sketch.editor.view.ProjectFileSelector;
 import com.besome.sketch.lib.base.BaseAppCompatActivity;
 import com.besome.sketch.lib.ui.CustomViewPager;
 import com.besome.sketch.tools.CompileLogActivity;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.sketchware.remod.R;
@@ -202,7 +203,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 Notify.createNotificationChannel(ntc);
             }
 
-            androidx.core.app.NotificationCompat.Builder NotifyProjectBuild = new androidx.core.app.NotificationCompat.Builder(getApplicationContext(), "Project Build");
+            Notification.Builder NotifyProjectBuild = new Notification.Builder(getApplicationContext(), "Project Build");
             NotifyProjectBuild.setSmallIcon(R.drawable.sketch_app_icon);
             NotifyProjectBuild.setContentTitle(title);
             NotifyProjectBuild.setOngoing(setUnCancelable);
@@ -224,8 +225,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                         "Project Build", "Project build notify", NotificationManager.IMPORTANCE_HIGH);
                 Notify.createNotificationChannel(ntc);
             }
-
-            androidx.core.app.NotificationCompat.Builder NotifyProjectBuild = new androidx.core.app.NotificationCompat.Builder(getApplicationContext(), "Project Build");
+            Notification.Builder NotifyProjectBuild = new Notification.Builder(getApplicationContext(), "Project Build");
             NotifyProjectBuild.setSmallIcon(R.drawable.sketch_app_icon);
             NotifyProjectBuild.setContentTitle(title);
             NotifyProjectBuild.setOngoing(setUnCancelable);
@@ -234,7 +234,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 NotifyProjectBuild.setProgress(100, 0, true);
             }
             NotifyProjectBuild.setOnlyAlertOnce(true);
-            // NotifyProjectBuild.addAction(R.drawable.sketch_app_icon,ActionText,pendingIntent);
+            //NotifyProjectBuild.addAction(R.drawable.sketch_app_icon, ActionText, pendingIntent);
             Notify.notify(notificationId, NotifyProjectBuild.build());
         }
     }
