@@ -62,17 +62,17 @@ public class TextBean extends nA implements Parcelable {
     public int imeOption;
 
     public TextBean() {
-        this.text = "";
-        this.textSize = 12;
-        this.textType = TEXT_TYPE_NORMAL;
-        this.textColor = 0xff000000;
-        this.hint = "";
-        this.hintColor = 0xff607d8b;
-        this.singleLine = 0;
-        this.line = 0;
-        this.inputType = INPUT_TYPE_TEXT;
-        this.imeOption = IME_OPTION_NORMAL;
-        this.textFont = TEXT_FONT;
+        text = "";
+        textSize = 12;
+        textType = TEXT_TYPE_NORMAL;
+        textColor = 0xff000000;
+        hint = "";
+        hintColor = 0xff607d8b;
+        singleLine = 0;
+        line = 0;
+        inputType = INPUT_TYPE_TEXT;
+        imeOption = IME_OPTION_NORMAL;
+        textFont = TEXT_FONT;
     }
 
     public TextBean(Parcel parcel) {

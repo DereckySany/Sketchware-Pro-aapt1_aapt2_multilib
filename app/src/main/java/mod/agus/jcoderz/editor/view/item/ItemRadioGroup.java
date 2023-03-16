@@ -15,32 +15,41 @@ import a.a.a.sy;
 import a.a.a.ty;
 import a.a.a.wB;
 
-public class ItemRadioGroup extends RadioGroup implements sy, ty {
-    public ViewBean viewBean = null;
-    public int paddingFactor;
-    public boolean hasSelection = false;
-    public boolean isFixed = false;
-    public Paint paint;
-    public int gravity = 0;
+public class ItemRadioGroup extends RadioGroup  {
+    private Paint paint;
+    private final Rect rect;
+    private float paddingFactor;
+    private boolean hasSelection;
+    private boolean hasFixed;
+    private ViewBean viewBean;
+    private int gravity;
+    private boolean isFixed;
+
 
     public ItemRadioGroup(Context context) {
         super(context);
         this.setViewBean(context);
+        paddingFactor = wB.a(context, 1.0f);
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(0x9599d5d0);
+        rect = new Rect();
+
+        setDrawingCacheEnabled(true);
     }
 
     public void a() {
-        int var1 = 0;
+        int viewPosition = 0;
 
-        int var4;
-        for(int var2 = 0; var1 < this.getChildCount(); var2 = var4) {
-            View var3 = this.getChildAt(var1);
-            var4 = var2;
-            if (var3 instanceof sy) {
-                ((sy)var3).getBean().index = var2;
-                var4 = var2 + 1;
+        int beanIndex;
+        for(int i = 0; viewPosition < this.getChildCount(); i = beanIndex) {
+            View view = this.getChildAt(viewPosition);
+            beanIndex = i;
+            if (view instanceof sy) {
+                ((sy) view).getBean().index = i;
+                beanIndex = i + 1;
             }
 
-            ++var1;
+            ++viewPosition;
         }
 
     }
@@ -51,7 +60,7 @@ public class ItemRadioGroup extends RadioGroup implements sy, ty {
     }
 
     public final void setViewBean(Context context) {
-        this.paddingFactor = (int) wB.a(context, 1.0f);
+        this.paddingFactor = wB.a(context, 1.0f);
         this.setOrientation(gravity);
         this.setDrawingCacheEnabled(true);
         this.setMinimumWidth((int) wB.a(context, 32.0F));
@@ -60,33 +69,33 @@ public class ItemRadioGroup extends RadioGroup implements sy, ty {
         this.paint.setStrokeWidth(wB.a(this.getContext(), 2.0F));
     }
 
-    public void addView(View var1, int var2) {
-        int var3 = this.getChildCount();
-        if (var2 > var3) {
-            super.addView(var1);
+    public void addView(View view, int gravity) {
+        int childCount = this.getChildCount();
+        if (gravity > childCount) {
+            super.addView(view);
         } else {
-            byte var4 = -1;
-            int var5 = 0;
+            byte invalido = -1;
+            int position = 0;
 
-            int var6;
+            int child;
             while(true) {
-                var6 = var4;
-                if (var5 >= var3) {
+                child = invalido;
+                if (position >= childCount) {
                     break;
                 }
 
-                if (this.getChildAt(var5).getVisibility() == View.GONE) {
-                    var6 = var5;
+                if (this.getChildAt(position).getVisibility() == View.GONE) {
+                    child = position;
                     break;
                 }
 
-                ++var5;
+                ++position;
             }
 
-            if (var6 >= 0 && var2 >= var6) {
-                super.addView(var1, var2 + 1);
+            if (child >= 0 && gravity >= child) {
+                super.addView(view, gravity + 1);
             } else {
-                super.addView(var1, var2);
+                super.addView(view, gravity);
             }
         }
     }
@@ -107,64 +116,65 @@ public class ItemRadioGroup extends RadioGroup implements sy, ty {
         return this.hasSelection;
     }
 
-    public void onDraw(Canvas var1) {
+    public void onDraw(Canvas canvas) {
         if (!this.isFixed) {
             if (this.hasSelection) {
                 this.paint.setColor(-1785080368);
-                var1.drawRect(new Rect(0, 0, this.getMeasuredWidth(), this.getMeasuredHeight()), this.paint);
+                rect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                canvas.drawRect(new Rect(0, 0, this.getMeasuredWidth(), this.getMeasuredHeight()), this.paint);
             }
 
             this.paint.setColor(1610612736);
-            int var2 = this.getMeasuredWidth();
-            int var3 = this.getMeasuredHeight();
-            float var4 = (float)var2;
-            var1.drawLine(0.0F, 0.0F, var4, 0.0F, this.paint);
-            float var5 = (float)var3;
-            var1.drawLine(0.0F, 0.0F, 0.0F, var5, this.paint);
-            var1.drawLine(var4, 0.0F, var4, var5, this.paint);
-            var1.drawLine(0.0F, var5, var4, var5, this.paint);
+            int width = this.getMeasuredWidth();
+            int height = this.getMeasuredHeight();
+            float floatWidth = (float) width;
+            canvas.drawLine(0.0F, 0.0F, floatWidth, 0.0F, this.paint);
+            float floatHeight = (float) height;
+            canvas.drawLine(0.0F, 0.0F, 0.0F, floatHeight, this.paint);
+            canvas.drawLine(floatWidth, 0.0F, floatWidth, floatHeight, this.paint);
+            canvas.drawLine(0.0F, floatHeight, floatWidth, floatHeight, this.paint);
         }
 
-        super.onDraw(var1);
+        super.onDraw(canvas);
     }
 
-    public void setBean(ViewBean var1) {
-        this.viewBean = var1;
+    public void setBean(ViewBean viewBean) {
+        this.viewBean = viewBean;
     }
 
-    public void setChildScrollEnabled(boolean var1) {
-        for(int var2 = 0; var2 < this.getChildCount(); ++var2) {
-            View var3 = this.getChildAt(var2);
-            if (var3 instanceof ty) {
-                ((ty)var3).setChildScrollEnabled(var1);
+    public void setChildScrollEnabled(boolean scrollEnabled) {
+        for(int position = 0; position < this.getChildCount(); ++position) {
+            View view = this.getChildAt(position);
+            if (view instanceof ty) {
+                ((ty) view).setChildScrollEnabled(scrollEnabled);
             }
 
-            if (var3 instanceof ItemHorizontalScrollView) {
-                ((ItemHorizontalScrollView)var3).setScrollEnabled(var1);
+            if (view instanceof ItemHorizontalScrollView) {
+                ((ItemHorizontalScrollView) view).setScrollEnabled(scrollEnabled);
             }
 
-            if (var3 instanceof ItemVerticalScrollView) {
-                ((ItemVerticalScrollView)var3).setScrollEnabled(var1);
+            if (view instanceof ItemVerticalScrollView) {
+                ((ItemVerticalScrollView) view).setScrollEnabled(scrollEnabled);
             }
         }
 
     }
 
-    public void setFixed(boolean var1) {
-        this.isFixed = var1;
+    public void setFixed(boolean hasFixed) {
+        this.isFixed = hasFixed;
     }
 
-    public void setLayoutGravity(int var1) {
-        this.gravity = var1;
-        super.setGravity(var1);
+    public void setLayoutGravity(int LayoutGravity) {
+        this.gravity = LayoutGravity;
+        super.setGravity(LayoutGravity);
     }
 
     public void setPadding(int left, int top, int right, int bottom) {
-        super.setPadding(left * paddingFactor, top * paddingFactor, right * paddingFactor, paddingFactor * bottom);
+        super.setPadding((int) (left * paddingFactor), (int) (top * paddingFactor), (int) (right * paddingFactor), (int) (paddingFactor * bottom));
     }
 
     public void setSelection(boolean z) {
-        this.hasSelection = z;
-        this.invalidate();
+        hasSelection = z;
+        invalidate();
     }
 }
