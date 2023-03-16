@@ -552,7 +552,7 @@ public class LibraryDownloader {
                 options.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
                 //Output
                 options.add("--output");
-                options.add(new File(_path).getParentFile().getAbsolutePath() + "classes.zip");
+                options.add(new File(_path).getParent() + File.separator + "minified-classes.jar");
                 //run D8 with list commands
                 R8.main(options.toArray(new String[0]));
 
