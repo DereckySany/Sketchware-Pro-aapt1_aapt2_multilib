@@ -371,26 +371,29 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                             tilName.setHint("Name Library");
                             tilImport.setHint("Import library name");
                             tilManifast.setHint("Manifast");
+                            
                             etName.setEnabled(true);
-                            etImport.setTextIsSelectable(true);
+                            etName.setTextIsSelectable(true);
+                            etName.setKeyListener(null);
                             etName.setText(
                                     (infoName.exists() && !isEmpty() ? FileUtil.readFile(infoName.getAbsolutePath())
                                             : "Not avaliable!"));
                             etImport.setEnabled(true);
                             etImport.setTextIsSelectable(true);
+                            etImport.setKeyListener(null);
                             etImport.setText(
                                     (infoImport.exists() && !isEmpty() ? FileUtil.readFile(infoImport.getAbsolutePath())
                                             : "Not avaliable!"));
                             etManifast.setEnabled(true);
-                            etImport.setTextIsSelectable(true);
+                            etManifast.setTextIsSelectable(true);
+                            etManifast.setKeyListener(null);
                             etManifast.setText((infoManifast.exists() && !isEmpty()
                                     ? FileUtil.readFile(infoManifast.getAbsolutePath())
                                     : "Not avaliable!"));
-
                             dialogView.findViewById(R.id.text_info_ok)
                                     .setOnClickListener(Helper.getDialogDismissListener(infoDialog));
                             infoDialog.getWindow()
-                                    .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                                    .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                             infoDialog.setView(dialogView);
                             infoDialog.show();
                             break;
@@ -461,7 +464,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                                         deleteDialog.dismiss();
                                     });
                             deleteDialog.getWindow()
-                                    .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                                    .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                             fileNameToDelete.requestFocus();
                             deleteDialog.setView(deleteRoot);
                             deleteDialog.show();
