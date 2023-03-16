@@ -323,7 +323,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         this.getContext().startActivity(intent);
         String code = FileUtil.readFile(tempFile);
         input.setText(code);
-        setValue(code);
+        value = code;
         dialog.dismiss();
     }
 
