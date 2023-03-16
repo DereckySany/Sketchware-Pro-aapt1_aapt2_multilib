@@ -1080,16 +1080,18 @@ public class LibraryDownloader {
 
         @Override
         protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
             progressDialog.setTitle(tool + " is running...");
             progressDialog.setMessage(values.toString());
-            super.onProgressUpdate(values);
+            progressDialog.show();
         }
 
         @Override
         protected void onCancelled(String s) {
+            super.onCancelled(s);
             progressDialog.setTitle(tool + " is Cancelled...");
             progressDialog.setMessage(s.toString());
-            super.onCancelled(s);
+            progressDialog.show();
         }
 
         @Override

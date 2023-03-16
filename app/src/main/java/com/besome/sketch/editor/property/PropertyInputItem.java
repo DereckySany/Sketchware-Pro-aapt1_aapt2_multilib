@@ -310,7 +310,6 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
 
     private void getCodeEditorValue(EditText input, Dialog dialog) {
         String tempFile = wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/" + "edit.txt";
-        String code;
         FileUtil.writeFile(tempFile, input.getText().toString());
         Intent intent = new Intent();
         if (ConfigActivity.isLegacyCeEnabled()) {
@@ -322,10 +321,10 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         intent.putExtra("title", tvName.getText().toString() + ".java");
         intent.putExtra("content", tempFile);
         this.getContext().startActivity(intent);
-        code = FileUtil.readFile(tempFile);
+        String code = FileUtil.readFile(tempFile);
         input.setText(code);
         setValue(code);
-        //dialog.dismiss();
+        dialog.dismiss();
     }
 
     private AlertDialog.Builder showTranslationDialog(EditText input) {
