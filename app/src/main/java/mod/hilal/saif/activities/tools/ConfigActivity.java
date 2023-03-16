@@ -203,8 +203,8 @@ public class ConfigActivity extends Activity {
                 SETTING_USE_NEW_VERSION_CONTROL,
                 SETTING_USE_ASD_HIGHLIGHTER,
                 SETTING_BLOCKMANAGER_DIRECTORY_PALETTE_FILE_PATH,
-                SETTING_BLOCKMANAGER_DIRECTORY_BLOCK_FILE_PATH);
-                SETTING_PROJECT_COMPILING_NOTIFICATION;
+                SETTING_BLOCKMANAGER_DIRECTORY_BLOCK_FILE_PATH,
+                SETTING_PROJECT_COMPILING_NOTIFICATION);
 
         for (String key : keys) {
             settings.put(key, getDefaultValue(key));
