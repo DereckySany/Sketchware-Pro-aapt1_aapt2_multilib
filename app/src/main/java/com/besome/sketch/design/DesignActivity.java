@@ -252,19 +252,11 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
      */
     private void indicateCompileErrorOccurred(String error) {
         new CompileErrorSaver(q.sc_id).writeLogsToFile(error);
-        if (!isActivityForeground) {
             Snackbar snackbar = Snackbar.a(coordinatorLayout, "Show compile log", -2 /* BaseTransientBottomBar.LENGTH_INDEFINITE */);
             snackbar.a(Helper.getResString(R.string.common_word_show), v -> {
                 if (!mB.a()) {
                     snackbar.c();
                     new CompileErrorSaver(sc_id).showDialog(DesignActivity.this);
-                    isTaskRunning = false;
-                    currentNotificationCache.title = "Build Failed";
-                    currentNotificationCache.description = "App build has been failed";
-                    currentNotificationCache.ProjectStage = 2;
-                    if (!isActivityForeground) {
-                        ProjectBuildingNotify(notificationId, "Build Failed", "App build has been failed!", false, true);
-                    }
                 }
             });
             /* Set the text color to yellow */
@@ -274,18 +266,6 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             currentNotificationCache.title = "Build Failed";
             currentNotificationCache.description = "App build has been failed";
             currentNotificationCache.ProjectStage = 2;
-
-        } else {
-            Intent intent = new Intent(getApplicationContext(), CompileLogActivity.class);
-            intent.putExtra("error", error);
-            intent.putExtra("sc_id", sc_id);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            isTaskRunning = false;
-            currentNotificationCache.title = "Build Failed";
-            currentNotificationCache.description = "App build has been failed";
-            currentNotificationCache.ProjectStage = 2;
-            ProjectBuildingNotify(notificationId, "Build Failed", "App build has been failed", false, false, "Show Compile Log", intent);
-        }
     }
 
     @Override
@@ -1392,6 +1372,14 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 } catch (Throwable tr) {
                     dismissNotification();
                     LogUtil.e("DesignActivity$BuildAsyncTask", "Failed to build project", tr);
+//                    new CompileErrorSaver(q.sc_id).writeLogsToFile(tr instanceof zy ? tr.getMessage() : Log.getStackTraceString(tr));
+                    isTaskRunning = false;
+                    currentNotificationCache.title = "Build Failed";
+                    currentNotificationCache.description = "App build has been failed";
+                    currentNotificationCache.ProjectStage = 2;
+//                    if (!isActivityForeground) {
+//                        ProjectBuildingNotify(notificationId, "Build Failed", "App build has been failed!", false, true);
+//                    }
                     indicateCompileErrorOccurred(tr instanceof zy ? tr.getMessage() : Log.getStackTraceString(tr));
                 }
             }
