@@ -17,9 +17,9 @@ public class SrcCodeBean implements Parcelable {
         }
     };
 
-    public final String pkgName;
-    public final String source;
-    public final String srcFileName;
+    public String pkgName;
+    public String source;
+    public String srcFileName;
 
     public SrcCodeBean() {}
 
