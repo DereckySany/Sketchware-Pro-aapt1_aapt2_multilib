@@ -20,46 +20,46 @@ public class TextBean extends nA implements Parcelable {
         }
     };
 
-    public static final int IME_OPTION_DONE = 6;
-    public static final int IME_OPTION_GO = 2;
-    public static final int IME_OPTION_NEXT = 5;
-    public static final int IME_OPTION_NONE = 1;
-    public static final int IME_OPTION_NORMAL = 0;
-    public static final int IME_OPTION_SEARCH = 3;
-    public static final int IME_OPTION_SEND = 4;
-    public static final int INPUT_TYPE_NUMBER_DECIMAL = 8194;
-    public static final int INPUT_TYPE_NUMBER_SIGNED = 4098;
-    public static final int INPUT_TYPE_NUMBER_SIGNED_DECIMAL = 12290;
-    public static final int INPUT_TYPE_PASSWORD = 129;
-    public static final int INPUT_TYPE_PHONE = 3;
-    public static final int INPUT_TYPE_TEXT = 1;
-    public static final String TEXT_FONT = "default_font";
-    public static final int TEXT_TYPE_BOLD = 1;
-    public static final int TEXT_TYPE_BOLDITALIC = 3;
-    public static final int TEXT_TYPE_ITALIC = 2;
-    public static final int TEXT_TYPE_NORMAL = 0;
-    @Expose
-    public String text;
-    @Expose
-    public int textSize;
-    @Expose
-    public int textColor;
-    @Expose
-    public int textType;
-    @Expose
-    public String textFont;
+    public static int IME_OPTION_DONE = 6;
+    public static int IME_OPTION_GO = 2;
+    public static int IME_OPTION_NEXT = 5;
+    public static int IME_OPTION_NONE = 1;
+    public static int IME_OPTION_NORMAL = 0;
+    public static int IME_OPTION_SEARCH = 3;
+    public static int IME_OPTION_SEND = 4;
+    public static int INPUT_TYPE_NUMBER_DECIMAL = 8194;
+    public static int INPUT_TYPE_NUMBER_SIGNED = 4098;
+    public static int INPUT_TYPE_NUMBER_SIGNED_DECIMAL = 12290;
+    public static int INPUT_TYPE_PASSWORD = 129;
+    public static int INPUT_TYPE_PHONE = 3;
+    public static int INPUT_TYPE_TEXT = 1;
+    public static String TEXT_FONT = "default_font";
+    public static int TEXT_TYPE_BOLD = 1;
+    public static int TEXT_TYPE_BOLDITALIC = 3;
+    public static int TEXT_TYPE_ITALIC = 2;
+    public static int TEXT_TYPE_NORMAL = 0;
     @Expose
     public String hint;
     @Expose
     public int hintColor;
     @Expose
-    public int singleLine;
-    @Expose
-    public int line;
+    public int imeOption;
     @Expose
     public int inputType;
     @Expose
-    public int imeOption;
+    public int line;
+    @Expose
+    public int singleLine;
+    @Expose
+    public String text;
+    @Expose
+    public int textColor;
+    @Expose
+    public String textFont;
+    @Expose
+    public int textSize;
+    @Expose
+    public int textType;
 
     public TextBean() {
         text = "";
@@ -146,8 +146,7 @@ public class TextBean extends nA implements Parcelable {
         return hintColor == textBean.hintColor && singleLine == textBean.singleLine && line == textBean.line && inputType == textBean.inputType && imeOption == textBean.imeOption;
     }
 
-    public void print() {
-    }
+    public void print() {}
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {

@@ -155,6 +155,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
     private br componentTabAdapter = null;
 
     private NotificationManager Notify;
+    private Intent designActivityIntent;
     private int notificationId = 1;
     private boolean isTaskRunning;
     private notificationCache currentNotificationCache = new notificationCache();
@@ -237,31 +238,6 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             //NotifyProjectBuild.addAction(R.drawable.sketch_app_icon, ActionText, pendingIntent);
             Notify.notify(notificationId, NotifyProjectBuild.build());
         }
-    }
-
-    private void ProjectBuildingNotify(int notificationId, String title, String content, boolean ongoing, boolean cancelable, String buttonText, Intent buttonIntent) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getString(R.string.channel_id));
-        builder.setSmallIcon(R.drawable.ic_launcher);
-        builder.setContentTitle(title);
-        builder.setContentText(content);
-        builder.setOngoing(ongoing);
-        builder.setAutoCancel(cancelable);
-        builder.setPriority(NotificationCompat.PRIORITY_HIGH);
-
-        // Adiciona um botão à notificação
-        if (buttonIntent != null) {
-            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, buttonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            builder.addAction(0, buttonText, pendingIntent);
-        }
-
-        // Define o Intent a ser aberto ao clicar na notificação
-        designActivityIntent = new Intent(getApplicationContext(), DesignActivity.class);
-        designActivityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, designActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
-        notificationManager.notify(notificationId, builder.build());
     }
 
     public void dismissNotification() {
