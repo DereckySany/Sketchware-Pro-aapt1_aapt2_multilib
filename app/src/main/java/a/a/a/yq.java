@@ -655,7 +655,7 @@ public class yq {
             Mx mx = new Mx();
             mx.a("google_play_services_version", 12451000);
             if (N.isFirebaseEnabled) {
-                mx.a("firebase_database_url", "https://" + firebaseLibrary.getData(), false);
+                mx.a("firebase_database_url", "https://" + firebaseLibrary.data, false);
                 mx.a("project_id", firebaseLibrary.data.trim().replaceAll(FIREBASE_DATABASE_STORAGE_LOCATION_MATCHER, ""), false);
                 mx.a("google_app_id", firebaseLibrary.reserved1, false);
                 
