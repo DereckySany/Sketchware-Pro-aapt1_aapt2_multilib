@@ -4,8 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class SrcCodeBean implements Parcelable {
-    public static final Parcelable.Creator<SrcCodeBean> CREATOR = new Parcelable.Creator<>() {
 
+    public static final Parcelable.Creator<SrcCodeBean> CREATOR = new Parcelable.Creator<>() {
         @Override
         public SrcCodeBean createFromParcel(Parcel source) {
             return new SrcCodeBean(source);
@@ -17,28 +17,21 @@ public class SrcCodeBean implements Parcelable {
         }
     };
 
-    public String pkgName;
-    public String source;
-    public String srcFileName;
+    public final String pkgName;
+    public final String source;
+    public final String srcFileName;
 
-    public SrcCodeBean() {
+    public SrcCodeBean() {}
+
+    public SrcCodeBean(String srcFileName, String content) {
+        this.srcFileName = srcFileName;
+        this.source = content;
     }
 
-    public SrcCodeBean(String sourceFilename, String content) {
-        srcFileName = sourceFilename;
-        source = content;
-    }
-
-    public SrcCodeBean(SrcCodeBean other) {
-        pkgName = other.pkgName;
-        source = other.source;
-        srcFileName = other.srcFileName;
-    }
-
-    public SrcCodeBean(Parcel other) {
-        pkgName = other.readString();
-        srcFileName = other.readString();
-        source = other.readString();
+    public SrcCodeBean(Parcel source) {
+        this.pkgName = source.readString();
+        this.srcFileName = source.readString();
+        this.source = source.readString();
     }
 
     public static Parcelable.Creator<SrcCodeBean> getCreator() {

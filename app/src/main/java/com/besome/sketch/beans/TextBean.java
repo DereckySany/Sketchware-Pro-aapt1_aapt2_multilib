@@ -113,10 +113,10 @@ public class TextBean extends nA implements Parcelable {
     }
 
     public boolean isEqual(TextBean textBean) {
-        String str = text;
-        if (str != null) {
-            String str2 = textBean.text;
-            if (str2 == null || !str.equals(str2)) {
+        String currentText = text;
+        if (currentText != null) {
+            String otherText = textBean.text;
+            if (otherText == null || !currentText.equals(otherText)) {
                 return false;
             }
         } else if (textBean.text != null) {
@@ -125,19 +125,19 @@ public class TextBean extends nA implements Parcelable {
         if (textSize != textBean.textSize || textColor != textBean.textColor || textType != textBean.textType) {
             return false;
         }
-        String str3 = textFont;
-        if (str3 != null) {
-            String str4 = textBean.textFont;
-            if (str4 == null || !str3.equals(str4)) {
+        String currentFont = textFont;
+        if (currentFont != null) {
+            String otherFont = textBean.textFont;
+            if (otherFont == null || !currentFont.equals(otherFont)) {
                 return false;
             }
         } else if (textBean.textFont != null) {
             return false;
         }
-        String str5 = hint;
-        if (str5 != null) {
-            String str6 = textBean.hint;
-            if (str6 == null || !str5.equals(str6)) {
+        String currentHint = hint;
+        if (currentHint != null) {
+            String otherHint = textBean.hint;
+            if (otherHint == null || !currentHint.equals(otherHint)) {
                 return false;
             }
         } else if (textBean.hint != null) {
