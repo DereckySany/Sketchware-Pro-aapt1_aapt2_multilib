@@ -37,7 +37,7 @@ public class TextBean extends nA implements Parcelable {
     public static int TEXT_TYPE_BOLD = 1;
     public static int TEXT_TYPE_BOLDITALIC = 3;
     public static int TEXT_TYPE_ITALIC = 2;
-    public static int TEXT_TYPE_NORMAL = 0;
+    public static int TEXT_TYPE_NORMAL;
     @Expose
     public String text;
     @Expose

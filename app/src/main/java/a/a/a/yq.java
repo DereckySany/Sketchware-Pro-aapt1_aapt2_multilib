@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.hey.studios.build.BuildSettings;
 import mod.hey.studios.project.ProjectSettings;
@@ -633,6 +635,7 @@ public class yq {
      */
     public void b(hC projectFileManager, eC projectDataManger, iC projectLibraryManager, boolean exportingProject) {
         ArrayList<SrcCodeBean> srcCodeBeans = a(projectFileManager, projectDataManger, projectLibraryManager, exportingProject);
+        
         if (N.u) {
             XmlBuilder pathsTag = new XmlBuilder("paths");
             pathsTag.addAttribute("xmlns", "android", "http://schemas.android.com/apk/res/android");
@@ -640,25 +643,27 @@ public class yq {
             externalPathTag.addAttribute("", "name", "external_files");
             externalPathTag.addAttribute("", "path", ".");
             pathsTag.a(externalPathTag);
-            srcCodeBeans.add(new SrcCodeBean("provider_paths.xml",
-                    CommandBlock.applyCommands("xml/provider_paths.xml", pathsTag.toCode())));
+            srcCodeBeans.add(new SrcCodeBean("provider_paths.xml", CommandBlock.applyCommands("xml/provider_paths.xml", pathsTag.toCode())));
         }
 
         for (SrcCodeBean bean : srcCodeBeans) {
-            a(bean.srcFileName, bean.source);
+            a(bean.getSrcFileName(), bean.getSource());
         }
+
         if (N.isFirebaseEnabled || N.isAdMobEnabled || N.isMapUsed) {
             ProjectLibraryBean firebaseLibrary = projectLibraryManager.d();
             Mx mx = new Mx();
             mx.a("google_play_services_version", 12451000);
             if (N.isFirebaseEnabled) {
-                mx.a("firebase_database_url", "https://" + firebaseLibrary.data, false);
+                mx.a("firebase_database_url", "https://" + firebaseLibrary.getData(), false);
                 mx.a("project_id", firebaseLibrary.data.trim().replaceAll(FIREBASE_DATABASE_STORAGE_LOCATION_MATCHER, ""), false);
                 mx.a("google_app_id", firebaseLibrary.reserved1, false);
-                if (firebaseLibrary.reserved2 != null && firebaseLibrary.reserved2.length() > 0) {
+                
+                if (StringUtils.isNotBlank(firebaseLibrary.reserved2)) {
                     mx.a("google_api_key", firebaseLibrary.reserved2, false);
                 }
-                if (firebaseLibrary.reserved3 != null && firebaseLibrary.reserved3.length() > 0) {
+                
+                if (StringUtils.isNotBlank(firebaseLibrary.reserved3)) {
                     mx.a("google_storage_bucket", firebaseLibrary.reserved3, false);
                 }
             }
@@ -667,8 +672,7 @@ public class yq {
                 mx.a("google_maps_key", projectLibraryManager.e().data, false);
             }
             String filePath = "values/secrets.xml";
-            fileUtil.b(resDirectoryPath + File.separator + filePath,
-                    CommandBlock.applyCommands(filePath, mx.toCode()));
+            fileUtil.b(resDirectoryPath + File.separator + filePath, CommandBlock.applyCommands(filePath, mx.toCode()));
         }
         h();
     }
