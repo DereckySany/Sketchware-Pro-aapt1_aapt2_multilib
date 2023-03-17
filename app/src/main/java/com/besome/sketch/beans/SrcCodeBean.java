@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class SrcCodeBean implements Parcelable {
-
+    //public static final Creator<SrcCodeBean> CREATOR = new Creator<SrcCodeBean>() 
     public static final Parcelable.Creator<SrcCodeBean> CREATOR = new Parcelable.Creator<>() {
         @Override
         public SrcCodeBean createFromParcel(Parcel source) {
@@ -23,43 +23,47 @@ public class SrcCodeBean implements Parcelable {
 
     public SrcCodeBean() {}
 
-    public SrcCodeBean(String srcFileName, String content) {
-        this.srcFileName = srcFileName;
+    public SrcCodeBean(String sourceFilename, String content) {
+        this.srcFileName = sourceFilename;
         this.source = content;
     }
 
-    public SrcCodeBean(Parcel source) {
-        this.pkgName = source.readString();
-        this.srcFileName = source.readString();
-        this.source = source.readString();
+    public SrcCodeBean(Parcel other) {
+        this.pkgName = other.readString();
+        this.srcFileName = other.readString();
+        this.source = other.readString();
     }
 
     public static Parcelable.Creator<SrcCodeBean> getCreator() {
         return CREATOR;
     }
 
+    // public Creator<SrcCodeBean> getCreator() {
+    //     return CREATOR;
+    // }
+
     public String getPkgName() {
         return pkgName;
     }
 
-    public void setPkgName(String pkgName) {
-        this.pkgName = pkgName;
+    public void setPkgName(String newPkgName) {
+        this.pkgName = newPkgName;
     }
 
     public String getSource() {
         return source;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setSource(String newSource) {
+        this.source = newSource;
     }
 
     public String getSrcFileName() {
         return srcFileName;
     }
 
-    public void setSrcFileName(String srcFileName) {
-        this.srcFileName = srcFileName;
+    public void setSrcFileName(String newSrcFileName) {
+        this.srcFileName = newSrcFileName;
     }
 
     @Override

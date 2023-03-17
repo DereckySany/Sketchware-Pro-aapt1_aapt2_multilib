@@ -39,27 +39,27 @@ public class TextBean extends nA implements Parcelable {
     public static int TEXT_TYPE_ITALIC = 2;
     public static int TEXT_TYPE_NORMAL = 0;
     @Expose
+    public String text;
+    @Expose
+    public int textSize;
+    @Expose
+    public int textColor;
+    @Expose
+    public int textType;
+    @Expose
+    public String textFont;
+    @Expose
     public String hint;
     @Expose
     public int hintColor;
     @Expose
-    public int imeOption;
-    @Expose
-    public int inputType;
+    public int singleLine;
     @Expose
     public int line;
     @Expose
-    public int singleLine;
+    public int inputType;
     @Expose
-    public String text;
-    @Expose
-    public int textColor;
-    @Expose
-    public String textFont;
-    @Expose
-    public int textSize;
-    @Expose
-    public int textType;
+    public int imeOption;
 
     public TextBean() {
         text = "";
@@ -112,39 +112,80 @@ public class TextBean extends nA implements Parcelable {
         return 0;
     }
 
+    // public boolean isEqual(TextBean textBean) {
+    //     String currentText = text;
+    //     if (currentText != null) {
+    //         String otherText = textBean.text;
+    //         if (otherText == null || !currentText.equals(otherText)) {
+    //             return false;
+    //         }
+    //     } else if (textBean.text != null) {
+    //         return false;
+    //     }
+    //     if (textSize != textBean.textSize || textColor != textBean.textColor || textType != textBean.textType) {
+    //         return false;
+    //     }
+    //     String currentFont = textFont;
+    //     if (currentFont != null) {
+    //         String otherFont = textBean.textFont;
+    //         if (otherFont == null || !currentFont.equals(otherFont)) {
+    //             return false;
+    //         }
+    //     } else if (textBean.textFont != null) {
+    //         return false;
+    //     }
+    //     String currentHint = hint;
+    //     if (currentHint != null) {
+    //         String otherHint = textBean.hint;
+    //         if (otherHint == null || !currentHint.equals(otherHint)) {
+    //             return false;
+    //         }
+    //     } else if (textBean.hint != null) {
+    //         return false;
+    //     }
+    //     return hintColor == textBean.hintColor && singleLine == textBean.singleLine && line == textBean.line && inputType == textBean.inputType && imeOption == textBean.imeOption;
+    // }
     public boolean isEqual(TextBean textBean) {
         String currentText = text;
-        if (currentText != null) {
-            String otherText = textBean.text;
-            if (otherText == null || !currentText.equals(otherText)) {
+        String otherText = textBean.text;
+        if (currentText == null) {
+            if (otherText != null) {
                 return false;
             }
-        } else if (textBean.text != null) {
+        } else if (!currentText.equals(otherText)) {
             return false;
         }
-        if (textSize != textBean.textSize || textColor != textBean.textColor || textType != textBean.textType) {
-            return false;
-        }
+        
         String currentFont = textFont;
-        if (currentFont != null) {
-            String otherFont = textBean.textFont;
-            if (otherFont == null || !currentFont.equals(otherFont)) {
+        String otherFont = textBean.textFont;
+        if (currentFont == null) {
+            if (otherFont != null) {
                 return false;
             }
-        } else if (textBean.textFont != null) {
+        } else if (!currentFont.equals(otherFont)) {
             return false;
         }
+        
         String currentHint = hint;
-        if (currentHint != null) {
-            String otherHint = textBean.hint;
-            if (otherHint == null || !currentHint.equals(otherHint)) {
+        String otherHint = textBean.hint;
+        if (currentHint == null) {
+            if (otherHint != null) {
                 return false;
             }
-        } else if (textBean.hint != null) {
+        } else if (!currentHint.equals(otherHint)) {
             return false;
         }
-        return hintColor == textBean.hintColor && singleLine == textBean.singleLine && line == textBean.line && inputType == textBean.inputType && imeOption == textBean.imeOption;
+        
+        return textSize == textBean.textSize &&
+            textColor == textBean.textColor &&
+            textType == textBean.textType &&
+            hintColor == textBean.hintColor &&
+            singleLine == textBean.singleLine &&
+            line == textBean.line &&
+            inputType == textBean.inputType &&
+            imeOption == textBean.imeOption;
     }
+
 
     public void print() {}
 
