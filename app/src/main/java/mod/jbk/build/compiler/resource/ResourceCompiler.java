@@ -229,9 +229,9 @@ public class ResourceCompiler {
 
             args.add("--output-text-symbols");
             args.add(buildHelper.yq.binDirectoryPath);
-
-            if (buildHelper.yq.N.g) {
-                args.add("--no-version-transitions");
+            // Material Enabled
+            if (buildHelper.yq.N.g == true) {
+                args.add("--no-version-vectors");
             }
 
             /* Specify resources directory */
@@ -266,35 +266,35 @@ public class ResourceCompiler {
                 args.addAll(Arrays.asList("-A", localLibraryAssetsDirectory));
             }
 
-            // Include compiled built-in library resources 
-           /* for (Jp library : buildHelper.builtInLibraryManager.a()) {
+            // Include compiled built-in library resources
+            for (Jp library : buildHelper.builtInLibraryManager.a()) {
                 if (library.c()) {
-                    args.addAll(Arrays.asList("-S", new File(getCompiledBuiltInLibraryResourcesDirectory(), library.a() + ".zip").getAbsolutePath()));
+                    args.addAll(Arrays.asList("-j", new File(getCompiledBuiltInLibraryResourcesDirectory(), library.a() + ".zip").getAbsolutePath()));
                 }
-            }*/
+            }
 
             // Include compiled local libraries' resources 
-           /* File[] filesInCompiledResourcesPath = new File(resourcesPath).listFiles();
+            File[] filesInCompiledResourcesPath = new File(resourcesPath).listFiles();
             if (filesInCompiledResourcesPath != null) {
                 for (File file : filesInCompiledResourcesPath) {
                     if (file.isFile() && (!file.getName().equals("project.zip") || !file.getName().equals("project-imported.zip"))) {
                         args.addAll(Arrays.asList("-S", file.getAbsolutePath()));
                     }
                 }
-            }*/
+            }
 
             // Include compiled project resources 
-            /*File projectArchive = new File(resourcesPath, "project.zip");
+            File projectArchive = new File(resourcesPath, "project.zip");
             if (projectArchive.exists()) {
                 args.addAll(Arrays.asList("-S", projectArchive.getAbsolutePath()));
-            }*/
+            }
 
             // Include compiled imported project resources 
-            /*File projectImportedArchive = new File(resourcesPath, "project-imported.zip");
+            File projectImportedArchive = new File(resourcesPath, "project-imported.zip");
             if (projectImportedArchive.exists()) {
                 args.addAll(Arrays.asList("-S", projectImportedArchive.getAbsolutePath()));
-            }*/
-
+            }
+            ////
             // Add R.java 
             linkingAssertDirectoryExists(buildHelper.yq.rJavaDirectoryPath);
             args.add("-m");
@@ -304,11 +304,11 @@ public class ResourceCompiler {
 
             // Output AAPT's generated ProGuard rules to a.a.a.yq.aapt_rules 
             // Remove this line:
-            if (!buildHelper.yq.aaptProGuardRules.isEmpty()) {
-                args.add("-G");
-                // And remove this line too:
-                args.add(buildHelper.yq.aaptProGuardRules);
-            }
+//            if (!buildHelper.yq.aaptProGuardRules.isEmpty()) {
+            args.add("-G");
+            // And remove this line too:
+            args.add(buildHelper.yq.aaptProGuardRules);
+//            }
 
             // Add AndroidManifest.xml 
             linkingAssertFileExists(buildHelper.yq.androidManifestPath);
