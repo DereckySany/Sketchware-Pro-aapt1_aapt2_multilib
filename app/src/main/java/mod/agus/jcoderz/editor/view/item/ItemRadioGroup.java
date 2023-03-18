@@ -16,10 +16,10 @@ public class ItemRadioGroup extends LinearLayout implements sy {
     private ViewBean viewBean;
     private Paint paint;
     private Rect rect;
-    private float paddingFactor;
+    private int paddingFactor;
     private int gravity;
     private boolean hasSelection;
-    private boolean hasFixed;
+    private boolean isFixed;
 
     public ItemRadioGroup(Context context) {
         super(context);
@@ -30,7 +30,7 @@ public class ItemRadioGroup extends LinearLayout implements sy {
         this.setOrientation(0);
         this.setDrawingCacheEnabled(true);
         this.paint = new Paint(1);
-        this.paddingFactor = wB.a(context, 1.0f);
+        this.paddingFactor = (int) wB.a(context, 1.0f);
     }
 
     public void a() {
@@ -92,7 +92,7 @@ public class ItemRadioGroup extends LinearLayout implements sy {
         }
     }
 
-
+    @Override
     public ViewBean getBean() {
         return viewBean;
     }
@@ -104,11 +104,11 @@ public class ItemRadioGroup extends LinearLayout implements sy {
 
     @Override
     public boolean getFixed() {
-        return hasFixed;
+        return isFixed;
     }
 
     public void setFixed(boolean z) {
-        hasFixed = z;
+        isFixed = z;
     }
 
     public boolean getSelection() {
@@ -120,29 +120,17 @@ public class ItemRadioGroup extends LinearLayout implements sy {
         hasSelection = z;
         invalidate();
     }
-
     @Override
     public void onDraw(Canvas canvas) {
-        if (!this.hasFixed) {
-            if (this.hasSelection) {
-                this.paint.setColor(-1785080368);
-                rect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
-                canvas.drawRect(rect, paint);
-            }
-            this.paint.setColor(1610612736);
-            int measuredWidth = getMeasuredWidth();
-            int measuredHeight = getMeasuredHeight();
-            float floatWidth = (float) measuredWidth;
-            canvas.drawLine(0.0f, 0.0f, floatWidth, 0.0f, this.paint);
-            float floatHeight = (float) measuredHeight;
-            canvas.drawLine(0.0f, 0.0f, 0.0f, floatHeight, this.paint);
-            canvas.drawLine(floatWidth, 0.0f, floatWidth, floatHeight, this.paint);
-            canvas.drawLine(0.0f, floatHeight, floatWidth, floatHeight, this.paint);
+        if (hasSelection) {
+            rect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
+            canvas.drawRect(rect, paint);
         }
         super.onDraw(canvas);
     }
 
+    @Override
     public void setPadding(int left, int top, int right, int bottom) {
-        super.setPadding((int) (left * paddingFactor), (int) (top * paddingFactor), (int) (right * paddingFactor), (int) (paddingFactor * bottom));
+        super.setPadding(left * paddingFactor, top * paddingFactor,right * paddingFactor, paddingFactor * bottom);
     }
 }

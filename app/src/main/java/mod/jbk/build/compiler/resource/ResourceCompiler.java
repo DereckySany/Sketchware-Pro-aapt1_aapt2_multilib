@@ -421,6 +421,7 @@ public class ResourceCompiler {
                 if (builtInLibrary.c()) {
                     String libraryName = builtInLibrary.a();
                     String libraryResources = BuiltInLibraries.getLibraryResourcesPath(libraryName);
+                    String libraryManifest = BuiltInLibraries.getLibraryManifestPath(libraryName);
                     Context context = SketchApplication.getContext();
                     File cachedCompiledResources = new File(getCompiledBuiltInLibraryResourcesDirectory(), libraryName + ".zip");
 
@@ -432,6 +433,10 @@ public class ResourceCompiler {
                         commands.add("package");
                         commands.add("-S");
                         commands.add(libraryResources);
+                        if (libraryManifest.contains("AndroidManifest.xml")){
+                            commands.add("-M");
+                            commands.add(libraryManifest);
+                        }
                         commands.add("-F");
                         commands.add(cachedCompiledResources.getAbsolutePath());
 
