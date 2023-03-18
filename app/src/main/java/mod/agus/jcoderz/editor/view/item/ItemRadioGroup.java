@@ -8,50 +8,46 @@ import android.view.View;
 import android.widget.RadioGroup;
 
 import com.besome.sketch.beans.ViewBean;
-import com.besome.sketch.editor.view.item.ItemHorizontalScrollView;
-import com.besome.sketch.editor.view.item.ItemVerticalScrollView;
 
 import a.a.a.sy;
-import a.a.a.ty;
 import a.a.a.wB;
 
-public class ItemRadioGroup extends RadioGroup  {
-    private Paint paint;
-    private final Rect rect;
-    private float paddingFactor;
+public class ItemRadioGroup extends RadioGroup {
+    private ViewBean viewBean = null;
     private boolean hasSelection;
-    private boolean hasFixed;
-    private ViewBean viewBean;
-    private int gravity;
     private boolean isFixed;
-
-
+    private Paint paint;
+    private int gravity;
+    //private float paddingFactor;
+    
     public ItemRadioGroup(Context context) {
         super(context);
-        this.setViewBean(context);
-        paddingFactor = wB.a(context, 1.0f);
-        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(0x9599d5d0);
-        rect = new Rect();
+        this.a(context);
+        //paddingFactor = wB.a(context, 1.0f);
+    }
 
-        setDrawingCacheEnabled(true);
+    public final void a(Context context) {
+        this.setOrientation(0);
+        this.setDrawingCacheEnabled(true);
+        this.setMinimumWidth((int) wB.a(context, 32.0F));
+        this.setMinimumHeight((int) wB.a(context, 32.0F));
+        this.paint = new Paint(1);
+        this.paint.setStrokeWidth(wB.a(this.getContext(), 2.0F));
+        //this.paddingFactor = wB.a(context, 1.0f);
     }
 
     public void a() {
         int viewPosition = 0;
-
         int beanIndex;
-        for(int i = 0; viewPosition < this.getChildCount(); i = beanIndex) {
+        for (int i = 0; viewPosition < this.getChildCount(); i = beanIndex) {
             View view = this.getChildAt(viewPosition);
             beanIndex = i;
             if (view instanceof sy) {
                 ((sy) view).getBean().index = i;
                 beanIndex = i + 1;
             }
-
             ++viewPosition;
         }
-
     }
 
     @Override
@@ -59,26 +55,25 @@ public class ItemRadioGroup extends RadioGroup  {
         super.setOrientation(orientation);
     }
 
-    public final void setViewBean(Context context) {
-        this.paddingFactor = wB.a(context, 1.0f);
-        this.setOrientation(gravity);
-        this.setDrawingCacheEnabled(true);
-        this.setMinimumWidth((int) wB.a(context, 32.0F));
-        this.setMinimumHeight((int)wB.a(context, 32.0F));
-        this.paint = new Paint(1);
-        this.paint.setStrokeWidth(wB.a(this.getContext(), 2.0F));
+    public void setLayoutGravity(int LayoutGravity) {
+        this.gravity = LayoutGravity;
+        super.setGravity(LayoutGravity);
     }
 
-    public void addView(View view, int gravity) {
+    public int getLayoutGravity() {
+        return this.gravity;
+    }
+
+    public void addView(View view, int num) {
         int childCount = this.getChildCount();
-        if (gravity > childCount) {
+        if (num > childCount) {
             super.addView(view);
         } else {
             byte invalido = -1;
             int position = 0;
 
             int child;
-            while(true) {
+            while (true) {
                 child = invalido;
                 if (position >= childCount) {
                     break;
@@ -92,89 +87,64 @@ public class ItemRadioGroup extends RadioGroup  {
                 ++position;
             }
 
-            if (child >= 0 && gravity >= child) {
-                super.addView(view, gravity + 1);
+            if (child >= 0 && num >= child) {
+                super.addView(view, num + 1);
             } else {
-                super.addView(view, gravity);
+                super.addView(view, num);
             }
         }
     }
+
 
     public ViewBean getBean() {
-        return this.viewBean;
-    }
-
-    public boolean getFixed() {
-        return this.isFixed;
-    }
-
-    public int getLayoutGravity() {
-        return this.gravity;
-    }
-
-    public boolean getSelection() {
-        return this.hasSelection;
-    }
-
-    public void onDraw(Canvas canvas) {
-        if (!this.isFixed) {
-            if (this.hasSelection) {
-                this.paint.setColor(-1785080368);
-                rect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
-                canvas.drawRect(new Rect(0, 0, this.getMeasuredWidth(), this.getMeasuredHeight()), this.paint);
-            }
-
-            this.paint.setColor(1610612736);
-            int width = this.getMeasuredWidth();
-            int height = this.getMeasuredHeight();
-            float floatWidth = (float) width;
-            canvas.drawLine(0.0F, 0.0F, floatWidth, 0.0F, this.paint);
-            float floatHeight = (float) height;
-            canvas.drawLine(0.0F, 0.0F, 0.0F, floatHeight, this.paint);
-            canvas.drawLine(floatWidth, 0.0F, floatWidth, floatHeight, this.paint);
-            canvas.drawLine(0.0F, floatHeight, floatWidth, floatHeight, this.paint);
-        }
-
-        super.onDraw(canvas);
+        return viewBean;
     }
 
     public void setBean(ViewBean viewBean) {
         this.viewBean = viewBean;
     }
 
-    public void setChildScrollEnabled(boolean scrollEnabled) {
-        for(int position = 0; position < this.getChildCount(); ++position) {
-            View view = this.getChildAt(position);
-            if (view instanceof ty) {
-                ((ty) view).setChildScrollEnabled(scrollEnabled);
-            }
-
-            if (view instanceof ItemHorizontalScrollView) {
-                ((ItemHorizontalScrollView) view).setScrollEnabled(scrollEnabled);
-            }
-
-            if (view instanceof ItemVerticalScrollView) {
-                ((ItemVerticalScrollView) view).setScrollEnabled(scrollEnabled);
-            }
-        }
-
+    public boolean getFixed() {
+        return isFixed;
     }
 
-    public void setFixed(boolean hasFixed) {
-        this.isFixed = hasFixed;
+    public void setFixed(boolean z) {
+        isFixed = z;
     }
 
-    public void setLayoutGravity(int LayoutGravity) {
-        this.gravity = LayoutGravity;
-        super.setGravity(LayoutGravity);
-    }
-
-    public void setPadding(int left, int top, int right, int bottom) {
-        super.setPadding((int) (left * paddingFactor), (int) (top * paddingFactor), (int) (right * paddingFactor), (int) (paddingFactor * bottom));
+    public boolean getSelection() {
+        return hasSelection;
     }
 
     public void setSelection(boolean z) {
         hasSelection = z;
         invalidate();
     }
+
+    @Override
+    public void onDraw(Canvas canvas) {
+        if (!this.isFixed) {
+            if (this.hasSelection) {
+                this.paint.setColor(-1785080368);
+                canvas.drawRect(new Rect(0, 0, this.getMeasuredWidth(), this.getMeasuredHeight()), this.paint);
+            }
+            this.paint.setColor(1610612736);
+            int measuredWidth = getMeasuredWidth();
+            int measuredHeight = getMeasuredHeight();
+            float floatWidth = (float) measuredWidth;
+            canvas.drawLine(0.0f, 0.0f, floatWidth, 0.0f, this.paint);
+            float floatHeight = (float) measuredHeight;
+            canvas.drawLine(0.0f, 0.0f, 0.0f, floatHeight, this.paint);
+            canvas.drawLine(floatWidth, 0.0f, floatWidth, floatHeight, this.paint);
+            canvas.drawLine(0.0f, floatHeight, floatWidth, floatHeight, this.paint);
+        }
+        super.onDraw(canvas);
+    }
+
+    public void setPadding(int left, int top, int right, int bottom) {
+        super.setPadding((int) wB.a(this.getContext(), (float) left), (int) wB.a(this.getContext(), (float) top), (int) wB.a(this.getContext(), (float) right), (int) wB.a(this.getContext(), (float) bottom));
+    }
 }
+//    public void setPadding(int left, int top, int right, int bottom) {
+//        super.setPadding((int) (left * paddingFactor), (int) (top * paddingFactor), (int) (right * paddingFactor), (int) (paddingFactor * bottom));
+//    }
