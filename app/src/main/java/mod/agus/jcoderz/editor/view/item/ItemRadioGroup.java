@@ -5,35 +5,32 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.View;
-import android.widget.RadioGroup;
+import android.widget.LinearLayout;
 
 import com.besome.sketch.beans.ViewBean;
 
 import a.a.a.sy;
 import a.a.a.wB;
 
-public class ItemRadioGroup extends RadioGroup {
-    private ViewBean viewBean = null;
-    private boolean hasSelection;
-    private boolean isFixed;
+public class ItemRadioGroup extends LinearLayout implements sy {
+    private ViewBean viewBean;
     private Paint paint;
+    private Rect rect;
+    private float paddingFactor;
     private int gravity;
-    //private float paddingFactor;
-    
+    private boolean hasSelection;
+    private boolean hasFixed;
+
     public ItemRadioGroup(Context context) {
         super(context);
         this.a(context);
-        //paddingFactor = wB.a(context, 1.0f);
     }
 
     public final void a(Context context) {
         this.setOrientation(0);
         this.setDrawingCacheEnabled(true);
-        this.setMinimumWidth((int) wB.a(context, 32.0F));
-        this.setMinimumHeight((int) wB.a(context, 32.0F));
         this.paint = new Paint(1);
-        this.paint.setStrokeWidth(wB.a(this.getContext(), 2.0F));
-        //this.paddingFactor = wB.a(context, 1.0f);
+        this.paddingFactor = wB.a(context, 1.0f);
     }
 
     public void a() {
@@ -100,22 +97,25 @@ public class ItemRadioGroup extends RadioGroup {
         return viewBean;
     }
 
+    @Override
     public void setBean(ViewBean viewBean) {
         this.viewBean = viewBean;
     }
 
+    @Override
     public boolean getFixed() {
-        return isFixed;
+        return hasFixed;
     }
 
     public void setFixed(boolean z) {
-        isFixed = z;
+        hasFixed = z;
     }
 
     public boolean getSelection() {
         return hasSelection;
     }
 
+    @Override
     public void setSelection(boolean z) {
         hasSelection = z;
         invalidate();
@@ -123,10 +123,11 @@ public class ItemRadioGroup extends RadioGroup {
 
     @Override
     public void onDraw(Canvas canvas) {
-        if (!this.isFixed) {
+        if (!this.hasFixed) {
             if (this.hasSelection) {
                 this.paint.setColor(-1785080368);
-                canvas.drawRect(new Rect(0, 0, this.getMeasuredWidth(), this.getMeasuredHeight()), this.paint);
+                rect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                canvas.drawRect(rect, paint);
             }
             this.paint.setColor(1610612736);
             int measuredWidth = getMeasuredWidth();
@@ -142,9 +143,6 @@ public class ItemRadioGroup extends RadioGroup {
     }
 
     public void setPadding(int left, int top, int right, int bottom) {
-        super.setPadding((int) wB.a(this.getContext(), (float) left), (int) wB.a(this.getContext(), (float) top), (int) wB.a(this.getContext(), (float) right), (int) wB.a(this.getContext(), (float) bottom));
+        super.setPadding((int) (left * paddingFactor), (int) (top * paddingFactor), (int) (right * paddingFactor), (int) (paddingFactor * bottom));
     }
 }
-//    public void setPadding(int left, int top, int right, int bottom) {
-//        super.setPadding((int) (left * paddingFactor), (int) (top * paddingFactor), (int) (right * paddingFactor), (int) (paddingFactor * bottom));
-//    }

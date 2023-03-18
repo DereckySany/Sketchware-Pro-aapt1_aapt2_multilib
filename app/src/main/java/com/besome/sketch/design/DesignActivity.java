@@ -1378,7 +1378,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                     currentNotificationCache.description = "App build has been failed";
                     currentNotificationCache.ProjectStage = 2;
                     // Cria um Intent para iniciar a Activity principal
-                    Intent intent = new Intent(getApplicationContext(), DesignActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), getApplicationContext().getClass());
                     if (!isActivityForeground) {
                         ProjectBuildingNotify(notificationId, "Build Failed", "App build has been failed!", false, false, "Show DesignActivity", intent);
                     }

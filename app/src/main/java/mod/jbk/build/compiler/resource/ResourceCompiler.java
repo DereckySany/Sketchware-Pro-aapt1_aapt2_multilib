@@ -340,9 +340,6 @@ public class ResourceCompiler {
                 ProcessBuilder processBuilder = new ProcessBuilder(
                         aapt.getAbsolutePath(),
                         "package",
-                        "-I",
-                        buildHelper.androidJarPath,
-                        "-f",
                         "-S",
                         resourceDir,
                         "-M",
@@ -401,13 +398,8 @@ public class ResourceCompiler {
                 ArrayList<String> commands = new ArrayList<>();
                 commands.add(aapt.getAbsolutePath());
                 commands.add("package");
-                commands.add("-I");
-                commands.add(buildHelper.androidJarPath);
-                commands.add("-f");
                 commands.add("-S");
                 commands.add(localLibraryResDirectory);
-                commands.add("-M");
-                commands.add(buildHelper.mll.getManifestPath());
                 commands.add("-F");
                 commands.add(outputPath + File.separator + localLibraryDirectory.getName() + ".zip");
 
@@ -511,13 +503,8 @@ public class ResourceCompiler {
             ArrayList<String> commands = new ArrayList<>();
             commands.add(aapt.getAbsolutePath());
             commands.add("package");
-            commands.add("-I");
-            commands.add(buildHelper.androidJarPath);
-            commands.add("-f");
             commands.add("-S");
             commands.add(resDirectoryPath);
-            commands.add("-M");
-            commands.add(buildHelper.yq.androidManifestPath);
             commands.add("-F");
             commands.add(outputFilePath);
             return commands;
