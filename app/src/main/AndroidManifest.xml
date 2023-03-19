@@ -330,6 +330,7 @@
 
         <activity android:name="dev.derecky.sany.manager.RepoManagerActivity"
             android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.Translucent"
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
     </application>

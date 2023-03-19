@@ -51,16 +51,15 @@ import mod.hey.studios.util.Helper;
 public class ManageLocalLibraryActivity extends AppCompatActivity implements LibraryDownloader.OnCompleteListener {
 
     private static final String RESET_LOCAL_LIBRARIES_TAG = "reset_local_libraries";
-    private CharSequence originalTitle = "Manage Local Library";
+    private final CharSequence originalTitle = "Manage Local Library";
     private LibraryAdapter adapter;
-    private ArrayList<String> arrayList = new ArrayList<>();
+    private final ArrayList<String> arrayList = new ArrayList<>();
     private boolean notAssociatedWithProject = false;
     private ListView listview;
     private String configurationFilePath = "";
     private String local_libs_path = "";
-    private ArrayList<HashMap<String, Object>> lookup_list = new ArrayList<>();
     private ArrayList<HashMap<String, Object>> project_used_libs = new ArrayList<>();
-
+    private RepoManagerActivity repoManagerActivity;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,21 +91,22 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
         MenuItem menuItem = menu.findItem(R.id.action_search);
         showSearchOnActionBar(menuItem);
         return true;
     }
 
+    @Override
+    public void onOptionsMenuClosed(Menu menu) {
+        setTitle(originalTitle);
+        super.onOptionsMenuClosed(menu);
+    }
+
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_search) {
-            if (item.expandActionView()) {
                 setTitle("");
-            } else {
-                setTitle(originalTitle);
-            }
         }
         if (id == R.id.action_reset) {
             showDialogResetLibrary();
@@ -115,8 +115,9 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             showDialogImportLibrary();
         }
         if (id == R.id.menu_repo_manager) {
-            Intent repoManagerIntent = new Intent(this, RepoManagerActivity.class);
-            startActivity(repoManagerIntent);
+            repoManagerActivity.showRepositoryListDialog(getApplicationContext());
+//            Intent repoManagerIntent = new Intent(this, RepoManagerActivity.class);
+//            startActivity(repoManagerIntent);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -124,12 +125,11 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem resetItem = menu.findItem(R.id.action_reset);
         resetItem.setVisible(!notAssociatedWithProject);
+        repoManagerActivity = new RepoManagerActivity();
         return true;
     }
 
     private void showSearchOnActionBar(MenuItem item) {
-        // iconSearch = findViewById(R.id.search_button);
-        // iconSearch.setImageResource(R.drawable.search_icon_white);
         // SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) item.getActionView();
         // searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -317,7 +317,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
             enabled.setChecked(false);
             if (!notAssociatedWithProject) {
-                lookup_list = new Gson().fromJson(FileUtil.readFile(configurationFilePath), Helper.TYPE_MAP_LIST);
+                ArrayList<HashMap<String, Object>> lookup_list = new Gson().fromJson(FileUtil.readFile(configurationFilePath), Helper.TYPE_MAP_LIST);
                 enabled.setChecked(lookup_list.contains(getLocalLibraryData(libname)));
             } else {
                 enabled.setEnabled(false);
