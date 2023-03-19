@@ -91,10 +91,9 @@ public class ViewPanes {
             case ViewBeans.VIEW_TYPE_LAYOUT_COLLAPSINGTOOLBARLAYOUT:
             case ViewBeans.VIEW_TYPE_LAYOUT_TEXTINPUTLAYOUT:
             case ViewBeans.VIEW_TYPE_LAYOUT_SWIPEREFRESHLAYOUT:
-                return new ItemLinearLayout(context);
-
             case ViewBeans.VIEW_TYPE_LAYOUT_RADIOGROUP:
-                return new ItemRadioGroup(context);
+                return new ItemLinearLayout(context);
+             // return new ItemRadioGroup(context);
 
             case ViewBeans.VIEW_TYPE_WIDGET_MATERIALBUTTON:
                 return new ItemMaterialButton(context);

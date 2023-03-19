@@ -2857,7 +2857,17 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
 
     </style>
-        <style name="Theme.MyApplication" parent="Base.V7.Theme.AppCompat">
+        <style name="Theme.MyApplication" parent="Base.V7.Theme.AppCompat.Light">
+        <item name="actionBarStyle">@style/Widget.AppCompat.ActionBar.Solid</item>
+        <item name="actionBarTabBarStyle">@style/Widget.AppCompat.ActionBar.TabBar</item>
+        <item name="actionBarTabStyle">@style/Widget.AppCompat.ActionBar.TabView</item>
+        <item name="actionBarTabTextStyle">@style/Widget.AppCompat.ActionBar.TabText</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.ActionBar</item>
+        <item name="actionButtonStyle">@style/Widget.AppCompat.ActionButton</item>
+        <item name="actionDropDownStyle">@style/Widget.AppCompat.Spinner.DropDown.ActionBar
+        </item>
+        <item name="searchViewStyle">@style/Widget.AppCompat.SearchView</item>
+
         <item name="colorAccent">@color/color_accent</item>
         <item name="colorControlHighlight">@color/color_control_highlight</item>
         <item name="colorControlNormal">@color/color_primary</item>
@@ -2879,7 +2889,6 @@
         <item name="controlBackground">?selectableItemBackgroundBorderless</item>
         <item name="editTextColor">?android:textColorPrimary</item>
         <item name="isLightTheme">false</item>
-        <item name="searchViewStyle">@style/SearchView</item>
         <item name="textAppearanceSearchResultSubtitle">
             @style/TextAppearance.AppCompat.SearchResult.Subtitle
         </item>
@@ -2892,20 +2901,5 @@
         <item name="tooltipFrameBackground">@drawable/tooltip_frame_dark</item>
         <item name="viewInflaterClass">androidx.appcompat.app.AppCompatViewInflater</item>
         <item name="windowActionBar">true</item>
-        <item name="windowActionBarOverlay">false</item>
-        <item name="windowActionModeOverlay">false</item>
-        <item name="windowFixedHeightMajor">@null</item>
-        <item name="windowFixedHeightMinor">@null</item>
-        <item name="windowFixedWidthMajor">@null</item>
-        <item name="windowFixedWidthMinor">@null</item>
-        <item name="windowNoTitle">false</item>
-    </style>
-    <style name="SearchView" parent="@style/Base.Widget.AppCompat.SearchView.ActionBar">
-        <item name="layout">@layout/abc_search_view</item>
-        <item name="queryBackground">@drawable/abc_textfield_search_material</item>
-        <item name="searchHintIcon">@drawable/search_icon_white</item>
-        <item name="searchIcon">@drawable/search_icon_white</item>
-        <item name="isLightTheme">false</item>
-        <item name="defaultQueryHint">@string/abc_search_hint</item>
     </style>
 </resources>

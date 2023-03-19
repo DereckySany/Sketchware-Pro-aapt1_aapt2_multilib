@@ -4,8 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class SrcCodeBean implements Parcelable {
-    //public static final Creator<SrcCodeBean> CREATOR = new Creator<SrcCodeBean>() 
-    public static final Parcelable.Creator<SrcCodeBean> CREATOR = new Parcelable.Creator<>() {
+    public static final Creator<SrcCodeBean> CREATOR = new Creator<SrcCodeBean>() {
+    // public static final Parcelable.Creator<SrcCodeBean> CREATOR = new Parcelable.Creator<>() {
         @Override
         public SrcCodeBean createFromParcel(Parcel source) {
             return new SrcCodeBean(source);
@@ -34,13 +34,13 @@ public class SrcCodeBean implements Parcelable {
         this.source = other.readString();
     }
 
-    public static Parcelable.Creator<SrcCodeBean> getCreator() {
-        return CREATOR;
-    }
-
-    // public Creator<SrcCodeBean> getCreator() {
+    // public static Parcelable.Creator<SrcCodeBean> getCreator() {
     //     return CREATOR;
     // }
+
+    public Creator<SrcCodeBean> getCreator() {
+        return CREATOR;
+    }
 
     public String getPkgName() {
         return pkgName;
