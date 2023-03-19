@@ -43,19 +43,37 @@ public class RepoManagerActivity extends AppCompatActivity {
             ".sketchware" + File.separator + "libs" + File.separator + "repositories.json");
     private ArrayList<HashMap<String, Object>> repositoryList = new ArrayList<>();
     private RepositoryListAdapter adapter;
+    private ListView listview;
+    private EditText searchEditText;
+    private FloatingActionButton addFab;
 
-    public void showRepositoryListDialog(Context context) {
-        Dialog repositoryListDialog = new Dialog(context);
-        repositoryListDialog.setContentView(R.layout.repository_list_dialog);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.repository_list_dialog);
+ 
+        listview = findViewById(R.id.list_view);
+        searchEditText = findViewById(R.id.search_edit_text);
+        addFab = findViewById(R.id.add_fab);
 
-        ListView listview = repositoryListDialog.findViewById(R.id.list_view);
-        EditText searchEditText = repositoryListDialog.findViewById(R.id.search_edit_text);
-        FloatingActionButton addFab = repositoryListDialog.findViewById(R.id.add_fab);
+        
+        // checkFile();
         loadRepositories();
+        setUpSearchView();
+        // initToolbar();
         adapter = new RepositoryListAdapter(context, repositoryList);
         listview.setAdapter(adapter);
+
         addFab.setOnClickListener(v -> showAddRepositoryDialog());
 
+    }
+
+    private void setUpSearchView() {
+        searchEditText.setActivated(true);
+        searchEditText.setQueryHint("Search for repository name");
+        searchEditText.onActionViewExpanded();
+        searchEditText.setIconifiedByDefault(true);
+        searchEditText.clearFocus();
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -68,9 +86,21 @@ public class RepoManagerActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                String lowerCase = s.toLowerCase();
+                ArrayList<String> filter = new ArrayList<>();
+                for (String next : arrayList) {
+                    if (next.toLowerCase().contains(lowerCase)) {
+                        // filter.add(next);
+                    }
+                }
+                // adapter.setFilter(filter);
             }
         });
+    }
+
+    public void showRepositoryListDialog(Context context) {
+        Dialog repositoryListDialog = new Dialog(context);
+        repositoryListDialog.setContentView(R.layout.repository_list_dialog);
 
         repositoryListDialog.show();
     }
@@ -108,7 +138,7 @@ public class RepoManagerActivity extends AppCompatActivity {
 
     private void saveRepositories() {
         try {
-            File file = new File(getApplicationContext().getExternalFilesDir(null), "repositories.json");
+            File file = new File(CONFIGURED_REPOSITORIES_FILE);
             FileWriter fileWriter = new FileWriter(file);
             Gson gson = new Gson();
             gson.toJson(repositoryList, fileWriter);
@@ -131,6 +161,7 @@ public class RepoManagerActivity extends AppCompatActivity {
             repositoryList = new ArrayList<>();
         }
     }
+
     public class RepositoryListAdapter extends BaseAdapter {
 
         private ArrayList<HashMap<String, Object>> repositoryList;

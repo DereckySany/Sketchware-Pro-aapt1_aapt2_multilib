@@ -2857,53 +2857,39 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
 
     </style>
-        <style name="Theme.MyApplication" parent="Base.V7.Theme.AppCompat.Light">
-        <item name="actionBarStyle">@style/Widget.AppCompat.ActionBar.Solid</item>
+    <style name="Theme.MyApplication" parent="Base.V7.Theme.AppCompat.Light">
+        <item name="actionBarStyle">@style/Widget.AppCompat.ActionBar</item>
         <item name="actionBarTabBarStyle">@style/Widget.AppCompat.ActionBar.TabBar</item>
         <item name="actionBarTabStyle">@style/Widget.AppCompat.ActionBar.TabView</item>
         <item name="actionBarTabTextStyle">@style/Widget.AppCompat.ActionBar.TabText</item>
-        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.ActionBar</item>
+        <item name="actionBarTheme">@style/Base.ThemeOverlay.AppCompat.ActionBar</item>
         <item name="actionButtonStyle">@style/Widget.AppCompat.ActionButton</item>
         <item name="actionDropDownStyle">@style/Widget.AppCompat.Spinner.DropDown.ActionBar
         </item>
-        <item name="searchViewStyle">@style/Widget.AppCompat.SearchView</item>
+
         <item name="actionOverflowButtonStyle">@style/Widget.AppCompat.ActionButton.Overflow
         </item>
         <item name="actionOverflowMenuStyle">@style/Widget.AppCompat.PopupMenu.Overflow</item>
-        <item name="android:textColorHintInverse">@color/abc_hint_foreground_material_light</item>
-        <item name="android:textColorHint">@color/abc_hint_foreground_material_dark</item>
-        <item name="android:textColorLink">?android:colorAccent</item>
-        <item name="android:buttonBarStyle">?buttonBarStyle</item>
-        <item name="android:buttonBarButtonStyle">?buttonBarButtonStyle</item>
-        <item name="android:textColorLinkInverse">?android:colorAccent</item>
-        <item name="colorAccent">@color/color_accent</item>
-        <item name="colorControlHighlight">@color/color_control_highlight</item>
-        <item name="colorControlNormal">@color/color_primary</item>
-        <item name="colorPrimary">@color/color_primary</item>
-        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+      
+        <item name="colorAccent">@color/accent_material_light</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
-        <item name="rippleColor">@color/color_primary</item>
-        <item name="subtitleTextAppearance">?textAppearanceSubtitle1</item>
-        <item name="subtitleTextColor">@color/white</item>
-        <item name="titleTextAppearance">?textAppearanceHeadline6</item>
         <item name="titleTextColor">@color/white</item>
         <item name="actionMenuTextColor">@color/white</item>
         <item name="autoCompleteTextViewStyle">@style/Widget.AppCompat.AutoCompleteTextView</item>
         <item name="colorBackgroundFloating">@color/background_floating_material_light</item>
-        <item name="colorButtonNormal">@color/button_material_light</item>
-        <item name="colorControlActivated">?colorAccent</item>
+        <item name="colorButtonNormal">@color/button_material_light</item> 
+        <item name="colorControlHighlight">@color/ripple_material_light</item> 
         <item name="colorError">@color/error_color_material_light</item>
-        <item name="colorSwitchThumbNormal">@color/switch_thumb_material_light</item>
-        <item name="controlBackground">?selectableItemBackgroundBorderless</item>
-        <item name="editTextColor">@color/white</item>
+        <item name="colorPrimary">@color/primary_material_light</item>
+        <item name="colorPrimaryDark">@color/primary_dark_material_light</item>
+        <item name="colorSwitchThumbNormal">@color/switch_thumb_material_light</item> 
+        <item name="editTextColor">?android:textColorPrimary</item>  
         <item name="isLightTheme">false</item>
-        <item name="textAppearanceSearchResultSubtitle">
-            @style/TextAppearance.AppCompat.SearchResult.Subtitle
-        </item>
-        <item name="textAppearanceSearchResultTitle">
-            @style/TextAppearance.AppCompat.SearchResult.Title
-        </item>
-        <item name="textColorSearchUrl">@color/white</item>
+        <item name="listChoiceBackgroundIndicator">@drawable/abc_list_selector_holo_light</item>     
+        <item name="searchViewStyle">@style/Widget.AppCompat.SearchView</item>   
+        <item name="textAppearancePopupMenuHeader">
+            @style/TextAppearance.AppCompat.Widget.PopupMenu.Header
+        </item>  
         <item name="toolbarStyle">@style/Widget.AppCompat.Toolbar</item>
         <item name="tooltipForegroundColor">@color/foreground_material_dark</item>
         <item name="tooltipFrameBackground">@drawable/tooltip_frame_dark</item>

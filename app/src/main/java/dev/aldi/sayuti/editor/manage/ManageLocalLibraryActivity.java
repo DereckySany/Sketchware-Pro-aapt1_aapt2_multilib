@@ -115,9 +115,9 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             showDialogImportLibrary();
         }
         if (id == R.id.menu_repo_manager) {
-            repoManagerActivity.showRepositoryListDialog(getApplicationContext());
-//            Intent repoManagerIntent = new Intent(this, RepoManagerActivity.class);
-//            startActivity(repoManagerIntent);
+            // repoManagerActivity.showRepositoryListDialog(getApplicationContext());
+           Intent repoManagerIntent = new Intent(this, RepoManagerActivity.class);
+           startActivity(repoManagerIntent);
         }
         return super.onOptionsItemSelected(item);
     }
