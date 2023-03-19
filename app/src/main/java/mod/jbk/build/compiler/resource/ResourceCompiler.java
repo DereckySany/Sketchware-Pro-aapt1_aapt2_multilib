@@ -230,9 +230,9 @@ public class ResourceCompiler {
             args.add("--output-text-symbols");
             args.add(buildHelper.yq.binDirectoryPath);
             // Material Enabled
-            if (buildHelper.yq.N.g == true) {
-                args.add("--no-version-vectors");
-            }
+            // if (buildHelper.yq.N.g == true) {
+            args.add("--no-version-vectors");
+            // }
 
             /* Specify resources directory */
             args.add("-S");
