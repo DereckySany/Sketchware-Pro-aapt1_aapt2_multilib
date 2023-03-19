@@ -48,7 +48,7 @@ public class RepoManagerActivity extends AppCompatActivity {
     private FloatingActionButton addFab;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.repository_list_dialog);
  
@@ -61,7 +61,7 @@ public class RepoManagerActivity extends AppCompatActivity {
         loadRepositories();
         setUpSearchView();
         // initToolbar();
-        adapter = new RepositoryListAdapter(context, repositoryList);
+        adapter = new RepositoryListAdapter(getApplicationContext(), repositoryList);
         listview.setAdapter(adapter);
 
         addFab.setOnClickListener(v -> showAddRepositoryDialog());
@@ -70,9 +70,7 @@ public class RepoManagerActivity extends AppCompatActivity {
 
     private void setUpSearchView() {
         searchEditText.setActivated(true);
-        searchEditText.setQueryHint("Search for repository name");
-        searchEditText.onActionViewExpanded();
-        searchEditText.setIconifiedByDefault(true);
+        searchEditText.setHint("Search for repository name");
         searchEditText.clearFocus();
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -86,14 +84,14 @@ public class RepoManagerActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String lowerCase = s.toLowerCase();
-                ArrayList<String> filter = new ArrayList<>();
-                for (String next : arrayList) {
-                    if (next.toLowerCase().contains(lowerCase)) {
-                        // filter.add(next);
+                String lowerCase = s.toString().toLowerCase();
+                ArrayList<HashMap<String, Object>> repositoryFilter = new ArrayList<>();
+                for (HashMap<String, Object> next : repositoryList) {
+                    if (next.containsKey(lowerCase) || next.containsValue(lowerCase)) {
+                        repositoryFilter.add(next);
                     }
                 }
-                // adapter.setFilter(filter);
+                adapter.updateData(repositoryFilter);
             }
         });
     }
@@ -138,8 +136,7 @@ public class RepoManagerActivity extends AppCompatActivity {
 
     private void saveRepositories() {
         try {
-            File file = new File(CONFIGURED_REPOSITORIES_FILE);
-            FileWriter fileWriter = new FileWriter(file);
+            FileWriter fileWriter = new FileWriter(CONFIGURED_REPOSITORIES_FILE);
             Gson gson = new Gson();
             gson.toJson(repositoryList, fileWriter);
             fileWriter.close();
