@@ -2867,7 +2867,15 @@
         <item name="actionDropDownStyle">@style/Widget.AppCompat.Spinner.DropDown.ActionBar
         </item>
         <item name="searchViewStyle">@style/Widget.AppCompat.SearchView</item>
-
+        <item name="actionOverflowButtonStyle">@style/Widget.AppCompat.ActionButton.Overflow
+        </item>
+        <item name="actionOverflowMenuStyle">@style/Widget.AppCompat.PopupMenu.Overflow</item>
+        <item name="android:textColorHintInverse">@color/abc_hint_foreground_material_light</item>
+        <item name="android:textColorHint">@color/abc_hint_foreground_material_dark</item>
+        <item name="android:textColorLink">?android:colorAccent</item>
+        <item name="android:buttonBarStyle">?buttonBarStyle</item>
+        <item name="android:buttonBarButtonStyle">?buttonBarButtonStyle</item>
+        <item name="android:textColorLinkInverse">?android:colorAccent</item>
         <item name="colorAccent">@color/color_accent</item>
         <item name="colorControlHighlight">@color/color_control_highlight</item>
         <item name="colorControlNormal">@color/color_primary</item>
@@ -2879,7 +2887,7 @@
         <item name="subtitleTextColor">@color/white</item>
         <item name="titleTextAppearance">?textAppearanceHeadline6</item>
         <item name="titleTextColor">@color/white</item>
-        <item name="actionMenuTextColor">?android:textColorPrimary</item>
+        <item name="actionMenuTextColor">@color/white</item>
         <item name="autoCompleteTextViewStyle">@style/Widget.AppCompat.AutoCompleteTextView</item>
         <item name="colorBackgroundFloating">@color/background_floating_material_light</item>
         <item name="colorButtonNormal">@color/button_material_light</item>
@@ -2887,7 +2895,7 @@
         <item name="colorError">@color/error_color_material_light</item>
         <item name="colorSwitchThumbNormal">@color/switch_thumb_material_light</item>
         <item name="controlBackground">?selectableItemBackgroundBorderless</item>
-        <item name="editTextColor">?android:textColorPrimary</item>
+        <item name="editTextColor">@color/white</item>
         <item name="isLightTheme">false</item>
         <item name="textAppearanceSearchResultSubtitle">
             @style/TextAppearance.AppCompat.SearchResult.Subtitle
@@ -2895,7 +2903,7 @@
         <item name="textAppearanceSearchResultTitle">
             @style/TextAppearance.AppCompat.SearchResult.Title
         </item>
-        <item name="textColorSearchUrl">@color/abc_search_url_text</item>
+        <item name="textColorSearchUrl">@color/white</item>
         <item name="toolbarStyle">@style/Widget.AppCompat.Toolbar</item>
         <item name="tooltipForegroundColor">@color/foreground_material_dark</item>
         <item name="tooltipFrameBackground">@drawable/tooltip_frame_dark</item>
