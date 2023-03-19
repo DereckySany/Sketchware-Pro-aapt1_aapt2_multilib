@@ -1,36 +1,26 @@
 package dev.aldi.sayuti.editor.manage;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.ProgressDialog;
-import android.app.SearchManager;
 import android.app.AlertDialog;
-import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
-
 import android.os.Build;
 import android.os.Bundle;
-import android.os.AsyncTask;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.SpinnerAdapter;
-import android.widget.TextView;
 import android.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -52,6 +42,7 @@ import java.util.Set;
 
 import a.a.a.aB;
 import a.a.a.xB;
+import dev.derecky.sany.manager.RepoManagerActivity;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.hey.studios.project.library.LibraryDownloader;
@@ -61,7 +52,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
     private static final String RESET_LOCAL_LIBRARIES_TAG = "reset_local_libraries";
     private CharSequence originalTitle = "Manage Local Library";
-    private ImageView iconSearch;
     private LibraryAdapter adapter;
     private ArrayList<String> arrayList = new ArrayList<>();
     private boolean notAssociatedWithProject = false;
@@ -112,17 +102,21 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_search) {
-             if (item.expandActionView()){
-                 setTitle("");
-             } else {
-                 setTitle(originalTitle);
-             }
+            if (item.expandActionView()) {
+                setTitle("");
+            } else {
+                setTitle(originalTitle);
+            }
         }
         if (id == R.id.action_reset) {
             showDialogResetLibrary();
         }
         if (id == R.id.action_import) {
             showDialogImportLibrary();
+        }
+        if (id == R.id.menu_repo_manager) {
+            Intent repoManagerIntent = new Intent(this, RepoManagerActivity.class);
+            startActivity(repoManagerIntent);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -371,7 +365,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                             tilName.setHint("Name Library");
                             tilImport.setHint("Import library name");
                             tilManifast.setHint("Manifast");
-                            
+
                             etName.setEnabled(true);
                             etName.setTextIsSelectable(true);
                             etName.setKeyListener(null);

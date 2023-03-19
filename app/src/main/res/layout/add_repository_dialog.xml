@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:id="@+id/dialoginfolayoutLinearLayout0"
+        android:paddingLeft="20.0dip"
+        android:paddingTop="15.0dip"
+        android:paddingBottom="5.0dip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="30.0dip"
+            android:layout_height="30.0dip"
+            android:layout_marginRight="10.0dip"
+            android:src="@drawable/color_about_96"
+            android:scaleType="fitCenter" />
+        <TextView
+            android:textSize="18.0sp"
+            android:textStyle="bold"
+            android:textColor="?colorPrimaryDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Add Repository"
+            android:text="" />
+    </LinearLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:orientation="vertical"
+        android:paddingLeft="20.0dip"
+        android:paddingRight="20.0dip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/name_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autofillHints=""
+            android:hint="Name"
+            android:inputType="textShortMessage"
+            android:text=""
+            android:textColor="@color/black"
+            android:textColorHint="?colorPrimaryDark"
+            android:textIsSelectable="true"
+            android:textSize="18.0sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:orientation="vertical"
+        android:paddingLeft="20.0dip"
+        android:paddingRight="20.0dip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/url_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autofillHints=""
+            android:hint="URL"
+            android:inputType="textWebEditText"
+            android:text=""
+            android:textColor="@color/black"
+            android:textColorHint="?colorPrimaryDark"
+            android:textIsSelectable="true"
+            android:textSize="18.0sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:gravity="right|center_vertical"
+        android:orientation="horizontal"
+        android:background="?colorPrimaryDark"
+        android:padding="8.0dip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/cancel_repo_button"
+            android:layout_width="@dimen/project_button_height"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/cancel_button_label"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/add_repo_button"
+            android:layout_width="@dimen/project_button_height"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/common_word_add"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</LinearLayout>
