@@ -35,6 +35,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import mod.hey.studios.util.Helper;
 
@@ -45,13 +47,14 @@ public class RepoManagerActivity extends AppCompatActivity {
     private RepositoryListAdapter adapter;
     private ListView listview;
     private EditText searchEditText;
+    private TextView index_size;
     private FloatingActionButton addFab;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.repository_list_dialog);
-
+        index_size = findViewById(R.id.repo_index);
         listview = findViewById(R.id.list_view);
         searchEditText = findViewById(R.id.search_edit_text);
         addFab = findViewById(R.id.add_fab);
@@ -81,32 +84,32 @@ public class RepoManagerActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String lowerCase = s.toString().toLowerCase();
-                applyFilter(lowerCase);
-
+                applyFilter(s);
             }
         });
     }
-    private void applyFilter(String query) {
-        if (query.isEmpty()) {
+    private void applyFilter(Editable query) {
+        if (query.length() <= 0) {
             adapter.updateData(repositoryList);
             listview.setAdapter(adapter);
             return;
         }
-        final ArrayList<HashMap<String, Object>> repositoryFilter = new ArrayList<>();
-        for (HashMap<String, Object> search : repositoryList) {
-            if (search.containsKey(query)) {
-                repositoryFilter.add(search);
-                adapter.notifyDataSetChanged();
-            } else if (search.containsValue(query)) {
-                repositoryFilter.add(search);
-                adapter.notifyDataSetChanged();
-            }
-        }
-        adapter.updateData(repositoryFilter);
+//        final ArrayList<HashMap<String, Object>> repositoryFilter = new ArrayList<>();
+//        for (HashMap<String, Object> search : repositoryList) {
+//            if (search.containsKey(query)) {
+//                repositoryFilter.add(search);
+//                adapter.notifyDataSetChanged();
+//            } else if (search.containsValue(query)) {
+//                repositoryFilter.add(search);
+//                adapter.notifyDataSetChanged();
+//            }
+//        }
+        List<HashMap<String, Object>> repositoryFilter;
+        repositoryFilter = repositoryList.stream()
+                .filter(hashmap ->((hashmap.get(query.toString().toLowerCase())) == null ))
+                .collect(Collectors.toList());
+        adapter.updateData((ArrayList<HashMap<String, Object>>) repositoryFilter);
     }
-
-//    public void showRepositoryListDialog(Context context) {}
 
     public void showAddRepositoryDialog() {
         Dialog addRepositoryDialog = new Dialog(this, R.style.AlertDialog_AppCompat_Light);
@@ -149,6 +152,9 @@ public class RepoManagerActivity extends AppCompatActivity {
 
         addRepositoryDialog.show();
     }
+    private void getRepositoriesIndex(){
+        index_size.setText("index: " + repositoryList.size());
+    };
 
     private void saveRepositories() {
         try {
@@ -159,6 +165,7 @@ public class RepoManagerActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        getRepositoriesIndex();
     }
 
     private void loadRepositories() {
@@ -173,6 +180,7 @@ public class RepoManagerActivity extends AppCompatActivity {
         if (repositoryList == null) {
             repositoryList = new ArrayList<>();
         }
+        getRepositoriesIndex();
     }
 
     public class RepositoryListAdapter extends BaseAdapter {
