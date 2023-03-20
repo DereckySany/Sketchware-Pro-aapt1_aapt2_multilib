@@ -84,37 +84,33 @@ public class RepoManagerActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                applyFilter(s);
+                applyFilter(s.toString());
             }
         });
     }
-    private void applyFilter(Editable query) {
-        if (query.length() <= 0) {
+    private void applyFilter(String query) {
+        if (query.isEmpty()) {
             adapter.updateData(repositoryList);
             listview.setAdapter(adapter);
             return;
         }
-//        final ArrayList<HashMap<String, Object>> repositoryFilter = new ArrayList<>();
-//        for (HashMap<String, Object> search : repositoryList) {
-//            if (search.containsKey(query)) {
-//                repositoryFilter.add(search);
-//                adapter.notifyDataSetChanged();
-//            } else if (search.containsValue(query)) {
-//                repositoryFilter.add(search);
-//                adapter.notifyDataSetChanged();
-//            }
-//        }
-        List<HashMap<String, Object>> repositoryFilter;
-        repositoryFilter = repositoryList.stream()
-                .filter(hashmap ->((hashmap.get(query.toString().toLowerCase())) == null ))
-                .collect(Collectors.toList());
-        adapter.updateData((ArrayList<HashMap<String, Object>>) repositoryFilter);
+        final ArrayList<HashMap<String, Object>> repositoryFilter = new ArrayList<>();
+        for (HashMap<String, Object> search : repositoryList) {
+            if (search.values().toString().toLowerCase().contains(query.toLowerCase())) {
+                repositoryFilter.add(search);
+                adapter.notifyDataSetChanged();
+            } else if (search.toString().toLowerCase().contains(query.toLowerCase())) {
+                repositoryFilter.add(search);
+                adapter.notifyDataSetChanged();
+            }
+        }
+        adapter.updateData(repositoryFilter);
     }
 
     public void showAddRepositoryDialog() {
-        Dialog addRepositoryDialog = new Dialog(this, R.style.AlertDialog_AppCompat_Light);
+        AlertDialog addRepositoryDialog = new AlertDialog.Builder(this, R.style.AlertDialog_AppCompat_Light).create();
         addRepositoryDialog.setContentView(R.layout.add_repository_dialog);
-
+//        final View addRepository = getLayoutInflater().inflate(R.layout.add_repository_dialog, null);
         EditText nameEditText = addRepositoryDialog.findViewById(R.id.repo_name_edit_text);
         EditText urlEditText = addRepositoryDialog.findViewById(R.id.repo_url_edit_text);
         Button addButton = addRepositoryDialog.findViewById(R.id.add_repo_button);
