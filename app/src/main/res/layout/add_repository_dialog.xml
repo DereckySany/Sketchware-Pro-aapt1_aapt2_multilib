@@ -18,6 +18,7 @@
             android:src="@drawable/color_about_96"
             android:scaleType="fitCenter" />
         <TextView
+            android:id="@+id/dialog_repo_title"
             android:textSize="18.0sp"
             android:textStyle="bold"
             android:textColor="?colorPrimaryDark"

@@ -1,7 +1,6 @@
 package dev.derecky.sany.manager;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,7 +18,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -35,8 +33,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import mod.hey.studios.util.Helper;
 
@@ -88,33 +84,38 @@ public class RepoManagerActivity extends AppCompatActivity {
             }
         });
     }
+
     private void applyFilter(String query) {
         if (query.isEmpty()) {
             adapter.updateData(repositoryList);
-            listview.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+//            listview.setAdapter(adapter);
             return;
         }
         final ArrayList<HashMap<String, Object>> repositoryFilter = new ArrayList<>();
         for (HashMap<String, Object> search : repositoryList) {
             if (search.values().toString().toLowerCase().contains(query.toLowerCase())) {
                 repositoryFilter.add(search);
-                adapter.notifyDataSetChanged();
             } else if (search.toString().toLowerCase().contains(query.toLowerCase())) {
                 repositoryFilter.add(search);
-                adapter.notifyDataSetChanged();
             }
         }
         adapter.updateData(repositoryFilter);
+        adapter.notifyDataSetChanged();
     }
 
     public void showAddRepositoryDialog() {
-        AlertDialog addRepositoryDialog = new AlertDialog.Builder(this, R.style.AlertDialog_AppCompat_Light).create();
-        addRepositoryDialog.setContentView(R.layout.add_repository_dialog);
-//        final View addRepository = getLayoutInflater().inflate(R.layout.add_repository_dialog, null);
-        EditText nameEditText = addRepositoryDialog.findViewById(R.id.repo_name_edit_text);
-        EditText urlEditText = addRepositoryDialog.findViewById(R.id.repo_url_edit_text);
-        Button addButton = addRepositoryDialog.findViewById(R.id.add_repo_button);
-        Button cancelButton = addRepositoryDialog.findViewById(R.id.cancel_repo_button);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialog_AppCompat_Light);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.add_repository_dialog, null);
+        builder.setView(dialogView);
+
+        EditText nameEditText = dialogView.findViewById(R.id.repo_name_edit_text);
+        EditText urlEditText = dialogView.findViewById(R.id.repo_url_edit_text);
+        Button addButton = dialogView.findViewById(R.id.add_repo_button);
+        Button cancelButton = dialogView.findViewById(R.id.cancel_repo_button);
+
+        AlertDialog addRepositoryDialog = builder.create();
 
         addButton.setOnClickListener(v -> {
             String name = nameEditText.getText().toString().trim();
@@ -148,9 +149,12 @@ public class RepoManagerActivity extends AppCompatActivity {
 
         addRepositoryDialog.show();
     }
-    private void getRepositoriesIndex(){
+
+    private void getRepositoriesIndex() {
         index_size.setText("index: " + repositoryList.size());
-    };
+    }
+
+    ;
 
     private void saveRepositories() {
         try {
@@ -230,7 +234,7 @@ public class RepoManagerActivity extends AppCompatActivity {
             nameTextView.setText(name);
             urlTextView.setText(url);
             expand_button.setOnClickListener(v -> {
-                if (expand_options.getVisibility() == View.GONE){
+                if (expand_options.getVisibility() == View.GONE) {
                     expand_button.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_less_24));
                     expand_options.setVisibility(View.VISIBLE);
                     expand_options_delete.setOnClickListener(view -> {
@@ -267,7 +271,62 @@ public class RepoManagerActivity extends AppCompatActivity {
                         deleteDialog.show();
 
                     });
-                    expand_options_edit.setOnClickListener(view -> Toast.makeText(RepoManagerActivity.this, "The Insert Item has not Working yet!", Toast.LENGTH_SHORT).show());
+                    expand_options_edit.setOnClickListener(view -> {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(RepoManagerActivity.this, R.style.AlertDialog_AppCompat_Light);
+                        LayoutInflater inflater = getLayoutInflater();
+                        View dialogView = inflater.inflate(R.layout.add_repository_dialog, null);
+                        builder.setView(dialogView);
+
+                        TextView nameTitle = dialogView.findViewById(R.id.dialog_repo_title);
+                        EditText nameEditText = dialogView.findViewById(R.id.repo_name_edit_text);
+                        EditText urlEditText = dialogView.findViewById(R.id.repo_url_edit_text);
+                        Button addButton = dialogView.findViewById(R.id.add_repo_button);
+                        Button cancelButton = dialogView.findViewById(R.id.cancel_repo_button);
+
+                        // Get the repository data at the specified position
+                        HashMap<String, Object> repositoryData = repositoryList.get(position);
+                        String currentName = (String) repositoryData.get("name");
+                        String currentUrl = (String) repositoryData.get("url");
+
+                        // Set the current name and URL values in the EditText fields
+                        nameTitle.setText("Rename Repository");
+                        nameEditText.setText(currentName);
+                        urlEditText.setText(currentUrl);
+
+                        AlertDialog repositoryDialogEdit = builder.create();
+
+                        addButton.setOnClickListener(view1 -> {
+                            String editName = nameEditText.getText().toString().trim();
+                            String editUrl = urlEditText.getText().toString().trim();
+
+                            if (editName.isEmpty()) {
+                                nameEditText.setError("Name cannot be empty");
+                                return;
+                            }
+
+                            if (editUrl.isEmpty()) {
+                                urlEditText.setError("URL cannot be empty");
+                                return;
+                            }
+
+                            if (!Patterns.WEB_URL.matcher(editUrl).matches()) {
+                                urlEditText.setError("Invalid URL format");
+                                return;
+                            }
+
+                            // Update the name and URL values in the repository data
+                            repositoryData.put("name", editName);
+                            repositoryData.put("url", editUrl);
+
+                            saveRepositories();
+                            adapter.notifyDataSetChanged();
+                            repositoryDialogEdit.dismiss();
+                        });
+
+                        cancelButton.setOnClickListener(view1 -> repositoryDialogEdit.dismiss());
+
+                        repositoryDialogEdit.show();
+                    });
                 } else {
                     expand_button.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_more_24));
                     expand_options.setVisibility(View.GONE);
