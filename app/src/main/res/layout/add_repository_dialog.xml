@@ -6,7 +6,6 @@
     <LinearLayout
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:id="@+id/dialoginfolayoutLinearLayout0"
         android:paddingLeft="20.0dip"
         android:paddingTop="15.0dip"
         android:paddingBottom="5.0dip"
@@ -24,8 +23,7 @@
             android:textColor="?colorPrimaryDark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Add Repository"
-            android:text="" />
+            android:text="Add Repository" />
     </LinearLayout>
     <com.google.android.material.textfield.TextInputLayout
         android:orientation="vertical"
@@ -35,16 +33,13 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/name_edit_text"
+            android:id="@+id/repo_name_edit_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:autofillHints=""
-            android:hint="Name"
+            android:hint="Repository Name"
             android:inputType="textShortMessage"
-            android:text=""
             android:textColor="@color/black"
             android:textColorHint="?colorPrimaryDark"
-            android:textIsSelectable="true"
             android:textSize="18.0sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -56,16 +51,13 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/url_edit_text"
+            android:id="@+id/repo_url_edit_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:autofillHints=""
             android:hint="URL"
-            android:inputType="textWebEditText"
-            android:text=""
+            android:inputType="text"
             android:textColor="@color/black"
             android:textColorHint="?colorPrimaryDark"
-            android:textIsSelectable="true"
             android:textSize="18.0sp" />
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -125,7 +125,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem resetItem = menu.findItem(R.id.action_reset);
         resetItem.setVisible(!notAssociatedWithProject);
-        repoManagerActivity = new RepoManagerActivity();
+//        repoManagerActivity = new RepoManagerActivity();
         return true;
     }
 

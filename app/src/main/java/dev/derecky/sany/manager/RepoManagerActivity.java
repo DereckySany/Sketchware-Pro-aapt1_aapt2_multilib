@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import dev.aldi.sayuti.editor.manage.ManageLocalLibraryActivity;
 import mod.hey.studios.util.Helper;
 
 public class RepoManagerActivity extends AppCompatActivity {
@@ -51,17 +51,14 @@ public class RepoManagerActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.repository_list_dialog);
- 
+
         listview = findViewById(R.id.list_view);
         searchEditText = findViewById(R.id.search_edit_text);
         addFab = findViewById(R.id.add_fab);
 
-        
-        // checkFile();
         loadRepositories();
         setUpSearchView();
-        // initToolbar();
-        adapter = new RepositoryListAdapter(getApplicationContext(), repositoryList);
+        adapter = new RepositoryListAdapter(this, repositoryList);
         listview.setAdapter(adapter);
 
         addFab.setOnClickListener(v -> showAddRepositoryDialog());
@@ -85,48 +82,67 @@ public class RepoManagerActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 String lowerCase = s.toString().toLowerCase();
-                ArrayList<HashMap<String, Object>> repositoryFilter = new ArrayList<>();
-                for (HashMap<String, Object> next : repositoryList) {
-                    if (next.containsKey(lowerCase) || next.containsValue(lowerCase)) {
-                        repositoryFilter.add(next);
-                    }
-                }
-                adapter.updateData(repositoryFilter);
+                applyFilter(lowerCase);
+
             }
         });
     }
-
-    public void showRepositoryListDialog(Context context) {
-        Dialog repositoryListDialog = new Dialog(context);
-        repositoryListDialog.setContentView(R.layout.repository_list_dialog);
-
-        repositoryListDialog.show();
+    private void applyFilter(String query) {
+        if (query.isEmpty()) {
+            adapter.updateData(repositoryList);
+            listview.setAdapter(adapter);
+            return;
+        }
+        final ArrayList<HashMap<String, Object>> repositoryFilter = new ArrayList<>();
+        for (HashMap<String, Object> search : repositoryList) {
+            if (search.containsKey(query)) {
+                repositoryFilter.add(search);
+                adapter.notifyDataSetChanged();
+            } else if (search.containsValue(query)) {
+                repositoryFilter.add(search);
+                adapter.notifyDataSetChanged();
+            }
+        }
+        adapter.updateData(repositoryFilter);
     }
 
-    private void showAddRepositoryDialog() {
-        Dialog addRepositoryDialog = new Dialog(getApplicationContext());
+//    public void showRepositoryListDialog(Context context) {}
+
+    public void showAddRepositoryDialog() {
+        Dialog addRepositoryDialog = new Dialog(this, R.style.AlertDialog_AppCompat_Light);
         addRepositoryDialog.setContentView(R.layout.add_repository_dialog);
 
-        EditText nameEditText = addRepositoryDialog.findViewById(R.id.name_edit_text);
-        EditText urlEditText = addRepositoryDialog.findViewById(R.id.url_edit_text);
-        Button addButton = addRepositoryDialog.findViewById(R.id.add_button);
-        Button cancelButton = addRepositoryDialog.findViewById(R.id.cancel_button);
+        EditText nameEditText = addRepositoryDialog.findViewById(R.id.repo_name_edit_text);
+        EditText urlEditText = addRepositoryDialog.findViewById(R.id.repo_url_edit_text);
+        Button addButton = addRepositoryDialog.findViewById(R.id.add_repo_button);
+        Button cancelButton = addRepositoryDialog.findViewById(R.id.cancel_repo_button);
 
         addButton.setOnClickListener(v -> {
             String name = nameEditText.getText().toString().trim();
             String url = urlEditText.getText().toString().trim();
 
-            if (!name.isEmpty() && !url.isEmpty()) {
-                HashMap<String, Object> repositoryAdd = new HashMap<>();
-                repositoryAdd.put("name", name);
-                repositoryAdd.put("url", url);
-                repositoryList.add(repositoryAdd);
-                saveRepositories();
-                adapter.notifyDataSetChanged();
-                addRepositoryDialog.dismiss();
-            } else {
-                Toast.makeText(getApplicationContext(), "Name and URL cannot be empty", Toast.LENGTH_SHORT).show();
+            if (name.isEmpty()) {
+                nameEditText.setError("Name cannot be empty");
+                return;
             }
+
+            if (url.isEmpty()) {
+                urlEditText.setError("URL cannot be empty");
+                return;
+            }
+
+            if (!Patterns.WEB_URL.matcher(url).matches()) {
+                urlEditText.setError("Invalid URL format");
+                return;
+            }
+
+            HashMap<String, Object> repositoryAdd = new HashMap<>();
+            repositoryAdd.put("name", name);
+            repositoryAdd.put("url", url);
+            repositoryList.add(repositoryAdd);
+            saveRepositories();
+            adapter.notifyDataSetChanged();
+            addRepositoryDialog.dismiss();
         });
 
         cancelButton.setOnClickListener(v -> addRepositoryDialog.dismiss());
@@ -156,6 +172,7 @@ public class RepoManagerActivity extends AppCompatActivity {
         }
         if (repositoryList == null) {
             repositoryList = new ArrayList<>();
+        } else {
         }
     }
 
