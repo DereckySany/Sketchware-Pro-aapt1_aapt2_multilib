@@ -172,7 +172,6 @@ public class RepoManagerActivity extends AppCompatActivity {
         }
         if (repositoryList == null) {
             repositoryList = new ArrayList<>();
-        } else {
         }
     }
 
