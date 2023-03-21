@@ -249,13 +249,9 @@ public class RepoManagerActivity extends AppCompatActivity {
                         fileNameToDelete.setEnabled(false);
                         deleteRoot.findViewById(R.id.text_del_delete)
                                 .setOnClickListener(view1 -> {
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                        repository.remove(name,url);
-                                    } else {
-                                        HashMap<String, Object> repositoryRemove = new HashMap<>();
-                                        repositoryRemove.put(name,url);
-                                        REPOSITORY_LIST.remove(repositoryRemove);
-                                    }
+                                    HashMap<String, Object> repositoryRemove = new HashMap<>();
+                                    repositoryRemove.put(name,url);
+                                    REPOSITORY_LIST.remove(repositoryRemove);
                                     saveRepositories();
                                     adapter.notifyDataSetChanged();
                                     deleteDialog.dismiss();
