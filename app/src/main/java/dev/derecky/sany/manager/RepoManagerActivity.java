@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.besome.sketch.SketchApplication;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -41,7 +39,7 @@ import mod.hey.studios.util.Helper;
 public class RepoManagerActivity extends AppCompatActivity {
     public static final File CONFIGURED_REPOSITORIES_FILE = new File(Environment.getExternalStorageDirectory(),
             ".sketchware" + File.separator + "libs" + File.separator + "repositories.json");
-    private ArrayList<HashMap<String, Object>> repositoryList = new ArrayList<>();
+    private ArrayList<HashMap<String, Object>> REPOSITORY_LIST = new ArrayList<>();
     private RepositoryListAdapter adapter;
     private ListView listview;
     private EditText searchEditText;
@@ -59,7 +57,7 @@ public class RepoManagerActivity extends AppCompatActivity {
 
         loadRepositories();
         setUpSearchView();
-        adapter = new RepositoryListAdapter(this, repositoryList);
+        adapter = new RepositoryListAdapter(this, REPOSITORY_LIST);
         listview.setAdapter(adapter);
 
         addFab.setOnClickListener(v -> showAddRepositoryDialog());
@@ -89,13 +87,13 @@ public class RepoManagerActivity extends AppCompatActivity {
 
     private void applyFilter(String query) {
         if (query.isEmpty()) {
-            adapter.updateData(repositoryList);
+            adapter.updateData(REPOSITORY_LIST);
             adapter.notifyDataSetChanged();
 //            listview.setAdapter(adapter);
             return;
         }
         final ArrayList<HashMap<String, Object>> repositoryFilter = new ArrayList<>();
-        for (HashMap<String, Object> search : repositoryList) {
+        for (HashMap<String, Object> search : REPOSITORY_LIST) {
             if (search.values().toString().toLowerCase().contains(query.toLowerCase())) {
                 repositoryFilter.add(search);
             } else if (search.toString().toLowerCase().contains(query.toLowerCase())) {
@@ -135,7 +133,7 @@ public class RepoManagerActivity extends AppCompatActivity {
             HashMap<String, Object> repositoryAdd = new HashMap<>();
             repositoryAdd.put("name", name);
             repositoryAdd.put("url", url);
-            repositoryList.add(repositoryAdd);
+            REPOSITORY_LIST.add(repositoryAdd);
             saveRepositories();
             adapter.notifyDataSetChanged();
             addRepositoryDialog.dismiss();
@@ -148,14 +146,14 @@ public class RepoManagerActivity extends AppCompatActivity {
     }
 
     private void getRepositoriesIndex() {
-        index_size.setText("index: " + repositoryList.size());
+        index_size.setText("index: " + REPOSITORY_LIST.size());
     }
 
     private void saveRepositories() {
         try {
             FileWriter fileWriter = new FileWriter(CONFIGURED_REPOSITORIES_FILE);
             Gson gson = new Gson();
-            gson.toJson(repositoryList, fileWriter);
+            gson.toJson(REPOSITORY_LIST, fileWriter);
             fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -166,14 +164,14 @@ public class RepoManagerActivity extends AppCompatActivity {
     private void loadRepositories() {
         try {
             FileReader repositories = new FileReader(CONFIGURED_REPOSITORIES_FILE);
-            repositoryList = new Gson().fromJson(repositories, new TypeToken<ArrayList<HashMap<String, Object>>>() {
+            REPOSITORY_LIST = new Gson().fromJson(repositories, new TypeToken<ArrayList<HashMap<String, Object>>>() {
             }.getType());
             repositories.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (repositoryList == null) {
-            repositoryList = new ArrayList<>();
+        if (REPOSITORY_LIST == null) {
+            REPOSITORY_LIST = new ArrayList<>();
         }
         getRepositoriesIndex();
     }
@@ -252,8 +250,7 @@ public class RepoManagerActivity extends AppCompatActivity {
                                 .setOnClickListener(view1 -> {
                                     repositoryList.remove(position);
                                     saveRepositories();
-                                    applyFilter(searchEditText.getText().toString());
-//                                    adapter.notifyDataSetChanged();
+                                    adapter.notifyDataSetChanged();
                                     deleteDialog.dismiss();
                                     SketchwareUtil.showMessage(getApplicationContext(),"Removed if Sucessful!");
                                 });

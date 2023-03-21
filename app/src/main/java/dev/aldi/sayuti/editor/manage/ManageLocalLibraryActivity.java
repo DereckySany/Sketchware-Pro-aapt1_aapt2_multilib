@@ -50,7 +50,6 @@ import mod.hey.studios.util.Helper;
 
 public class ManageLocalLibraryActivity extends AppCompatActivity implements LibraryDownloader.OnCompleteListener {
 
-    private static final String RESET_LOCAL_LIBRARIES_TAG = "reset_local_libraries";
     private final CharSequence originalTitle = "Manage Local Library";
     private LibraryAdapter adapter;
     private final ArrayList<String> arrayList = new ArrayList<>();
@@ -59,7 +58,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     private static String IN_USE_LIBRARY_FILE_PATH = "";
     private static String LOCAL_LIBRARYS_PATH = "";
     private ArrayList<HashMap<String, Object>> project_used_libs = new ArrayList<>();
-    private RepoManagerActivity repoManagerActivity;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +112,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             showDialogImportLibrary();
         }
         if (id == R.id.menu_repo_manager) {
-            // repoManagerActivity.showRepositoryListDialog(getApplicationContext());
            Intent repoManagerIntent = new Intent(this, RepoManagerActivity.class);
            startActivity(repoManagerIntent);
         }
@@ -123,7 +121,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem resetItem = menu.findItem(R.id.action_reset);
         resetItem.setVisible(!notAssociatedWithProject);
-//        repoManagerActivity = new RepoManagerActivity();
         return true;
     }
 
@@ -237,7 +234,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         Collections.sort(directories, String.CASE_INSENSITIVE_ORDER);
 
         adapter = new LibraryAdapter(directories);
-        //arrayList.addAll(directories);
+        arrayList.addAll(directories);
         //adapter.updateData(arrayList);
         listview.setAdapter(adapter);
     }
