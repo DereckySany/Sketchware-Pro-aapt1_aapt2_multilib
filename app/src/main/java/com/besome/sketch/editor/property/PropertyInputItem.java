@@ -287,23 +287,25 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         dialog.a(view);
         dialog.b(Helper.getResString(R.string.common_word_save), v -> {
             String content = input.getText().toString();
-            String tempFile = wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/" + "edit.txt";
-            if (lengthValidator.b()) {
-                try {
-                    if (!tempFile.isEmpty()) {
-                        setValue(tempFile);
-                        if (valueChangeListener != null) valueChangeListener.a(key, value);
-                    } else {
-                        setValue(content);
-                        if (valueChangeListener != null) valueChangeListener.a(key, value);
-                    }
-                    dialog.dismiss();
-                } catch (Exception e) {
-                    String errorMessage = "Erro ao salvar valor: " + e.getMessage();
-                    showTranslationErrorDialog(errorMessage);
+            String tempFile = wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/edit.txt";
+            try {
+                if (lengthValidator.b() && !FileUtil.readFile(tempFile).isEmpty()) {
+                    setValue(FileUtil.readFile(tempFile));
+                } else {
+                    setValue(content);
                 }
-                FileUtil.writeFile(tempFile, "");
+            } catch (Exception e) {
+            String errorMessage = "Erro ao salvar valor: " + e.getMessage();
+            showTranslationErrorDialog(errorMessage);
             }
+
+            if (valueChangeListener != null) {
+                valueChangeListener.a(key, value);
+            }
+
+            FileUtil.writeFile(tempFile, "");
+            dialog.dismiss();
+
         });
         dialog.a(v -> {
             showTranslationDialog(input).create().show();
@@ -317,7 +319,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
     }
 
     private String getCodeEditorValue(String input) {
-        String tempFile = wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/" + "edit.txt";
+        String tempFile = wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/edit.txt";
         FileUtil.writeFile(tempFile, input);
         Intent intent = new Intent();
         if (ConfigActivity.isLegacyCeEnabled()) {
@@ -329,7 +331,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         intent.putExtra("title", tvName.getText().toString() + ".java");
         intent.putExtra("content", tempFile);
         this.getContext().startActivity(intent);
-        return FileUtil.readFile(wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/" + "edit.txt");
+        return FileUtil.readFile(wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/edit.txt");
     }
 
     private AlertDialog.Builder showTranslationDialog(EditText input) {
