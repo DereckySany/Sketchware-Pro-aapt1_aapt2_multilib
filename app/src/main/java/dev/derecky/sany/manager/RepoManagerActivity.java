@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.besome.sketch.SketchApplication;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -34,6 +35,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import mod.SketchwareUtil;
 import mod.hey.studios.util.Helper;
 
 public class RepoManagerActivity extends AppCompatActivity {
@@ -137,6 +139,7 @@ public class RepoManagerActivity extends AppCompatActivity {
             saveRepositories();
             adapter.notifyDataSetChanged();
             addRepositoryDialog.dismiss();
+            SketchwareUtil.showMessage(getApplicationContext(),"Added if Sucessful!");
         });
         addRoot.findViewById(R.id.cancel_repo_button).setOnClickListener(Helper.getDialogDismissListener(addRepositoryDialog));
         addRepositoryDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -251,6 +254,7 @@ public class RepoManagerActivity extends AppCompatActivity {
                                     saveRepositories();
                                     adapter.notifyDataSetChanged();
                                     deleteDialog.dismiss();
+                                    SketchwareUtil.showMessage(getApplicationContext(),"Removed if Sucessful!");
                                 });
                         deleteRoot.findViewById(R.id.text_del_cancel).setOnClickListener(Helper.getDialogDismissListener(deleteDialog));
                         deleteDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -301,6 +305,7 @@ public class RepoManagerActivity extends AppCompatActivity {
                             saveRepositories();
                             adapter.notifyDataSetChanged();
                             repositoryDialogEdit.dismiss();
+                            SketchwareUtil.showMessage(getApplicationContext(),"Rename if Sucessful!");
                         });
                         editRoot.findViewById(R.id.cancel_repo_button).setOnClickListener(Helper.getDialogDismissListener(repositoryDialogEdit));
                         repositoryDialogEdit.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);

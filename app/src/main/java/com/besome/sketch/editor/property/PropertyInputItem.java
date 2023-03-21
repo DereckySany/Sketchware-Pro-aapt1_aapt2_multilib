@@ -287,30 +287,38 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         dialog.a(view);
         dialog.b(Helper.getResString(R.string.common_word_save), v -> {
             String content = input.getText().toString();
+            String tempFile = wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/" + "edit.txt";
             if (lengthValidator.b()) {
                 try {
-                setValue(content);
-                    if (valueChangeListener != null) valueChangeListener.a(key, value);
+                    if (!tempFile.isEmpty()) {
+                        setValue(tempFile);
+                        if (valueChangeListener != null) valueChangeListener.a(key, value);
+                    } else {
+                        setValue(content);
+                        if (valueChangeListener != null) valueChangeListener.a(key, value);
+                    }
                     dialog.dismiss();
                 } catch (Exception e) {
                     String errorMessage = "Erro ao salvar valor: " + e.getMessage();
                     showTranslationErrorDialog(errorMessage);
                 }
+                FileUtil.writeFile(tempFile, "");
             }
         });
         dialog.a(v -> {
             showTranslationDialog(input).create().show();
         });
         dialog.configureDefaultButton("Code Editor", v -> {
-            getCodeEditorValue(input,dialog);
+			String updatedValue = getCodeEditorValue(input.getText().toString());
+			input.setText(updatedValue);
         });
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.show();
     }
 
-    private void getCodeEditorValue(EditText input, Dialog dialog) {
+    private String getCodeEditorValue(String input) {
         String tempFile = wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/" + "edit.txt";
-        FileUtil.writeFile(tempFile, input.getText().toString());
+        FileUtil.writeFile(tempFile, input);
         Intent intent = new Intent();
         if (ConfigActivity.isLegacyCeEnabled()) {
             intent.setClass((Activity) this.getContext(), SrcCodeEditorLegacy.class);
@@ -321,10 +329,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         intent.putExtra("title", tvName.getText().toString() + ".java");
         intent.putExtra("content", tempFile);
         this.getContext().startActivity(intent);
-        String code = FileUtil.readFile(tempFile);
-        input.setText(code);
-        value = code;
-        dialog.dismiss();
+        return FileUtil.readFile(wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/" + "edit.txt");
     }
 
     private AlertDialog.Builder showTranslationDialog(EditText input) {

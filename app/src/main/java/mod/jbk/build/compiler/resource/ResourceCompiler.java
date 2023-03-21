@@ -272,12 +272,11 @@ public class ResourceCompiler {
                     args.addAll(Arrays.asList("-j", new File(getCompiledBuiltInLibraryResourcesDirectory(), library.a() + ".zip").getAbsolutePath()));
                 }
             }
-
-            // Include compiled local libraries' resources 
+            // Include compiled local libraries' resources
             File[] filesInCompiledResourcesPath = new File(resourcesPath).listFiles();
             if (filesInCompiledResourcesPath != null) {
                 for (File file : filesInCompiledResourcesPath) {
-                    if (file.isFile() && (!file.getName().equals("project.zip") || !file.getName().equals("project-imported.zip"))) {
+                    if (file.isFile() && !file.getName().equals("project.zip") && !file.getName().equals("project-imported.zip")) {
                         args.addAll(Arrays.asList("-S", file.getAbsolutePath()));
                     }
                 }
@@ -329,21 +328,66 @@ public class ResourceCompiler {
             }
         }
 
-        private void compileImportedResources(String outputPath) throws zy {
+//        private void compileImportedResources(String outputPath) throws zy {
+//            String resourceDir = buildHelper.fpu.getPathResource(buildHelper.yq.sc_id);
+//            String ManifestDir = buildHelper.yq.androidManifestPath;
+//            if (!FileUtil.isExistFile(resourceDir) || new File(resourceDir).length() == 0) {
+//                return;
+//            }
+//            String outputZip = outputPath + File.separator + "project-imported.zip";
+//            try {
+//                ProcessBuilder processBuilder = new ProcessBuilder(
+//                        aapt.getAbsolutePath(),
+//                        "package",
+//                        "-S",
+//                        resourceDir,
+//                        "-M",
+//                        ManifestDir,
+//                        "-F",
+//                        outputZip
+//                );
+//                processBuilder.redirectErrorStream(true);
+//                Process process = processBuilder.start();
+//                try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+//                    String line;
+//                    while ((line = reader.readLine()) != null) {
+//                        LogUtil.d(TAG + ":cIR", line);
+//                    }
+//                }
+//                int exitCode = process.waitFor();
+//                if (exitCode != 0) {
+//                    throw new zy("aapt compilation failed with exit code " + exitCode);
+//                }
+//            } catch (IOException exception) {
+//                throw new zy("I/O error occurred: " + exception.getMessage());
+//            } catch (InterruptedException exception) {
+//                throw new zy("Compilation was interrupted: " + exception.getMessage());
+//            } catch (SecurityException exception) {
+//                throw new zy("Security violation occurred: " + exception.getMessage());
+//            } catch (Exception exception) {
+//                throw new zy("Compilation failed: " + exception.getMessage());
+//            }
+//        }
+        private void compileImportedResources(String outputPath) throws Exception {
             String resourceDir = buildHelper.fpu.getPathResource(buildHelper.yq.sc_id);
             String ManifestDir = buildHelper.yq.androidManifestPath;
             if (!FileUtil.isExistFile(resourceDir) || new File(resourceDir).length() == 0) {
                 return;
             }
-            String outputZip = outputPath + File.separator + "project-imported.zip";
+            String outputZip = outputPath + File.separator + "project-resources.zip";
             try {
                 ProcessBuilder processBuilder = new ProcessBuilder(
                         aapt.getAbsolutePath(),
                         "package",
-                        "-S",
-                        resourceDir,
+                        "--auto-add-overlay",
+                        "-v",
+                        "-f",
+                        "-I",
+                        buildHelper.androidJarPath,
                         "-M",
                         ManifestDir,
+                        "-S",
+                        resourceDir,
                         "-F",
                         outputZip
                 );
@@ -357,16 +401,12 @@ public class ResourceCompiler {
                 }
                 int exitCode = process.waitFor();
                 if (exitCode != 0) {
-                    throw new zy("aapt compilation failed with exit code " + exitCode);
+                    throw new Exception("aapt compilation failed with exit code " + exitCode);
                 }
             } catch (IOException exception) {
-                throw new zy("I/O error occurred: " + exception.getMessage());
+                throw new Exception("I/O error occurred: " + exception.getMessage());
             } catch (InterruptedException exception) {
-                throw new zy("Compilation was interrupted: " + exception.getMessage());
-            } catch (SecurityException exception) {
-                throw new zy("Security violation occurred: " + exception.getMessage());
-            } catch (Exception exception) {
-                throw new zy("Compilation failed: " + exception.getMessage());
+                throw new Exception("Compilation was interrupted: " + exception.getMessage());
             }
         }
 
