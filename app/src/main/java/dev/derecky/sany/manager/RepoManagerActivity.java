@@ -252,7 +252,8 @@ public class RepoManagerActivity extends AppCompatActivity {
                                 .setOnClickListener(view1 -> {
                                     repositoryList.remove(position);
                                     saveRepositories();
-                                    adapter.notifyDataSetChanged();
+                                    applyFilter(searchEditText.getText().toString());
+//                                    adapter.notifyDataSetChanged();
                                     deleteDialog.dismiss();
                                     SketchwareUtil.showMessage(getApplicationContext(),"Removed if Sucessful!");
                                 });

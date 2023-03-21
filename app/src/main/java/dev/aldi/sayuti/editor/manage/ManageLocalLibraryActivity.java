@@ -56,8 +56,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     private final ArrayList<String> arrayList = new ArrayList<>();
     private boolean notAssociatedWithProject = false;
     private ListView listview;
-    private String configurationFilePath = "";
-    private String local_libs_path = "";
+    private static String IN_USE_LIBRARY_FILE_PATH = "";
+    private static String LOCAL_LIBRARYS_PATH = "";
     private ArrayList<HashMap<String, Object>> project_used_libs = new ArrayList<>();
     private RepoManagerActivity repoManagerActivity;
     @Override
@@ -71,10 +71,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         if (getIntent().hasExtra("sc_id")) {
             String sc_id = getIntent().getStringExtra("sc_id");
             notAssociatedWithProject = sc_id.equals("system");
-            configurationFilePath = FileUtil.getExternalStorageDir().concat("/.sketchware/data/")
-                    .concat(sc_id.concat("/local_library"));
-            local_libs_path = FileUtil.getExternalStorageDir().concat("/.sketchware/libs/local_libs/");
-            // Carregar lista de arquivos
+            IN_USE_LIBRARY_FILE_PATH = FileUtil.getExternalStorageDir().concat("/.sketchware/data/").concat(sc_id.concat("/local_library"));
+            LOCAL_LIBRARYS_PATH = FileUtil.getExternalStorageDir().concat("/.sketchware/libs/local_libs/");
             loadLocalLibraryList();
 
         } else {
@@ -143,7 +141,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             @Override
             public boolean onQueryTextChange(String newText) {
                 applyFilter(newText);
-                return false;
+                return true;
             }
         });
     }
@@ -187,7 +185,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             dialog.a(xB.b().a(getApplicationContext(), R.string.common_word_cancel),
                     Helper.getDialogDismissListener(dialog));
             dialog.b(xB.b().a(getApplicationContext(), R.string.common_word_reset), view -> {
-                FileUtil.writeFile(configurationFilePath, "[]");
+                FileUtil.writeFile(IN_USE_LIBRARY_FILE_PATH, "[]");
                 SketchwareUtil.toast("Successfully reset local libraries");
                 loadLocalLibraryList();
                 dialog.dismiss();
@@ -210,7 +208,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                 dialog.dismiss();
                 SketchwareUtil.toast("Library removed successfully");
                 loadLocalLibraryList();
-                // loadFiles();
             }
         }.execute(lib);
     }
@@ -218,15 +215,15 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     private void loadLocalLibraryList() {
         arrayList.clear();
         if (!notAssociatedWithProject) {
-            if (!FileUtil.isExistFile(configurationFilePath) || FileUtil.readFile(configurationFilePath).equals("")) {
-                FileUtil.writeFile(configurationFilePath, "[]");
+            if (!FileUtil.isExistFile(IN_USE_LIBRARY_FILE_PATH) || FileUtil.readFile(IN_USE_LIBRARY_FILE_PATH).equals("")) {
+                FileUtil.writeFile(IN_USE_LIBRARY_FILE_PATH, "[]");
             } else {
-                project_used_libs = new Gson().fromJson(FileUtil.readFile(configurationFilePath), Helper.TYPE_MAP_LIST);
+                project_used_libs = new Gson().fromJson(FileUtil.readFile(IN_USE_LIBRARY_FILE_PATH), Helper.TYPE_MAP_LIST);
             }
         }
 
         List<String> localLibraryNames = new LinkedList<>();
-        FileUtil.listDir(local_libs_path, localLibraryNames);
+        FileUtil.listDir(LOCAL_LIBRARYS_PATH, localLibraryNames);
 
         Set<String> uniqueDirectories = new HashSet<>();
         for (String filename : localLibraryNames) {
@@ -240,15 +237,15 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         Collections.sort(directories, String.CASE_INSENSITIVE_ORDER);
 
         adapter = new LibraryAdapter(directories);
-        arrayList.addAll(directories);
-        adapter.updateData(arrayList);
+        //arrayList.addAll(directories);
+        //adapter.updateData(arrayList);
         listview.setAdapter(adapter);
     }
 
     private void applyFilter(String query) {
         if (query.isEmpty()) {
             adapter.updateData(arrayList);
-            listview.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
             return;
         }
 
@@ -259,6 +256,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             }
         }
         adapter.updateData(filteredList);
+        adapter.notifyDataSetChanged();
     }
 
 
@@ -300,7 +298,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             enabled.setText(localLibraries.get(position));
 
             String libname = enabled.getText().toString();
-            String libconfig = local_libs_path + libname + "/config";
+            String libconfig = LOCAL_LIBRARYS_PATH + libname + "/config";
 
             enabled.setOnClickListener(v -> {
                 HashMap<String, Object> localLibrary = getLocalLibraryData(libname);
@@ -310,14 +308,14 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                     project_used_libs.remove(localLibrary);
                     project_used_libs.add(localLibrary);
                 }
-                FileUtil.writeFile(configurationFilePath, new Gson().toJson(project_used_libs));
+                FileUtil.writeFile(IN_USE_LIBRARY_FILE_PATH, new Gson().toJson(project_used_libs));
             });
 
             setColorIndicator(indicator, libconfig);
 
             enabled.setChecked(false);
             if (!notAssociatedWithProject) {
-                ArrayList<HashMap<String, Object>> lookup_list = new Gson().fromJson(FileUtil.readFile(configurationFilePath), Helper.TYPE_MAP_LIST);
+                ArrayList<HashMap<String, Object>> lookup_list = new Gson().fromJson(FileUtil.readFile(IN_USE_LIBRARY_FILE_PATH), Helper.TYPE_MAP_LIST);
                 enabled.setChecked(lookup_list.contains(getLocalLibraryData(libname)));
             } else {
                 enabled.setEnabled(false);
@@ -333,9 +331,9 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                     switch (menuItem.getTitle().toString()) {
                         case "Info":
                             final String libraryName = enabled.getText().toString();
-                            final String configPath = local_libs_path.concat(libraryName + "/config");
-                            final String versionPath = local_libs_path.concat(libraryName + "/version");
-                            final String manifastPath = local_libs_path.concat(libraryName + "/AndroidManifest.xml");
+                            final String configPath = LOCAL_LIBRARYS_PATH.concat(libraryName + "/config");
+                            final String versionPath = LOCAL_LIBRARYS_PATH.concat(libraryName + "/version");
+                            final String manifastPath = LOCAL_LIBRARYS_PATH.concat(libraryName + "/AndroidManifest.xml");
 
                             final File infoName = new File(configPath);
                             final File infoImport = new File(versionPath);
@@ -413,8 +411,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                             root.findViewById(R.id.text_save)
                                     .setOnClickListener(view -> {
                                         enabled.setChecked(false);
-                                        File input = new File(local_libs_path.concat(enabled.getText().toString()));
-                                        File output = new File(local_libs_path.concat(filename.getText().toString()));
+                                        File input = new File(LOCAL_LIBRARYS_PATH.concat(enabled.getText().toString()));
+                                        File output = new File(LOCAL_LIBRARYS_PATH.concat(filename.getText().toString()));
                                         if (!input.renameTo(output)) {
                                             SketchwareUtil.toastError("Failed to rename library");
                                         }
@@ -453,7 +451,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                             deleteRoot.findViewById(R.id.text_del_delete)
                                     .setOnClickListener(view -> {
                                         enabled.setChecked(false);
-                                        final String lib = local_libs_path.concat(enabled.getText().toString());
+                                        final String lib = LOCAL_LIBRARYS_PATH.concat(enabled.getText().toString());
                                         deleteLibrary(lib);
                                         deleteDialog.dismiss();
                                     });
@@ -478,7 +476,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             HashMap<String, Object> localLibrary = new HashMap<>();
             localLibrary.put("name", libname);
 
-            File configPathFile = new File(local_libs_path, libname + "/config");
+            File configPathFile = new File(LOCAL_LIBRARYS_PATH, libname + "/config");
             if (configPathFile.exists()) {
                 String packageName = null;
                 try (BufferedReader reader = new BufferedReader(new FileReader(configPathFile))) {
@@ -489,32 +487,32 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                 localLibrary.put("packageName", packageName);
             }
 
-            File resPathFile = new File(local_libs_path, libname + "/res");
+            File resPathFile = new File(LOCAL_LIBRARYS_PATH, libname + "/res");
             if (resPathFile.exists()) {
                 localLibrary.put("resPath", resPathFile.getPath());
             }
 
-            File jarPathFile = new File(local_libs_path, libname + "/classes.jar");
+            File jarPathFile = new File(LOCAL_LIBRARYS_PATH, libname + "/classes.jar");
             if (jarPathFile.exists()) {
                 localLibrary.put("jarPath", jarPathFile.getPath());
             }
 
-            File dexPathFile = new File(local_libs_path, libname + "/classes.dex");
+            File dexPathFile = new File(LOCAL_LIBRARYS_PATH, libname + "/classes.dex");
             if (dexPathFile.exists()) {
                 localLibrary.put("dexPath", dexPathFile.getPath());
             }
 
-            File manifestPathFile = new File(local_libs_path, libname + "/AndroidManifest.xml");
+            File manifestPathFile = new File(LOCAL_LIBRARYS_PATH, libname + "/AndroidManifest.xml");
             if (manifestPathFile.exists()) {
                 localLibrary.put("manifestPath", manifestPathFile.getPath());
             }
 
-            File pgRulesPathFile = new File(local_libs_path, libname + "/proguard.txt");
+            File pgRulesPathFile = new File(LOCAL_LIBRARYS_PATH, libname + "/proguard.txt");
             if (pgRulesPathFile.exists()) {
                 localLibrary.put("pgRulesPath", pgRulesPathFile.getPath());
             }
 
-            File assetsPathFile = new File(local_libs_path, libname + "/assets");
+            File assetsPathFile = new File(LOCAL_LIBRARYS_PATH, libname + "/assets");
             if (assetsPathFile.exists()) {
                 localLibrary.put("assetsPath", assetsPathFile.getPath());
             }
