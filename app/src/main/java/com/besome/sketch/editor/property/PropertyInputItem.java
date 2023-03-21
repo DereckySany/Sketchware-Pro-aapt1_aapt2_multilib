@@ -311,25 +311,8 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
             showTranslationDialog(input).create().show();
         });
         dialog.configureDefaultButton("Code Editor", v -> {
-            String tempFile = wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/edit.txt";
-			String updatedValue = getCodeEditorValue(input.getText().toString());
-            input.setText(updatedValue);
-            try {
-                if (lengthValidator.b() && !FileUtil.readFile(tempFile).isEmpty()) {
-                    setValue(FileUtil.readFile(tempFile));
-                }
-            } catch (Exception e) {
-                String errorMessage = "Erro ao salvar valor: " + e.getMessage();
-                showTranslationErrorDialog(errorMessage);
-            }
-
-            if (valueChangeListener != null) {
-                input.setText(value);
-            }
-
-            FileUtil.writeFile(tempFile, "");
-//            dialog.dismiss();
-
+			String updatedValue = input.getText().toString();
+            input.setText(getCodeEditorValue(updatedValue));
         });
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.show();
@@ -340,9 +323,9 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         FileUtil.writeFile(tempFile, input);
         Intent intent = new Intent();
         if (ConfigActivity.isLegacyCeEnabled()) {
-            intent.setClass((Activity) this.getContext(), SrcCodeEditorLegacy.class);
+            intent.setClass(this.getContext(), SrcCodeEditorLegacy.class);
         } else {
-            intent.setClass((Activity) this.getContext(), mod.hey.studios.code.SrcCodeEditor.class);
+            intent.setClass(this.getContext(), mod.hey.studios.code.SrcCodeEditor.class);
         }
         intent.putExtra("java", "");
         intent.putExtra("title", tvName.getText().toString() + ".java");
