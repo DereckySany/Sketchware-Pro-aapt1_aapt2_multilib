@@ -2,6 +2,7 @@ package dev.derecky.sany.manager;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
@@ -248,7 +249,13 @@ public class RepoManagerActivity extends AppCompatActivity {
                         fileNameToDelete.setEnabled(false);
                         deleteRoot.findViewById(R.id.text_del_delete)
                                 .setOnClickListener(view1 -> {
-                                    repository.clear();
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                        repository.remove(name,url);
+                                    } else {
+                                        HashMap<String, Object> repositoryRemove = new HashMap<>();
+                                        repositoryRemove.put(name,url);
+                                        REPOSITORY_LIST.remove(repositoryRemove);
+                                    }
                                     saveRepositories();
                                     adapter.notifyDataSetChanged();
                                     deleteDialog.dismiss();
