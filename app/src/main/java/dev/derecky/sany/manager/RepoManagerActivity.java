@@ -153,16 +153,24 @@ public class RepoManagerActivity extends AppCompatActivity {
 
     private void saveRepositories() {
         try {
+            // Cria uma cópia da lista sem as chaves "menu_expanded"
+            List<HashMap<String, Object>> newList = new ArrayList<>();
+            for (HashMap<String, Object> repository : REPOSITORY_LIST) {
+                HashMap<String, Object> newRepository = new HashMap<>(repository);
+                newRepository.remove("menu_expanded");
+                newList.add(newRepository);
+            }
+
+            // Grava a nova lista no arquivo
             FileWriter fileWriter = new FileWriter(CONFIGURED_REPOSITORIES_FILE);
             Gson gson = new Gson();
-            gson.toJson(REPOSITORY_LIST, fileWriter);
+            gson.toJson(newList, fileWriter);
             fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         getRepositoriesIndex();
     }
-
     private void loadRepositories() {
         try {
             FileReader repositories = new FileReader(CONFIGURED_REPOSITORIES_FILE);
@@ -174,6 +182,11 @@ public class RepoManagerActivity extends AppCompatActivity {
         }
         if (REPOSITORY_LIST == null) {
             REPOSITORY_LIST = new ArrayList<>();
+        } else {
+            // Adiciona a chave "menu_expanded" com o valor View.GONE a cada elemento do REPOSITORY_LIST
+            for (HashMap<String, Object> repository : REPOSITORY_LIST) {
+                repository.put("menu_expanded", View.GONE);
+            }
         }
         getRepositoriesIndex();
     }
@@ -223,22 +236,19 @@ public class RepoManagerActivity extends AppCompatActivity {
             ImageButton expand_options_edit = convertView.findViewById(R.id.expand_options_view_edit);
 
             HashMap<String, Object> repository = repositoryList.get(position);
-            List<Integer> visibilite = new ArrayList<>();
             String name = (String) repository.get("name");
             String url = (String) repository.get("url");
+            Integer menu_expanded = (Integer) repository.get("menu_expanded");
 
             nameTextView.setText(name);
             urlTextView.setText(url);
-            if (visibilite.get(position).equals(position)){
-                expand_options.setVisibility(View.VISIBLE);
-            } else {
-                expand_options.setVisibility(View.GONE);
-            }
+            expand_options.setVisibility(menu_expanded);
+
             expand_button.setOnClickListener(v -> {
                 if (expand_options.getVisibility() == View.GONE) {
                     expand_button.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_less_24));
                     expand_options.setVisibility(View.VISIBLE);
-                    visibilite.add(position);
+                    repository.put("menu_expanded", View.VISIBLE);
                     expand_options_delete.setOnClickListener(view -> {
                         final AlertDialog deleteDialog = new AlertDialog.Builder(RepoManagerActivity.this).create();
                         final View deleteRoot = getLayoutInflater().inflate(R.layout.dialog_delete_layout, null);
@@ -322,7 +332,7 @@ public class RepoManagerActivity extends AppCompatActivity {
                 } else {
                     expand_button.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_more_24));
                     expand_options.setVisibility(View.GONE);
-                    visibilite.remove(position);
+                    repository.put("menu_expanded", View.GONE);
                 }
             });
 
