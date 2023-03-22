@@ -32,6 +32,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -69,7 +70,7 @@ public class RepoManagerActivity extends AppCompatActivity {
 
             @Override
             public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-                if (i1 < 0) {
+                if (i2 < 0) {
                     addFab.setVisibility(View.VISIBLE);
                 } else {
                     addFab.setVisibility(View.GONE);
@@ -106,7 +107,6 @@ public class RepoManagerActivity extends AppCompatActivity {
         if (query.isEmpty()) {
             adapter.updateData(REPOSITORY_LIST);
             adapter.notifyDataSetChanged();
-//            listview.setAdapter(adapter);
             return;
         }
         final ArrayList<HashMap<String, Object>> repositoryFilter = new ArrayList<>();
@@ -285,12 +285,9 @@ public class RepoManagerActivity extends AppCompatActivity {
                         deleteRoot.findViewById(R.id.text_del_delete)
                                 .setOnClickListener(view1 -> {
                                     // Work well
-                                    // repositoryList.remove(repository);
-                                    HashMap<String, Object> repositoryRemove = new HashMap<>();
-                                    repositoryRemove.put("name", name);
-                                    repositoryRemove.put("url", url);
-                                    repositoryRemove.put("menu_expanded", View.GONE);
-                                    REPOSITORY_LIST.remove(repositoryRemove);
+                                    //repositoryList.remove(repository);
+                                    ArrayList<HashMap<String, Object>> repositoryRemove = REPOSITORY_LIST;
+                                    repositoryRemove.remove(repository);
                                     saveRepositories();
                                     adapter.notifyDataSetChanged();
                                     deleteDialog.dismiss();
