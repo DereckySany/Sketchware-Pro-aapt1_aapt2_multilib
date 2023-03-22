@@ -1,7 +1,12 @@
 package dev.derecky.sany.manager;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
@@ -71,9 +76,15 @@ public class RepoManagerActivity extends AppCompatActivity {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (firstVisibleItem > 0) {
-                    addFab.setVisibility(View.GONE);
+                    addFab.animate().alpha(0).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            addFab.setVisibility(View.GONE);
+                        }
+                    }).start();
                 } else {
                     addFab.setVisibility(View.VISIBLE);
+                    addFab.animate().alpha(1).start();
                 }
             }
         });
@@ -243,6 +254,8 @@ public class RepoManagerActivity extends AppCompatActivity {
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.repository_item, parent, false);
             }
+            final int ANIMATION_DURATION = 200; // Duração da animação em milissegundos
+            final float OPTIONS_SCALE_FACTOR = 0.9f; // Fator de escala das opções
 
             TextView nameTextView = convertView.findViewById(R.id.name_text_view);
             TextView urlTextView = convertView.findViewById(R.id.url_text_view);
@@ -260,10 +273,33 @@ public class RepoManagerActivity extends AppCompatActivity {
             nameTextView.setText(name);
             urlTextView.setText(url);
             expand_options.setVisibility(menu_expanded);
+            Drawable drawable = getDrawable(menu_expanded == View.GONE ? R.drawable.selector_ic_expand_more_24 : R.drawable.selector_ic_expand_less_24);
+            expand_button.setImageDrawable(drawable);
+            expand_button.animate().rotation(menu_expanded == View.GONE ? 180 : 0).start();
+
             expand_button.setOnClickListener(v -> {
-                expand_button.setImageDrawable(getDrawable(menu_expanded == View.GONE ? R.drawable.selector_ic_expand_more_24 : R.drawable.selector_ic_expand_less_24));
                 if (expand_options.getVisibility() == View.GONE) {
-                    expand_options.setVisibility(View.VISIBLE);
+                    // Adiciona animação de deslocamento para baixo
+                    ObjectAnimator translateY = ObjectAnimator.ofFloat(expand_options, "translationY", -expand_options.getHeight(), 0);
+                    translateY.setDuration(ANIMATION_DURATION);
+
+                    // Adiciona animação de escala
+                    ObjectAnimator scaleX = ObjectAnimator.ofFloat(expand_options, "scaleX", OPTIONS_SCALE_FACTOR, 1f);
+                    scaleX.setDuration(ANIMATION_DURATION);
+
+                    ObjectAnimator scaleY = ObjectAnimator.ofFloat(expand_options, "scaleY", OPTIONS_SCALE_FACTOR, 1f);
+                    scaleY.setDuration(ANIMATION_DURATION);
+
+                    // Adiciona animação de transparência
+                    ObjectAnimator alpha = ObjectAnimator.ofFloat(expand_options, "alpha", 0f, 1f);
+                    alpha.setDuration(ANIMATION_DURATION);
+
+                    // Inicia todas as animações ao mesmo tempo
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    animatorSet.playTogether(translateY, scaleX, scaleY, alpha);
+                    animatorSet.start();
+
+                    // Define a variável menu_expanded para View.VISIBLE
                     repository.put("menu_expanded", View.VISIBLE);
                     expand_options_delete.setOnClickListener(view -> {
                         final AlertDialog deleteDialog = new AlertDialog.Builder(RepoManagerActivity.this).create();
@@ -284,7 +320,9 @@ public class RepoManagerActivity extends AppCompatActivity {
                         deleteRoot.findViewById(R.id.text_del_delete)
                                 .setOnClickListener(view1 -> {
                                     ArrayList<HashMap<String, Object>> repositoryRemove = REPOSITORY_LIST;
+                                    // remove from FILTER REPOSITORY_LIST
                                     repositoryList.remove(repository);
+                                    // remove from REPOSITORY_LIST
                                     repositoryRemove.remove(repository);
                                     saveRepositories();
                                     adapter.notifyDataSetChanged();
@@ -348,7 +386,33 @@ public class RepoManagerActivity extends AppCompatActivity {
                         repositoryDialogEdit.show();
                     });
                 } else {
-                    expand_options.setVisibility(View.GONE);
+                    // Adiciona animação de deslocamento para cima
+                    ObjectAnimator translateY = ObjectAnimator.ofFloat(expand_options, "translationY", 0, -expand_options.getHeight());
+                    translateY.setDuration(ANIMATION_DURATION);
+
+                    // Adiciona animação de escala
+                    ObjectAnimator scaleX = ObjectAnimator.ofFloat(expand_options, "scaleX", 1f, OPTIONS_SCALE_FACTOR);
+                    scaleX.setDuration(ANIMATION_DURATION);
+
+                    ObjectAnimator scaleY = ObjectAnimator.ofFloat(expand_options, "scaleY", 1f, OPTIONS_SCALE_FACTOR);
+                    scaleY.setDuration(ANIMATION_DURATION);
+
+                    // Adiciona animação de transparência
+                    ObjectAnimator alpha = ObjectAnimator.ofFloat(expand_options, "alpha", 1f, 0f);
+                    alpha.setDuration(ANIMATION_DURATION);
+
+                    // Inicia todas as animações ao mesmo tempo
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    animatorSet.playTogether(translateY, scaleX, scaleY, alpha);
+                    animatorSet.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            expand_options.setVisibility(View.GONE);
+                        }
+                    });
+                    animatorSet.start();
+
+                    // Define a variável menu_expanded para View.GONE
                     repository.put("menu_expanded", View.GONE);
                 }
             });
