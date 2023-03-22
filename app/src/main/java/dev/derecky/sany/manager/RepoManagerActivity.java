@@ -275,9 +275,9 @@ public class RepoManagerActivity extends AppCompatActivity {
             expand_options.setVisibility(menu_expanded);
             Drawable drawable = getDrawable(menu_expanded == View.GONE ? R.drawable.selector_ic_expand_more_24 : R.drawable.selector_ic_expand_less_24);
             expand_button.setImageDrawable(drawable);
-            expand_button.animate().rotation(menu_expanded == View.GONE ? 180 : 0).start();
 
             expand_button.setOnClickListener(v -> {
+                expand_button.animate().rotation(menu_expanded == View.GONE ? 180 : -180).start();
                 if (expand_options.getVisibility() == View.GONE) {
                     // Adiciona animação de deslocamento para baixo
                     ObjectAnimator translateY = ObjectAnimator.ofFloat(expand_options, "translationY", -expand_options.getHeight(), 0);
@@ -295,12 +295,22 @@ public class RepoManagerActivity extends AppCompatActivity {
                     alpha.setDuration(ANIMATION_DURATION);
 
                     // Inicia todas as animações ao mesmo tempo
+                    //AnimatorSet animatorSet = new AnimatorSet();
+                    //animatorSet.playTogether(translateY, scaleX, scaleY, alpha);
+                    //animatorSet.start();
+                    // Inicia todas as animações ao mesmo tempo
                     AnimatorSet animatorSet = new AnimatorSet();
                     animatorSet.playTogether(translateY, scaleX, scaleY, alpha);
+                    animatorSet.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            expand_options.setVisibility(View.VISIBLE);
+                            // Define a variável menu_expanded para View.VISIBLE
+                            repository.put("menu_expanded", View.VISIBLE);
+                        }
+                    });
                     animatorSet.start();
 
-                    // Define a variável menu_expanded para View.VISIBLE
-                    repository.put("menu_expanded", View.VISIBLE);
                     expand_options_delete.setOnClickListener(view -> {
                         final AlertDialog deleteDialog = new AlertDialog.Builder(RepoManagerActivity.this).create();
                         final View deleteRoot = getLayoutInflater().inflate(R.layout.dialog_delete_layout, null);
@@ -408,12 +418,11 @@ public class RepoManagerActivity extends AppCompatActivity {
                         @Override
                         public void onAnimationEnd(Animator animation) {
                             expand_options.setVisibility(View.GONE);
+                            // Define a variável menu_expanded para View.GONE
+                            repository.put("menu_expanded", View.GONE);
                         }
                     });
                     animatorSet.start();
-
-                    // Define a variável menu_expanded para View.GONE
-                    repository.put("menu_expanded", View.GONE);
                 }
             });
 
