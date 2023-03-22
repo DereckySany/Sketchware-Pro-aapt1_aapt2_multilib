@@ -33,6 +33,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import mod.SketchwareUtil;
 import mod.hey.studios.util.Helper;
@@ -222,15 +223,22 @@ public class RepoManagerActivity extends AppCompatActivity {
             ImageButton expand_options_edit = convertView.findViewById(R.id.expand_options_view_edit);
 
             HashMap<String, Object> repository = repositoryList.get(position);
+            List<Integer> visibilite = new ArrayList<>();
             String name = (String) repository.get("name");
             String url = (String) repository.get("url");
 
             nameTextView.setText(name);
             urlTextView.setText(url);
+            if (visibilite.get(position).equals(position)){
+                expand_options.setVisibility(View.VISIBLE);
+            } else {
+                expand_options.setVisibility(View.GONE);
+            }
             expand_button.setOnClickListener(v -> {
                 if (expand_options.getVisibility() == View.GONE) {
                     expand_button.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_less_24));
                     expand_options.setVisibility(View.VISIBLE);
+                    visibilite.add(position);
                     expand_options_delete.setOnClickListener(view -> {
                         final AlertDialog deleteDialog = new AlertDialog.Builder(RepoManagerActivity.this).create();
                         final View deleteRoot = getLayoutInflater().inflate(R.layout.dialog_delete_layout, null);
@@ -244,14 +252,12 @@ public class RepoManagerActivity extends AppCompatActivity {
                             final TextView deleteTitleTextView = (TextView) deleteTitleChildAt1;
                             deleteTitleTextView.setText("Delete Repository");
                         }
-                        HashMap<String, Object> repositoryRemove = repositoryList.get(position);
                         deleteFileName.setHint("That local Repository will be permanently removed!");
                         fileNameToDelete.setText(nameTextView.getText().toString());
                         fileNameToDelete.setEnabled(false);
                         deleteRoot.findViewById(R.id.text_del_delete)
                                 .setOnClickListener(view1 -> {
-                                    repositoryRemove.remove("name");
-                                    repositoryRemove.remove("url");
+                                    repositoryList.remove(repository);
                                     saveRepositories();
                                     adapter.notifyDataSetChanged();
                                     deleteDialog.dismiss();
@@ -316,6 +322,7 @@ public class RepoManagerActivity extends AppCompatActivity {
                 } else {
                     expand_button.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_more_24));
                     expand_options.setVisibility(View.GONE);
+                    visibilite.remove(position);
                 }
             });
 
