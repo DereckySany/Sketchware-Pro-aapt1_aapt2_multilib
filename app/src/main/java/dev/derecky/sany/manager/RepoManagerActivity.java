@@ -260,10 +260,9 @@ public class RepoManagerActivity extends AppCompatActivity {
             nameTextView.setText(name);
             urlTextView.setText(url);
             expand_options.setVisibility(menu_expanded);
-
             expand_button.setOnClickListener(v -> {
+                expand_button.setImageDrawable(getDrawable(menu_expanded == View.GONE ? R.drawable.selector_ic_expand_more_24 : R.drawable.selector_ic_expand_less_24));
                 if (expand_options.getVisibility() == View.GONE) {
-                    expand_button.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_less_24));
                     expand_options.setVisibility(View.VISIBLE);
                     repository.put("menu_expanded", View.VISIBLE);
                     expand_options_delete.setOnClickListener(view -> {
@@ -284,9 +283,8 @@ public class RepoManagerActivity extends AppCompatActivity {
                         fileNameToDelete.setEnabled(false);
                         deleteRoot.findViewById(R.id.text_del_delete)
                                 .setOnClickListener(view1 -> {
-                                    // Work well
-                                    //repositoryList.remove(repository);
                                     ArrayList<HashMap<String, Object>> repositoryRemove = REPOSITORY_LIST;
+                                    repositoryList.remove(repository);
                                     repositoryRemove.remove(repository);
                                     saveRepositories();
                                     adapter.notifyDataSetChanged();
@@ -350,7 +348,6 @@ public class RepoManagerActivity extends AppCompatActivity {
                         repositoryDialogEdit.show();
                     });
                 } else {
-                    expand_button.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_more_24));
                     expand_options.setVisibility(View.GONE);
                     repository.put("menu_expanded", View.GONE);
                 }
