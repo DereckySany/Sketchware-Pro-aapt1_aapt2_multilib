@@ -244,14 +244,14 @@ public class RepoManagerActivity extends AppCompatActivity {
                             final TextView deleteTitleTextView = (TextView) deleteTitleChildAt1;
                             deleteTitleTextView.setText("Delete Repository");
                         }
+                        HashMap<String, Object> repositoryRemove = repositoryList.get(position);
                         deleteFileName.setHint("That local Repository will be permanently removed!");
                         fileNameToDelete.setText(nameTextView.getText().toString());
                         fileNameToDelete.setEnabled(false);
                         deleteRoot.findViewById(R.id.text_del_delete)
                                 .setOnClickListener(view1 -> {
-                                    HashMap<String, Object> repositoryRemove = new HashMap<>();
-                                    repositoryRemove.put(name,url);
-                                    REPOSITORY_LIST.remove(repositoryRemove);
+                                    repositoryRemove.remove("name");
+                                    repositoryRemove.remove("url");
                                     saveRepositories();
                                     adapter.notifyDataSetChanged();
                                     deleteDialog.dismiss();
