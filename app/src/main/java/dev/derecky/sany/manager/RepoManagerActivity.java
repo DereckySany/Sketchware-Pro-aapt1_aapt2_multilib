@@ -2,7 +2,6 @@ package dev.derecky.sany.manager;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
@@ -70,7 +69,7 @@ public class RepoManagerActivity extends AppCompatActivity {
 
             @Override
             public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-                if (i < 0){
+                if (i1 < 0) {
                     addFab.setVisibility(View.VISIBLE);
                 } else {
                     addFab.setVisibility(View.GONE);
@@ -151,11 +150,12 @@ public class RepoManagerActivity extends AppCompatActivity {
             HashMap<String, Object> repositoryAdd = new HashMap<>();
             repositoryAdd.put("name", name);
             repositoryAdd.put("url", url);
+            repositoryAdd.put("menu_expanded", View.GONE);
             REPOSITORY_LIST.add(repositoryAdd);
             saveRepositories();
             adapter.notifyDataSetChanged();
             addRepositoryDialog.dismiss();
-            SketchwareUtil.showMessage(getApplicationContext(),"Added if Sucessful!");
+            SketchwareUtil.showMessage(getApplicationContext(), "Added if Sucessful!");
         });
         addRoot.findViewById(R.id.cancel_repo_button).setOnClickListener(Helper.getDialogDismissListener(addRepositoryDialog));
         addRepositoryDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -187,6 +187,7 @@ public class RepoManagerActivity extends AppCompatActivity {
         }
         getRepositoriesIndex();
     }
+
     private void loadRepositories() {
         try {
             FileReader repositories = new FileReader(CONFIGURED_REPOSITORIES_FILE);
@@ -283,11 +284,17 @@ public class RepoManagerActivity extends AppCompatActivity {
                         fileNameToDelete.setEnabled(false);
                         deleteRoot.findViewById(R.id.text_del_delete)
                                 .setOnClickListener(view1 -> {
-                                    repositoryList.remove(repository);
+                                    // Work well
+                                    // repositoryList.remove(repository);
+                                    HashMap<String, Object> repositoryRemove = new HashMap<>();
+                                    repositoryRemove.put("name", name);
+                                    repositoryRemove.put("url", url);
+                                    repositoryRemove.put("menu_expanded", View.GONE);
+                                    REPOSITORY_LIST.remove(repositoryRemove);
                                     saveRepositories();
                                     adapter.notifyDataSetChanged();
                                     deleteDialog.dismiss();
-                                    SketchwareUtil.showMessage(getApplicationContext(),"Removed if Sucessful!");
+                                    SketchwareUtil.showMessage(getApplicationContext(), "Removed if Sucessful!");
                                 });
                         deleteRoot.findViewById(R.id.text_del_cancel).setOnClickListener(Helper.getDialogDismissListener(deleteDialog));
                         deleteDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -338,7 +345,7 @@ public class RepoManagerActivity extends AppCompatActivity {
                             saveRepositories();
                             adapter.notifyDataSetChanged();
                             repositoryDialogEdit.dismiss();
-                            SketchwareUtil.showMessage(getApplicationContext(),"Rename if Sucessful!");
+                            SketchwareUtil.showMessage(getApplicationContext(), "Rename if Sucessful!");
                         });
                         editRoot.findViewById(R.id.cancel_repo_button).setOnClickListener(Helper.getDialogDismissListener(repositoryDialogEdit));
                         repositoryDialogEdit.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
