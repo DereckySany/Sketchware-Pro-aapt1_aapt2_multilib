@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -61,6 +62,21 @@ public class RepoManagerActivity extends AppCompatActivity {
         setUpSearchView();
         adapter = new RepositoryListAdapter(this, REPOSITORY_LIST);
         listview.setAdapter(adapter);
+        listview.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+                if (i < 0){
+                    addFab.setVisibility(View.VISIBLE);
+                } else {
+                    addFab.setVisibility(View.GONE);
+                }
+            }
+        });
 
         addFab.setOnClickListener(v -> showAddRepositoryDialog());
 
