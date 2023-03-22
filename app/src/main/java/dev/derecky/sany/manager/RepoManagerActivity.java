@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -64,16 +65,15 @@ public class RepoManagerActivity extends AppCompatActivity {
         listview.setAdapter(adapter);
         listview.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
             }
 
             @Override
-            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-                if (i2 < 0) {
-                    addFab.setVisibility(View.VISIBLE);
-                } else {
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (firstVisibleItem > 0) {
                     addFab.setVisibility(View.GONE);
+                } else {
+                    addFab.setVisibility(View.VISIBLE);
                 }
             }
         });
