@@ -50,7 +50,7 @@ import mod.hey.studios.util.Helper;
 public class ManageLocalLibraryActivity extends AppCompatActivity implements LibraryDownloader.OnCompleteListener {
 
     private final CharSequence originalTitle = "Manage Local Library";
-    private ManageLocalLibraryActivity.LibraryAdapter adapter;
+    private LibraryAdapter adapter;
     private final ArrayList<String> arrayList = new ArrayList<>();
     private boolean notAssociatedWithProject = false;
     private ListView listview;
@@ -232,7 +232,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         List<String> directories = new LinkedList<>(uniqueDirectories);
         Collections.sort(directories, String.CASE_INSENSITIVE_ORDER);
 
-        adapter = new ManageLocalLibraryActivity.LibraryAdapter(directories);
+        adapter = new LibraryAdapter(directories);
         arrayList.addAll(directories);
         //adapter.updateData(arrayList);
         listview.setAdapter(adapter);
@@ -333,8 +333,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                     expand_bar_options.setVisibility(View.VISIBLE);
                     show_expand_bar_options.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_less_24));
                     expand_delete_option.setOnClickListener(v -> {
-                        final AlertDialog deleteDialog = new AlertDialog.Builder(ManageLocalLibraryActivity.this)
-                                .create();
+                        final AlertDialog deleteDialog = new AlertDialog.Builder(ManageLocalLibraryActivity.this).create();
 
                         final View deleteRoot = getLayoutInflater().inflate(R.layout.dialog_delete_layout, null);
                         final LinearLayout deleteTitle = deleteRoot
@@ -412,8 +411,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         final File infoImport = new File(versionPath);
                         final File infoManifast = new File(manifastPath);
 
-                        final AlertDialog infoDialog = new AlertDialog.Builder(ManageLocalLibraryActivity.this)
-                                .create();
+                        final AlertDialog infoDialog = new AlertDialog.Builder(ManageLocalLibraryActivity.this).create();
 
                         final View dialogView = getLayoutInflater().inflate(R.layout.dialog_info_layout, null);
                         final LinearLayout titleLayout = dialogView
