@@ -76,7 +76,7 @@ public class RepoManagerActivity extends AppCompatActivity {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (firstVisibleItem > 0) {
-                    addFab.animate().alpha(0).scaleXBy(0).withEndAction(new Runnable() {
+                    addFab.animate().alpha(0).scaleX(0).scaleY(0).withEndAction(new Runnable() {
                         @Override
                         public void run() {
                             addFab.setVisibility(View.GONE);
@@ -84,7 +84,7 @@ public class RepoManagerActivity extends AppCompatActivity {
                     }).start();
                 } else {
                     addFab.setVisibility(View.VISIBLE);
-                    addFab.animate().alpha(1).scaleXBy(1).start();
+                    addFab.animate().alpha(1).scaleX(1).scaleY(1).start();
                 }
             }
         });
@@ -307,6 +307,7 @@ public class RepoManagerActivity extends AppCompatActivity {
                             expand_options.setVisibility(View.VISIBLE);
                             // Define a variável menu_expanded para View.VISIBLE
                             repository.put("menu_expanded", View.VISIBLE);
+                            expand_button.setImageDrawable(drawable);
                         }
                     });
                     animatorSet.start();
@@ -421,6 +422,8 @@ public class RepoManagerActivity extends AppCompatActivity {
                             expand_options.setVisibility(View.GONE);
                             // Define a variável menu_expanded para View.GONE
                             repository.put("menu_expanded", View.GONE);
+                            expand_button.setImageDrawable(drawable);
+
                         }
                     });
                     animatorSet.start();
