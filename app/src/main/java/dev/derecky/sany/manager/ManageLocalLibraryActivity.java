@@ -1,10 +1,10 @@
 package dev.derecky.sany.manager;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -49,13 +50,13 @@ import mod.hey.studios.util.Helper;
 
 public class ManageLocalLibraryActivity extends AppCompatActivity implements LibraryDownloader.OnCompleteListener {
 
-    private final CharSequence originalTitle = "Manage Local Library";
-    private LibraryAdapter adapter;
-    private final ArrayList<String> arrayList = new ArrayList<>();
-    private boolean notAssociatedWithProject = false;
-    private ListView listview;
     private static String IN_USE_LIBRARY_FILE_PATH = "";
     private static String LOCAL_LIBRARYS_PATH = "";
+    private final CharSequence originalTitle = "Manage Local Library";
+    private final ArrayList<String> arrayList = new ArrayList<>();
+    private LibraryAdapter adapter;
+    private boolean notAssociatedWithProject = false;
+    private ListView listview;
     private ArrayList<HashMap<String, Object>> project_used_libs = new ArrayList<>();
 
     @Override
@@ -111,7 +112,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             showDialogImportLibrary();
         }
         if (id == R.id.menu_repo_manager) {
-            Intent repoManagerIntent = new Intent(this, RepoManagerActivity.class);
+            Intent repoManagerIntent = new Intent(getApplicationContext(), RepoManagerActivity.class);
             startActivity(repoManagerIntent);
         }
         return super.onOptionsItemSelected(item);
@@ -144,7 +145,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
     private void showDialogImportLibrary() {
         if (Build.VERSION.SDK_INT > 26) {
-            new AlertDialog.Builder(this)
+            new AlertDialog.Builder(getApplicationContext())
                     .setTitle("Choose compiler")
                     .setMessage("Would you like to use DX, D8 or R8 to compile the library?\n" +
                             "D8 supports Java 8, while DX does not. Limitation: D8 only works on Android 8 and above.\n" +
@@ -159,7 +160,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                     .show();
 
         } else {
-            new AlertDialog.Builder(this)
+            new AlertDialog.Builder(getApplicationContext())
                     .setTitle("Choose compiler")
                     .setMessage("Would you like to use Dx or D8 to dex the library?\n" +
                             "D8 supports Java 8, whereas Dx does not. Limitation: D8 only works on Android 8 and above.")
@@ -296,17 +297,17 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             final ImageView status_image = convertView.findViewById(R.id.imageView_indicator_content_use_lib);
             final TextView status_text = convertView.findViewById(R.id.status_text_content_use_lib);
 
-            final ImageView show_expand_bar_options = convertView.findViewById(R.id.expand_view_content_use_lib);
+            final ImageButton show_expand_bar_options = convertView.findViewById(R.id.expand_view_content_use_lib);
 
             final LinearLayout expand_bar_options = convertView.findViewById(R.id.expand_options_view_content_use_lib);
-            final LinearLayout expand_delete_option = convertView.findViewById(R.id.delete_button_content_use_lib);
-            final LinearLayout expand_rename_option = convertView.findViewById(R.id.rename_button_content_use_lib);
-            final LinearLayout expand_info_option = convertView.findViewById(R.id.info_button_content_use_lib);
+            final ImageButton expand_delete_option = convertView.findViewById(R.id.delete_button_content_use_lib);
+            final ImageButton expand_rename_option = convertView.findViewById(R.id.rename_button_content_use_lib);
+            final ImageButton expand_info_option = convertView.findViewById(R.id.info_button_content_use_lib);
 
             name_text_lib.setText(localLibraries.get(position));
 
             String libname = name_text_lib.getText().toString();
-            String libconfig = LOCAL_LIBRARYS_PATH.concat(libname);
+            String libconfig = LOCAL_LIBRARYS_PATH + libname;
 
             main_content.setOnClickListener(v -> {
                 HashMap<String, Object> localLibrary = getLocalLibraryData(libname);
@@ -328,7 +329,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             } else {
                 enable_this_lib.setEnabled(false);
             }
-            show_expand_bar_options.setOnClickListener(r -> {
+            convertView.findViewById(R.id.expand_view_content_use_lib).setOnClickListener(view -> {
                 if (expand_bar_options.getVisibility() == View.GONE) {
                     expand_bar_options.setVisibility(View.VISIBLE);
                     show_expand_bar_options.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_less_24));
@@ -353,7 +354,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         deleteRoot.findViewById(R.id.text_del_cancel)
                                 .setOnClickListener(Helper.getDialogDismissListener(deleteDialog));
                         deleteRoot.findViewById(R.id.text_del_delete)
-                                .setOnClickListener(view -> {
+                                .setOnClickListener(view1 -> {
                                     enable_this_lib.setChecked(false);
                                     final String lib = LOCAL_LIBRARYS_PATH.concat(name_text_lib.getText().toString());
                                     deleteLibrary(lib);
@@ -384,7 +385,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         root.findViewById(R.id.text_cancel)
                                 .setOnClickListener(Helper.getDialogDismissListener(realog));
                         root.findViewById(R.id.text_save)
-                                .setOnClickListener(view -> {
+                                .setOnClickListener(view1 -> {
                                     enable_this_lib.setChecked(false);
                                     File input = new File(LOCAL_LIBRARYS_PATH.concat(name_text_lib.getText().toString()));
                                     File output = new File(LOCAL_LIBRARYS_PATH.concat(filename.getText().toString()));
@@ -517,13 +518,12 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         }
 
         private void setColorIndicator(ImageView imageView, TextView indicator, String lib_name) {
-            String[] files = { "/classes.jar", "/classes.dex", "/AndroidManifest.xml", "/config" };
+            String[] files = {"classes.jar", "classes.dex", "AndroidManifest.xml", "config"};
             StringBuilder status = new StringBuilder();
-
             // Verifica se todos os arquivos em files existem no caminho lib_name
             List<String> missingFiles = new ArrayList<>();
             for (String file : files) {
-                if (!FileUtil.isExistFile(lib_name + file)) {
+                if (!FileUtil.isExistFile(lib_name + File.separator + file)) {
                     missingFiles.add(file);
                 }
             }

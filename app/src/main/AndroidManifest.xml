@@ -240,7 +240,8 @@
             android:theme="@style/Theme.MyApplication"
             android:windowSoftInputMode="adjustPan|stateHidden" />
 
-        <activity android:name="dev.derecky.sany.manager.ManageLocalLibraryActivity"
+        <activity
+            android:name="dev.derecky.sany.manager.ManageLocalLibraryActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.MyApplication"
             android:windowSoftInputMode="adjustPan|stateHidden" />
