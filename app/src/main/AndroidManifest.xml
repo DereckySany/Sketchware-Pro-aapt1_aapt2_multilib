@@ -239,6 +239,12 @@
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.MyApplication"
             android:windowSoftInputMode="adjustPan|stateHidden" />
+
+        <activity android:name="dev.derecky.sany.manager.ManageLocalLibraryActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.MyApplication"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+
         <activity
             android:name="mod.agus.jcoderz.editor.manage.permission.ManagePermissionActivity"
             android:configChanges="orientation|screenSize" />
@@ -332,6 +338,5 @@
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.Translucent"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-
     </application>
 </manifest>
