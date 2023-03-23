@@ -76,7 +76,7 @@ public class RepoManagerActivity extends AppCompatActivity {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (firstVisibleItem > 0) {
-                    addFab.animate().alpha(0).withEndAction(new Runnable() {
+                    addFab.animate().alpha(0).scaleXBy(0).withEndAction(new Runnable() {
                         @Override
                         public void run() {
                             addFab.setVisibility(View.GONE);
@@ -84,7 +84,7 @@ public class RepoManagerActivity extends AppCompatActivity {
                     }).start();
                 } else {
                     addFab.setVisibility(View.VISIBLE);
-                    addFab.animate().alpha(1).start();
+                    addFab.animate().alpha(1).scaleXBy(1).start();
                 }
             }
         });
@@ -277,8 +277,8 @@ public class RepoManagerActivity extends AppCompatActivity {
             expand_button.setImageDrawable(drawable);
 
             expand_button.setOnClickListener(v -> {
-                expand_button.animate().rotation(menu_expanded == View.GONE ? 180 : 0).start();
                 if (expand_options.getVisibility() == View.GONE) {
+                    expand_button.animate().rotationX(1);
                     // Adiciona animação de deslocamento para baixo
                     ObjectAnimator translateY = ObjectAnimator.ofFloat(expand_options, "translationY", -expand_options.getHeight(), 0);
                     translateY.setDuration(ANIMATION_DURATION);
@@ -396,6 +396,7 @@ public class RepoManagerActivity extends AppCompatActivity {
                         repositoryDialogEdit.show();
                     });
                 } else {
+                    expand_button.animate().rotationX(1);
                     // Adiciona animação de deslocamento para cima
                     ObjectAnimator translateY = ObjectAnimator.ofFloat(expand_options, "translationY", 0, -expand_options.getHeight());
                     translateY.setDuration(ANIMATION_DURATION);
