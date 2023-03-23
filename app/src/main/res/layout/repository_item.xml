@@ -54,7 +54,6 @@
         android:animateLayoutChanges="true"
         android:paddingVertical="@dimen/padding_edit_view"
         android:background="@drawable/bg_rounded_bottom"
-        android:stateListAnimator="@anim/abc_fade_out"
         android:orientation="horizontal">
         <ImageButton
             android:id="@+id/expand_options_view_delete"

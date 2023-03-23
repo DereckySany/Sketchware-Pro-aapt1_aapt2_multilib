@@ -277,7 +277,7 @@ public class RepoManagerActivity extends AppCompatActivity {
             expand_button.setImageDrawable(drawable);
 
             expand_button.setOnClickListener(v -> {
-                expand_button.animate().rotation(menu_expanded == View.GONE ? 180 : -180).start();
+                expand_button.animate().rotation(menu_expanded == View.GONE ? 180 : 0).start();
                 if (expand_options.getVisibility() == View.GONE) {
                     // Adiciona animação de deslocamento para baixo
                     ObjectAnimator translateY = ObjectAnimator.ofFloat(expand_options, "translationY", -expand_options.getHeight(), 0);
@@ -401,10 +401,10 @@ public class RepoManagerActivity extends AppCompatActivity {
                     translateY.setDuration(ANIMATION_DURATION);
 
                     // Adiciona animação de escala
-                    ObjectAnimator scaleX = ObjectAnimator.ofFloat(expand_options, "scaleX", 1f, OPTIONS_SCALE_FACTOR);
+                    ObjectAnimator scaleX = ObjectAnimator.ofFloat(expand_options, "scaleX", OPTIONS_SCALE_FACTOR, 1f);
                     scaleX.setDuration(ANIMATION_DURATION);
 
-                    ObjectAnimator scaleY = ObjectAnimator.ofFloat(expand_options, "scaleY", 1f, OPTIONS_SCALE_FACTOR);
+                    ObjectAnimator scaleY = ObjectAnimator.ofFloat(expand_options, "scaleY", OPTIONS_SCALE_FACTOR, 1f);
                     scaleY.setDuration(ANIMATION_DURATION);
 
                     // Adiciona animação de transparência
