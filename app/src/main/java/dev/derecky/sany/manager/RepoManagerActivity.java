@@ -278,7 +278,8 @@ public class RepoManagerActivity extends AppCompatActivity {
 
             expand_button.setOnClickListener(v -> {
                 if (expand_options.getVisibility() == View.GONE) {
-                    expand_button.animate().rotationX(1);
+                    //expand_button.animate().rotationX(1);
+                    expand_button.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_less_24));
                     // Adiciona animação de deslocamento para baixo
                     ObjectAnimator translateY = ObjectAnimator.ofFloat(expand_options, "translationY", -expand_options.getHeight(), 0);
                     translateY.setDuration(ANIMATION_DURATION);
@@ -305,9 +306,7 @@ public class RepoManagerActivity extends AppCompatActivity {
                         @Override
                         public void onAnimationEnd(Animator animation) {
                             expand_options.setVisibility(View.VISIBLE);
-                            // Define a variável menu_expanded para View.VISIBLE
                             repository.put("menu_expanded", View.VISIBLE);
-                            expand_button.setImageDrawable(drawable);
                         }
                     });
                     animatorSet.start();
@@ -397,7 +396,8 @@ public class RepoManagerActivity extends AppCompatActivity {
                         repositoryDialogEdit.show();
                     });
                 } else {
-                    expand_button.animate().rotationX(1);
+                    // expand_button.animate().rotationX(1);
+                    expand_button.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_more_24));
                     // Adiciona animação de deslocamento para cima
                     ObjectAnimator translateY = ObjectAnimator.ofFloat(expand_options, "translationY", 0, -expand_options.getHeight());
                     translateY.setDuration(ANIMATION_DURATION);
@@ -422,7 +422,6 @@ public class RepoManagerActivity extends AppCompatActivity {
                             expand_options.setVisibility(View.GONE);
                             // Define a variável menu_expanded para View.GONE
                             repository.put("menu_expanded", View.GONE);
-                            expand_button.setImageDrawable(drawable);
 
                         }
                     });
