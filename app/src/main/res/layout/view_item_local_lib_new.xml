@@ -1,29 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:rotationX="1">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_round_white"
+        android:elevation="1px"
         android:gravity="center"
         android:padding="@dimen/mtrl_btn_icon_padding">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/colored_box_96"
-            android:visibility="gone" />
+            android:src="@drawable/open_box_48"
+            android:visibility="visible" />
 
         <ImageView
             android:id="@+id/imageView_indicator_content_use_lib"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="9pt"
+            android:layout_height="9pt"
             android:layout_gravity="center"
-            android:src="@drawable/ic_ok_48dp"
+            android:src="@drawable/ic_cancel_48dp"
             android:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="3pt"
+            android:layout_height="3pt"
+            android:layout_gravity="center"
+            android:layout_margin="1pt"
+            android:background="@color/scolor_green_02"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/main_content_use_lib"
@@ -61,7 +72,7 @@
                 android:id="@+id/radiobutton_content_use_lib"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:clickable="false"/>
+                android:clickable="false" />
         </LinearLayout>
 
         <ImageButton
@@ -77,11 +88,13 @@
         android:id="@+id/expand_options_view_content_use_lib"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
         android:background="@drawable/bg_rounded_bottom"
+        android:elevation="0dp"
         android:gravity="center"
+        android:isScrollContainer="false"
         android:orientation="horizontal"
         android:paddingVertical="@dimen/padding_edit_view"
+        android:translationY="-130px"
         android:visibility="gone">
 
         <ImageButton
