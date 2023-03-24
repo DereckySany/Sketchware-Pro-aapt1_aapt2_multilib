@@ -144,7 +144,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
     private void showDialogImportLibrary() {
         if (Build.VERSION.SDK_INT > 26) {
-            new AlertDialog.Builder(getApplicationContext())
+            new AlertDialog.Builder(this)
                     .setTitle("Choose compiler")
                     .setMessage("Would you like to use DX, D8 or R8 to compile the library?\n" +
                             "D8 supports Java 8, while DX does not. Limitation: D8 only works on Android 8 and above.\n" +
@@ -159,7 +159,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                     .show();
 
         } else {
-            new AlertDialog.Builder(getApplicationContext())
+            new AlertDialog.Builder(this)
                     .setTitle("Choose compiler")
                     .setMessage("Would you like to use Dx or D8 to dex the library?\n" +
                             "D8 supports Java 8, whereas Dx does not. Limitation: D8 only works on Android 8 and above.")

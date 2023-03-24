@@ -14,7 +14,8 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/colored_box_96" />
+            android:src="@drawable/colored_box_96"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/imageView_indicator_content_use_lib"
