@@ -26,7 +26,7 @@
             android:layout_height="9pt"
             android:layout_gravity="center"
             android:src="@drawable/ic_cancel_48dp"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="3pt"
@@ -34,7 +34,7 @@
             android:layout_gravity="center"
             android:layout_margin="1pt"
             android:background="@color/scolor_green_02"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <LinearLayout
             android:id="@+id/main_content_use_lib"
@@ -89,12 +89,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_rounded_bottom"
-        android:elevation="0dp"
         android:gravity="center"
         android:isScrollContainer="false"
         android:orientation="horizontal"
         android:paddingVertical="@dimen/padding_edit_view"
-        android:translationY="-130px"
+        android:translationY="-50dp"
         android:visibility="gone">
 
         <ImageButton

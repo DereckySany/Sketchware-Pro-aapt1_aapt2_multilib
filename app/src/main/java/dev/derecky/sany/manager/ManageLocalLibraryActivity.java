@@ -331,7 +331,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             show_expand_bar_options.setOnClickListener(view -> {
                 if (expand_bar_options.getVisibility() == View.GONE) {
                     expand_bar_options.setVisibility(View.VISIBLE);
-                    expand_bar_options.animate().translationX(0).alpha(1).start();
+                    expand_bar_options.animate().translationY(0).start();
                     //show_expand_bar_options.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_less_24));
                     show_expand_bar_options.animate().rotationX(180).start();
                     expand_delete_option.setOnClickListener(v -> {
@@ -361,7 +361,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         fileNameToDelete.requestFocus();
                         deleteDialog.setView(root);
                         deleteDialog.show();
-                        expand_bar_options.animate().translationX(-130).alpha(0).start();
+                        expand_bar_options.animate().translationX(-50).start();
                         expand_bar_options.setVisibility(View.GONE);
                         //show_expand_bar_options.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_more_24));
                         show_expand_bar_options.animate().rotationX(0).start();
@@ -398,9 +398,9 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         filename.requestFocus();
                         realog.setView(root);
                         realog.show();
-                        expand_bar_options.animate().translationX(-130).alpha(0).start();
+                        expand_bar_options.animate().translationX(-50).start();
                         expand_bar_options.setVisibility(View.GONE);
-                        // show_expand_bar_options.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_more_24));
+                        //show_expand_bar_options.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_more_24));
                         show_expand_bar_options.animate().rotationX(0).start();
                     });
                     expand_info_option.setOnClickListener(v -> {
@@ -450,13 +450,13 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         infoDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                         infoDialog.setView(dialogView);
                         infoDialog.show();
-                        expand_bar_options.animate().translationX(-130).alpha(0).start();
+                        expand_bar_options.animate().translationX(-50).start();
                         expand_bar_options.setVisibility(View.GONE);
-                        // show_expand_bar_options.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_more_24));
+                        //show_expand_bar_options.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_more_24));
                         show_expand_bar_options.animate().rotationX(0).start();
                     });
                 } else {
-                    expand_bar_options.animate().translationX(-130).alpha(0).start();
+                    expand_bar_options.animate().translationX(-50).start();
                     expand_bar_options.setVisibility(View.GONE);
                     //show_expand_bar_options.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_more_24));
                     show_expand_bar_options.animate().rotationX(0).start();
