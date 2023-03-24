@@ -1,7 +1,6 @@
 package dev.derecky.sany.manager;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -235,7 +234,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
         adapter = new LibraryAdapter(directories);
         arrayList.addAll(directories);
-        //adapter.updateData(arrayList);
         listview.setAdapter(adapter);
     }
 
@@ -290,7 +288,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             if (convertView == null) {
                 convertView = getLayoutInflater().inflate(R.layout.view_item_local_lib_new, parent, false);
             }
-            final LinearLayout main_content = findViewById(R.id.main_content_use_lib);
+            final LinearLayout main_content = convertView.findViewById(R.id.main_content_use_lib);
             final TextView name_text_lib = convertView.findViewById(R.id.name_text_content_use_lib);
             final RadioButton enable_this_lib = convertView.findViewById(R.id.radiobutton_content_use_lib);
 
@@ -329,19 +327,17 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             } else {
                 enable_this_lib.setEnabled(false);
             }
-            convertView.findViewById(R.id.expand_view_content_use_lib).setOnClickListener(view -> {
+            main_content.setOnClickListener(view -> {
                 if (expand_bar_options.getVisibility() == View.GONE) {
                     expand_bar_options.setVisibility(View.VISIBLE);
                     show_expand_bar_options.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_less_24));
                     expand_delete_option.setOnClickListener(v -> {
                         final AlertDialog deleteDialog = new AlertDialog.Builder(ManageLocalLibraryActivity.this).create();
 
-                        final View deleteRoot = getLayoutInflater().inflate(R.layout.dialog_delete_layout, null);
-                        final LinearLayout deleteTitle = deleteRoot
-                                .findViewById(R.id.dialogdeletelayoutLinearLayout1);
-                        final TextInputLayout deleteFileName = deleteRoot
-                                .findViewById(R.id.dialogdeletelayoutLinearLayout2);
-                        final EditText fileNameToDelete = deleteRoot.findViewById(R.id.edittext_delete_name);
+                        final View root = getLayoutInflater().inflate(R.layout.dialog_delete_layout, null);
+                        final LinearLayout deleteTitle = root.findViewById(R.id.dialogdeletelayoutLinearLayout1);
+                        final TextInputLayout deleteFileName = root.findViewById(R.id.dialogdeletelayoutLinearLayout2);
+                        final EditText fileNameToDelete = root.findViewById(R.id.edittext_delete_name);
 
                         final View deleteTitleChildAt1 = deleteTitle.getChildAt(1);
                         if (deleteTitleChildAt1 instanceof TextView) {
@@ -351,19 +347,16 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         deleteFileName.setHint("That local library will be permanently removed!");
                         fileNameToDelete.setText(name_text_lib.getText().toString());
                         fileNameToDelete.setEnabled(false);
-                        deleteRoot.findViewById(R.id.text_del_cancel)
-                                .setOnClickListener(Helper.getDialogDismissListener(deleteDialog));
-                        deleteRoot.findViewById(R.id.text_del_delete)
-                                .setOnClickListener(view1 -> {
-                                    enable_this_lib.setChecked(false);
-                                    final String lib = LOCAL_LIBRARYS_PATH.concat(name_text_lib.getText().toString());
-                                    deleteLibrary(lib);
-                                    deleteDialog.dismiss();
-                                });
-                        deleteDialog.getWindow()
-                                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+                        root.findViewById(R.id.text_del_cancel).setOnClickListener(Helper.getDialogDismissListener(deleteDialog));
+                        root.findViewById(R.id.text_del_delete).setOnClickListener(view1 -> {
+                            enable_this_lib.setChecked(false);
+                            final String lib = LOCAL_LIBRARYS_PATH.concat(name_text_lib.getText().toString());
+                            deleteLibrary(lib);
+                            deleteDialog.dismiss();
+                        });
+                        deleteDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                         fileNameToDelete.requestFocus();
-                        deleteDialog.setView(deleteRoot);
+                        deleteDialog.setView(root);
                         deleteDialog.show();
                     });
                     expand_rename_option.setOnClickListener(v -> {
@@ -382,22 +375,19 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
                         tilFilename.setHint("New local library name");
                         filename.setText(name_text_lib.getText().toString());
-                        root.findViewById(R.id.text_cancel)
-                                .setOnClickListener(Helper.getDialogDismissListener(realog));
-                        root.findViewById(R.id.text_save)
-                                .setOnClickListener(view1 -> {
-                                    enable_this_lib.setChecked(false);
-                                    File input = new File(LOCAL_LIBRARYS_PATH.concat(name_text_lib.getText().toString()));
-                                    File output = new File(LOCAL_LIBRARYS_PATH.concat(filename.getText().toString()));
-                                    if (!input.renameTo(output)) {
-                                        SketchwareUtil.toastError("Failed to rename library");
-                                    }
-                                    SketchwareUtil.toast("NOTE: Removed library from used local libraries");
-                                    loadLocalLibraryList();
-                                    realog.dismiss();
-                                });
-                        realog.getWindow()
-                                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                        root.findViewById(R.id.text_cancel).setOnClickListener(Helper.getDialogDismissListener(realog));
+                        root.findViewById(R.id.text_save).setOnClickListener(view1 -> {
+                            enable_this_lib.setChecked(false);
+                            File input = new File(LOCAL_LIBRARYS_PATH.concat(name_text_lib.getText().toString()));
+                            File output = new File(LOCAL_LIBRARYS_PATH.concat(filename.getText().toString()));
+                            if (!input.renameTo(output)) {
+                                SketchwareUtil.toastError("Failed to rename library");
+                            }
+                            SketchwareUtil.toast("NOTE: Removed library from used local libraries");
+                            loadLocalLibraryList();
+                            realog.dismiss();
+                        });
+                        realog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                         filename.requestFocus();
                         realog.setView(root);
                         realog.show();
@@ -415,13 +405,10 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         final AlertDialog infoDialog = new AlertDialog.Builder(ManageLocalLibraryActivity.this).create();
 
                         final View dialogView = getLayoutInflater().inflate(R.layout.dialog_info_layout, null);
-                        final LinearLayout titleLayout = dialogView
-                                .findViewById(R.id.dialoginfolayoutLinearLayout0);
+                        final LinearLayout titleLayout = dialogView.findViewById(R.id.dialoginfolayoutLinearLayout0);
                         final TextInputLayout tilName = dialogView.findViewById(R.id.dialoginfolayoutLinearLayout1);
-                        final TextInputLayout tilImport = dialogView
-                                .findViewById(R.id.dialoginfolayoutLinearLayout2);
-                        final TextInputLayout tilManifast = dialogView
-                                .findViewById(R.id.dialoginfolayoutLinearLayout3);
+                        final TextInputLayout tilImport = dialogView.findViewById(R.id.dialoginfolayoutLinearLayout2);
+                        final TextInputLayout tilManifast = dialogView.findViewById(R.id.dialoginfolayoutLinearLayout3);
                         final EditText etName = dialogView.findViewById(R.id.edittext_info_name);
                         final EditText etImport = dialogView.findViewById(R.id.edittext_info_import);
                         final EditText etManifast = dialogView.findViewById(R.id.edittext_info_manifast);
@@ -439,25 +426,17 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         etName.setEnabled(true);
                         etName.setTextIsSelectable(true);
                         etName.setKeyListener(null);
-                        etName.setText(
-                                (infoName.exists() && !isEmpty() ? FileUtil.readFile(infoName.getAbsolutePath())
-                                        : "Not avaliable!"));
+                        etName.setText((infoName.exists() && !isEmpty() ? FileUtil.readFile(infoName.getAbsolutePath()) : "Not avaliable!"));
                         etImport.setEnabled(true);
                         etImport.setTextIsSelectable(true);
                         etImport.setKeyListener(null);
-                        etImport.setText(
-                                (infoImport.exists() && !isEmpty() ? FileUtil.readFile(infoImport.getAbsolutePath())
-                                        : "Not avaliable!"));
+                        etImport.setText((infoImport.exists() && !isEmpty() ? FileUtil.readFile(infoImport.getAbsolutePath()) : "Not avaliable!"));
                         etManifast.setEnabled(true);
                         etManifast.setTextIsSelectable(true);
                         etManifast.setKeyListener(null);
-                        etManifast.setText((infoManifast.exists() && !isEmpty()
-                                ? FileUtil.readFile(infoManifast.getAbsolutePath())
-                                : "Not avaliable!"));
-                        dialogView.findViewById(R.id.text_info_ok)
-                                .setOnClickListener(Helper.getDialogDismissListener(infoDialog));
-                        infoDialog.getWindow()
-                                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+                        etManifast.setText((infoManifast.exists() && !isEmpty() ? FileUtil.readFile(infoManifast.getAbsolutePath()) : "Not avaliable!"));
+                        dialogView.findViewById(R.id.text_info_ok).setOnClickListener(Helper.getDialogDismissListener(infoDialog));
+                        infoDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                         infoDialog.setView(dialogView);
                         infoDialog.show();
                     });
