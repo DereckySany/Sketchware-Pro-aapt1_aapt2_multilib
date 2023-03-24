@@ -327,7 +327,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             } else {
                 enable_this_lib.setEnabled(false);
             }
-            main_content.setOnClickListener(view -> {
+            show_expand_bar_options.setOnClickListener(view -> {
                 if (expand_bar_options.getVisibility() == View.GONE) {
                     expand_bar_options.setVisibility(View.VISIBLE);
                     show_expand_bar_options.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_less_24));
@@ -358,6 +358,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         fileNameToDelete.requestFocus();
                         deleteDialog.setView(root);
                         deleteDialog.show();
+                        expand_bar_options.setVisibility(View.GONE);
+                        show_expand_bar_options.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_more_24));
                     });
                     expand_rename_option.setOnClickListener(v -> {
                         final AlertDialog realog = new AlertDialog.Builder(ManageLocalLibraryActivity.this).create();
@@ -391,6 +393,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         filename.requestFocus();
                         realog.setView(root);
                         realog.show();
+                        expand_bar_options.setVisibility(View.GONE);
+                        show_expand_bar_options.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_more_24));
                     });
                     expand_info_option.setOnClickListener(v -> {
                         final String libraryName = name_text_lib.getText().toString();
@@ -439,6 +443,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         infoDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                         infoDialog.setView(dialogView);
                         infoDialog.show();
+                        expand_bar_options.setVisibility(View.GONE);
+                        show_expand_bar_options.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_more_24));
                     });
                 } else {
                     expand_bar_options.setVisibility(View.GONE);

@@ -8,28 +8,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_round_white"
+        android:gravity="center"
         android:padding="@dimen/mtrl_btn_icon_padding">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/mtrl_btn_icon_padding"
-            android:src="@drawable/colored_box_96"
+            android:src="@drawable/colored_box_96" />
+
+        <ImageView
+            android:id="@+id/imageView_indicator_content_use_lib"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_ok_48dp"
             android:visibility="visible" />
 
         <LinearLayout
             android:id="@+id/main_content_use_lib"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/mtrl_btn_icon_padding">
+            android:layout_weight="1">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical">
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingLeft="2pt">
 
                 <TextView
                     android:id="@+id/name_text_content_use_lib"
@@ -40,18 +47,6 @@
                     android:text="Google Mavem"
                     android:textColor="@color/colorAccent" />
 
-                <RadioButton
-                    android:id="@+id/radiobutton_content_use_lib"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:checked="true" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical">
-
                 <TextView
                     android:id="@+id/status_text_content_use_lib"
                     android:layout_width="wrap_content"
@@ -59,15 +54,13 @@
                     android:layout_weight="1"
                     android:gravity="center|left"
                     android:text="Done" />
-
-                <ImageView
-                    android:id="@+id/imageView_indicator_content_use_lib"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="2pt"
-                    android:src="@drawable/ic_cancel_48dp" />
-
             </LinearLayout>
+
+            <RadioButton
+                android:id="@+id/radiobutton_content_use_lib"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:clickable="false"/>
         </LinearLayout>
 
         <ImageButton
