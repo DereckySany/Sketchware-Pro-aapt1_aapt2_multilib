@@ -20,15 +20,8 @@
             android:src="@drawable/open_box_48"
             android:visibility="visible" />
 
-        <ImageView
-            android:id="@+id/imageView_indicator_content_use_lib"
-            android:layout_width="9pt"
-            android:layout_height="9pt"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_cancel_48dp"
-            android:visibility="gone" />
-
         <LinearLayout
+            android:id="@+id/linearlayout_indicator_content_use_lib"
             android:layout_width="3pt"
             android:layout_height="3pt"
             android:layout_gravity="center"

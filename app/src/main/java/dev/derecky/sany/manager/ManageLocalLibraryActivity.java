@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,7 +16,6 @@ import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -292,7 +292,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             final TextView name_text_lib = convertView.findViewById(R.id.name_text_content_use_lib);
             final RadioButton enable_this_lib = convertView.findViewById(R.id.radiobutton_content_use_lib);
 
-            final ImageView status_image = convertView.findViewById(R.id.imageView_indicator_content_use_lib);
+            final LinearLayout status_indicator = convertView.findViewById(R.id.linearlayout_indicator_content_use_lib);
             final TextView status_text = convertView.findViewById(R.id.status_text_content_use_lib);
 
             final ImageButton show_expand_bar_options = convertView.findViewById(R.id.expand_view_content_use_lib);
@@ -318,7 +318,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                 FileUtil.writeFile(IN_USE_LIBRARY_FILE_PATH, new Gson().toJson(project_used_libs));
             });
 
-            setColorIndicator(status_image, status_text, libconfig);
+            setColorIndicator(status_indicator, status_text, libconfig);
 
             enable_this_lib.setChecked(false);
             if (!notAssociatedWithProject) {
@@ -513,7 +513,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             return localLibrary;
         }
 
-        private void setColorIndicator(ImageView imageView, TextView indicator, String lib_name) {
+        private void setColorIndicator(LinearLayout linearLayout_indicator, TextView indicator, String lib_name) {
             String[] files = {"classes.jar", "classes.dex", "AndroidManifest.xml", "config"};
             StringBuilder status = new StringBuilder();
             // Verifica se todos os arquivos em files existem no caminho lib_name
@@ -526,7 +526,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
             if (!missingFiles.isEmpty()) {
                 // Se houver arquivos ausentes, define o status como "Error: falta $arquivo1, $arquivo2..."
-                status.append("Error: missing ");
+                status.append("Missing: ");
                 for (int i = 0; i < missingFiles.size(); i++) {
                     if (i > 0) {
                         status.append(", ");
@@ -534,18 +534,31 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                     status.append(missingFiles.get(i));
                 }
                 // Verifica se os únicos arquivos ausentes são /config e /AndroidManifest.xml
-                if (missingFiles.contains("/config") || missingFiles.contains("/AndroidManifest.xml")) {
-                    imageView.setImageDrawable(getDrawable(R.drawable.ic_warning_96dp));
+                if (missingFiles.contains("config") || missingFiles.contains("AndroidManifest.xml")) {
+                    // add warning
+                    setIndicatorColor(linearLayout_indicator, 0xFF555555);
+
                 } else {
-                    imageView.setImageDrawable(getDrawable(R.drawable.ic_cancel_48dp));
+                    //add fail
+                    setIndicatorColor(linearLayout_indicator, 0xFFD50000);
                 }
             } else {
                 // Se todos os arquivos existirem, define o status como "Done!"
                 status.append("Done!");
-                imageView.setImageDrawable(getDrawable(R.drawable.ic_ok_48dp));
+                setIndicatorColor(linearLayout_indicator, 0xFF00E676);
             }
             // Define o texto do indicador de status
             indicator.setText(status);
+        }
+
+        private void setIndicatorColor(LinearLayout linearLayout, int color) {
+            linearLayout.setBackground(new GradientDrawable() {
+                public GradientDrawable getIns(int a, int b) {
+                    this.setCornerRadius(a);
+                    this.setColor(b);
+                    return this;
+                }
+            }.getIns((int) 15, color));
         }
     }
 }
