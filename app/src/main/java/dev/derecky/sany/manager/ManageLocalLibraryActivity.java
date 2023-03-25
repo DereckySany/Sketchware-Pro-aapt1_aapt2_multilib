@@ -285,7 +285,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             if (convertView == null) {
                 convertView = getLayoutInflater().inflate(R.layout.view_item_local_lib_new, parent, false);
             }
-            final LinearLayout main_content = convertView.findViewById(R.id.main_content_use_lib);
             final TextView name_text_lib = convertView.findViewById(R.id.name_text_content_use_lib);
             final RadioButton enable_this_lib = convertView.findViewById(R.id.radiobutton_content_use_lib);
 
@@ -303,8 +302,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
             String libname = name_text_lib.getText().toString();
             String libconfig = LOCAL_LIBRARYS_PATH + libname;
-
-            main_content.setOnClickListener(view -> enable_this_lib.performClick());
 
             enable_this_lib.setOnClickListener(v -> {
                 HashMap<String, Object> localLibrary = getLocalLibraryData(libname);
