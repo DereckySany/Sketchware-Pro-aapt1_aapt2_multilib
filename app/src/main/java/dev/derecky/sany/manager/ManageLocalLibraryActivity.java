@@ -372,7 +372,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             }
             show_expand_bar_options.setOnClickListener(view -> {
                 if (expand_bar_options.getVisibility() == View.GONE) {
-                    isExpandBarVisible.set(position, true);
+                    isExpandBarVisible.add(position, true);
                     expand_bar_options.setVisibility(View.VISIBLE);
                     expand_bar_options.animate().translationY(0).start();
                     show_expand_bar_options.animate().rotationX(180).start();
@@ -403,7 +403,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         fileNameToDelete.requestFocus();
                         deleteDialog.setView(root);
                         deleteDialog.show();
-                        isExpandBarVisible.set(position, false);
+                        isExpandBarVisible.add(position, false);
                         expand_bar_options.animate().translationY(-50).start();
                         expand_bar_options.setVisibility(View.GONE);
                         show_expand_bar_options.animate().rotationX(0).start();
@@ -440,7 +440,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         filename.requestFocus();
                         realog.setView(root);
                         realog.show();
-                        isExpandBarVisible.set(position, false);
+                        isExpandBarVisible.add(position, false);
                         expand_bar_options.animate().translationY(-50).start();
                         expand_bar_options.setVisibility(View.GONE);
                         show_expand_bar_options.animate().rotationX(0).start();
@@ -492,13 +492,13 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         infoDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                         infoDialog.setView(dialogView);
                         infoDialog.show();
-                        isExpandBarVisible.set(position, false);
+                        isExpandBarVisible.add(position, false);
                         expand_bar_options.animate().translationY(-50).start();
                         expand_bar_options.setVisibility(View.GONE);
                         show_expand_bar_options.animate().rotationX(0).start();
                     });
                 } else {
-                    isExpandBarVisible.set(position, false);
+                    isExpandBarVisible.add(position, false);
                     expand_bar_options.animate().translationY(-50).start();
                     expand_bar_options.setVisibility(View.GONE);
                     show_expand_bar_options.animate().rotationX(0).start();
