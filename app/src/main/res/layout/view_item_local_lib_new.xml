@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:rotationX="1">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,8 +16,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/open_box_48"
-            android:visibility="visible" />
+            android:src="@drawable/package_96" />
 
         <LinearLayout
             android:id="@+id/linearlayout_indicator_content_use_lib"
@@ -26,13 +24,12 @@
             android:layout_height="3pt"
             android:layout_gravity="center"
             android:layout_margin="1pt"
-            android:background="@color/scolor_green_02"
-            android:visibility="visible" />
+            android:background="@color/scolor_green_02" />
 
         <LinearLayout
             android:id="@+id/main_content_use_lib"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1">
 
             <LinearLayout
@@ -45,27 +42,22 @@
 
                 <TextView
                     android:id="@+id/name_text_content_use_lib"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center|left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="Google Mavem"
                     android:textColor="@color/colorAccent" />
 
                 <TextView
                     android:id="@+id/status_text_content_use_lib"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center|left"
+                    android:layout_height="match_parent"
                     android:text="Done" />
             </LinearLayout>
 
             <RadioButton
                 android:id="@+id/radiobutton_content_use_lib"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:clickable="false" />
+                android:layout_height="match_parent" />
         </LinearLayout>
 
         <ImageButton
@@ -83,7 +75,6 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_rounded_bottom"
         android:gravity="center"
-        android:isScrollContainer="false"
         android:orientation="horizontal"
         android:paddingVertical="@dimen/padding_edit_view"
         android:translationY="-50dp"

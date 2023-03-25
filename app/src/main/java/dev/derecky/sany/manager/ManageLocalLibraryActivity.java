@@ -307,6 +307,10 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             String libname = name_text_lib.getText().toString();
             String libconfig = LOCAL_LIBRARYS_PATH + libname;
 
+            enable_this_lib.setOnClickListener(view -> {
+                main_content.performClick();
+            });
+
             main_content.setOnClickListener(v -> {
                 HashMap<String, Object> localLibrary = getLocalLibraryData(libname);
                 if (!enable_this_lib.isChecked()) {
@@ -332,7 +336,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                 if (expand_bar_options.getVisibility() == View.GONE) {
                     expand_bar_options.setVisibility(View.VISIBLE);
                     expand_bar_options.animate().translationY(0).start();
-                    //show_expand_bar_options.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_less_24));
                     show_expand_bar_options.animate().rotationX(180).start();
                     expand_delete_option.setOnClickListener(v -> {
                         final AlertDialog deleteDialog = new AlertDialog.Builder(ManageLocalLibraryActivity.this).create();
@@ -361,9 +364,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         fileNameToDelete.requestFocus();
                         deleteDialog.setView(root);
                         deleteDialog.show();
-                        expand_bar_options.animate().translationX(-50).start();
+                        expand_bar_options.animate().translationY(-50).start();
                         expand_bar_options.setVisibility(View.GONE);
-                        //show_expand_bar_options.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_more_24));
                         show_expand_bar_options.animate().rotationX(0).start();
                     });
                     expand_rename_option.setOnClickListener(v -> {
@@ -398,9 +400,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         filename.requestFocus();
                         realog.setView(root);
                         realog.show();
-                        expand_bar_options.animate().translationX(-50).start();
+                        expand_bar_options.animate().translationY(-50).start();
                         expand_bar_options.setVisibility(View.GONE);
-                        //show_expand_bar_options.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_more_24));
                         show_expand_bar_options.animate().rotationX(0).start();
                     });
                     expand_info_option.setOnClickListener(v -> {
@@ -450,108 +451,87 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         infoDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                         infoDialog.setView(dialogView);
                         infoDialog.show();
-                        expand_bar_options.animate().translationX(-50).start();
+                        expand_bar_options.animate().translationY(-50).start();
                         expand_bar_options.setVisibility(View.GONE);
-                        //show_expand_bar_options.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_more_24));
                         show_expand_bar_options.animate().rotationX(0).start();
                     });
                 } else {
-                    expand_bar_options.animate().translationX(-50).start();
+                    expand_bar_options.animate().translationY(-50).start();
                     expand_bar_options.setVisibility(View.GONE);
-                    //show_expand_bar_options.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_more_24));
                     show_expand_bar_options.animate().rotationX(0).start();
                 }
             });
             return convertView;
         }
-
-        private HashMap<String, Object> getLocalLibraryData(String libname) {
+        private HashMap<String, Object> getLocalLibraryData(String lib_name) {
             HashMap<String, Object> localLibrary = new HashMap<>();
-            localLibrary.put("name", libname);
+            localLibrary.put("name", lib_name);
 
-            File configPathFile = new File(LOCAL_LIBRARYS_PATH, libname + "/config");
-            if (configPathFile.exists()) {
-                String packageName = null;
-                try (BufferedReader reader = new BufferedReader(new FileReader(configPathFile))) {
-                    packageName = reader.readLine();
-                } catch (IOException e) {
-                    // Handle exception
-                }
-                localLibrary.put("packageName", packageName);
-            }
-
-            File resPathFile = new File(LOCAL_LIBRARYS_PATH, libname + "/res");
-            if (resPathFile.exists()) {
-                localLibrary.put("resPath", resPathFile.getPath());
-            }
-
-            File jarPathFile = new File(LOCAL_LIBRARYS_PATH, libname + "/classes.jar");
-            if (jarPathFile.exists()) {
-                localLibrary.put("jarPath", jarPathFile.getPath());
-            }
-
-            File dexPathFile = new File(LOCAL_LIBRARYS_PATH, libname + "/classes.dex");
-            if (dexPathFile.exists()) {
-                localLibrary.put("dexPath", dexPathFile.getPath());
-            }
-
-            File manifestPathFile = new File(LOCAL_LIBRARYS_PATH, libname + "/AndroidManifest.xml");
-            if (manifestPathFile.exists()) {
-                localLibrary.put("manifestPath", manifestPathFile.getPath());
-            }
-
-            File pgRulesPathFile = new File(LOCAL_LIBRARYS_PATH, libname + "/proguard.txt");
-            if (pgRulesPathFile.exists()) {
-                localLibrary.put("pgRulesPath", pgRulesPathFile.getPath());
-            }
-
-            File assetsPathFile = new File(LOCAL_LIBRARYS_PATH, libname + "/assets");
-            if (assetsPathFile.exists()) {
-                localLibrary.put("assetsPath", assetsPathFile.getPath());
-            }
+            addFileInfo(localLibrary, "packageName", lib_name + "/config");
+            addFileInfo(localLibrary, "resPath", lib_name + "/res");
+            addFileInfo(localLibrary, "jarPath", lib_name + "/classes.jar");
+            addFileInfo(localLibrary, "dexPath", lib_name + "/classes.dex");
+            addFileInfo(localLibrary, "manifestPath", lib_name + "/AndroidManifest.xml");
+            addFileInfo(localLibrary, "pgRulesPath", lib_name + "/proguard.txt");
+            addFileInfo(localLibrary, "assetsPath", lib_name + "/assets");
 
             return localLibrary;
         }
 
-        private void setColorIndicator(LinearLayout linearLayout_indicator, TextView indicator, String lib_name) {
+        private void addFileInfo(HashMap<String, Object> localLibrary, String key, String filePath) {
+            File file = new File(LOCAL_LIBRARYS_PATH, filePath);
+            if (file.exists()) {
+                localLibrary.put(key, file.getPath());
+            }
+        }
+
+        public enum FileStatus {
+            MISSING, WARNING, DONE
+        }
+
+        private List<String> getMissingFiles(String libName) {
             String[] files = {"classes.jar", "classes.dex", "AndroidManifest.xml", "config"};
-            StringBuilder status = new StringBuilder();
-            // Verifica se todos os arquivos em files existem no caminho lib_name
             List<String> missingFiles = new ArrayList<>();
             for (String file : files) {
-                if (!FileUtil.isExistFile(lib_name + File.separator + file)) {
+                if (!FileUtil.isExistFile(libName + File.separator + file)) {
                     missingFiles.add(file);
                 }
             }
-
-            if (!missingFiles.isEmpty()) {
-                // Se houver arquivos ausentes, define o status como "Error: falta $arquivo1, $arquivo2..."
-                status.append("Missing: ");
-                for (int i = 0; i < missingFiles.size(); i++) {
-                    if (i > 0) {
-                        status.append(", ");
-                    }
-                    status.append(missingFiles.get(i));
-                }
-                // Verifica se os únicos arquivos ausentes são /config e /AndroidManifest.xml
-                if (missingFiles.contains("config") || missingFiles.contains("AndroidManifest.xml")) {
-                    // add warning
-                    setIndicatorColor(linearLayout_indicator, 0xFF555555);
-
-                } else {
-                    //add fail
-                    setIndicatorColor(linearLayout_indicator, 0xFFD50000);
-                }
-            } else {
-                // Se todos os arquivos existirem, define o status como "Done!"
-                status.append("Done!");
-                setIndicatorColor(linearLayout_indicator, 0xFF00E676);
-            }
-            // Define o texto do indicador de status
-            indicator.setText(status);
+            return missingFiles;
         }
 
-        private void setIndicatorColor(LinearLayout linearLayout, int color) {
+        private FileStatus getStatus(List<String> missingFiles) {
+            if (missingFiles.contains("config") || missingFiles.contains("AndroidManifest.xml")) {
+                return FileStatus.WARNING;
+            } else if (missingFiles.isEmpty()) {
+                return FileStatus.DONE;
+            } else {
+                return FileStatus.MISSING;
+            }
+        }
+
+        private String getStatusMessage(List<String> missingFiles) {
+            if (missingFiles.isEmpty()) {
+                return "Done!";
+            } else {
+                return String.format("Missing: %s", String.join(", ", missingFiles));
+            }
+        }
+
+        private void setIndicatorBackground(LinearLayout linearLayout, FileStatus status) {
+            int color;
+            switch (status) {
+                case MISSING:
+                    color = 0xFFD50000; // Red
+                    break;
+                case WARNING:
+                    color = 0xFF555555; // Gray
+                    break;
+                case DONE:
+                default:
+                    color = 0xFF00E676; // Green
+                    break;
+            }
             linearLayout.setBackground(new GradientDrawable() {
                 public GradientDrawable getIns(int a, int b) {
                     this.setCornerRadius(a);
@@ -559,6 +539,13 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                     return this;
                 }
             }.getIns((int) 15, color));
+        }
+
+        private void setColorIndicator(LinearLayout linearLayoutIndicator, TextView indicator, String libName) {
+            List<String> missingFiles = getMissingFiles(libName);
+            FileStatus status = getStatus(missingFiles);
+            setIndicatorBackground(linearLayoutIndicator, status);
+            indicator.setText(getStatusMessage(missingFiles));
         }
     }
 }
