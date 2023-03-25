@@ -28,7 +28,10 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.sketchware.remod.R;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -54,6 +57,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     private boolean notAssociatedWithProject = false;
     private ListView listview;
     private ArrayList<HashMap<String, Object>> PROJECT_USED_LIBS = new ArrayList<>();
+    private List<Boolean> isExpandBarVisible;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -231,6 +235,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
         List<String> directories = new LinkedList<>(uniqueDirectories);
         Collections.sort(directories, String.CASE_INSENSITIVE_ORDER);
+        isExpandBarVisible = Collections.nCopies(directories.size(), false);
 
         adapter = new LibraryAdapter(directories);
         ALL_LOCAL_LIBRARYS_LIST.addAll(directories);
@@ -326,9 +331,14 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             } else {
                 enable_this_lib.setEnabled(false);
             }
-
+            if (isExpandBarVisible.get(position)) {
+                expand_bar_options.setVisibility(View.VISIBLE);
+            } else {
+                expand_bar_options.setVisibility(View.GONE);
+            }
             show_expand_bar_options.setOnClickListener(view -> {
                 if (expand_bar_options.getVisibility() == View.GONE) {
+                    isExpandBarVisible.set(position, true);
                     expand_bar_options.setVisibility(View.VISIBLE);
                     expand_bar_options.animate().translationY(0).start();
                     show_expand_bar_options.animate().rotationX(180).start();
@@ -359,6 +369,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         fileNameToDelete.requestFocus();
                         deleteDialog.setView(root);
                         deleteDialog.show();
+                        isExpandBarVisible.set(position, false);
                         expand_bar_options.animate().translationY(-50).start();
                         expand_bar_options.setVisibility(View.GONE);
                         show_expand_bar_options.animate().rotationX(0).start();
@@ -395,6 +406,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         filename.requestFocus();
                         realog.setView(root);
                         realog.show();
+                        isExpandBarVisible.set(position, false);
                         expand_bar_options.animate().translationY(-50).start();
                         expand_bar_options.setVisibility(View.GONE);
                         show_expand_bar_options.animate().rotationX(0).start();
@@ -446,11 +458,13 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         infoDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                         infoDialog.setView(dialogView);
                         infoDialog.show();
+                        isExpandBarVisible.set(position, false);
                         expand_bar_options.animate().translationY(-50).start();
                         expand_bar_options.setVisibility(View.GONE);
                         show_expand_bar_options.animate().rotationX(0).start();
                     });
                 } else {
+                    isExpandBarVisible.set(position, false);
                     expand_bar_options.animate().translationY(-50).start();
                     expand_bar_options.setVisibility(View.GONE);
                     show_expand_bar_options.animate().rotationX(0).start();
@@ -463,7 +477,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             HashMap<String, Object> localLibrary = new HashMap<>();
             localLibrary.put("name", lib_name);
 
-            addFileInfo(localLibrary, "packageName", lib_name + "/config");
+            readFileInfo(localLibrary, "packageName", lib_name + "/config");
             addFileInfo(localLibrary, "resPath", lib_name + "/res");
             addFileInfo(localLibrary, "jarPath", lib_name + "/classes.jar");
             addFileInfo(localLibrary, "dexPath", lib_name + "/classes.dex");
@@ -472,6 +486,22 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             addFileInfo(localLibrary, "assetsPath", lib_name + "/assets");
 
             return localLibrary;
+        }
+
+        private void readFileInfo(HashMap<String, Object> localLibrary, String key, String filePath) {
+            File file = new File(LOCAL_LIBRARYS_PATH, filePath);
+            if (!file.exists()) {
+                return;
+            }
+
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String packageName = reader.readLine();
+                if (packageName != null) {
+                    localLibrary.put(key, packageName.trim());
+                }
+            } catch (IOException e) {
+                // Handle exception
+            }
         }
 
         private void addFileInfo(HashMap<String, Object> localLibrary, String key, String filePath) {
