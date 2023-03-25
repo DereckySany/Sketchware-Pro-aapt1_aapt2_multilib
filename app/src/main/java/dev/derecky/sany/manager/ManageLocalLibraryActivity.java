@@ -305,12 +305,14 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
             enable_this_lib.setOnClickListener(v -> {
                 HashMap<String, Object> localLibrary = getLocalLibraryData(libname);
+                boolean isChecked = enable_this_lib.isChecked(); //false
                 if (!enable_this_lib.isChecked()) {
                     project_used_libs.remove(localLibrary);
                 } else {
                     project_used_libs.remove(localLibrary);
                     project_used_libs.add(localLibrary);
                 }
+                enable_this_lib.setChecked(!isChecked); //true
                 FileUtil.writeFile(IN_USE_LIBRARY_FILE_PATH, new Gson().toJson(project_used_libs));
             });
 
