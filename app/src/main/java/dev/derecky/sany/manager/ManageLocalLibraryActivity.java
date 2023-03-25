@@ -370,8 +370,12 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             }
 
             if (isExpandBarVisibleForPosition) {
+                show_expand_bar_options.setRotationX(180);
+                expand_bar_options.setTranslationY(0);
                 expand_bar_options.setVisibility(View.VISIBLE);
             } else {
+                show_expand_bar_options.setRotationX(0);
+                expand_bar_options.setTranslationY(-50);
                 expand_bar_options.setVisibility(View.GONE);
             }
             show_expand_bar_options.setOnClickListener(view -> {
