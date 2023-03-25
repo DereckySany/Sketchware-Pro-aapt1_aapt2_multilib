@@ -33,6 +33,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.AbstractList;
 import java.util.AbstractSequentialList;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,7 +63,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     private boolean notAssociatedWithProject = false;
     private ListView listview;
     private ArrayList<HashMap<String, Object>> PROJECT_USED_LIBS = new ArrayList<>();
-    private List<Boolean> isExpandBarVisible = new LinkedList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -241,9 +241,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                 .sorted(String.CASE_INSENSITIVE_ORDER)
                 .collect(Collectors.toList());
 
-        // Initialize the expand bar visibility list
-        isExpandBarVisible = Collections.nCopies(directories.size(), false);
-
         // Initialize the adapter with the directory names
         adapter = new LibraryAdapter(directories);
         ALL_LOCAL_LIBRARYS_LIST.addAll(directories);
@@ -300,10 +297,12 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
     public class LibraryAdapter extends BaseAdapter {
 
+        private final AbstractList<Boolean> isExpandBarVisible;
         private List<String> localLibraries;
 
         public LibraryAdapter(List<String> localLibraries) {
             this.localLibraries = localLibraries;
+            this.isExpandBarVisible = new ArrayList<>(Collections.nCopies(localLibraries.size(), false));
         }
 
         public void updateData(List<String> localLibraries) {
@@ -344,13 +343,13 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             final ImageButton expand_rename_option = convertView.findViewById(R.id.rename_button_content_use_lib);
             final ImageButton expand_info_option = convertView.findViewById(R.id.info_button_content_use_lib);
 
-            name_text_lib.setText(localLibraries.get(position));
+            boolean isExpandBarVisibleForPosition = isExpandBarVisible.get(position);
 
-            String libname = name_text_lib.getText().toString();
-            String libconfig = LOCAL_LIBRARYS_PATH + libname;
+            String directory = localLibraries.get(position);
+            name_text_lib.setText(directory);
 
             enable_this_lib.setOnClickListener(v -> {
-                HashMap<String, Object> localLibrary = getLocalLibraryData(libname);
+                HashMap<String, Object> localLibrary = getLocalLibraryData(directory);
                 if (!enable_this_lib.isChecked()) {
                     PROJECT_USED_LIBS.remove(localLibrary);
                 } else {
@@ -360,17 +359,17 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                 FileUtil.writeFile(IN_USE_LIBRARY_FILE_PATH, new Gson().toJson(PROJECT_USED_LIBS));
             });
 
-            setColorIndicator(status_indicator, status_text, libconfig);
+            setColorIndicator(status_indicator, status_text, directory);
 
             enable_this_lib.setChecked(false);
             if (!notAssociatedWithProject) {
                 ArrayList<HashMap<String, Object>> lookup_list = new Gson().fromJson(FileUtil.readFile(IN_USE_LIBRARY_FILE_PATH), Helper.TYPE_MAP_LIST);
-                enable_this_lib.setChecked(lookup_list.contains(getLocalLibraryData(libname)));
+                enable_this_lib.setChecked(lookup_list.contains(getLocalLibraryData(directory)));
             } else {
                 enable_this_lib.setEnabled(false);
             }
 
-            if (isExpandBarVisible.get(position)) {
+            if (isExpandBarVisibleForPosition) {
                 expand_bar_options.setVisibility(View.VISIBLE);
             } else {
                 expand_bar_options.setVisibility(View.GONE);
@@ -378,7 +377,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             show_expand_bar_options.setOnClickListener(view -> {
                 if (expand_bar_options.getVisibility() == View.GONE) {
                     expand_bar_options.setVisibility(View.VISIBLE);
-                    isExpandBarVisible.set(position,true);
+                    isExpandBarVisible.set(position, true);
                     expand_bar_options.animate().translationY(0).start();
                     show_expand_bar_options.animate().rotationX(180).start();
                     expand_delete_option.setOnClickListener(v -> {
@@ -395,12 +394,12 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                             deleteTitleTextView.setText("Delete local library");
                         }
                         deleteFileName.setHint("That local library will be permanently removed!");
-                        fileNameToDelete.setText(name_text_lib.getText().toString());
+                        fileNameToDelete.setText(directory);
                         fileNameToDelete.setEnabled(false);
                         root.findViewById(R.id.text_del_cancel).setOnClickListener(Helper.getDialogDismissListener(deleteDialog));
                         root.findViewById(R.id.text_del_delete).setOnClickListener(view1 -> {
                             enable_this_lib.setChecked(false);
-                            final String lib = LOCAL_LIBRARYS_PATH.concat(name_text_lib.getText().toString());
+                            final String lib = LOCAL_LIBRARYS_PATH.concat(directory);
                             deleteLibrary(lib);
                             deleteDialog.dismiss();
                         });
@@ -410,7 +409,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         deleteDialog.show();
                         expand_bar_options.animate().translationY(-50).start();
                         expand_bar_options.setVisibility(View.GONE);
-                        isExpandBarVisible.set(position,false);
+                        isExpandBarVisible.set(position, false);
                         show_expand_bar_options.animate().rotationX(0).start();
                     });
                     expand_rename_option.setOnClickListener(v -> {
@@ -428,11 +427,11 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         }
 
                         tilFilename.setHint("New local library name");
-                        filename.setText(name_text_lib.getText().toString());
+                        filename.setText(directory);
                         root.findViewById(R.id.text_cancel).setOnClickListener(Helper.getDialogDismissListener(realog));
                         root.findViewById(R.id.text_save).setOnClickListener(view1 -> {
                             enable_this_lib.setChecked(false);
-                            File input = new File(LOCAL_LIBRARYS_PATH.concat(name_text_lib.getText().toString()));
+                            File input = new File(LOCAL_LIBRARYS_PATH.concat(directory));
                             File output = new File(LOCAL_LIBRARYS_PATH.concat(filename.getText().toString()));
                             if (!input.renameTo(output)) {
                                 SketchwareUtil.toastError("Failed to rename library");
@@ -447,11 +446,11 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         realog.show();
                         expand_bar_options.animate().translationY(-50).start();
                         expand_bar_options.setVisibility(View.GONE);
-                        isExpandBarVisible.set(position,false);
+                        isExpandBarVisible.set(position, false);
                         show_expand_bar_options.animate().rotationX(0).start();
                     });
                     expand_info_option.setOnClickListener(v -> {
-                        final String libraryName = name_text_lib.getText().toString();
+                        final String libraryName = directory;
                         final String configPath = LOCAL_LIBRARYS_PATH.concat(libraryName + "/config");
                         final String versionPath = LOCAL_LIBRARYS_PATH.concat(libraryName + "/version");
                         final String manifastPath = LOCAL_LIBRARYS_PATH.concat(libraryName + "/AndroidManifest.xml");
@@ -499,13 +498,13 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                         infoDialog.show();
                         expand_bar_options.animate().translationY(-50).start();
                         expand_bar_options.setVisibility(View.GONE);
-                        isExpandBarVisible.set(position,false);
+                        isExpandBarVisible.set(position, false);
                         show_expand_bar_options.animate().rotationX(0).start();
                     });
                 } else {
                     expand_bar_options.animate().translationY(-50).start();
                     expand_bar_options.setVisibility(View.GONE);
-                    isExpandBarVisible.set(position,false);
+                    isExpandBarVisible.set(position, false);
                     show_expand_bar_options.animate().rotationX(0).start();
                 }
             });
@@ -609,7 +608,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         }
 
         private void setColorIndicator(LinearLayout linearLayoutIndicator, TextView indicator, String libName) {
-            List<String> missingFiles = getMissingFiles(libName);
+            String lib_path = LOCAL_LIBRARYS_PATH + libName;
+            List<String> missingFiles = getMissingFiles(lib_path);
             FileStatus status = getStatus(missingFiles);
             setIndicatorBackground(linearLayoutIndicator, status);
             indicator.setText(getStatusMessage(missingFiles, status));
