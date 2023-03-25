@@ -28,10 +28,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.sketchware.remod.R;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -307,9 +304,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             String libname = name_text_lib.getText().toString();
             String libconfig = LOCAL_LIBRARYS_PATH + libname;
 
-            main_content.setOnClickListener(view -> {
-                enable_this_lib.performClick();
-            });
+            main_content.setOnClickListener(view -> enable_this_lib.performClick());
 
             enable_this_lib.setOnClickListener(v -> {
                 HashMap<String, Object> localLibrary = getLocalLibraryData(libname);
@@ -463,6 +458,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             });
             return convertView;
         }
+
         private HashMap<String, Object> getLocalLibraryData(String lib_name) {
             HashMap<String, Object> localLibrary = new HashMap<>();
             localLibrary.put("name", lib_name);
@@ -502,6 +498,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
         private FileStatus getStatus(List<String> missingFiles) {
             if (missingFiles.contains("config") || missingFiles.contains("AndroidManifest.xml")) {
+                return FileStatus.MISSING;
+            } else if (missingFiles.contains("classes.dex") || missingFiles.contains("classes.jar")) {
                 return FileStatus.WARNING;
             } else if (missingFiles.isEmpty()) {
                 return FileStatus.DONE;
@@ -510,11 +508,15 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             }
         }
 
-        private String getStatusMessage(List<String> missingFiles) {
-            if (missingFiles.isEmpty()) {
-                return "Done!";
-            } else {
-                return String.format("Missing: %s", String.join(", ", missingFiles));
+        private String getStatusMessage(List<String> missingFiles, FileStatus status) {
+            switch (status) {
+                case MISSING:
+                    return String.format("Missing: %s", String.join(", ", missingFiles));
+                case WARNING:
+                    return String.format("Warning! Missing: %s", String.join(", ", missingFiles));
+                case DONE:
+                default:
+                    return "Done!";
             }
         }
 
@@ -522,10 +524,10 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             int color;
             switch (status) {
                 case MISSING:
-                    color = 0xFFD50000; // Red
+                    color = 0xFFFF8700; // Orange
                     break;
                 case WARNING:
-                    color = 0xFF555555; // Gray
+                    color = 0xFFD50000; // Red
                     break;
                 case DONE:
                 default:
@@ -545,7 +547,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             List<String> missingFiles = getMissingFiles(libName);
             FileStatus status = getStatus(missingFiles);
             setIndicatorBackground(linearLayoutIndicator, status);
-            indicator.setText(getStatusMessage(missingFiles));
+            indicator.setText(getStatusMessage(missingFiles, status));
         }
     }
 }
