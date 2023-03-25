@@ -16,7 +16,8 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/package_96" />
+            android:src="@drawable/package_96"
+            android:paddingLeft="@dimen/mtrl_btn_icon_padding"/>
 
         <LinearLayout
             android:id="@+id/linearlayout_indicator_content_use_lib"
@@ -54,8 +55,8 @@
                     android:text="Done" />
             </LinearLayout>
 
-            <RadioButton
-                android:id="@+id/radiobutton_content_use_lib"
+            <CheckBox
+                android:id="@+id/check_content_use_lib"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
         </LinearLayout>

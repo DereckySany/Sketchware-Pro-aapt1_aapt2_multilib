@@ -24,7 +24,7 @@
             android:textColor="?colorPrimaryDark"
             android:gravity="center"
             android:focusable="false"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Write Library dependency"
             android:singleLine="true"
@@ -41,7 +41,7 @@
         <ProgressBar
             android:id="@id/progressbar1"
             android:focusable="false"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4.0dip"
             android:layout_marginBottom="4.0dip"
@@ -60,9 +60,9 @@
 			<EditText
 				android:id="@id/edittext1"
 				android:layout_width="0.0dip"
-				android:layout_height="wrap_content"
+				android:layout_height="match_parent"
 				android:layout_weight="1"
-				android:layout_marginLeft="5dp"
+				android:layout_marginStart="5dp"
 				android:gravity="center"
 				android:textSize="14.0sp"
 				android:hint="Example: com.anjlab.android.iab.v3:library:1.0.44"
@@ -77,7 +77,7 @@
 				android:layout_width="36.0dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/transparent"
-				android:layout_marginRight="5dp"
+				android:layout_marginEnd="5dp"
 				android:src="@drawable/ic_content_paste_grey"
 				android:scaleType="center" />
 		</LinearLayout>
@@ -96,7 +96,7 @@
             android:paddingTop="2.0dip"
             android:paddingBottom="10.0dip"
             android:focusable="false"
-            android:layout_width="3.0dip"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="You can find the dependency of a library in Github, typically in the Readme file. However, please note that this is not Gradle system, so it won't download inner dependencies of a library. If the library you download has inner dependencies, you will need to download them seperately."
             android:layout_weight="1.0" />
@@ -117,33 +117,38 @@
     </LinearLayout>
     <LinearLayout
         android:gravity="center"
+        android:layout_gravity="center"
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10.0dip">
+
         <RadioGroup
+            android:id="@+id/choselibraryextesion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
-            android:id="@+id/choselibraryextesion"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:weightSum="5">
+
             <RadioButton
-                android:textStyle="bold"
                 android:id="@+id/liblaryformataar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="100.0dip"
+                android:layout_weight="1"
                 android:checked="true"
                 android:text="aar"
-                android:layout_weight="1.0" />
+                android:textStyle="bold" />
+
             <RadioButton
-                android:textStyle="bold"
                 android:id="@+id/liblaryformatjar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="100.0dip"
+                android:layout_weight="1"
                 android:text="jar"
-                android:layout_weight="1.0" />
+                android:textStyle="bold" />
         </RadioGroup>
     </LinearLayout>
     <LinearLayout

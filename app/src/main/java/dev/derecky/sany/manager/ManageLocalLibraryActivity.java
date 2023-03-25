@@ -14,11 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -48,18 +48,18 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
     private static String IN_USE_LIBRARY_FILE_PATH = "";
     private static String LOCAL_LIBRARYS_PATH = "";
-    private final CharSequence originalTitle = "Manage Local Library";
-    private final ArrayList<String> arrayList = new ArrayList<>();
+    private final CharSequence original_Title = "Manage Local Library";
+    private final ArrayList<String> ALL_LOCAL_LIBRARYS_LIST = new ArrayList<>();
     private LibraryAdapter adapter;
     private boolean notAssociatedWithProject = false;
     private ListView listview;
-    private ArrayList<HashMap<String, Object>> project_used_libs = new ArrayList<>();
+    private ArrayList<HashMap<String, Object>> PROJECT_USED_LIBS = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manage_local_library);
-        setTitle(originalTitle);
+        setTitle(original_Title);
         setTitleColor(R.color.white);
         listview = findViewById(R.id.list_local_librarys);
 
@@ -69,6 +69,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             IN_USE_LIBRARY_FILE_PATH = FileUtil.getExternalStorageDir().concat("/.sketchware/data/").concat(sc_id.concat("/local_library"));
             LOCAL_LIBRARYS_PATH = FileUtil.getExternalStorageDir().concat("/.sketchware/libs/local_libs/");
             loadLocalLibraryList();
+
 
         } else {
             finishAfterTransition();
@@ -92,7 +93,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
     @Override
     public void onOptionsMenuClosed(Menu menu) {
-        setTitle(originalTitle);
+        setTitle(original_Title);
         super.onOptionsMenuClosed(menu);
     }
 
@@ -140,33 +141,35 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     }
 
     private void showDialogImportLibrary() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose compiler");
+
         if (Build.VERSION.SDK_INT > 26) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Choose compiler")
-                    .setMessage("Would you like to use DX, D8 or R8 to compile the library?\n" +
+            builder.setMessage("Would you like to use DX, D8 or R8 to compile the library?\n" +
                             "D8 supports Java 8, while DX does not. Limitation: D8 only works on Android 8 and above.\n" +
                             "R8 is the new official Android Studio compiler.(but in alpha here!)")
-                    .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
-                            "D8").showDialog(ManageLocalLibraryActivity.this))
-                    .setNegativeButton("DX", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, false,
-                            "Dx").showDialog(ManageLocalLibraryActivity.this))
-                    .setNeutralButton("R8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
-                            "R8").showDialog(ManageLocalLibraryActivity.this))
-                    .setCancelable(true)
-                    .show();
-
+                    .setPositiveButton("D8", (dialog, which) -> {
+                        new LibraryDownloader(ManageLocalLibraryActivity.this, true, "D8").showDialog(ManageLocalLibraryActivity.this);
+                    })
+                    .setNegativeButton("DX", (dialog, which) -> {
+                        new LibraryDownloader(ManageLocalLibraryActivity.this, false, "Dx").showDialog(ManageLocalLibraryActivity.this);
+                    })
+                    .setNeutralButton("R8", (dialog, which) -> {
+                        new LibraryDownloader(ManageLocalLibraryActivity.this, true, "R8").showDialog(ManageLocalLibraryActivity.this);
+                    });
         } else {
-            new AlertDialog.Builder(this)
-                    .setTitle("Choose compiler")
-                    .setMessage("Would you like to use Dx or D8 to dex the library?\n" +
+            builder.setMessage("Would you like to use Dx or D8 to dex the library?\n" +
                             "D8 supports Java 8, whereas Dx does not. Limitation: D8 only works on Android 8 and above.")
-                    .setPositiveButton("D8", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, true,
-                            "D8").showDialog(ManageLocalLibraryActivity.this))
-                    .setNegativeButton("DX", (dialog, which) -> new LibraryDownloader(ManageLocalLibraryActivity.this, false,
-                            "Dx").showDialog(ManageLocalLibraryActivity.this))
-                    .setNeutralButton("Cancel", null)
-                    .show();
+                    .setPositiveButton("D8", (dialog, which) -> {
+                        new LibraryDownloader(ManageLocalLibraryActivity.this, true, "D8").showDialog(ManageLocalLibraryActivity.this);
+                    })
+                    .setNegativeButton("DX", (dialog, which) -> {
+                        new LibraryDownloader(ManageLocalLibraryActivity.this, false, "Dx").showDialog(ManageLocalLibraryActivity.this);
+                    })
+                    .setNeutralButton("Cancel", null);
         }
+
+        builder.setCancelable(true).show();
     }
 
     private void showDialogResetLibrary() {
@@ -206,12 +209,12 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     }
 
     private void loadLocalLibraryList() {
-        arrayList.clear();
+        ALL_LOCAL_LIBRARYS_LIST.clear();
         if (!notAssociatedWithProject) {
             if (!FileUtil.isExistFile(IN_USE_LIBRARY_FILE_PATH) || FileUtil.readFile(IN_USE_LIBRARY_FILE_PATH).equals("")) {
                 FileUtil.writeFile(IN_USE_LIBRARY_FILE_PATH, "[]");
             } else {
-                project_used_libs = new Gson().fromJson(FileUtil.readFile(IN_USE_LIBRARY_FILE_PATH), Helper.TYPE_MAP_LIST);
+                PROJECT_USED_LIBS = new Gson().fromJson(FileUtil.readFile(IN_USE_LIBRARY_FILE_PATH), Helper.TYPE_MAP_LIST);
             }
         }
 
@@ -230,19 +233,19 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         Collections.sort(directories, String.CASE_INSENSITIVE_ORDER);
 
         adapter = new LibraryAdapter(directories);
-        arrayList.addAll(directories);
+        ALL_LOCAL_LIBRARYS_LIST.addAll(directories);
         listview.setAdapter(adapter);
     }
 
     private void applyFilter(String query) {
         if (query.isEmpty()) {
-            adapter.updateData(arrayList);
+            adapter.updateData(ALL_LOCAL_LIBRARYS_LIST);
             adapter.notifyDataSetChanged();
             return;
         }
 
         List<String> filteredList = new ArrayList<>();
-        for (String library : arrayList) {
+        for (String library : ALL_LOCAL_LIBRARYS_LIST) {
             if (library.toLowerCase().contains(query.toLowerCase())) {
                 filteredList.add(library);
             }
@@ -286,7 +289,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                 convertView = getLayoutInflater().inflate(R.layout.view_item_local_lib_new, parent, false);
             }
             final TextView name_text_lib = convertView.findViewById(R.id.name_text_content_use_lib);
-            final RadioButton enable_this_lib = convertView.findViewById(R.id.radiobutton_content_use_lib);
+            final CheckBox enable_this_lib = convertView.findViewById(R.id.check_content_use_lib);
 
             final LinearLayout status_indicator = convertView.findViewById(R.id.linearlayout_indicator_content_use_lib);
             final TextView status_text = convertView.findViewById(R.id.status_text_content_use_lib);
@@ -305,15 +308,13 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
             enable_this_lib.setOnClickListener(v -> {
                 HashMap<String, Object> localLibrary = getLocalLibraryData(libname);
-                boolean isChecked = enable_this_lib.isChecked(); //false
                 if (!enable_this_lib.isChecked()) {
-                    project_used_libs.remove(localLibrary);
+                    PROJECT_USED_LIBS.remove(localLibrary);
                 } else {
-                    project_used_libs.remove(localLibrary);
-                    project_used_libs.add(localLibrary);
+                    PROJECT_USED_LIBS.remove(localLibrary);
+                    PROJECT_USED_LIBS.add(localLibrary);
                 }
-                enable_this_lib.setChecked(!isChecked); //true
-                FileUtil.writeFile(IN_USE_LIBRARY_FILE_PATH, new Gson().toJson(project_used_libs));
+                FileUtil.writeFile(IN_USE_LIBRARY_FILE_PATH, new Gson().toJson(PROJECT_USED_LIBS));
             });
 
             setColorIndicator(status_indicator, status_text, libconfig);
@@ -480,10 +481,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             }
         }
 
-        public enum FileStatus {
-            MISSING, WARNING, DONE
-        }
-
         private List<String> getMissingFiles(String libName) {
             String[] files = {"classes.jar", "classes.dex", "AndroidManifest.xml", "config"};
             List<String> missingFiles = new ArrayList<>();
@@ -547,6 +544,10 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             FileStatus status = getStatus(missingFiles);
             setIndicatorBackground(linearLayoutIndicator, status);
             indicator.setText(getStatusMessage(missingFiles, status));
+        }
+
+        public enum FileStatus {
+            MISSING, WARNING, DONE
         }
     }
 }
