@@ -39,6 +39,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import a.a.a.aB;
 import a.a.a.xB;
@@ -57,7 +58,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     private boolean notAssociatedWithProject = false;
     private ListView listview;
     private ArrayList<HashMap<String, Object>> PROJECT_USED_LIBS = new ArrayList<>();
-    private List<Boolean> isExpandBarVisible;
+    private List<Boolean> isExpandBarVisible = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -211,8 +212,41 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             }
         }.execute(lib);
     }
-
     private void loadLocalLibraryList() {
+        ALL_LOCAL_LIBRARYS_LIST.clear();
+
+        // Ensure that the project library file exists and is not empty
+        if (!notAssociatedWithProject) {
+            if (!FileUtil.isExistFile(IN_USE_LIBRARY_FILE_PATH) || FileUtil.readFile(IN_USE_LIBRARY_FILE_PATH).isEmpty()) {
+                FileUtil.writeFile(IN_USE_LIBRARY_FILE_PATH, "[]");
+            } else {
+                PROJECT_USED_LIBS = new Gson().fromJson(FileUtil.readFile(IN_USE_LIBRARY_FILE_PATH), Helper.TYPE_MAP_LIST);
+            }
+        }
+
+        // Get a list of all local library names
+        List<String> localLibraryNames = new LinkedList<>();
+        FileUtil.listDir(LOCAL_LIBRARYS_PATH, localLibraryNames);
+
+        // Extract the directory names from the list of library names
+        List<String> directories = localLibraryNames.stream()
+                .filter(FileUtil::isDirectory)
+                .map(Uri::parse)
+                .map(Uri::getLastPathSegment)
+                .distinct()
+                .sorted(String.CASE_INSENSITIVE_ORDER)
+                .collect(Collectors.toList());
+
+        // Initialize the expand bar visibility list
+        isExpandBarVisible = Collections.nCopies(directories.size(), false);
+
+        // Initialize the adapter with the directory names
+        adapter = new LibraryAdapter(directories);
+        ALL_LOCAL_LIBRARYS_LIST.addAll(directories);
+        listview.setAdapter(adapter);
+    }
+
+/*    private void loadLocalLibraryList() {
         ALL_LOCAL_LIBRARYS_LIST.clear();
         if (!notAssociatedWithProject) {
             if (!FileUtil.isExistFile(IN_USE_LIBRARY_FILE_PATH) || FileUtil.readFile(IN_USE_LIBRARY_FILE_PATH).equals("")) {
@@ -240,7 +274,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         adapter = new LibraryAdapter(directories);
         ALL_LOCAL_LIBRARYS_LIST.addAll(directories);
         listview.setAdapter(adapter);
-    }
+    }*/
 
     private void applyFilter(String query) {
         if (query.isEmpty()) {
