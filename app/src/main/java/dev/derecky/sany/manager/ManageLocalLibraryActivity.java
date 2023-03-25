@@ -307,11 +307,11 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             String libname = name_text_lib.getText().toString();
             String libconfig = LOCAL_LIBRARYS_PATH + libname;
 
-            enable_this_lib.setOnClickListener(view -> {
-                main_content.performClick();
+            main_content.setOnClickListener(view -> {
+                enable_this_lib.performClick();
             });
 
-            main_content.setOnClickListener(v -> {
+            enable_this_lib.setOnClickListener(v -> {
                 HashMap<String, Object> localLibrary = getLocalLibraryData(libname);
                 if (!enable_this_lib.isChecked()) {
                     project_used_libs.remove(localLibrary);
