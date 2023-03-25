@@ -39,7 +39,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.app.NotificationCompatSideChannelService;
 import androidx.core.content.FileProvider;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -89,8 +88,6 @@ import a.a.a.yB;
 import a.a.a.yq;
 import a.a.a.zy;
 import dev.aldi.sayuti.editor.manage.ManageCustomAttributeActivity;
-//import dev.aldi.sayuti.editor.manage.ManageLocalLibraryActivity;
-import dev.derecky.sany.manager.ManageLocalLibraryActivity;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.component.Magnifier;
@@ -973,10 +970,16 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
     }
 
     /**
-     * Opens {@link ManageLocalLibraryActivity}.
+     * Opens {@link dev.aldi.sayuti.editor.manage.ManageLocalLibraryActivity}.
      */
     void toLocalLibraryManager() {
-        launchActivity(ManageLocalLibraryActivity.class, null);
+        launchActivity(dev.aldi.sayuti.editor.manage.ManageLocalLibraryActivity.class, null);
+    }
+    /**
+     * Opens {@link dev.derecky.sany.manager.ManageLocalLibraryActivity}.
+     */
+    void toNewLocalLibraryManager() {
+        launchActivity(dev.derecky.sany.manager.ManageLocalLibraryActivity.class, null);
     }
 
     /**
