@@ -64,9 +64,8 @@ public class ResourceCompiler {
         if (useAapt2) {
             resourceCompiler = new Aapt2Compiler(dp, aaptFile, willBuildAppBundle);
         } else {
-            resourceCompiler = new AaptCompiler(dp, aaptFile);
+            resourceCompiler = new AaptCompiler(dp, aaptFile, willBuildAppBundle);
         }
-        //resourceCompiler.setProgressListener(progressReceiver::onProgress);
         resourceCompiler.setProgressListener(new Compiler.ProgressListener() {
             @Override
             void onProgressUpdate(String newProgress) {
@@ -111,13 +110,15 @@ public class ResourceCompiler {
      */
     static class AaptCompiler implements Compiler {
 
+        private final boolean buildAppBundle;
         private final File aapt;
         private final Dp buildHelper;
         private ProgressListener progressListener;
 
-        public AaptCompiler(final Dp buildHelper, final File aapt) {
+        public AaptCompiler(final Dp buildHelper, final File aapt, final boolean buildAppBundle) {
             this.buildHelper = buildHelper;
             this.aapt = aapt;
+            this.buildAppBundle = buildAppBundle;
         }
 
         private File getCompiledBuiltInLibraryResourcesDirectory() {
@@ -257,6 +258,7 @@ public class ResourceCompiler {
             }
         }
 
+/*
         public void compile2() throws zy, MissingFileException {
             String outputPath = buildHelper.yq.binDirectoryPath + File.separator + "res";
             emptyOrCreateDirectory(outputPath);
@@ -345,12 +347,16 @@ public class ResourceCompiler {
                 args.addAll(Arrays.asList("-I", customAndroidSdk));
             }
 
-            /* Force overwriting of existing files */
+            */
+/* Force overwriting of existing files *//*
+
             args.add("-f");
 
             args.add("-m");
 
-            /* Don't generate final R.java ID fields */
+            */
+/* Don't generate final R.java ID fields *//*
+
             args.add("--non-constant-id");
 
             args.add("--output-text-symbols");
@@ -360,7 +366,9 @@ public class ResourceCompiler {
             args.add("--no-version-vectors");
             // }
 
-            /* Specify resources directory */
+            */
+/* Specify resources directory *//*
+
             args.add("-S");
             args.add(buildHelper.yq.resDirectoryPath);
 
@@ -453,6 +461,8 @@ public class ResourceCompiler {
                 throw new zy(log);
             }
         }
+*/
+/*
 
         private void compileImportedResources(String outputPath) throws Exception {
             String resourceDir = buildHelper.fpu.getPathResource(buildHelper.yq.sc_id);
@@ -656,6 +666,7 @@ public class ResourceCompiler {
                 throw new MissingFileException(file, MissingFileException.STEP_RESOURCE_LINKING, true);
             }
         }
+*/
 
         @Override
         public void setProgressListener(ProgressListener listener) {
