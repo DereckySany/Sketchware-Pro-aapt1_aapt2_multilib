@@ -64,7 +64,7 @@ public class ResourceCompiler {
         if (useAapt2) {
             resourceCompiler = new Aapt2Compiler(dp, aaptFile, willBuildAppBundle);
         } else {
-            resourceCompiler = new AaptCompiler(dp, aaptFile, willBuildAppBundle);
+            resourceCompiler = new AaptCompiler(dp, aaptFile);
         }
         //resourceCompiler.setProgressListener(progressReceiver::onProgress);
         resourceCompiler.setProgressListener(new Compiler.ProgressListener() {
@@ -111,15 +111,13 @@ public class ResourceCompiler {
      */
     static class AaptCompiler implements Compiler {
 
-        private final boolean buildAppBundle;
         private final File aapt;
         private final Dp buildHelper;
         private ProgressListener progressListener;
 
-        public AaptCompiler(final Dp buildHelper, final File aapt, final boolean buildAppBundle) {
+        public AaptCompiler(final Dp buildHelper, final File aapt) {
             this.buildHelper = buildHelper;
             this.aapt = aapt;
-            this.buildAppBundle = buildAppBundle;
         }
 
         private File getCompiledBuiltInLibraryResourcesDirectory() {
@@ -127,7 +125,139 @@ public class ResourceCompiler {
         }
 
         @Override
-        public void compile() throws zy, MissingFileException {
+        public void compile() throws zy {
+            String resourcesPath = buildHelper.yq.binDirectoryPath + File.separator + "res";
+            /* Start generating arguments for AAPT */
+            ArrayList<String> args = new ArrayList<>();
+
+            args.add(aapt.getAbsolutePath());
+            args.add("package");
+
+            /* Generate R.java for libraries */
+            String extraPackages = buildHelper.getLibraryPackageNames();
+            if (!extraPackages.isEmpty()) {
+                args.add("--extra-packages");
+                args.add(extraPackages);
+            }
+
+            /* Set minSdkVersion */
+            args.add("--min-sdk-version");
+            args.add(String.valueOf(buildHelper.settings.getMinSdkVersion()));
+
+            /* Set targetSdkVersion */
+            args.add("--target-sdk-version");
+            args.add(buildHelper.settings.getValue(ProjectSettings.SETTING_TARGET_SDK_VERSION, "28"));
+
+            /* Set versionCode */
+            args.add("--version-code");
+            args.add(Optional.ofNullable(buildHelper.yq.versionCode).filter(s -> !s.isEmpty()).orElse("1"));
+
+            /* Set versionName */
+            args.add("--version-name");
+            args.add(Optional.ofNullable(buildHelper.yq.versionName).filter(s -> !s.isEmpty()).orElse("1.0"));
+
+            args.add("--auto-add-overlay");
+            args.add("--generate-dependencies");
+
+            /* Force overwriting of existing files */
+            args.add("-f");
+
+            args.add("-m");
+
+            /* Don't generate final R.java ID fields */
+            args.add("--non-constant-id");
+
+            /* Generate a text file containing resource symbols */
+            args.add("--output-text-symbols");
+            args.add(buildHelper.yq.binDirectoryPath);
+
+            if (buildHelper.yq.N.g) {
+                args.add("--no-version-vectors");
+            }
+
+            /* Specify resources directory */
+            args.add("-S");
+            args.add(buildHelper.yq.resDirectoryPath);
+
+            args.add("-S");
+            args.add(resourcesPath);
+
+            /* Specify local libraries' resource directories */
+            for (String localLibraryResDirectory : buildHelper.mll.getResLocalLibrary()) {
+                args.add("-S");
+                args.add(localLibraryResDirectory);
+            }
+
+            /* Specify imported resources directory */
+            if (FileUtil.isExistFile(buildHelper.fpu.getPathResource(buildHelper.yq.resDirectoryPath))) {
+                args.add("-S");
+                args.add(buildHelper.fpu.getPathResource(buildHelper.yq.resDirectoryPath));
+            }
+
+            /* Add assets added by vanilla method */
+            args.add("-A");
+            args.add(buildHelper.yq.assetsPath);
+
+            /* Add imported assets */
+            if (FileUtil.isExistFile(buildHelper.fpu.getPathAssets(buildHelper.yq.assetsPath))) {
+                args.add("-A");
+                args.add(buildHelper.fpu.getPathAssets(buildHelper.yq.assetsPath));
+            }
+
+            /* Add local libraries' assets */
+            for (String localLibraryAssetsDirectory : buildHelper.mll.getAssets()) {
+                args.add("-A");
+                args.add(localLibraryAssetsDirectory);
+            }
+
+            /* Add built-in libraries' assets */
+            for (Jp library : buildHelper.builtInLibraryManager.a()) {
+                if (library.d()) {
+                    args.add("-A");
+                    args.add(BuiltInLibraries.EXTRACTED_BUILT_IN_LIBRARIES_PATH + File.separator + library.a() + File.separator + "assets");
+                }
+
+                if (library.c()) {
+                    args.add("-S");
+                    args.add(BuiltInLibraries.EXTRACTED_BUILT_IN_LIBRARIES_PATH + File.separator + library.a() + File.separator + "res");
+                }
+            }
+
+            /* Specify R.java output directory */
+            args.add("-J");
+            args.add(buildHelper.yq.rJavaDirectoryPath);
+
+            /* Specify where to output ProGuard options to */
+            args.add("-G");
+            args.add(buildHelper.yq.aaptProGuardRules);
+
+            /* Specify AndroidManifest.xml's path */
+            args.add("-M");
+            args.add(buildHelper.yq.androidManifestPath);
+
+            /* Specify android.jar */
+            String customAndroidSdk = buildHelper.build_settings.getValue(BuildSettings.SETTING_ANDROID_JAR_PATH, "");
+            if (customAndroidSdk.isEmpty()) {
+                args.add("-I");
+                args.add(buildHelper.androidJarPath);
+            } else {
+                args.addAll(Arrays.asList("-I", customAndroidSdk));
+            }
+            /* Specify output APK file */
+            args.add("-F");
+            args.add(buildHelper.yq.resourcesApkPath);
+
+            LogUtil.d(TAG + ":l", args.toString());
+            BinaryExecutor executor = new BinaryExecutor();
+            executor.setCommands(args);
+            String log = executor.execute();
+            if (!log.isEmpty()) {
+                LogUtil.e(TAG + ":l", log);
+                throw new zy(log);
+            }
+        }
+
+        public void compile2() throws zy, MissingFileException {
             String outputPath = buildHelper.yq.binDirectoryPath + File.separator + "res";
             emptyOrCreateDirectory(outputPath);
 
@@ -179,10 +309,6 @@ public class ResourceCompiler {
             ArrayList<String> args = new ArrayList<>();
             args.add(aapt.getAbsolutePath());
             args.add("package");
-
-            if (buildAppBundle) {
-                throw new UnsupportedOperationException("Build AppBundle not supported with AAPT");
-            }
 
             // Use the generated R.java for used libraries
             String extraPackages = buildHelper.getLibraryPackageNames();
@@ -328,46 +454,6 @@ public class ResourceCompiler {
             }
         }
 
-//        private void compileImportedResources(String outputPath) throws zy {
-//            String resourceDir = buildHelper.fpu.getPathResource(buildHelper.yq.sc_id);
-//            String ManifestDir = buildHelper.yq.androidManifestPath;
-//            if (!FileUtil.isExistFile(resourceDir) || new File(resourceDir).length() == 0) {
-//                return;
-//            }
-//            String outputZip = outputPath + File.separator + "project-imported.zip";
-//            try {
-//                ProcessBuilder processBuilder = new ProcessBuilder(
-//                        aapt.getAbsolutePath(),
-//                        "package",
-//                        "-S",
-//                        resourceDir,
-//                        "-M",
-//                        ManifestDir,
-//                        "-F",
-//                        outputZip
-//                );
-//                processBuilder.redirectErrorStream(true);
-//                Process process = processBuilder.start();
-//                try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-//                    String line;
-//                    while ((line = reader.readLine()) != null) {
-//                        LogUtil.d(TAG + ":cIR", line);
-//                    }
-//                }
-//                int exitCode = process.waitFor();
-//                if (exitCode != 0) {
-//                    throw new zy("aapt compilation failed with exit code " + exitCode);
-//                }
-//            } catch (IOException exception) {
-//                throw new zy("I/O error occurred: " + exception.getMessage());
-//            } catch (InterruptedException exception) {
-//                throw new zy("Compilation was interrupted: " + exception.getMessage());
-//            } catch (SecurityException exception) {
-//                throw new zy("Security violation occurred: " + exception.getMessage());
-//            } catch (Exception exception) {
-//                throw new zy("Compilation failed: " + exception.getMessage());
-//            }
-//        }
         private void compileImportedResources(String outputPath) throws Exception {
             String resourceDir = buildHelper.fpu.getPathResource(buildHelper.yq.sc_id);
             String ManifestDir = buildHelper.yq.androidManifestPath;
@@ -573,7 +659,7 @@ public class ResourceCompiler {
 
         @Override
         public void setProgressListener(ProgressListener listener) {
-            progressListener = listener;
+//            progressListener = listener;
         }
     }
 
