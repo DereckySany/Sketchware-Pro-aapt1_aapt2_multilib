@@ -18,7 +18,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 import a.a.a.Dp;
 import a.a.a.Jp;
@@ -126,6 +125,7 @@ public class ResourceCompiler {
             return new File(SketchApplication.getContext().getCacheDir(), "compiledLibs");
         }
 
+        @Override
         public void compile() throws zy, MissingFileException {
             String outputPath = buildHelper.yq.binDirectoryPath + File.separator + "res";
             emptyOrCreateDirectory(outputPath);
@@ -163,13 +163,13 @@ public class ResourceCompiler {
                     executor.shutdownNow();
                 }
             }
+
             executor.shutdown();
 
             long totalTime = System.currentTimeMillis() - startTime;
             LogUtil.d(TAG + ":c", "Resource compilation completed in " + totalTime + " ms");
             link();
         }
-
         public void link() throws zy, MissingFileException {
             String resourcesPath = buildHelper.yq.binDirectoryPath + File.separator + "res";
             if (progressListener != null)
@@ -178,6 +178,10 @@ public class ResourceCompiler {
             ArrayList<String> args = new ArrayList<>();
             args.add(aapt.getAbsolutePath());
             args.add("package");
+
+            if (buildAppBundle) {
+                throw new UnsupportedOperationException("Build AppBundle not supported with AAPT");
+            }
 
             // Use the generated R.java for used libraries
             String extraPackages = buildHelper.getLibraryPackageNames();
@@ -214,25 +218,23 @@ public class ResourceCompiler {
                 args.addAll(Arrays.asList("-I", customAndroidSdk));
             }
 
-            // Force overwriting of existing files
-
+            /* Force overwriting of existing files */
             args.add("-f");
 
             args.add("-m");
 
-            // Don't generate final R.java ID fields
-
+            /* Don't generate final R.java ID fields */
             args.add("--non-constant-id");
 
             args.add("--output-text-symbols");
             args.add(buildHelper.yq.binDirectoryPath);
+
             // Material Enabled
              if (buildHelper.yq.N.g == true) {
-                args.add("--no-version-vectors");
+            args.add("--no-version-vectors");
              }
 
-            // Specify resources directory
-
+            /* Specify resources directory */
             args.add("-S");
             args.add(buildHelper.yq.resDirectoryPath);
 
@@ -291,7 +293,6 @@ public class ResourceCompiler {
             if (projectImportedArchive.exists()) {
                 args.addAll(Arrays.asList("-S", projectImportedArchive.getAbsolutePath()));
             }
-            ////
             // Add R.java 
             linkingAssertDirectoryExists(buildHelper.yq.rJavaDirectoryPath);
             args.add("-m");
@@ -299,12 +300,10 @@ public class ResourceCompiler {
             args.add(buildHelper.yq.rJavaDirectoryPath);
 
 
-            // Output AAPT's generated ProGuard rules to a.a.a.yq.aapt_rules 
-            // Remove this line:
+            // Output AAPT's generated ProGuard rules to a.a.a.yq.aapt_rules
             if (!buildHelper.yq.aaptProGuardRules.isEmpty()) {
-                args.add("-G");
-                // And remove this line too:
-                args.add(buildHelper.yq.aaptProGuardRules);
+            args.add("-G");
+            args.add(buildHelper.yq.aaptProGuardRules);
             }
 
             // Add AndroidManifest.xml 
@@ -531,7 +530,7 @@ public class ResourceCompiler {
 
         @Override
         public void setProgressListener(ProgressListener listener) {
-//            progressListener = listener;
+            progressListener = listener;
         }
     }
 
