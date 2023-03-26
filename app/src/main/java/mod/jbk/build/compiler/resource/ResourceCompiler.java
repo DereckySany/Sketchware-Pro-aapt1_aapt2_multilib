@@ -156,11 +156,6 @@ public class ResourceCompiler {
                 return null;
             }));
 
-            futures.add(executor.submit(() -> {
-                link();
-                return null;
-            }));
-
             for (Future<Void> future : futures) {
                 try {
                     future.get();
@@ -173,6 +168,7 @@ public class ResourceCompiler {
 
             long totalTime = System.currentTimeMillis() - startTime;
             LogUtil.d(TAG + ":c", "Resource compilation completed in " + totalTime + " ms");
+            link();
         }
         public void link() throws zy, MissingFileException {
             String resourcesPath = buildHelper.yq.binDirectoryPath + File.separator + "res";

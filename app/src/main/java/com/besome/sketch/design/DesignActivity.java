@@ -217,7 +217,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 NotifyProjectBuild.setProgress(100, 0, true);
             }
             NotifyProjectBuild.setOnlyAlertOnce(true);
-//            NotifyProjectBuild.addAction(R.drawable.sketch_app_icon, ActionText, pendingIntent);
+            NotifyProjectBuild.addAction(R.drawable.sketch_app_icon, ActionText, pendingIntent);
             Notify.notify(notificationId, NotifyProjectBuild.build());
         }
     }
@@ -862,7 +862,6 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
 
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(DesignActivity.this)
                     .setTitle("Compile log")
-                    .setCancelable(true)
                     .setPositiveButton("Dismiss", null)
                     .setNegativeButton("Clear", (dialog1, which) -> {
                         FileUtil.writeFile(FilePathUtil.getLastDebugCompileLog(),"");
@@ -875,7 +874,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 CodeEditor editor = new CodeEditor(DesignActivity.this);
                 editor.setTypefaceText(Typeface.MONOSPACE);
                 editor.setEditable(false);
-                editor.setEditorLanguage(CodeEditorLanguages.loadTextMateLanguage(CodeEditorLanguages.SCOPE_NAME_KOTLIN));
+                editor.setEditorLanguage(new JavaLanguage());
                 editor.setColorScheme(new EditorColorScheme());
                 editor.setTextSize(14);
                 editor.setHardwareAcceleratedDrawAllowed(true);
