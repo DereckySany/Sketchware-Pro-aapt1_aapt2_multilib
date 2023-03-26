@@ -66,7 +66,6 @@ public class ResourceCompiler {
         } else {
             resourceCompiler = new AaptCompiler(dp, aaptFile, willBuildAppBundle);
         }
-        //resourceCompiler.setProgressListener(progressReceiver::onProgress);
         resourceCompiler.setProgressListener(new Compiler.ProgressListener() {
             @Override
             void onProgressUpdate(String newProgress) {
@@ -157,11 +156,16 @@ public class ResourceCompiler {
                 return null;
             }));
 
+            futures.add(executor.submit(() -> {
+                link();
+                return null;
+            }));
+
             for (Future<Void> future : futures) {
                 try {
                     future.get();
                 } catch (InterruptedException | ExecutionException e) {
-                    // Handle exception
+                    executor.shutdownNow();
                 }
             }
 
@@ -169,7 +173,6 @@ public class ResourceCompiler {
 
             long totalTime = System.currentTimeMillis() - startTime;
             LogUtil.d(TAG + ":c", "Resource compilation completed in " + totalTime + " ms");
-            link();
         }
         public void link() throws zy, MissingFileException {
             String resourcesPath = buildHelper.yq.binDirectoryPath + File.separator + "res";
@@ -229,10 +232,11 @@ public class ResourceCompiler {
 
             args.add("--output-text-symbols");
             args.add(buildHelper.yq.binDirectoryPath);
+
             // Material Enabled
-            // if (buildHelper.yq.N.g == true) {
+             if (buildHelper.yq.N.g == true) {
             args.add("--no-version-vectors");
-            // }
+             }
 
             /* Specify resources directory */
             args.add("-S");
@@ -293,7 +297,6 @@ public class ResourceCompiler {
             if (projectImportedArchive.exists()) {
                 args.addAll(Arrays.asList("-S", projectImportedArchive.getAbsolutePath()));
             }
-            ////
             // Add R.java 
             linkingAssertDirectoryExists(buildHelper.yq.rJavaDirectoryPath);
             args.add("-m");
@@ -301,13 +304,11 @@ public class ResourceCompiler {
             args.add(buildHelper.yq.rJavaDirectoryPath);
 
 
-            // Output AAPT's generated ProGuard rules to a.a.a.yq.aapt_rules 
-            // Remove this line:
-//            if (!buildHelper.yq.aaptProGuardRules.isEmpty()) {
+            // Output AAPT's generated ProGuard rules to a.a.a.yq.aapt_rules
+            if (!buildHelper.yq.aaptProGuardRules.isEmpty()) {
             args.add("-G");
-            // And remove this line too:
             args.add(buildHelper.yq.aaptProGuardRules);
-//            }
+            }
 
             // Add AndroidManifest.xml 
             linkingAssertFileExists(buildHelper.yq.androidManifestPath);
@@ -328,46 +329,6 @@ public class ResourceCompiler {
             }
         }
 
-//        private void compileImportedResources(String outputPath) throws zy {
-//            String resourceDir = buildHelper.fpu.getPathResource(buildHelper.yq.sc_id);
-//            String ManifestDir = buildHelper.yq.androidManifestPath;
-//            if (!FileUtil.isExistFile(resourceDir) || new File(resourceDir).length() == 0) {
-//                return;
-//            }
-//            String outputZip = outputPath + File.separator + "project-imported.zip";
-//            try {
-//                ProcessBuilder processBuilder = new ProcessBuilder(
-//                        aapt.getAbsolutePath(),
-//                        "package",
-//                        "-S",
-//                        resourceDir,
-//                        "-M",
-//                        ManifestDir,
-//                        "-F",
-//                        outputZip
-//                );
-//                processBuilder.redirectErrorStream(true);
-//                Process process = processBuilder.start();
-//                try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-//                    String line;
-//                    while ((line = reader.readLine()) != null) {
-//                        LogUtil.d(TAG + ":cIR", line);
-//                    }
-//                }
-//                int exitCode = process.waitFor();
-//                if (exitCode != 0) {
-//                    throw new zy("aapt compilation failed with exit code " + exitCode);
-//                }
-//            } catch (IOException exception) {
-//                throw new zy("I/O error occurred: " + exception.getMessage());
-//            } catch (InterruptedException exception) {
-//                throw new zy("Compilation was interrupted: " + exception.getMessage());
-//            } catch (SecurityException exception) {
-//                throw new zy("Security violation occurred: " + exception.getMessage());
-//            } catch (Exception exception) {
-//                throw new zy("Compilation failed: " + exception.getMessage());
-//            }
-//        }
         private void compileImportedResources(String outputPath) throws Exception {
             String resourceDir = buildHelper.fpu.getPathResource(buildHelper.yq.sc_id);
             String ManifestDir = buildHelper.yq.androidManifestPath;

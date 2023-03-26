@@ -202,23 +202,23 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 Notify.createNotificationChannel(ntc);
             }
 
-            Notification.Builder builder;
+            Notification.Builder NotifyProjectBuild;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                builder = new Notification.Builder(getApplicationContext(), "Project Build");
+                NotifyProjectBuild = new Notification.Builder(getApplicationContext(), "Project Build");
             } else {
-                builder = new Notification.Builder(getApplicationContext());
+                NotifyProjectBuild = new Notification.Builder(getApplicationContext());
             }
 
-            builder.setSmallIcon(R.drawable.sketch_app_icon);
-            builder.setContentTitle(title);
-            builder.setOngoing(setUnCancelable);
-            builder.setContentText(content);
+            NotifyProjectBuild.setSmallIcon(R.drawable.sketch_app_icon);
+            NotifyProjectBuild.setContentTitle(title);
+            NotifyProjectBuild.setOngoing(setUnCancelable);
+            NotifyProjectBuild.setContentText(content);
             if (setProcess) {
-                builder.setProgress(100, 0, true);
+                NotifyProjectBuild.setProgress(100, 0, true);
             }
-            builder.setOnlyAlertOnce(true);
-            builder.addAction(R.drawable.sketch_app_icon, ActionText, pendingIntent);
-            Notify.notify(notificationId, builder.build());
+            NotifyProjectBuild.setOnlyAlertOnce(true);
+//            NotifyProjectBuild.addAction(R.drawable.sketch_app_icon, ActionText, pendingIntent);
+            Notify.notify(notificationId, NotifyProjectBuild.build());
         }
     }
 
@@ -232,23 +232,23 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 Notify.createNotificationChannel(ntc);
             }
 
-            Notification.Builder builder;
+            Notification.Builder NotifyProjectBuild;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                builder = new Notification.Builder(getApplicationContext(), "Project Build");
+                NotifyProjectBuild = new Notification.Builder(getApplicationContext(), "Project Build");
             } else {
-                builder = new Notification.Builder(getApplicationContext());
+                NotifyProjectBuild = new Notification.Builder(getApplicationContext());
             }
 
-            builder.setSmallIcon(R.drawable.sketch_app_icon);
-            builder.setContentTitle(title);
-            builder.setOngoing(setUnCancelable);
-            builder.setContentText(content);
+            NotifyProjectBuild.setSmallIcon(R.drawable.sketch_app_icon);
+            NotifyProjectBuild.setContentTitle(title);
+            NotifyProjectBuild.setOngoing(setUnCancelable);
+            NotifyProjectBuild.setContentText(content);
             if (setProcess) {
-                builder.setProgress(100, 0, true);
+                NotifyProjectBuild.setProgress(100, 0, true);
             }
-            builder.setOnlyAlertOnce(true);
-            //builder.addAction(R.drawable.sketch_app_icon, ActionText, pendingIntent);
-            Notify.notify(notificationId, builder.build());
+            NotifyProjectBuild.setOnlyAlertOnce(true);
+            //NotifyProjectBuild.addAction(R.drawable.sketch_app_icon, ActionText, pendingIntent);
+            Notify.notify(notificationId, NotifyProjectBuild.build());
         }
     }
 
