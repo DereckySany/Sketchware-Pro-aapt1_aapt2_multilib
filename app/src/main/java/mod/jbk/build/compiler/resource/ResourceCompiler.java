@@ -18,6 +18,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import a.a.a.Dp;
 import a.a.a.Jp;
@@ -125,141 +126,7 @@ public class ResourceCompiler {
             return new File(SketchApplication.getContext().getCacheDir(), "compiledLibs");
         }
 
-        @Override
-        public void compile() throws zy {
-            String resourcesPath = buildHelper.yq.binDirectoryPath + File.separator + "res";
-            /* Start generating arguments for AAPT */
-            ArrayList<String> args = new ArrayList<>();
-
-            args.add(aapt.getAbsolutePath());
-            args.add("package");
-
-            /* Generate R.java for libraries */
-            String extraPackages = buildHelper.getLibraryPackageNames();
-            if (!extraPackages.isEmpty()) {
-                args.add("--extra-packages");
-                args.add(extraPackages);
-            }
-
-            /* Set minSdkVersion */
-            args.add("--min-sdk-version");
-            args.add(String.valueOf(buildHelper.settings.getMinSdkVersion()));
-
-            /* Set targetSdkVersion */
-            args.add("--target-sdk-version");
-            args.add(buildHelper.settings.getValue(ProjectSettings.SETTING_TARGET_SDK_VERSION, "28"));
-
-            /* Set versionCode */
-            args.add("--version-code");
-            args.add(Optional.ofNullable(buildHelper.yq.versionCode).filter(s -> !s.isEmpty()).orElse("1"));
-
-            /* Set versionName */
-            args.add("--version-name");
-            args.add(Optional.ofNullable(buildHelper.yq.versionName).filter(s -> !s.isEmpty()).orElse("1.0"));
-
-            args.add("--auto-add-overlay");
-            args.add("--generate-dependencies");
-
-            /* Force overwriting of existing files */
-            args.add("-f");
-
-            args.add("-m");
-
-            /* Don't generate final R.java ID fields */
-            args.add("--non-constant-id");
-
-            /* Generate a text file containing resource symbols */
-            args.add("--output-text-symbols");
-            args.add(buildHelper.yq.binDirectoryPath);
-
-            if (buildHelper.yq.N.g) {
-                args.add("--no-version-vectors");
-            }
-
-            /* Specify resources directory */
-            args.add("-S");
-            args.add(buildHelper.yq.resDirectoryPath);
-
-            args.add("-S");
-            args.add(resourcesPath);
-
-            /* Specify local libraries' resource directories */
-            for (String localLibraryResDirectory : buildHelper.mll.getResLocalLibrary()) {
-                args.add("-S");
-                args.add(localLibraryResDirectory);
-            }
-
-            /* Specify imported resources directory */
-            if (FileUtil.isExistFile(buildHelper.fpu.getPathResource(buildHelper.yq.resDirectoryPath))) {
-                args.add("-S");
-                args.add(buildHelper.fpu.getPathResource(buildHelper.yq.resDirectoryPath));
-            }
-
-            /* Add assets added by vanilla method */
-            args.add("-A");
-            args.add(buildHelper.yq.assetsPath);
-
-            /* Add imported assets */
-            if (FileUtil.isExistFile(buildHelper.fpu.getPathAssets(buildHelper.yq.assetsPath))) {
-                args.add("-A");
-                args.add(buildHelper.fpu.getPathAssets(buildHelper.yq.assetsPath));
-            }
-
-            /* Add local libraries' assets */
-            for (String localLibraryAssetsDirectory : buildHelper.mll.getAssets()) {
-                args.add("-A");
-                args.add(localLibraryAssetsDirectory);
-            }
-
-            /* Add built-in libraries' assets */
-            for (Jp library : buildHelper.builtInLibraryManager.a()) {
-                if (library.d()) {
-                    args.add("-A");
-                    args.add(BuiltInLibraries.EXTRACTED_BUILT_IN_LIBRARIES_PATH + File.separator + library.a() + File.separator + "assets");
-                }
-
-                if (library.c()) {
-                    args.add("-S");
-                    args.add(BuiltInLibraries.EXTRACTED_BUILT_IN_LIBRARIES_PATH + File.separator + library.a() + File.separator + "res");
-                }
-            }
-
-            /* Specify R.java output directory */
-            args.add("-J");
-            args.add(buildHelper.yq.rJavaDirectoryPath);
-
-            /* Specify where to output ProGuard options to */
-            args.add("-G");
-            args.add(buildHelper.yq.aaptProGuardRules);
-
-            /* Specify AndroidManifest.xml's path */
-            args.add("-M");
-            args.add(buildHelper.yq.androidManifestPath);
-
-            /* Specify android.jar */
-            String customAndroidSdk = buildHelper.build_settings.getValue(BuildSettings.SETTING_ANDROID_JAR_PATH, "");
-            if (customAndroidSdk.isEmpty()) {
-                args.add("-I");
-                args.add(buildHelper.androidJarPath);
-            } else {
-                args.addAll(Arrays.asList("-I", customAndroidSdk));
-            }
-            /* Specify output APK file */
-            args.add("-F");
-            args.add(buildHelper.yq.resourcesApkPath);
-
-            LogUtil.d(TAG + ":l", args.toString());
-            BinaryExecutor executor = new BinaryExecutor();
-            executor.setCommands(args);
-            String log = executor.execute();
-            if (!log.isEmpty()) {
-                LogUtil.e(TAG + ":l", log);
-                throw new zy(log);
-            }
-        }
-
-/*
-        public void compile2() throws zy, MissingFileException {
+        public void compile() throws zy, MissingFileException {
             String outputPath = buildHelper.yq.binDirectoryPath + File.separator + "res";
             emptyOrCreateDirectory(outputPath);
 
@@ -289,20 +156,24 @@ public class ResourceCompiler {
                 return null;
             }));
 
+            futures.add(executor.submit(() -> {
+                link();
+                return null;
+            }));
+
             for (Future<Void> future : futures) {
                 try {
                     future.get();
                 } catch (InterruptedException | ExecutionException e) {
-                    // Handle exception
+                    executor.shutdownNow();
                 }
             }
-
             executor.shutdown();
 
             long totalTime = System.currentTimeMillis() - startTime;
             LogUtil.d(TAG + ":c", "Resource compilation completed in " + totalTime + " ms");
-            link();
         }
+
         public void link() throws zy, MissingFileException {
             String resourcesPath = buildHelper.yq.binDirectoryPath + File.separator + "res";
             if (progressListener != null)
@@ -347,27 +218,24 @@ public class ResourceCompiler {
                 args.addAll(Arrays.asList("-I", customAndroidSdk));
             }
 
-            */
-/* Force overwriting of existing files *//*
+            // Force overwriting of existing files
 
             args.add("-f");
 
             args.add("-m");
 
-            */
-/* Don't generate final R.java ID fields *//*
+            // Don't generate final R.java ID fields
 
             args.add("--non-constant-id");
 
             args.add("--output-text-symbols");
             args.add(buildHelper.yq.binDirectoryPath);
             // Material Enabled
-            // if (buildHelper.yq.N.g == true) {
-            args.add("--no-version-vectors");
-            // }
+             if (buildHelper.yq.N.g == true) {
+                args.add("--no-version-vectors");
+             }
 
-            */
-/* Specify resources directory *//*
+            // Specify resources directory
 
             args.add("-S");
             args.add(buildHelper.yq.resDirectoryPath);
@@ -437,11 +305,11 @@ public class ResourceCompiler {
 
             // Output AAPT's generated ProGuard rules to a.a.a.yq.aapt_rules 
             // Remove this line:
-//            if (!buildHelper.yq.aaptProGuardRules.isEmpty()) {
-            args.add("-G");
-            // And remove this line too:
-            args.add(buildHelper.yq.aaptProGuardRules);
-//            }
+            if (!buildHelper.yq.aaptProGuardRules.isEmpty()) {
+                args.add("-G");
+                // And remove this line too:
+                args.add(buildHelper.yq.aaptProGuardRules);
+            }
 
             // Add AndroidManifest.xml 
             linkingAssertFileExists(buildHelper.yq.androidManifestPath);
@@ -461,8 +329,6 @@ public class ResourceCompiler {
                 throw new zy(log);
             }
         }
-*/
-/*
 
         private void compileImportedResources(String outputPath) throws Exception {
             String resourceDir = buildHelper.fpu.getPathResource(buildHelper.yq.sc_id);
@@ -666,7 +532,6 @@ public class ResourceCompiler {
                 throw new MissingFileException(file, MissingFileException.STEP_RESOURCE_LINKING, true);
             }
         }
-*/
 
         @Override
         public void setProgressListener(ProgressListener listener) {
