@@ -459,7 +459,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                     menu.add(Menu.NONE, 5, Menu.NONE, "Install last built APK");
                 }
                 if (FileUtil.isExistFile(FilePathUtil.getLastDebugCompileLog())) {
-                    menu.add(Menu.NONE, 6, Menu.NONE, "Show last compile Debug");
+                    menu.add(Menu.NONE, 6, Menu.NONE, "Show last compile log");
                 }
 
                 popupMenu.setOnMenuItemClickListener(item -> {
@@ -835,7 +835,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
 
     private void showLastedDebugCompilerlog() {
         ProgressDialog progress = new ProgressDialog(DesignActivity.this);
-        progress.setMessage("Geting Debug code...");
+        progress.setMessage("Geting Compile log...");
         progress.show();
 
         new Thread(() -> {
@@ -844,8 +844,12 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             final String source = FileUtil.readFile(FilePathUtil.getLastDebugCompileLog());
 
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(DesignActivity.this)
-                    .setTitle("Compile Debug")
-                    .setPositiveButton("Dismiss", null);
+                    .setTitle("Compile log")
+                    .setPositiveButton("Dismiss", null)
+                    .setNegativeButton("Clear", (dialog1, which) -> {
+                        FileUtil.writeFile(FilePathUtil.getLastDebugCompileLog(),"");
+                        SketchwareUtil.toast("Cleared log");
+                    });
 
             runOnUiThread(() -> {
                 progress.dismiss();
@@ -857,7 +861,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 editor.setColorScheme(new EditorColorScheme());
                 editor.setTextSize(14);
                 editor.setHardwareAcceleratedDrawAllowed(true);
-                editor.setText(!source.equals("") ? source : "Compiler log no exist!");
+                editor.setText(!source.equals("") ? source : "Compile log no exist!");
 
                 AlertDialog dialog = dialogBuilder.create();
                 dialog.setView(editor,
