@@ -34,6 +34,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -202,7 +203,12 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 Notify.createNotificationChannel(ntc);
             }
 
-            Notification.Builder NotifyProjectBuild = new Notification.Builder(getApplicationContext(), "Project Build");
+            Notification.Builder NotifyProjectBuild;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                NotifyProjectBuild = new Notification.Builder(getApplicationContext(), "Project Build");
+            } else {
+                NotifyProjectBuild = new Notification.Builder(getApplicationContext());
+            }
             NotifyProjectBuild.setSmallIcon(R.drawable.sketch_app_icon);
             NotifyProjectBuild.setContentTitle(title);
             NotifyProjectBuild.setOngoing(setUnCancelable);
@@ -225,7 +231,12 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                         "Project Build", "Project build notify", NotificationManager.IMPORTANCE_HIGH);
                 Notify.createNotificationChannel(ntc);
             }
-            Notification.Builder NotifyProjectBuild = new Notification.Builder(getApplicationContext(), "Project Build");
+            Notification.Builder NotifyProjectBuild;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                NotifyProjectBuild = new Notification.Builder(getApplicationContext(), "Project Build");
+            } else {
+                NotifyProjectBuild = new Notification.Builder(getApplicationContext());
+            }
             NotifyProjectBuild.setSmallIcon(R.drawable.sketch_app_icon);
             NotifyProjectBuild.setContentTitle(title);
             NotifyProjectBuild.setOngoing(setUnCancelable);
@@ -252,20 +263,20 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
      */
     private void indicateCompileErrorOccurred(String error) {
         new CompileErrorSaver(q.sc_id).writeLogsToFile(error);
-            Snackbar snackbar = Snackbar.a(coordinatorLayout, "Show compile log", -2 /* BaseTransientBottomBar.LENGTH_INDEFINITE */);
-            snackbar.a(Helper.getResString(R.string.common_word_show), v -> {
-                if (!mB.a()) {
-                    snackbar.c();
-                    new CompileErrorSaver(sc_id).showDialog(DesignActivity.this);
-                }
-            });
-            /* Set the text color to yellow */
-            snackbar.f(Color.YELLOW);
-            /* show snackbar only in foreground */
-            snackbar.n();
-            currentNotificationCache.title = "Build Failed";
-            currentNotificationCache.description = "App build has been failed";
-            currentNotificationCache.ProjectStage = 2;
+        Snackbar snackbar = Snackbar.a(coordinatorLayout, "Show compile log", -2 /* BaseTransientBottomBar.LENGTH_INDEFINITE */);
+        snackbar.a(Helper.getResString(R.string.common_word_show), v -> {
+            if (!mB.a()) {
+                snackbar.c();
+                new CompileErrorSaver(sc_id).showDialog(DesignActivity.this);
+            }
+        });
+        /* Set the text color to yellow */
+        snackbar.f(Color.YELLOW);
+        /* show snackbar only in foreground */
+        snackbar.n();
+        currentNotificationCache.title = "Build Failed";
+        currentNotificationCache.description = "App build has been failed";
+        currentNotificationCache.ProjectStage = 2;
     }
 
     @Override
@@ -845,7 +856,6 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
 
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(DesignActivity.this)
                     .setTitle("Compile log")
-                    .setCancelable(true)
                     .setPositiveButton("Dismiss", null)
                     .setNegativeButton("Clear", (dialog1, which) -> {
                         FileUtil.writeFile(FilePathUtil.getLastDebugCompileLog(),"");
@@ -854,7 +864,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
 
             runOnUiThread(() -> {
                 progress.dismiss();
-
+                TextView errorLogTxt = new TextView(getApplicationContext());
                 CodeEditor editor = new CodeEditor(DesignActivity.this);
                 editor.setTypefaceText(Typeface.MONOSPACE);
                 editor.setEditable(false);
@@ -862,15 +872,22 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 editor.setColorScheme(new EditorColorScheme());
                 editor.setTextSize(14);
                 editor.setHardwareAcceleratedDrawAllowed(true);
-                editor.setText(!source.equals("") ? source : "Compiler log no exist!");
+                if (!source.equals("")) {
+                    editor.setText(source);
+                } else {
+                    errorLogTxt.setText("Compile log no exist!");
+                }
 
                 AlertDialog dialog = dialogBuilder.create();
-                dialog.setView(editor,
+                dialog.setView((!source.equals("") ? editor : errorLogTxt),
                         (int) getDip(8),
                         (int) getDip(8),
                         (int) getDip(8),
                         (int) getDip(8));
                 dialog.show();
+                if (!source.equals("")) {
+                    dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(View.GONE);
+                }
             });
         }).start();
     }
@@ -981,6 +998,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
     void toLocalLibraryManager() {
         launchActivity(dev.aldi.sayuti.editor.manage.ManageLocalLibraryActivity.class, null);
     }
+
     /**
      * Opens {@link dev.derecky.sany.manager.ManageLocalLibraryActivity}.
      */
@@ -1163,9 +1181,9 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             runOnUiThread(() -> {
                 dismissNotification();
                 dismiss();
+                runProject.setClickable(true);
                 SketchwareUtil.toastError("APK build failed");
                 runProject.setText(Helper.getResString(R.string.common_word_run));
-                runProject.setClickable(true);
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             });
         }
