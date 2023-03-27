@@ -876,12 +876,12 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
 
                 AlertDialog dialog = dialogBuilder.create();
                 dialog.setView((!source.equals("") ? editor : errorLogTxt),
+                        (int) getDip(24),
                         (int) getDip(8),
-                        (int) getDip(8),
-                        (int) getDip(8),
+                        (int) getDip(24),
                         (int) getDip(8));
                 dialog.show();
-                if (!source.equals("")) {
+                if (source.equals("")) {
                     dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(View.GONE);
                 }
             });
