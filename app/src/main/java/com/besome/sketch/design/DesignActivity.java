@@ -203,7 +203,12 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 Notify.createNotificationChannel(ntc);
             }
 
-            Notification.Builder NotifyProjectBuild = new Notification.Builder(getApplicationContext(), "Project Build");
+            Notification.Builder NotifyProjectBuild;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                NotifyProjectBuild = new Notification.Builder(getApplicationContext(), "Project Build");
+            } else {
+                NotifyProjectBuild = new Notification.Builder(getApplicationContext());
+            }
             NotifyProjectBuild.setSmallIcon(R.drawable.sketch_app_icon);
             NotifyProjectBuild.setContentTitle(title);
             NotifyProjectBuild.setOngoing(setUnCancelable);
@@ -225,7 +230,12 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                         "Project Build", "Project build notify", NotificationManager.IMPORTANCE_HIGH);
                 Notify.createNotificationChannel(ntc);
             }
-            Notification.Builder NotifyProjectBuild = new Notification.Builder(getApplicationContext(), "Project Build");
+            Notification.Builder NotifyProjectBuild;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                NotifyProjectBuild = new Notification.Builder(getApplicationContext(), "Project Build");
+            } else {
+                NotifyProjectBuild = new Notification.Builder(getApplicationContext());
+            }
             NotifyProjectBuild.setSmallIcon(R.drawable.sketch_app_icon);
             NotifyProjectBuild.setContentTitle(title);
             NotifyProjectBuild.setOngoing(setUnCancelable);
@@ -846,7 +856,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(DesignActivity.this)
                     .setTitle("Compile log")
                     .setPositiveButton("Dismiss", null)
-                    .setNegativeButton("Clear", (dialog1, which) -> {
+                    .setNeutralButton("Clear", (dialog1, which) -> {
                         FileUtil.writeFile(FilePathUtil.getLastDebugCompileLog(),"");
                         SketchwareUtil.toast("Cleared log");
                     });
@@ -857,7 +867,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 CodeEditor editor = new CodeEditor(DesignActivity.this);
                 editor.setTypefaceText(Typeface.MONOSPACE);
                 editor.setEditable(false);
-                editor.setEditorLanguage(new JavaLanguage());
+                editor.setEditorLanguage(CodeEditorLanguages.loadTextMateLanguage(CodeEditorLanguages.SCOPE_NAME_KOTLIN));
                 editor.setColorScheme(new EditorColorScheme());
                 editor.setTextSize(14);
                 editor.setHardwareAcceleratedDrawAllowed(true);
@@ -870,6 +880,9 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                         (int) getDip(8),
                         (int) getDip(8));
                 dialog.show();
+                if (source.equals("")) {
+                    dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(View.GONE);
+                }
             });
         }).start();
     }
@@ -1163,9 +1176,9 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             runOnUiThread(() -> {
                 dismissNotification();
                 dismiss();
+                runProject.setClickable(true);
                 SketchwareUtil.toastError("APK build failed");
                 runProject.setText(Helper.getResString(R.string.common_word_run));
-                runProject.setClickable(true);
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             });
         }

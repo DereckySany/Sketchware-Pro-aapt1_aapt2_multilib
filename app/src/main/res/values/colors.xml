@@ -91,8 +91,8 @@
     <color name="foreground_material_light">@android:color/black</color>
     <color name="gold">#FFe6b121</color>
     <color name="grey">#FF828282</color>
-    <color name="highlighted_text_material_dark">#6680cbc4</color>
-    <color name="highlighted_text_material_light">#6600FFE7</color>
+    <color name="highlighted_text_material_dark">#6600AFFF</color>
+    <color name="highlighted_text_material_light">#6600AFFF</color>
     <color name="light_grey">#FFc6c6c6</color>
     <color name="lighter_grey">#FFeeeeee</color>
     <color name="list_selected_background">#2000AFFF</color>
@@ -150,7 +150,7 @@
     <color name="scolor_bg_02">#FFf1f4fb</color>
     <color name="scolor_black_01">#FF1d2129</color>
     <color name="scolor_black_02">#FF757575</color>
-    <color name="scolor_blue_01">#00AFFF</color>
+    <color name="scolor_blue_01">#FF00AFFF</color>
     <color name="scolor_dark_yellow_01">#FFFF8700</color>
     <color name="scolor_green_01">#FF52f55c</color>
     <color name="scolor_green_02">#FF74f37c</color>

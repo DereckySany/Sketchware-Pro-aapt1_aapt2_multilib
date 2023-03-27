@@ -23,8 +23,8 @@
                 <include layout="@layout/toolbar" />
 
                 <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tab_layout"
                     style="@style/DesignTabLayout"
+                    android:id="@+id/tab_layout"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/action_bar_height" />
 
