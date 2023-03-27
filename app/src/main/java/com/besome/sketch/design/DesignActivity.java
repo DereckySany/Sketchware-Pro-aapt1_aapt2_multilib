@@ -880,7 +880,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                         (int) getDip(8),
                         (int) getDip(8));
                 dialog.show();
-                if (source.equals("")) {
+                if (editor.getText().toString().equals("Compile log no exist!")) {
                     dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(View.GONE);
                 }
             });
