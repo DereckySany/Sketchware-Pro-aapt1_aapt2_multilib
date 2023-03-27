@@ -34,12 +34,12 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.app.NotificationCompatSideChannelService;
 import androidx.core.content.FileProvider;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -262,20 +262,20 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
      */
     private void indicateCompileErrorOccurred(String error) {
         new CompileErrorSaver(q.sc_id).writeLogsToFile(error);
-            Snackbar snackbar = Snackbar.a(coordinatorLayout, "Show compile log", -2 /* BaseTransientBottomBar.LENGTH_INDEFINITE */);
-            snackbar.a(Helper.getResString(R.string.common_word_show), v -> {
-                if (!mB.a()) {
-                    snackbar.c();
-                    new CompileErrorSaver(sc_id).showDialog(DesignActivity.this);
-                }
-            });
-            /* Set the text color to yellow */
-            snackbar.f(Color.YELLOW);
-            /* show snackbar only in foreground */
-            snackbar.n();
-            currentNotificationCache.title = "Build Failed";
-            currentNotificationCache.description = "App build has been failed";
-            currentNotificationCache.ProjectStage = 2;
+        Snackbar snackbar = Snackbar.a(coordinatorLayout, "Show compile log", -2 /* BaseTransientBottomBar.LENGTH_INDEFINITE */);
+        snackbar.a(Helper.getResString(R.string.common_word_show), v -> {
+            if (!mB.a()) {
+                snackbar.c();
+                new CompileErrorSaver(sc_id).showDialog(DesignActivity.this);
+            }
+        });
+        /* Set the text color to yellow */
+        snackbar.f(Color.YELLOW);
+        /* show snackbar only in foreground */
+        snackbar.n();
+        currentNotificationCache.title = "Build Failed";
+        currentNotificationCache.description = "App build has been failed";
+        currentNotificationCache.ProjectStage = 2;
     }
 
     @Override
@@ -857,30 +857,34 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                     .setTitle("Compile log")
                     .setPositiveButton("Dismiss", null)
                     .setNeutralButton("Clear", (dialog1, which) -> {
-                        FileUtil.writeFile(FilePathUtil.getLastDebugCompileLog(),"");
+                        FileUtil.writeFile(FilePathUtil.getLastDebugCompileLog(), "");
                         SketchwareUtil.toast("Cleared log");
                     });
 
             runOnUiThread(() -> {
                 progress.dismiss();
-
+                TextView errorLogTxt = new TextView(getApplicationContext());
                 CodeEditor editor = new CodeEditor(DesignActivity.this);
                 editor.setTypefaceText(Typeface.MONOSPACE);
                 editor.setEditable(false);
-                editor.setEditorLanguage(CodeEditorLanguages.loadTextMateLanguage(CodeEditorLanguages.SCOPE_NAME_KOTLIN));
+                editor.setEditorLanguage(new JavaLanguage());
                 editor.setColorScheme(new EditorColorScheme());
                 editor.setTextSize(14);
                 editor.setHardwareAcceleratedDrawAllowed(true);
-                editor.setText(!source.equals("") ? source : "Compile log no exist!");
+                if (!source.equals("")) {
+                    editor.setText(source);
+                } else {
+                    errorLogTxt.setText("Compile log no exist!");
+                }
 
                 AlertDialog dialog = dialogBuilder.create();
-                dialog.setView(editor,
+                dialog.setView((!source.equals("") ? editor : errorLogTxt),
                         (int) getDip(8),
                         (int) getDip(8),
                         (int) getDip(8),
                         (int) getDip(8));
                 dialog.show();
-                if (editor.getText().toString().equals("Compile log no exist!")) {
+                if (!source.equals("")) {
                     dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(View.GONE);
                 }
             });
