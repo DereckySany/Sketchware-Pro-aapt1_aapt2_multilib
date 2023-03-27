@@ -102,6 +102,10 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
         menusLayout.addView(addDrawerItem(14, false,
                 R.drawable.open_box_48, R.string.text_title_menu_local_library, R.string.text_subtitle_menu_local_library
         ));
+        /* Add New Local library Manager */
+        menusLayout.addView(addDrawerItem(15, false,
+                R.drawable.open_box_48, Integer.parseInt("new" + R.string.text_title_menu_local_library), R.string.text_subtitle_menu_local_library
+        ));
         /* Add Native library Manager */
         menusLayout.addView(addDrawerItem(19, false,
                 R.drawable.cpp, R.string.design_drawer_menu_nativelibs, R.string.design_drawer_menu_nativelibs_subtitle));
@@ -179,6 +183,10 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
 
                     case 14:
                         designActivity.toLocalLibraryManager();
+                        return;
+
+                    case 15:
+                        designActivity.toNewLocalLibraryManager();
                         return;
 
                     case 16:
