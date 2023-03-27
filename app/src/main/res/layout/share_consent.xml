@@ -1,14 +1,60 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
-  xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
     <include layout="@layout/toolbar" />
-    <LinearLayout android:orientation="vertical" android:id="@id/layout_ads" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" />
-    <LinearLayout android:gravity="center" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="16.0dip">
-        <ImageView android:layout_width="96.0dip" android:layout_height="96.0dip" android:src="@drawable/sketchware_welcome" />
-        <TextView android:textSize="18.0sp" android:textStyle="bold" android:textColor="@color/color_primary_dark" android:gravity="center" android:layout_gravity="center_vertical" android:id="@id/tv_agree_consent" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="8.0dip" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@id/layout_ads"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
+
+        <ImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:src="@drawable/sketchware_welcome" />
+
+        <TextView
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/color_primary_dark"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:id="@id/tv_agree_consent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp" />
     </LinearLayout>
-    <ScrollView android:layout_width="fill_parent" android:layout_height="0.0dip" android:layout_weight="1.0">
-        <LinearLayout android:orientation="vertical" android:id="@id/layout_contents" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.0">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@id/layout_contents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </ScrollView>
-    <Button android:theme="@style/AppTheme.Button.Blue" android:textSize="@dimen/text_size_button_material" android:textColor="#ffffffff" android:gravity="center" android:id="@id/btn_all_accept" android:background="#ffdddddd" android:layout_width="fill_parent" android:layout_height="wrap_content" />
+
+    <Button
+        android:theme="@style/AppTheme.Button.Blue"
+        android:textSize="@dimen/text_size_button_material"
+        android:textColor="#ffffffff"
+        android:gravity="center"
+        android:id="@id/btn_all_accept"
+        android:background="#ffdddddd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>

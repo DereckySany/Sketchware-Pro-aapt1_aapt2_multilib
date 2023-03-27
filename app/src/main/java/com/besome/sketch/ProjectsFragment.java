@@ -34,6 +34,7 @@ import com.besome.sketch.lib.ui.CircleImageView;
 import com.besome.sketch.projects.MyProjectButton;
 import com.besome.sketch.projects.MyProjectButtonLayout;
 import com.besome.sketch.projects.MyProjectSettingActivity;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sketchware.remod.R;
 
@@ -70,7 +71,7 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
     private AnimatorSet collapseAnimatorSet;
     private AnimatorSet expandAnimatorSet;
     private ProjectsAdapter projectsAdapter;
-    private FloatingActionButton floatingActionButton;
+    private ExtendedFloatingActionButton floatingActionButton;
     private DB preference;
 
     private void toProjectSettingOrRequestPermission(int position) {
@@ -332,16 +333,18 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
             if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
                 recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                     @Override
-                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                         super.onScrolled(recyclerView, dx, dy);
                         if (dy > 4) {
                             if (isCollapsed) return;
                             collapseAnimatorSet.start();
                             isCollapsed = true;
+                            floatingActionButton.shrink();
                         } else {
                             if (dy >= -4 || !isCollapsed) return;
                             expandAnimatorSet.start();
                             isCollapsed = false;
+                            floatingActionButton.extend();
                         }
                     }
                 });

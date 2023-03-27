@@ -5,15 +5,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.cardview.widget.CardView;
-
 import com.besome.sketch.beans.ProjectLibraryBean;
+import com.google.android.material.card.MaterialCardView;
 import com.sketchware.remod.R;
 
 import a.a.a.wB;
 import a.a.a.xB;
 
-public class LibraryItemView extends CardView {
+public class LibraryItemView extends MaterialCardView {
     protected final Context context;
     protected ImageView icon;
     protected TextView title;
@@ -39,6 +38,8 @@ public class LibraryItemView extends CardView {
         layoutParams.bottomMargin = (int) wB.a(context, 4f);
         layoutParams.rightMargin = (int) wB.a(context, 8f);
         setLayoutParams(layoutParams);
+
+        setRadius(wB.a(context, 10f));
     }
 
     public void setData(ProjectLibraryBean projectLibraryBean) {

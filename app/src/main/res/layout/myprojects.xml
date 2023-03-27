@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swipe_refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -11,10 +11,11 @@
         android:background="#fff6f6f6"
         android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_create_new"
             android:layout_width="match_parent"
             android:layout_height="96dp"
+            app:cardCornerRadius="@dimen/card_view_corners"
             android:layout_margin="8dp"
             android:background="@color/transparent"
             android:elevation="8dp">
@@ -44,14 +45,15 @@
                     android:text="@string/myprojects_list_menu_title_create_a_new_project"
                     android:textColor="@color/scolor_blue_01" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_restore_projects"
             android:layout_width="match_parent"
             android:layout_height="96dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="@dimen/card_view_margin8"
+            app:cardCornerRadius="@dimen/card_view_corners"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="@dimen/card_view_margin8"
             android:background="@color/transparent"
@@ -80,10 +82,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:clickable="false"
-                    android:text="Restore projects"
+                    android:text="@string/myprojects_list_menu_title_restore_project"
                     android:textColor="@color/scolor_blue_01" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/myprojects"

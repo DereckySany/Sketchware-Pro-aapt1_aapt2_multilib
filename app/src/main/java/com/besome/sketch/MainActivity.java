@@ -32,6 +32,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.besome.sketch.editor.manage.library.ProjectComparator;
 import com.besome.sketch.lib.base.BasePermissionAppCompatActivity;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -64,7 +65,7 @@ import mod.tyron.backup.SingleCopyAsyncTask;
 
 public class MainActivity extends BasePermissionAppCompatActivity implements ViewPager.OnPageChangeListener {
 
-    private FloatingActionButton fab;
+    private ExtendedFloatingActionButton fab;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
     private MainDrawer drawer;

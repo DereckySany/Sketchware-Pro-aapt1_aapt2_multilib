@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <inset android:insetLeft="@dimen/abc_control_inset_material" android:insetRight="@dimen/abc_control_inset_material" android:insetTop="@dimen/abc_control_inset_material" android:insetBottom="@dimen/abc_control_inset_material"
   xmlns:android="http://schemas.android.com/apk/res/android">
     <selector>
