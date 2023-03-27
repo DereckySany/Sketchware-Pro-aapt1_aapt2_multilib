@@ -759,8 +759,8 @@ public class Dp {
                 Os.chmod(aaptBinary.getAbsolutePath(), S_IRUSR | S_IWUSR | S_IXUSR);
             }
         } catch (Exception e) {
-            LogUtil.e(TAG, "Failed to extract AAPT2 binaries", e);
-            throw new By("Couldn't extract AAPT2 binaries! Message: " + e.getMessage());
+            LogUtil.e(TAG, "Failed to extract AAPT/AAPT2 binaries", e);
+            throw new By("Couldn't extract AAPT/AAPT2 binaries! Message: " + e.getMessage());
         }
     }
 

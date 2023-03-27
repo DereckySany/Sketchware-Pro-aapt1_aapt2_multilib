@@ -222,6 +222,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         }
     }
 
+
     public void ProjectBuildingNotify(int notificationId, String title, String content, boolean setProcess, boolean setUnCancelable) {
         if (ConfigActivity.isSettingEnabled(ConfigActivity.SETTING_PROJECT_COMPILING_NOTIFICATION)) {
             Notify = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -503,7 +504,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                             break;
 
                         case 6:
-                            showLastedDebugCompilerlog();
+                                showLastedDebugCompilerlog();
                             break;
 
                         default:
@@ -856,9 +857,9 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(DesignActivity.this)
                     .setTitle("Compile log")
                     .setPositiveButton("Dismiss", null)
-                    .setNeutralButton("Clear", (dialog1, which) -> {
-                        FileUtil.writeFile(FilePathUtil.getLastDebugCompileLog(), "");
-                        SketchwareUtil.toast("Cleared log");
+                    .setNegativeButton("Clear", (dialog1, which) -> {
+                        FileUtil.writeFile(FilePathUtil.getLastDebugCompileLog(),"");
+                        SketchwareUtil.toast("Cleared Compile log");
                     });
 
             runOnUiThread(() -> {
