@@ -66,7 +66,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         setTitle(original_Title);
         setTitleColor(R.color.white);
         listview = findViewById(R.id.list_local_librarys);
-        TextView index = findViewById(R.id.local_librarys_index);
+        index = findViewById(R.id.local_librarys_index);
 
         if (getIntent().hasExtra("sc_id")) {
             String sc_id = getIntent().getStringExtra("sc_id");
@@ -245,8 +245,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         // Initialize the adapter with the directory names
         adapter = new LibraryAdapter(directories);
         ALL_LOCAL_LIBRARYS_LIST.addAll(directories);
-        indexSizeList(directories.size());
         listview.setAdapter(adapter);
+        indexSizeList(directories.size());
     }
 
     private void applyFilter(String query) {
