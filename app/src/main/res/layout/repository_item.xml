@@ -6,6 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:elevation="1px"
         android:padding="@dimen/mtrl_btn_icon_padding"
         android:background="@drawable/bg_round_white">
     <ImageView

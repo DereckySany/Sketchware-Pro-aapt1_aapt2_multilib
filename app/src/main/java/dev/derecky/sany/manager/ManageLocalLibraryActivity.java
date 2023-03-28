@@ -245,8 +245,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         // Initialize the adapter with the directory names
         adapter = new LibraryAdapter(directories);
         ALL_LOCAL_LIBRARYS_LIST.addAll(directories);
+        indexSizeList(ALL_LOCAL_LIBRARYS_LIST.size());
         listview.setAdapter(adapter);
-        indexSizeList(directories.size());
     }
 
     private void applyFilter(String query) {
