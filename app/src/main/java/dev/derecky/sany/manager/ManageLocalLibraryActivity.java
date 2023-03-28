@@ -22,7 +22,6 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -34,16 +33,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.AbstractList;
-import java.util.AbstractSequentialList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 import a.a.a.aB;
@@ -62,6 +56,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     private LibraryAdapter adapter;
     private boolean notAssociatedWithProject = false;
     private ListView listview;
+    private TextView index;
     private ArrayList<HashMap<String, Object>> PROJECT_USED_LIBS = new ArrayList<>();
 
     @Override
@@ -71,6 +66,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         setTitle(original_Title);
         setTitleColor(R.color.white);
         listview = findViewById(R.id.list_local_librarys);
+        TextView index = findViewById(R.id.local_librarys_index);
 
         if (getIntent().hasExtra("sc_id")) {
             String sc_id = getIntent().getStringExtra("sc_id");
@@ -216,6 +212,11 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             }
         }.execute(lib);
     }
+
+    private void indexSizeList(int size) {
+        index.setText("index: " + size);
+    }
+
     private void loadLocalLibraryList() {
         ALL_LOCAL_LIBRARYS_LIST.clear();
 
@@ -244,43 +245,15 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         // Initialize the adapter with the directory names
         adapter = new LibraryAdapter(directories);
         ALL_LOCAL_LIBRARYS_LIST.addAll(directories);
+        indexSizeList(directories.size());
         listview.setAdapter(adapter);
     }
-
-/*    private void loadLocalLibraryList() {
-        ALL_LOCAL_LIBRARYS_LIST.clear();
-        if (!notAssociatedWithProject) {
-            if (!FileUtil.isExistFile(IN_USE_LIBRARY_FILE_PATH) || FileUtil.readFile(IN_USE_LIBRARY_FILE_PATH).equals("")) {
-                FileUtil.writeFile(IN_USE_LIBRARY_FILE_PATH, "[]");
-            } else {
-                PROJECT_USED_LIBS = new Gson().fromJson(FileUtil.readFile(IN_USE_LIBRARY_FILE_PATH), Helper.TYPE_MAP_LIST);
-            }
-        }
-
-        List<String> localLibraryNames = new LinkedList<>();
-        FileUtil.listDir(LOCAL_LIBRARYS_PATH, localLibraryNames);
-
-        Set<String> uniqueDirectories = new HashSet<>();
-        for (String filename : localLibraryNames) {
-            if (FileUtil.isDirectory(filename)) {
-                String directoryName = Uri.parse(filename).getLastPathSegment();
-                uniqueDirectories.add(directoryName);
-            }
-        }
-
-        List<String> directories = new LinkedList<>(uniqueDirectories);
-        Collections.sort(directories, String.CASE_INSENSITIVE_ORDER);
-        isExpandBarVisible = Collections.nCopies(directories.size(), false);
-
-        adapter = new LibraryAdapter(directories);
-        ALL_LOCAL_LIBRARYS_LIST.addAll(directories);
-        listview.setAdapter(adapter);
-    }*/
 
     private void applyFilter(String query) {
         if (query.isEmpty()) {
             adapter.updateData(ALL_LOCAL_LIBRARYS_LIST);
             adapter.notifyDataSetChanged();
+            indexSizeList(ALL_LOCAL_LIBRARYS_LIST.size());
             return;
         }
 
@@ -292,6 +265,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         }
         adapter.updateData(filteredList);
         adapter.notifyDataSetChanged();
+        indexSizeList(filteredList.size());
     }
 
 

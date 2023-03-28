@@ -871,14 +871,14 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 if (!source.equals("")) {
                     editor.setText(source);
                 } else {
-                    errorLogTxt.setText("Compile log no exist!");
+                    errorLogTxt.setText("\tCompile log no exist!");
                 }
 
                 AlertDialog dialog = dialogBuilder.create();
                 dialog.setView((!source.equals("") ? editor : errorLogTxt),
-                        (int) getDip(24),
                         (int) getDip(8),
-                        (int) getDip(24),
+                        (int) getDip(8),
+                        (int) getDip(8),
                         (int) getDip(8));
                 dialog.show();
                 if (source.equals("")) {
