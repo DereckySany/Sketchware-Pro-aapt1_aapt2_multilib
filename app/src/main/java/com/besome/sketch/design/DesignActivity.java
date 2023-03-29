@@ -209,7 +209,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             } else {
                 NotifyProjectBuild = new Notification.Builder(getApplicationContext());
             }
-            NotifyProjectBuild.setSmallIcon(R.drawable.sketch_app_icon);
+            NotifyProjectBuild.setSmallIcon(R.drawable.sketchware_48_white);
             NotifyProjectBuild.setContentTitle(title);
             NotifyProjectBuild.setOngoing(setUnCancelable);
             NotifyProjectBuild.setContentText(content);
@@ -217,7 +217,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 NotifyProjectBuild.setProgress(100, 0, true);
             }
             NotifyProjectBuild.setOnlyAlertOnce(true);
-            NotifyProjectBuild.addAction(R.drawable.sketch_app_icon, ActionText, pendingIntent);
+            NotifyProjectBuild.addAction(R.drawable.selector_palette_tab_ic_sketchware, ActionText, pendingIntent);
             Notify.notify(notificationId, NotifyProjectBuild.build());
         }
     }
@@ -237,7 +237,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             } else {
                 NotifyProjectBuild = new Notification.Builder(getApplicationContext());
             }
-            NotifyProjectBuild.setSmallIcon(R.drawable.sketch_app_icon);
+            NotifyProjectBuild.setSmallIcon(R.drawable.sketchware_48_white);
             NotifyProjectBuild.setContentTitle(title);
             NotifyProjectBuild.setOngoing(setUnCancelable);
             NotifyProjectBuild.setContentText(content);
@@ -245,7 +245,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 NotifyProjectBuild.setProgress(100, 0, true);
             }
             NotifyProjectBuild.setOnlyAlertOnce(true);
-            //NotifyProjectBuild.addAction(R.drawable.sketch_app_icon, ActionText, pendingIntent);
+//            NotifyProjectBuild.addAction(R.drawable.selector_palette_tab_ic_sketchware, title, null);
             Notify.notify(notificationId, NotifyProjectBuild.build());
         }
     }
@@ -845,9 +845,6 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
     }
 
     private void showLastedDebugCompilerlog() {
-        ProgressDialog progress = new ProgressDialog(DesignActivity.this);
-        progress.setMessage("Geting Compile log...");
-        progress.show();
 
         new Thread(() -> {
 
@@ -857,13 +854,12 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(DesignActivity.this)
                     .setTitle("Compile log")
                     .setPositiveButton("Dismiss", null)
-                    .setNegativeButton("Clear", (dialog1, which) -> {
+                    .setNeutralButton("Clear", (dialog1, which) -> {
                         FileUtil.writeFile(FilePathUtil.getLastDebugCompileLog(),"");
                         SketchwareUtil.toast("Cleared Compile log");
                     });
 
             runOnUiThread(() -> {
-                progress.dismiss();
                 TextView errorLogTxt = new TextView(getApplicationContext());
                 CodeEditor editor = new CodeEditor(DesignActivity.this);
                 editor.setTypefaceText(Typeface.MONOSPACE);
@@ -875,7 +871,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 if (!source.equals("")) {
                     editor.setText(source);
                 } else {
-                    errorLogTxt.setText("Compile log no exist!");
+                    errorLogTxt.setText("\tCompile log no exist!");
                 }
 
                 AlertDialog dialog = dialogBuilder.create();
@@ -885,7 +881,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                         (int) getDip(8),
                         (int) getDip(8));
                 dialog.show();
-                if (!source.equals("")) {
+                if (source.equals("")) {
                     dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(View.GONE);
                 }
             });

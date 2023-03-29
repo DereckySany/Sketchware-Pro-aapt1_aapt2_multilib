@@ -55,6 +55,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     private final ArrayList<String> arrayList = new ArrayList<>();
     private boolean notAssociatedWithProject = false;
     private ListView listview;
+    private TextView index;
     private static String IN_USE_LIBRARY_FILE_PATH = "";
     private static String LOCAL_LIBRARYS_PATH = "";
     private ArrayList<HashMap<String, Object>> project_used_libs = new ArrayList<>();
@@ -66,6 +67,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         setTitle(originalTitle);
         setTitleColor(R.color.white);
         listview = findViewById(R.id.list_local_librarys);
+        index = findViewById(R.id.local_librarys_index);
 
         if (getIntent().hasExtra("sc_id")) {
             String sc_id = getIntent().getStringExtra("sc_id");
@@ -208,7 +210,9 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             }
         }.execute(lib);
     }
-
+    private void indexSizeList(int size) {
+        index.setText("index: " + size);
+    }
     private void loadLocalLibraryList() {
         arrayList.clear();
         if (!notAssociatedWithProject) {
@@ -235,7 +239,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
         adapter = new LibraryAdapter(directories);
         arrayList.addAll(directories);
-        //adapter.updateData(arrayList);
+        indexSizeList(arrayList.size());
         listview.setAdapter(adapter);
     }
 
@@ -243,6 +247,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         if (query.isEmpty()) {
             adapter.updateData(arrayList);
             adapter.notifyDataSetChanged();
+            indexSizeList(arrayList.size());
             return;
         }
 
@@ -254,6 +259,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         }
         adapter.updateData(filteredList);
         adapter.notifyDataSetChanged();
+        indexSizeList(filteredList.size());
     }
 
 
