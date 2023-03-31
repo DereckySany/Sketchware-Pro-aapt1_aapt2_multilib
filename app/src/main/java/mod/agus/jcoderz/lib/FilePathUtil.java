@@ -5,10 +5,13 @@ import android.os.Environment;
 import java.io.File;
 
 public class FilePathUtil {
-
+    private static final File SKETCHWARE = new File(Environment.getExternalStorageDirectory(),".sketchware/");
     private static final File SKETCHWARE_DATA = new File(Environment.getExternalStorageDirectory(), ".sketchware/data/");
     private static final File SKETCHWARE_LOCAL_LIBS = new File(Environment.getExternalStorageDirectory(), ".sketchware/libs/local_libs");
 
+    public static String getLastDebugCompileLog() {
+        return new File(SKETCHWARE, "debug.txt").getAbsolutePath();
+    }
     public static String getLastCompileLogPath(String sc_id) {
         return new File(SKETCHWARE_DATA, sc_id + "/compile_log").getAbsolutePath();
     }
@@ -59,6 +62,14 @@ public class FilePathUtil {
 
     public String getResPathLocalLibrary(String libraryName) {
         return new File(SKETCHWARE_LOCAL_LIBS, libraryName + "/res").getAbsolutePath();
+    }
+
+    public String getJniPathLocalLibrary(String libraryName) {
+        return new File(SKETCHWARE_LOCAL_LIBS, libraryName + "/jni").getAbsolutePath();
+    }
+
+    public String getManifestPathLocalLibrary(String libraryName) {
+        return new File(SKETCHWARE_LOCAL_LIBS, libraryName + "/AndroidManifest.xml").getAbsolutePath();
     }
 
     public String getJarPathLocalLibraryUser(String sc_id) {

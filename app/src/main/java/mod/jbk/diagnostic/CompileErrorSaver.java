@@ -1,12 +1,22 @@
 package mod.jbk.diagnostic;
 
+import static mod.SketchwareUtil.getDip;
+
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.view.View;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
+import com.sketchware.remod.R;
 import android.content.Intent;
 
 import com.besome.sketch.tools.CompileLogActivity;
-
+import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FilePathUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.hey.studios.util.CompileLogHelper;
 
 public class CompileErrorSaver {
 
@@ -44,6 +54,44 @@ public class CompileErrorSaver {
         intent.putExtra("showingLastError", true);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         context.startActivity(intent);
+    }
+
+    /**
+     * Show an {@link AlertDialog} that displays the last saved error to the user.
+     *
+     * @param context The context to show the dialog on
+     */
+    public void showDialog(Context context) {
+        ScrollView scrollView = new ScrollView(context);
+        TextView errorLogTxt = new TextView(context);
+        errorLogTxt.setText(CompileLogHelper.colorErrsAndWarnings(getLogsFromFile()));
+        errorLogTxt.setTextIsSelectable(true);
+        scrollView.addView(errorLogTxt);
+
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setTitle("Last compile log")
+                .setPositiveButton(R.string.common_word_ok, null)
+                .setNegativeButton("Clear", (dialog1, which) -> {
+                    deleteSavedLogs();
+                    SketchwareUtil.toast("Cleared log");
+                })
+                .setNeutralButton("Show longView", (dialog1, which) -> {
+                    new CompileErrorSaver(sc_id).showLastErrors(context);
+                })
+                .create();
+
+        dialog.setView(scrollView,
+                (int) getDip(24),
+                (int) getDip(8),
+                (int) getDip(24),
+                (int) getDip(8));
+
+        dialog.show();
+
+        if (errorLogTxt.getText().toString().equals(MESSAGE_NO_COMPILE_ERRORS_SAVED)) {
+            dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setVisibility(View.GONE);
+            dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(View.GONE);
+        }
     }
 
     /**

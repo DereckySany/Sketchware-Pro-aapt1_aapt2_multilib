@@ -1,12 +1,6 @@
-def secrets = System.getenv("GOOGLE_SERVICES_JSON")
-def analyticsEnabled = secrets != null
-
-apply plugin: "com.android.application"
-apply plugin: "kotlin-android"
-
-if (analyticsEnabled) {
-    apply plugin: "com.google.gms.google-services"
-    apply plugin: "com.google.firebase.crashlytics"
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
 }
 
 android {
@@ -72,8 +66,8 @@ android {
 
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
@@ -119,21 +113,21 @@ dependencies {
     implementation "de.hdodenhof:circleimageview:3.1.0"
     implementation "com.github.angads25:filepicker:1.1.1"
 
-    minApi26Implementation "com.android.tools.build:bundletool:1.13.2"
+    minApi26Implementation "com.android.tools.build:bundletool:1.14.0"
     //noinspection GradleDependency copied from above dependency for not just runtime access
-    minApi26Implementation "com.google.protobuf:protobuf-java:3.19.2"
+    minApi26Implementation "com.google.protobuf:protobuf-java:3.21.12"
     //noinspection GradleDependency
     implementation "com.android.tools:sdklib:25.3.0", { exclude group: "com.intellij", module: "annotations" }
-    implementation "com.android.tools:r8:4.0.48"
-    implementation "com.github.Iyxan23:zipalign-java:1.0.0"
+    implementation "com.android.tools:r8:4.0.52"
 
     implementation "com.google.code.gson:gson:2.10.1"
-    implementation "com.madgag:scpkix-jdk15on:1.47.0.2"
+    implementation 'com.madgag:scpkix-jdk15on:1.47.0.3'
+
 
     //noinspection GradleDependency
-    implementation "com.squareup.okhttp3:okhttp:4.10.0"
+    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.11"
     //noinspection GradleDependency
-    implementation "com.squareup.okio:okio:3.1.0"
+    implementation 'com.squareup.okio:okio:3.3.0'
 
     // TODO: use proguard-core dependency when duplicate class issue has been fixed
     minApi21Implementation "net.sf.proguard:proguard-base:6.0.3"
@@ -148,14 +142,6 @@ dependencies {
     minApi26Implementation project(path: ":kotlinc")
 
     implementation "com.github.topjohnwu.libsu:core:5.0.4"
-
-    // Analytics and Crashlytics
-    if (analyticsEnabled) {
-        new File("$projectDir/google-services.json").text = secrets;
-    }
-    implementation platform("com.google.firebase:firebase-bom:31.2.1")
-    implementation "com.google.firebase:firebase-crashlytics"
-    implementation "com.google.firebase:firebase-analytics"
 
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5"
 }

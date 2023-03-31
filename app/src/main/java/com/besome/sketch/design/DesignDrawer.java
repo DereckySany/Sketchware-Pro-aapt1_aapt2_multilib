@@ -102,6 +102,10 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
         menusLayout.addView(addDrawerItem(14, false,
                 R.drawable.open_box_48, R.string.text_title_menu_local_library, R.string.text_subtitle_menu_local_library
         ));
+        /* Add New Local library Manager */
+        menusLayout.addView(addDrawerItem(15, false,
+                R.drawable.color_package_96, R.string.text_title_menu_local_library, R.string.text_subtitle_menu_local_library
+        ));
         /* Add Native library Manager */
         menusLayout.addView(addDrawerItem(19, false,
                 R.drawable.cpp, R.string.design_drawer_menu_nativelibs, R.string.design_drawer_menu_nativelibs_subtitle));
@@ -118,7 +122,10 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
         /* Add Logcat Reader */
         menusLayout.addView(addDrawerItem(22,false,
                 R.drawable.icons8_app_components,R.string.design_drawer_menu_title_logcat_reader,R.string.design_drawer_menu_subtitle_logcat_reader));
-    }
+        /* Add Tools Manager */
+        menusLayout.addView(addDrawerItem(23,false,
+                R.drawable.icons8_app_attrs,R.string.system_information_developer_options,R.string.design_manager_block_detail_actionbar_title));
+        }
 
     @Override
     public void onClick(View view) {
@@ -178,6 +185,10 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
                         designActivity.toLocalLibraryManager();
                         return;
 
+                    case 15:
+                        designActivity.toNewLocalLibraryManager();
+                        return;
+
                     case 16:
                         designActivity.toSourceCodeViewer();
                         return;
@@ -200,6 +211,9 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
 
                     case 22:
                         designActivity.toLogReader();
+                        return;
+                    case 23:
+                        designActivity.toToolsManager();
                         return;
                     case 2:
                     default:

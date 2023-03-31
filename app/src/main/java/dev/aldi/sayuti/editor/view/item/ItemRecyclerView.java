@@ -74,12 +74,12 @@ public class ItemRecyclerView extends ListView implements sy {
             paint.setColor(0x60000000);
             int measuredWidth = getMeasuredWidth();
             int measuredHeight = getMeasuredHeight();
-            float f2 = (float) measuredWidth;
-            canvas.drawLine(0.0f, 0.0f, f2, 0.0f, paint);
-            float f3 = (float) measuredHeight;
-            canvas.drawLine(0.0f, 0.0f, 0.0f, f3, paint);
-            canvas.drawLine(f2, 0.0f, f2, f3, paint);
-            canvas.drawLine(0.0f, f3, f2, f3, paint);
+            float floatWidth = (float) measuredWidth;
+            canvas.drawLine(0.0f, 0.0f, floatWidth, 0.0f, paint);
+            float floatHeight = (float) measuredHeight;
+            canvas.drawLine(0.0f, 0.0f, 0.0f, floatHeight, paint);
+            canvas.drawLine(floatWidth, 0.0f, floatWidth, floatHeight, paint);
+            canvas.drawLine(0.0f, floatHeight, floatWidth, floatHeight, paint);
         }
         super.onDraw(canvas);
     }

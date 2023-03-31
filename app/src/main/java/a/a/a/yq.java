@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.hey.studios.build.BuildSettings;
 import mod.hey.studios.project.ProjectSettings;
@@ -307,7 +309,7 @@ public class yq {
         fileUtil.b(projectMyscPath + File.separator + "app" + File.separator + "build.gradle",
                 Lx.getBuildGradleString(28, 21, 28, N));
         fileUtil.b(projectMyscPath + File.separator + "settings.gradle", Lx.a());
-        fileUtil.b(projectMyscPath + File.separator + "build.gradle", Lx.c("3.4.2", "4.3.3"));
+        fileUtil.b(projectMyscPath + File.separator + "build.gradle", Lx.c("7.4.1", "7.4.1"));
     }
 
     /**
@@ -626,6 +628,7 @@ public class yq {
      */
     public void b(hC projectFileManager, eC projectDataManger, iC projectLibraryManager, boolean exportingProject) {
         ArrayList<SrcCodeBean> srcCodeBeans = a(projectFileManager, projectDataManger, projectLibraryManager, exportingProject);
+        
         if (N.u) {
             XmlBuilder pathsTag = new XmlBuilder("paths");
             pathsTag.addAttribute("xmlns", "android", "http://schemas.android.com/apk/res/android");
@@ -633,13 +636,13 @@ public class yq {
             externalPathTag.addAttribute("", "name", "external_files");
             externalPathTag.addAttribute("", "path", ".");
             pathsTag.a(externalPathTag);
-            srcCodeBeans.add(new SrcCodeBean("provider_paths.xml",
-                    CommandBlock.applyCommands("xml/provider_paths.xml", pathsTag.toCode())));
+            srcCodeBeans.add(new SrcCodeBean("provider_paths.xml", CommandBlock.applyCommands("xml/provider_paths.xml", pathsTag.toCode())));
         }
 
         for (SrcCodeBean bean : srcCodeBeans) {
-            a(bean.srcFileName, bean.source);
+            a(bean.getSrcFileName(), bean.getSource());
         }
+
         if (N.isFirebaseEnabled || N.isAdMobEnabled || N.isMapUsed) {
             ProjectLibraryBean firebaseLibrary = projectLibraryManager.d();
             Mx mx = new Mx();
@@ -658,10 +661,12 @@ public class yq {
                 mx.a("firebase_database_url", databaseUrl, false);
                 mx.a("project_id", projectId, false);
                 mx.a("google_app_id", firebaseLibrary.reserved1, false);
-                if (firebaseLibrary.reserved2 != null && firebaseLibrary.reserved2.length() > 0) {
+                
+                if (StringUtils.isNotBlank(firebaseLibrary.reserved2)) {
                     mx.a("google_api_key", firebaseLibrary.reserved2, false);
                 }
-                if (firebaseLibrary.reserved3 != null && firebaseLibrary.reserved3.length() > 0) {
+                
+                if (StringUtils.isNotBlank(firebaseLibrary.reserved3)) {
                     mx.a("google_storage_bucket", firebaseLibrary.reserved3, false);
                 }
             }
@@ -670,8 +675,7 @@ public class yq {
                 mx.a("google_maps_key", projectLibraryManager.e().data, false);
             }
             String filePath = "values/secrets.xml";
-            fileUtil.b(resDirectoryPath + File.separator + filePath,
-                    CommandBlock.applyCommands(filePath, mx.toCode()));
+            fileUtil.b(resDirectoryPath + File.separator + filePath, CommandBlock.applyCommands(filePath, mx.toCode()));
         }
         h();
     }

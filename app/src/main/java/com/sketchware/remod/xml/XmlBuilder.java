@@ -1,6 +1,10 @@
 package com.sketchware.remod.xml;
 
+import android.annotation.SuppressLint;
+import android.os.Build;
+
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import a.a.a.Jx;
 
@@ -31,11 +35,7 @@ public class XmlBuilder {
     }
 
     private String addIndent(int indentSize) {
-        StringBuilder str = new StringBuilder();
-        for (int i = 0; i < b + indentSize; i++) {
-            str.append("\t");
-        }
-        return str.toString();
+        return "\t".repeat(b + indentSize);
     }
 
     public void addNamespaceDeclaration(int position, String namespace, String attr, String value) {
@@ -61,40 +61,33 @@ public class XmlBuilder {
 
     public String toCode() {
         StringBuilder resultCode = new StringBuilder();
-        resultCode.append(addZeroIndent());
-        resultCode.append("<");
-        resultCode.append(a);
+        boolean hasMultipleAttrs = e.size() > 1 && !d;
+        String attrSeparator = hasMultipleAttrs ? "\r\n" + addIndent(1) : " ";
+        
+        resultCode.append(addZeroIndent()).append("<").append(a);
         for (AttributeBuilder attr : e) {
-            if (e.size() <= 1 || d) {
-                resultCode.append(" ");
-            } else {
-                resultCode.append("\r\n");
-                resultCode.append(addIndent(1));
-                g = "\r\n" + addIndent(1);
-            }
-            resultCode.append(attr.toCode());
+            resultCode.append(attrSeparator).append(attr.toCode());
+            g = attrSeparator;
         }
+        
         if (f.size() <= 0) {
             if (c == null || c.length() <= 0) {
                 resultCode.append(" />");
             } else {
                 resultCode.append(">");
-                resultCode.append(c);
-                resultCode.append("</");
-                resultCode.append(a);
-                resultCode.append(">");
+                if (c != null || c.length() > 0) {
+                    resultCode.append(c);
+                }
+                resultCode.append("</").append(a).append(">");
             }
         } else {
-            resultCode.append(">");
-            resultCode.append("\r\n");
+            resultCode.append(">\r\n");
             for (XmlBuilder xmlBuilder : f) {
                 resultCode.append(xmlBuilder.toCode());
             }
-            resultCode.append(addZeroIndent());
-            resultCode.append("</");
-            resultCode.append(a);
-            resultCode.append(">");
+            resultCode.append(addZeroIndent()).append("</").append(a).append(">");
         }
+        
         resultCode.append("\r\n");
         return resultCode.toString();
     }
@@ -105,10 +98,8 @@ public class XmlBuilder {
 
     private void b(int indentSize) {
         b = indentSize;
-        if (f != null) {
-            for (XmlBuilder nx : f) {
-                nx.b(indentSize + 1);
-            }
+        for (XmlBuilder nx : f) {
+            nx.b(indentSize + 1);
         }
     }
 
@@ -129,12 +120,12 @@ public class XmlBuilder {
         }
 
         private String toCode() {
-            if (namespace != null && namespace.length() > 0) {
-                return namespace + ":" + attr + "=" + "\"" + value + "\"";
-            } else if (attr == null || attr.length() <= 0) {
+            if (namespace != null && !namespace.isEmpty()) {
+                return namespace + ":" + attr + "=\"" + value + "\"";
+            } else if (attr == null || attr.isEmpty()) {
                 return value.replaceAll("\n", g);
             } else {
-                return attr + "=" + "\"" + value + "\"";
+                return attr + "=\"" + value + "\"";
             }
         }
     }

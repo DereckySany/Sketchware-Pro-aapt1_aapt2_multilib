@@ -2,6 +2,7 @@ package dev.aldi.sayuti.editor.view.palette;
 
 import android.content.Context;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.besome.sketch.beans.ViewBean;
 import com.besome.sketch.editor.view.palette.IconBase;
@@ -21,7 +22,7 @@ public class IconRadioGroup extends IconBase {
     public ViewBean getBean() {
         ViewBean viewBean = new ViewBean();
         viewBean.type = ViewBeans.VIEW_TYPE_LAYOUT_RADIOGROUP;
-        viewBean.layout.orientation = VERTICAL;
+        viewBean.layout.orientation = LinearLayout.VERTICAL;
         viewBean.layout.width = ViewGroup.LayoutParams.MATCH_PARENT;
         viewBean.layout.paddingLeft = 8;
         viewBean.layout.paddingTop = 8;

@@ -2,7 +2,10 @@ package com.besome.sketch.editor.property;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.text.InputType;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -12,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.besome.sketch.beans.ProjectFileBean;
+import com.besome.sketch.editor.LogicEditorActivity;
 import com.sketchware.remod.R;
 
 import a.a.a.Kw;
@@ -24,16 +28,24 @@ import a.a.a.jC;
 import a.a.a.mB;
 import a.a.a.uq;
 import a.a.a.wB;
+import a.a.a.wq;
+import dev.derecky.sany.editor.tools.translateapi.TranslateAPI;
+import mod.agus.jcoderz.lib.FileUtil;
+import mod.hey.studios.code.SrcCodeEditorLegacy;
 import mod.hey.studios.util.Helper;
+import mod.hilal.saif.activities.tools.ConfigActivity;
+
 
 @SuppressLint("ViewConstructor")
 public class PropertyInputItem extends RelativeLayout implements View.OnClickListener {
-
+    private static final int SRC_CODE_EDITOR_RESULT = 1;
     private Context context;
     private String key = "";
     private String value = "";
     private ImageView imgLeftIcon;
     private int icon;
+    private int icon2;
+    private LogicEditorActivity logicEditor;
     private TextView tvName;
     private TextView tvValue;
     private View propertyItem;
@@ -55,6 +67,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
 
             case "property_text":
                 icon = R.drawable.abc_96;
+                icon2 = R.drawable.language_translate_96;
                 break;
 
             case "property_hint":
@@ -95,6 +108,7 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
 
             case "property_inject":
                 icon = R.drawable.ic_property_inject;
+                icon2 = R.drawable.language_translate_96;
                 break;
 
             case "property_convert":
@@ -253,6 +267,15 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         dialog.show();
     }
 
+    private void showTranslationErrorDialog(String errorMessage) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Erro");
+        builder.setMessage(errorMessage);
+        builder.setPositiveButton("OK", null);
+        AlertDialog errorDialog = builder.create();
+        errorDialog.show();
+    }
+
     private void showTextInputDialog(int minValue, int maxValue) {
         aB dialog = new aB((Activity) getContext());
         dialog.b(tvName.getText().toString());
@@ -263,16 +286,108 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         lengthValidator.a(value);
         dialog.a(view);
         dialog.b(Helper.getResString(R.string.common_word_save), v -> {
-            if (lengthValidator.b()) {
-                setValue(input.getText().toString());
-                if (valueChangeListener != null) valueChangeListener.a(key, value);
-                dialog.dismiss();
+            String content = input.getText().toString();
+            String tempFile = wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/edit.txt";
+            try {
+                if (lengthValidator.b() && !FileUtil.readFile(tempFile).isEmpty()) {
+                    setValue(FileUtil.readFile(tempFile));
+                } else {
+                    setValue(content);
+                }
+            } catch (Exception e) {
+            String errorMessage = "Erro ao salvar valor: " + e.getMessage();
+            showTranslationErrorDialog(errorMessage);
             }
+
+            if (valueChangeListener != null) {
+                valueChangeListener.a(key, value);
+            }
+
+            FileUtil.writeFile(tempFile, "");
+            dialog.dismiss();
+
+        });
+        dialog.a(v -> {
+            showTranslationDialog(input).create().show();
+        });
+        dialog.configureDefaultButton("Code Editor", v -> {
+			String updatedValue = input.getText().toString();
+            input.setText(getCodeEditorValue(updatedValue));
         });
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.show();
     }
 
+    private String getCodeEditorValue(String input) {
+        String tempFile = wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/edit.txt";
+        FileUtil.writeFile(tempFile, input);
+        Intent intent = new Intent();
+        if (ConfigActivity.isLegacyCeEnabled()) {
+            intent.setClass(this.getContext(), SrcCodeEditorLegacy.class);
+        } else {
+            intent.setClass(this.getContext(), mod.hey.studios.code.SrcCodeEditor.class);
+        }
+        intent.putExtra("java", "");
+        intent.putExtra("title", tvName.getText().toString() + ".java");
+        intent.putExtra("content", tempFile);
+        this.getContext().startActivity(intent);
+        return FileUtil.readFile(wq.getAbsolutePathOf(wq.i) + "/" + sc_id + "/.editor/edit.txt");
+    }
+
+    private AlertDialog.Builder showTranslationDialog(EditText input) {
+        String[] languageOptions = {"Inglês", "Espanhol", "Português"};
+
+        // Cria o dialog para selecionar o idioma
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Select language for translation");
+        builder.setItems(languageOptions, (dialog1, which) -> {
+                    // Obtém o idioma selecionado
+                    String selectedLanguage = languageOptions[which];
+                    String targetLanguageCode = "";
+                    switch (selectedLanguage) {
+                        case "Inglês":
+                            targetLanguageCode = "en";
+                            break;
+                        case "Espanhol":
+                            targetLanguageCode = "es";
+                            break;
+                        case "Português":
+                            targetLanguageCode = "pt";
+                            break;
+                    }
+                    // Obtém o texto de entrada
+                    final String text = input.getText().toString();
+
+                    try {
+                        TranslateAPI translator = new TranslateAPI("auto", targetLanguageCode, text);
+
+                        translator.setTranslateListener(new TranslateAPI.TranslateListener() {
+                            @Override
+                            public void onSuccess(String translatedText) {
+                                //Log.d(TAG, "Translated text: " + translatedText);
+                                input.setText(translatedText);
+                            }
+
+                            @Override
+                            public void onFailure(String errorText) {
+                                //Log.e(TAG, "Translation failed: " + errorText);
+                                showTranslationErrorDialog(errorText);
+                                builder.create().dismiss();
+                            }
+                        });
+                        translator.execute();
+                        //Toast.makeText(context, "Conteúdo traduzido para o " + selectedLanguage + "!", Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        String errorMessage = "Erro ao traduzir o texto: " + e.getMessage() + "\nInfo: " + e.getCause() ;
+                        showTranslationErrorDialog(errorMessage);
+                    }
+                });
+        return builder;
+    }
+
+    public void startActivity(Intent intent) {
+        throw new RuntimeException("Stub!");
+    }
     private void showNumberDecimalInputDialog(int minValue, int maxValue) {
         aB dialog = new aB((Activity) getContext());
         dialog.b(tvName.getText().toString());
@@ -295,4 +410,5 @@ public class PropertyInputItem extends RelativeLayout implements View.OnClickLis
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.show();
     }
+
 }

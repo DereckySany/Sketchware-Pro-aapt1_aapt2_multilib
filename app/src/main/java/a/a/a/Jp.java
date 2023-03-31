@@ -34,7 +34,7 @@ public class Jp {
     }
 
     /**
-     * @return The library's name inside libs.zip or dexs.zip, e.g. material-1.0.0
+     * @return The library's name inside libs.zip or dexs.zip, e.g. material-1.6.1
      * @see Jp#a
      */
     public String a() {

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sketchware Pro</string>
+    <string name="common_word_accept">Salvar</string>
+    <string name="common_word_add">Adicionar</string>
+    <string name="common_word_cancel">Cancelar</string>
+    <string name="common_word_close">Fechar</string>
+    <string name="common_word_copy">Copiar</string>
+    <string name="common_word_create">Criar</string>
+    <string name="common_word_delete">deletar</string>
+    <string name="common_word_detail">Detalhes</string>
+    <string name="common_word_edit">Editar</string>
+    <string name="common_word_exit">Sair</string>
+    <string name="common_word_finish">Terminar</string>
+    <string name="common_word_goback">Voltar</string>
+    <string name="common_word_image">Imagem</string>
+    <string name="common_word_import">Importar</string>
+    <string name="common_word_information">Informação</string>
+    <string name="common_word_no">Não</string>
+    <string name="common_word_ok">Ok</string>
+    <string name="common_word_save">Salvar</string>
+    <string name="common_word_yes">Sim</string>
+</resources>

@@ -3,7 +3,11 @@
 </p>
 
 # Sketchware Pro
+
+*Read this in other languages: [English](README.md), [Português](README-PT.md).*
+
 ![GitHub contributors](https://img.shields.io/github/contributors/Sketchware-Pro/Sketchware-Pro) ![GitHub last commit](https://img.shields.io/github/last-commit/Sketchware-Pro/Sketchware-Pro) ![Discord server stats](https://img.shields.io/discord/790686719753846785)
+[![Android CI](https://github.com/DereckySany/Sketchware-Pro-aapt1_aapt2_multilib/actions/workflows/android.yml/badge.svg)](https://github.com/DereckySany/Sketchware-Pro-aapt1_aapt2_multilib/actions/workflows/android.yml)
 
 Here you'll find the source code of many classes in Sketchware Pro, and most importantly, **the
 place** to contribute to Sketchware Pro.
@@ -23,25 +27,66 @@ or use the appropriate build Gradle command.
 
 ### Source code map
 
-| Class | Role |
-| ----- | ---- |
-| `a.a.a.Dp` | Helper for compiling an entire project |
-| `a.a.a.Ix` | Responsible for generating AndroidManifest.xml |
-| `a.a.a.Jx` | Generates source code of activities |
-| `a.a.a.Lx` | Generates source code of components, such as listeners, etc. |
-| `a.a.a.Ox` | Responsible for generating XML files of layouts |
-| `a.a.a.qq` | Registry of built-in libraries' dependencies |
-| `a.a.a.tq` | Responsible for the compiling dialog's quizzes |
-| `a.a.a.yq` | Organizes Sketchware projects' file paths |
+*Some classes are not available in all versions of the code, as they may have been replaced or not
+used in the version!*
+| Class | Description |
+|---|---|
+| [`a.a.a.Dp`](app/src/main/java/a/a/a/Dp.java) | Helper to compile an entire project |
+| [`a.a.a.aB`](app/src/main/java/a/a/a/aB.java) | Audio File Manager |
+| [`a.a.a.bB`](app/src/main/java/a/a/a/bB.java) | Video File Manager |
+| `a.a.a.Boi` | Responsible for generating the XML files of the layouts |
+| [`a.a.a.dt`](app/src/main/java/a/a/a/dt.java) | Responsible for resource processing |
+| [`a.a.a.Fw`](app/src/main/java/a/a/a/Fw.java) | Application Task Management Helper |
+| `a.a.a.GC` | Image File Manager |
+| [`a.a.a.Gx`](app/src/main/java/a/a/a/Gx.java) | Responsible for generating resources and compiling
+projects |
+| [`a.a.a.gt`](app/src/main/java/a/a/a/gt.java) | Library Resource Management Helper |
+| [`a.a.a.Hx`](app/src/main/java/a/a/a/Hx.java) | Helper for project code execution |
+| [`a.a.a.Ix`](app/src/main/java/a/a/a/Ix.java) | Responsible for AndroidManifest.xml generation |
+| [`a.a.a.jC`](app/src/main/java/a/a/a/jC.java) | Project File Manager |
+| [`a.a.a.Jp`](app/src/main/java/a/a/a/Jp.java) | Project Theme Manager |
+| [`a.a.a.jq`](app/src/main/java/a/a/a/jq.java) | Project Template Manager |
+| [`a.a.a.jr`](app/src/main/java/a/a/a/jr.java) | Responsible for managing library resources |
+| [`a.a.a.Jx`](app/src/main/java/a/a/a/Jx.java) | Responsible for generating the source code of the
+activities |
+| [`a.a.a.Kp`](app/src/main/java/a/a/a/Kp.java) | Text File Manager |
+| [`a.a.a.Lx`](app/src/main/java/a/a/a/Lx.java) | Source code generator for components such as
+listeners etc. |
+| [`a.a.a.MB`](app/src/main/java/a/a/a/MB.java) | Backup File Manager |
+| [`a.a.a.mq`](app/src/main/java/a/a/a/mq.java) | Library File Manager |
+| [`a.a.a.Mx`](app/src/main/java/a/a/a/Mx.java) | Package File Manager |
+| `a.a.a.Nx` | File Management Helper |
+| [`a.a.a.oq`](app/src/main/java/a/a/a/oq.java) | Theme Image File Manager |
+| [`a.a.a.Ox`](app/src/main/java/a/a/a/Ox.java) | HTML File File Manager |
+| [`a.a.a.qA`](app/src/main/java/a/a/a/qA.java) | Theme Manifest File Manager |
+| [`a.a.a.qq`](app/src/main/java/a/a/a/qq.java) | Registry of internal library dependencies |
+| [`a.a.a.rs`](app/src/main/java/a/a/a/rs.java) | Library Management Assistant |
+| [`a.a.a.sB`](app/src/main/java/a/a/a/sB.java) | Theme File Manager |
+| [`a.a.a.sq`](app/src/main/java/a/a/a/sq.java) | Responsible for generating content provider source
+code |
+| [`a.a.a.tq`](app/src/main/java/a/a/a/tq.java) | Responsible for compiling dialogue questionnaires
+|
+| [`a.a.a.tx`](app/src/main/java/a/a/a/tx.java) | Animation File Manager |
+| [`a.a.a.uq`](app/src/main/java/a/a/a/uq.java) | Font File Manager |
+| [`a.a.a.Ws`](app/src/main/java/a/a/a/Ws.java) | Plain Text File Manager |
+| [`a.a.a.wB`](app/src/main/java/a/a/a/wB.java) | SVG Image File Manager |
+| [`a.a.a.wq`](app/src/main/java/a/a/a/wq.java) | Image File Manager |
+| [`a.a.a.xo`](app/src/main/java/a/a/a/xo.java) | Vector Image File Manager |
+| [`a.a.a.yq`](app/src/main/java/a/a/a/yq.java) | Arrange File Paths in Sketchware Projects |
+| [`a.a.a.ZA`](app/src/main/java/a/a/a/ZA.java) | Resource Caching Manager |
 
-You can also check the `mod` package that has the majority of contributors' changes.
+* ***more in [`Classe Index`](ClassIndex.md).***
+
+You can also check the [`mod`](app/src/main/java/mod) package that has the majority of contributors'
+changes.
 
 ## Contributing
 
 Fork this repository and contribute back using
-[pull requests](https://github.com/Sketchware-Pro/Sketchware-Pro/pulls).
+[`pull requests`](https://github.com/Sketchware-Pro/Sketchware-Pro/pulls).
 
-Any contributions, large or small, major features, or bug fixes, are welcomed and appreciated, but will
+Any contributions, large or small, major features, or bug fixes, are welcomed and appreciated, but
+will
 be thoroughly reviewed.
 
 ### How to contribute

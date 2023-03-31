@@ -199,6 +199,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:choiceMode="none"
+                android:divider="@color/transparent"
                 android:padding="8dp" />
         </LinearLayout>
 

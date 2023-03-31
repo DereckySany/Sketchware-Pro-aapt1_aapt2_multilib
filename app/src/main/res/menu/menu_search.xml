@@ -1,0 +1,28 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/search_icon_white"
+        android:orderInCategory="10"
+        android:title=""
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_reset"
+        android:icon="@drawable/ic_restore_white_24dp"
+        android:orderInCategory="11"
+        android:title=""
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_import"
+        android:icon="@drawable/download_80px"
+        android:orderInCategory="12"
+        android:title=""
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_repo_manager"
+        android:icon="@drawable/sorting_options_48"
+        android:orderInCategory="13"
+        android:title="Manage Repositories"
+        app:showAsAction="always" />
+</menu>

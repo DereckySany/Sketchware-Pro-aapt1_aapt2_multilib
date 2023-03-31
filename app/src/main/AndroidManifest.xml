@@ -79,7 +79,8 @@
             android:configChanges="orientation|screenSize" />
         <activity
             android:name="com.besome.sketch.design.DesignActivity"
-            android:configChanges="orientation|screenSize" />
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name="com.besome.sketch.MainActivity"
             android:configChanges="orientation|screenSize"
@@ -128,7 +129,8 @@
             android:configChanges="orientation|screenSize" />
         <activity
             android:name="com.besome.sketch.editor.manage.library.ManageLibraryActivity"
-            android:configChanges="orientation|screenSize" />
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name="com.besome.sketch.editor.manage.ManageCollectionActivity"
             android:configChanges="orientation|screenSize" />
@@ -235,7 +237,16 @@
             android:configChanges="orientation|screenSize" />
         <activity
             android:name="dev.aldi.sayuti.editor.manage.ManageLocalLibraryActivity"
-            android:configChanges="orientation|screenSize" />
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.MyApplication"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+
+        <activity
+            android:name="dev.derecky.sany.manager.ManageLocalLibraryActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.MyApplication"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+
         <activity
             android:name="mod.agus.jcoderz.editor.manage.permission.ManagePermissionActivity"
             android:configChanges="orientation|screenSize" />
@@ -314,13 +325,20 @@
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.Translucent"
             android:windowSoftInputMode="adjustResize|stateHidden" />
+
         <activity
             android:name="mod.khaled.logcat.LogReaderActivity"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize" />
 
-        <meta-data
-            android:name="firebase_crashlytics_collection_enabled"
-            android:value="true" />
+        <activity
+            android:name="mod.tsd.activities.DocumentationActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.Translucent"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
 
+        <activity android:name="dev.derecky.sany.manager.RepoManagerActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.Translucent"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
     </application>
 </manifest>

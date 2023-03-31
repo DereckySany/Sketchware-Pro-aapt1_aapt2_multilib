@@ -1,20 +1,33 @@
 package mod.hey.studios.project.library;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ClipboardManager;
+import android.graphics.Color;
 import android.net.Uri;
+
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
-import android.util.Log;
+
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.tools.r8.D8;
+import com.android.tools.r8.R8;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.sketchware.remod.R;
@@ -43,12 +56,15 @@ import mod.hey.studios.lib.prdownloader.PRDownloader;
 import mod.hey.studios.lib.prdownloader.PRDownloader.OnDownloadListener;
 import mod.hey.studios.lib.prdownloader.PRDownloader.Status;
 import mod.hey.studios.util.Helper;
-import mod.jbk.build.BuildProgressReceiver;
 import mod.jbk.build.BuiltInLibraries;
+
+import mod.hey.studios.project.ProjectSettings;
 
 //changed in 6.3.0
 
 public class LibraryDownloader {
+
+    private static final String SEARCHING_MESSAGE = "Searching...";
 
     public static final File CONFIGURED_REPOSITORIES_FILE = new File(Environment.getExternalStorageDirectory(),
             ".sketchware" + File.separator + "libs" + File.separator + "repositories.json");
@@ -58,26 +74,85 @@ public class LibraryDownloader {
     private final ArrayList<String> repoNames = new ArrayList<>();
     Activity context;
     boolean use_d8;
+    String tool;
     private OnCompleteListener listener;
     private AlertDialog dialog;
     private boolean isAarAvailable = false, isAarDownloaded = false;
+    private boolean isJarAvailable = false, isJarDownloaded = false;
+    private boolean Use_Aar = true;
     private int downloadId;
     private String libName = "";
     private String currentRepo = "";
     private int counter = 0;
     private ArrayList<HashMap<String, Object>> repoMap = new ArrayList<>();
+    private ProgressDialog progressDialog;
 
-    public LibraryDownloader(Activity context, boolean use_d8) {
+    public ProjectSettings settings;
+
+    public LibraryDownloader(Activity context, boolean use_d8, String tool) {
         this.context = context;
         this.use_d8 = use_d8;
+        this.tool = tool;
 
         downloadPath = FileUtil.getExternalStorageDir() + "/.sketchware/libs/local_libs/";
     }
 
     private static void mkdirs(File file, String str) {
         File file2 = new File(file, str);
-        if (!file2.exists()) {
+        if (!file2.exists())
             file2.mkdirs();
+    }
+
+    public static void copyFile(String sourcePath, String destPath) {
+        if (!FileUtil.isExistFile(sourcePath)) return;
+        createNewFile(destPath);
+
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+
+        try {
+            fis = new FileInputStream(sourcePath);
+            fos = new FileOutputStream(destPath, false);
+
+            byte[] buff = new byte[1024];
+            int length = 0;
+
+            while ((length = fis.read(buff)) > 0) {
+                fos.write(buff, 0, length);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private static void createNewFile(String path) {
+        int lastSep = path.lastIndexOf(File.separator);
+        if (lastSep > 0) {
+            String dirPath = path.substring(0, lastSep);
+            FileUtil.makeDir(dirPath);
+        }
+
+        File file = new File(path);
+
+        try {
+            if (!file.exists()) file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -105,6 +180,23 @@ public class LibraryDownloader {
         }
     }
 
+    public String getClipeBoard() {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(context.CLIPBOARD_SERVICE);
+        if (clipboard.hasPrimaryClip()) {
+            //android.content.ClipDescription description = clipboard.getPrimaryClipDescription();
+            android.content.ClipData data = clipboard.getPrimaryClip();
+            //if (data != null && description != null && description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN))
+            final String accepts[] = {"implementation", ".", ":"};
+            final String clipe = String.valueOf(data.getItemAt(0).getText());
+            if (data != null) {
+                if (clipe.contains(accepts[0]) || clipe.contains(accepts[1]) || clipe.contains(accepts[2])) {
+                    return clipe; //return String.valueOf(data.getItemAt(0).getText());
+                }
+            }
+        }
+        return null;
+    }
+
     public void showDialog(OnCompleteListener listener) {
         this.listener = listener;
 
@@ -123,39 +215,228 @@ public class LibraryDownloader {
         final LinearLayout cancel = view.findViewById(R.id.linear11);
         final EditText library = view.findViewById(R.id.edittext1);
 
+        final ImageButton acao = view.findViewById(R.id.imageview1);
+        final RadioGroup radiog = view.findViewById(R.id.choselibraryextesion);
+        final RadioButton useAar = view.findViewById(R.id.liblaryformataar);
+        final RadioButton useJar = view.findViewById(R.id.liblaryformatjar);
+
         linear1.removeView(progressBarContainer);
 
         builder.setView(view);
+        builder.setCancelable(false);
+
         dialog = builder.show();
 
+        useAar.setEnabled(true);
+        useJar.setEnabled(true);
+
+        start.setEnabled(true);
+        start.setVisibility(View.VISIBLE);
         pause.setEnabled(false);
-        pause.setVisibility(View.INVISIBLE);
+        pause.setVisibility(View.GONE);
+        pause.setEnabled(false);
+        pause.setVisibility(View.GONE);
         resume.setEnabled(false);
-        resume.setVisibility(View.INVISIBLE);
-        cancel.setEnabled(false);
-        cancel.setVisibility(View.INVISIBLE);
+        resume.setVisibility(View.GONE);
+        cancel.setEnabled(true);
+        cancel.setVisibility(View.VISIBLE);
+
+        library.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence _param1, int _param2, int _param3, int _param4) {
+                final String _charSeq = _param1.toString();
+                if (_charSeq.length() > 0) {
+                    acao.setImageResource(R.drawable.ic_delete_grey);
+                } else {
+                    acao.setImageResource(R.drawable.ic_content_paste_grey);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        acao.setOnClickListener(acaoView -> {
+            if (library.getText().toString().length() > 0) {
+                library.setText("");
+            } else {
+                library.setText(getClipeBoard());
+            }
+        });
 
         start.setOnClickListener(startView -> {
+            int status = 0;
             String dependency = library.getText().toString();
 
             if (dependency.isEmpty()) {
-                SketchwareUtil.toastError("Dependency can't be empty");
-            } else if (!dependency.contains(":")) {
-                SketchwareUtil.toastError("Invalid dependency");
+                status = 1;
+            } else if (!dependency.contains(".")) {
+                status = 2;
+            } else if (dependency.contains("dependency") & dependency.contains("groupId")) {
+                SketchwareUtil.toast("Maven");
+                dependency = dependency.replace("<artifactId>", ":");
+                dependency = dependency.replace("artifactId", "");
+                dependency = dependency.replace("<version>", ":");
+                dependency = dependency.replace("</version>", "");
+                dependency = dependency.replace("dependency", "");
+                dependency = dependency.replace("groupId", "");
+                dependency = dependency.replace("<>", "");
+                dependency = dependency.replace("</>", "");
+                dependency = dependency.replaceAll(" ", "");
+                dependency = dependency.replace("\n", "");
+                status = 3;
+            } else if (dependency.contains("implementation") & dependency.contains("group:")) {
+                //implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
+                SketchwareUtil.toast("Gradle");
+                dependency = dependency.replace("implementation", "");
+                dependency = dependency.replace("group:", "");
+                dependency = dependency.replace("name:", ":");
+                dependency = dependency.replace("version:", ":");
+                dependency = dependency.replace(",", "");
+                dependency = dependency.replace("'", "");
+                dependency = dependency.replace(" ", "");
+                dependency = dependency.replace("\n", "");
+                status = 3;
+            } else if (dependency.contains("implementation") & dependency.contains(":")) {
+                if (dependency.contains("'")) {
+                    SketchwareUtil.toast("(Gradle (Short)");
+                } else {
+                    SketchwareUtil.toast("Gradle (Kotlin)");
+                }
+                // implementation 'io.github.amrdeveloper:codeview:1.3.4'
+                dependency = dependency.replace("implementation", "");
+                dependency = dependency.replace("'", "");
+                dependency = dependency.replace("\"", "");
+                dependency = dependency.replace("(", "");
+                dependency = dependency.replace(")", "");
+                dependency = dependency.replace(" ", "");
+                dependency = dependency.replace("\n", "");
+                status = 3;
+            } else if (dependency.contains("libraryDependencies") & dependency.contains("%")) {
+                //libraryDependencies += "com.google.code.gson" % "gson" % "2.10.1"
+                SketchwareUtil.toast("SBT");
+                dependency = dependency.replace("libraryDependencies", "");
+                dependency = dependency.replace("+=", "");
+                dependency = dependency.replace("\"", "");
+                dependency = dependency.replace("%", "");
+                dependency = dependency.replace(" ", ":");
+                dependency = dependency.replaceAll("(^::)", "");
+                dependency = dependency.replace("::", ":");
+                dependency = dependency.replace("\n", "");
+                status = 3;
+            } else if (dependency.contains("dependency") & dependency.contains("org=")) {
+                //<dependency org="com.google.code.gson" name="gson" rev="2.10.1"/>
+                SketchwareUtil.toast("Ivy");
+                dependency = dependency.replace("dependency", "");
+                dependency = dependency.replace("\"", "");
+                dependency = dependency.replace("<", "");
+                dependency = dependency.replace(">", "");
+                dependency = dependency.replace("/", "");
+                dependency = dependency.replace(":", "");
+                dependency = dependency.replace("org=", "");
+                dependency = dependency.replace("name=", ":");
+                dependency = dependency.replace("rev=", ":");
+                dependency = dependency.replace(" ", "");
+                dependency = dependency.replace("\n", "");
+                status = 3;
+            } else if (dependency.contains("@Grapes") & dependency.contains("version=")) {
+                SketchwareUtil.toast("Grape");
+                dependency = dependency.replace("\n", "");
+                dependency = dependency.replace("@Grapes", "");
+                dependency = dependency.replace("@Grab", "");
+                dependency = dependency.replace("group=", "");
+                dependency = dependency.replace("module=", ":");
+                dependency = dependency.replace("version=", ":");
+                dependency = dependency.replace("'", "");
+                dependency = dependency.replace("(", "");
+                dependency = dependency.replace(")", "");
+                dependency = dependency.replace(",", "");
+                dependency = dependency.replace(" ", "");
+                dependency = dependency.replace("\n", "");
+                status = 3;
+            } else if (dependency.contains("[") & dependency.contains("/") & dependency.contains("]")) {
+                SketchwareUtil.toast("Leiningen");
+                dependency = dependency.replace("[", "");
+                dependency = dependency.replace("]", "");
+                dependency = dependency.replace("/", ":");
+                dependency = dependency.replaceAll("( \")", ":");
+                dependency = dependency.replace("\"", "");
+                dependency = dependency.replace(" ", "");
+                dependency = dependency.replace("\n", "");
+                status = 3;
+            } else if (dependency.contains("'") & dependency.contains(":aar:") | dependency.contains(":jar:")) {
+                SketchwareUtil.toast("Buildr");
+                dependency = dependency.replace("'", "");
+                dependency = dependency.replace(":aar:", ":");
+                dependency = dependency.replace(":jar:", ":");
+                dependency = dependency.replace(" ", "");
+                dependency = dependency.replace("\n", "");
+                status = 3;
+            } else if (dependency.contains(":") & dependency.contains(".")) {
+                dependency = dependency.replaceAll("\n", "");
+                dependency = dependency.replaceAll(" ", "");
+                if (dependency.contains(":")) {
+                    Pattern p = Pattern.compile("(\\w+.\\w+.?\\w+.\\w+:\\w+-?\\w*:\\d+.\\d+.\\d+-?\\w*\\d*)");
+                    Matcher m = p.matcher(dependency);
+                    if (m.find()) {
+                        dependency = m.group(1);
+                        SketchwareUtil.toast("done");
+                        status = 3;
+                    }
+                    status = 3;
+                } else if (!dependency.contains("http") & dependency.contains(":") | dependency.contains(".")) {
+                    status = 3;
+                } else {
+                    status = 2;
+                }
             } else {
-                libName = downloadPath + _getLibName(dependency);
+                status = 2;
+                SketchwareUtil.toastError("Invalid dependency");
+            }
+
+            if (status == 1) {
+                SketchwareUtil.toastError("Dependency can't be empty");
+                library.setTextColor(0xFFFFFFFF);
+            } else if (status == 2) {
+                SketchwareUtil.toastError("Invalid dependency");
+                library.setTextColor(0xFFf91010);
+            } else if (status == 3) {
+                if (dependency.contains(":") | dependency.contains(".")) {
+                    library.setTextColor(0xFF00E676);
+                } else {
+                    library.setTextColor(0xFFF91010);
+                }
+                dependency = dependency.replaceAll("\n", "");
+                dependency = dependency.replaceAll(" ", "");
+
+                library.setText(dependency);
+                libName = downloadPath + _getLibName(dependency).trim();
 
                 if (!FileUtil.isExistFile(libName)) {
                     FileUtil.makeDir(libName);
                 }
+                Use_Aar = useAar.isChecked();
 
                 isAarDownloaded = false;
                 isAarAvailable = false;
 
+                isJarDownloaded = false;
+                isJarAvailable = false;
+
                 library.setEnabled(false);
 
+                acao.setEnabled(false);
+
+                useAar.setEnabled(false);
+                useJar.setEnabled(false);
+
                 start.setEnabled(false);
-                start.setVisibility(View.INVISIBLE);
+                start.setVisibility(View.GONE);
 
                 cancel.setEnabled(true);
                 cancel.setVisibility(View.VISIBLE);
@@ -165,7 +446,7 @@ public class LibraryDownloader {
                 currentRepo = repoUrls.get(counter);
 
                 downloadId = _download(
-                        currentRepo.concat(_getAarDownloadLink(dependency)),
+                        currentRepo.concat(_getDownloadLink(dependency)),
                         downloadPath,
                         _getLibName(dependency + ".zip"),
                         library,
@@ -176,8 +457,14 @@ public class LibraryDownloader {
                         pause,
                         resume,
                         cancel,
+                        acao,
+                        useAar,
+                        useJar,
                         progressbar1
                 );
+            } else {
+                SketchwareUtil.toastError("Invalid dependency");
+                library.setTextColor(0xFFf91010);
             }
         });
 
@@ -196,11 +483,13 @@ public class LibraryDownloader {
         cancel.setOnClickListener(cancelView -> {
             PRDownloader.cancel(downloadId);
             library.setEnabled(false);
-            dialog.dismiss();
+            if (dialog != null && dialog.isShowing()) {
+                dialog.dismiss();
+            }
         });
     }
 
-    private String _getAarDownloadLink(String str) {
+    private String _getDownloadLink(String str) {
         String[] split = str.split(":");
         String str2 = "/";
 
@@ -208,55 +497,79 @@ public class LibraryDownloader {
             str2 = str2.concat(split[i].replace(".", "/") + "/");
         }
 
-        return str2.concat(split[split.length - 1]).concat("/").concat(_getAarName(str));
+        return str2.concat(split[split.length - 1]).concat("/").concat(_getExtencionName(str));
     }
 
-    private String _getAarName(String str) {
+    private String _getExtencionName(String str) {
         String[] split = str.split(":");
-        return split[split.length - 2] + "-" + split[split.length - 1] + ".aar";
+        return split[split.length - 2] + "-" + split[split.length - 1] + (Use_Aar ? ".aar" : ".jar");
     }
 
     private String _getLibName(String str) {
         String[] split = str.split(":");
-        return split[split.length - 2] + "_V_" + split[split.length - 1];
+        return split[split.length - 2] + "_v_" + split[split.length - 1];
     }
 
     private void _jar2dex(String _path) throws Exception {
         // 6.3.0
         if (use_d8) {
-            File libs = BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH;
+            if (tool.equals("D8")) {
+                // D8
+                // File libs = new File(context.getFilesDir(), "libs");
+                ArrayList<String> cmd = new ArrayList<>();
+                // Input <file>
+                cmd.add(_path);
+                //  Compile without debugging information.
+                cmd.add("--release");
+                //  Compile an intermediate result intended for later merging
+                cmd.add("--intermediate");
+                //  Add <file|jdk-home> as a library resource
+                cmd.add("--lib");
+                cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
+                //  Add <file> as a classpath resource
+                cmd.add("--classpath");
+                cmd.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
+                //  Output result in <file>
+                cmd.add("--output");
+                cmd.add(new File(_path).getParentFile().getAbsolutePath());
+                // run D8 with list commands
+                D8.main(cmd.toArray(new String[0]));
 
-            ArrayList<String> cm = new ArrayList<>();
-            cm.add("--release");
-            cm.add("--intermediate");
+            } else if (tool.equals("R8")) {
+                // R8
+                ArrayList<String> options = new ArrayList<>();
+                // Input
+                //cmd.add("--input");
+                options.add(_path);
+                options.add("--release");
+                //options.add("--intermediate");
+                //options.add("--no-desugaring");
+                //options.add("--min-api");
+                //options.add("26");
+                options.add("--lib");
+                options.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar").getAbsolutePath());
+                options.add("--classpath");
+                options.add(new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "core-lambda-stubs.jar").getAbsolutePath());
+                //Output
+                options.add("--output");
+                options.add(new File(_path).getParent() + File.separator + "minified-classes.jar");
+                //run D8 with list commands
+                R8.main(options.toArray(new String[0]));
 
-            cm.add("--lib");
-            cm.add(new File(libs, "android.jar").getAbsolutePath());
-
-            cm.add("--classpath");
-            cm.add(new File(libs, "core-lambda-stubs.jar").getAbsolutePath());
-
-            cm.add("--output");
-            cm.add(new File(_path).getParentFile().getAbsolutePath());
-
-            // Input
-            cm.add(_path);
-
-            D8.main(cm.toArray(new String[0]));
+                //R8Compiler compiler = new R8Compiler(_path, new File(_path).getAbsolutePath());
+                //compiler.compile();
+            }
         } else {
-            // 6.3.0 fix2
+            // DX 6.3.0 fix
             Main.clearInternTables();
-
-            // dx
-            Main.main(new String[]{
-                    // 6.3.0 fix1
-                    // "--dex",
-                    "--debug",
-                    "--verbose",
-                    "--multi-dex",
-                    "--output=" + new File(_path).getParentFile().getAbsolutePath(),
-                    _path
-            });
+            ArrayList<String> paramets = new ArrayList<>();
+            paramets.add("--debug");
+            paramets.add("--verbose");
+            paramets.add("--multi-dex");
+            paramets.add("--output=");
+            paramets.add(new File(_path).getParentFile().getAbsolutePath());
+            paramets.add(_path);
+            Main.main(paramets.toArray(new String[0]));
         }
     }
 
@@ -315,13 +628,85 @@ public class LibraryDownloader {
             }
         }
 
-        // Method 2: screw manifest. use dependency
+        // Method 2: use Gradle
+        for (String f : files) {
+            if (getLastSegment(f).endsWith(".gradle")) {
+                String content = FileUtil.readFile(f);
+
+                Pattern p = Pattern.compile("^\\s*applicationId\\s*[:=].*\"(.*)\"", Pattern.MULTILINE);
+                Matcher m = p.matcher(content);
+
+                if (m.find()) {
+                    return m.group(1);
+                }
+            }
+        }
+
+        // Method 3: use META-INF
+        for (String f : files) {
+            if (f.endsWith("META-INF/MANIFEST.MF")) {
+                String content = FileUtil.readFile(f);
+
+                Pattern p = Pattern.compile("^\\s*Bundle-SymbolicName\\s*:\\s*(.*);", Pattern.MULTILINE);
+                Matcher m = p.matcher(content);
+
+                if (m.find()) {
+                    return m.group(1);
+                }
+            }
+        }
+
+        // Method 4: use baseline-prof.txt
+        for (String f : files) {
+            if (getLastSegment(f).equals("baseline-prof.txt")) {
+                String content = FileUtil.readFile(f);
+
+                Pattern p = Pattern.compile("^\\s*package: (.*)", Pattern.MULTILINE);
+                Matcher m = p.matcher(content);
+
+                if (m.find()) {
+                    return m.group(1);
+                }
+            }
+        }
+
+        // Method 5: screw manifest. use dependency
         if (defaultValue.contains(":")) {
             return defaultValue.split(":")[0];
         }
 
-        // Method 3: nothing worked. return empty string (lmao) (yeah lmao)
+        // Method 6: ignore manifesto. ignore dependency, testing new ways
+        if (defaultValue.contains(".")) {
+            return defaultValue.split("\\.")[0];
+        }
+
+        // Method 7: nothing worked. return empty string (lmao) (yeah lmao)
         return "";
+    }
+
+    private void checkLibsDirectory(String path) {
+        ArrayList<String> files = new ArrayList<>();
+        FileUtil.listDir(path, files);
+
+        for (String f : files) {
+            String p = getLastSegment(f);
+            if (p.equals("libs")) {
+                String libsPath = f;
+                ArrayList<String> libsFiles = new ArrayList<>();
+                FileUtil.listDir(libsPath, libsFiles);
+
+                for (String lib : libsFiles) {
+                    if (lib.endsWith(".jar")) {
+                        File libFile = new File(lib);
+                        File classesJar = new File(path + File.separator + "classes.jar");
+                        if (libFile.length() > classesJar.length()) {
+                            classesJar.delete();
+                            FileUtil.copyFile(lib, path + File.separator + "classes.jar");
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void deleteUnnecessaryFiles(String path) {
@@ -332,6 +717,7 @@ public class LibraryDownloader {
                 "classes.dex",
                 "classes.jar",
                 "config",
+                "version",
                 "AndroidManifest.xml",
                 "jni",
                 "assets",
@@ -352,6 +738,7 @@ public class LibraryDownloader {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private int _download(
             final String url,
             final String path,
@@ -367,6 +754,10 @@ public class LibraryDownloader {
             final LinearLayout resume,
             final LinearLayout cancel,
 
+            final ImageButton acao,
+            final RadioButton useAar,
+            final RadioButton useJar,
+
             final ProgressBar progressbar1) {
 
         return PRDownloader
@@ -374,18 +765,25 @@ public class LibraryDownloader {
                 .build()
                 .setOnStartOrResumeListener(() -> {
                     message.setText("Library found. Downloading...");
+
                     library.setEnabled(false);
+
+                    acao.setEnabled(false);
+
+                    useAar.setEnabled(false);
+                    useJar.setEnabled(false);
+
                     libraryContainer.removeAllViews();
                     libraryContainer.addView(progressBarContainer);
 
                     start.setEnabled(false);
-                    start.setVisibility(View.INVISIBLE);
+                    start.setVisibility(View.GONE);
 
                     pause.setEnabled(true);
                     pause.setVisibility(View.VISIBLE);
 
                     resume.setEnabled(false);
-                    resume.setVisibility(View.INVISIBLE);
+                    resume.setVisibility(View.GONE);
 
                     cancel.setEnabled(true);
                     cancel.setVisibility(View.VISIBLE);
@@ -393,11 +791,18 @@ public class LibraryDownloader {
                 .setOnPauseListener(() -> {
                     message.setText("Downloading paused.");
 
+                    library.setEnabled(false);
+
+                    acao.setEnabled(false);
+
+                    useAar.setEnabled(false);
+                    useJar.setEnabled(false);
+
                     start.setEnabled(false);
-                    start.setVisibility(View.INVISIBLE);
+                    start.setVisibility(View.GONE);
 
                     pause.setEnabled(false);
-                    pause.setVisibility(View.INVISIBLE);
+                    pause.setVisibility(View.GONE);
 
                     resume.setEnabled(true);
                     resume.setVisibility(View.VISIBLE);
@@ -406,19 +811,25 @@ public class LibraryDownloader {
                     cancel.setVisibility(View.VISIBLE);
                 })
                 .setOnCancelListener(() -> {
+                    FileUtil.deleteFile(libName);
                     library.setEnabled(true);
+
+                    acao.setEnabled(true);
+
+                    useAar.setEnabled(true);
+                    useJar.setEnabled(true);
 
                     start.setEnabled(true);
                     start.setVisibility(View.VISIBLE);
 
                     pause.setEnabled(false);
-                    pause.setVisibility(View.INVISIBLE);
+                    pause.setVisibility(View.GONE);
 
                     resume.setEnabled(false);
-                    resume.setVisibility(View.INVISIBLE);
+                    resume.setVisibility(View.GONE);
 
-                    cancel.setEnabled(false);
-                    cancel.setVisibility(View.INVISIBLE);
+                    cancel.setEnabled(true);
+                    cancel.setVisibility(View.VISIBLE);
                 })
                 .setOnProgressListener(progress -> {
                     int progressPercent = (int) (progress.currentBytes * 100 / progress.totalBytes);
@@ -427,64 +838,124 @@ public class LibraryDownloader {
                 .start(new OnDownloadListener() {
                     @Override
                     public void onDownloadComplete() {
-                        isAarAvailable = true;
-                        isAarDownloaded = true;
+                        // this is a default in Sketchware
+                        isAarAvailable = Use_Aar;
+                        isAarDownloaded = Use_Aar;
+                        // this is the beginning of magic
+                        isJarAvailable = !isAarAvailable;
+                        isJarDownloaded = !isAarDownloaded;
 
                         StringBuilder path2 = new StringBuilder();
                         path2.append(downloadPath);
                         path2.append(_getLibName(library.getText().toString()).concat(".zip"));
 
-                        if (isAarDownloaded && isAarAvailable) {
-                            _unZipFile(path2.toString(), libName);
-                            if (FileUtil.isExistFile(libName.concat("/classes.jar"))) {
-                                if (use_d8 || JarCheck.checkJar(libName.concat("/classes.jar"), 44, 51)) {
-                                    message.setText("Download completed.");
-
-                                    String[] test = {libName.concat("/classes.jar")};
-                                    new BackTask().execute(test);
-                                    FileUtil.deleteFile(path2.toString());
-
-                                    FileUtil.writeFile(libName + "/config", findPackageName(libName + "/", library.getText().toString()));
-
-                                    deleteUnnecessaryFiles(libName + "/");
-
-                                } else {
-                                    message.setText("This jar is not supported by Dx since Dx only supports up to Java 1.7. In order to proceed, you need to switch to D8 (if your Android version is 8+)");
-                                    FileUtil.deleteFile(path2.toString());
-                                }
-                            } else {
-                                message.setText("Library doesn't contain a jar file.");
-                                FileUtil.deleteFile(path2.toString());
+                        if (Use_Aar) {
+                            if (isAarDownloaded && isAarAvailable) {
+                                _unZipFile(path2.toString(), libName);
                             }
+                        } else {
+                            if (isJarDownloaded && isJarAvailable) {
+                                FileUtil.makeDir(path2.toString());
+                                copyFile(path2.toString(), libName.concat("/classes.jar").toString());
+                            }
+                        }
+                        if (FileUtil.isExistFile(libName.concat("/classes.jar"))) {
+                            if (use_d8 || JarCheck.checkJarFast(libName.concat("/classes.jar"), 44, 51)) {
+                                message.setText("Download completed!");
+                                String[] test = new String[]{libName.concat("/classes.jar")};
+                                new BackTask().execute(test);
+                                FileUtil.deleteFile(path2.toString());
+                                FileUtil.writeFile(libName + "/config", findPackageName(libName + "/", library.getText().toString()));
+                                FileUtil.writeFile(libName + "/version", library.getText().toString());
+                                checkLibsDirectory(libName + "/");
+                                deleteUnnecessaryFiles(libName + "/");
+                            } else {
+                                message.setText("This jar is not supported by Dx since Dx only supports up to Java 1.7.\nIn order to proceed, " +
+                                        (Build.VERSION.SDK_INT < 26 ? "D8 (Only supported by Android version is 8+)" : "you need Press Start to switch to D8") + ".");
+                                use_d8 = Build.VERSION.SDK_INT >= 26;
+                                tool = "D8";
+                                start.setOnClickListener(view -> {
+                                    if (use_d8 || JarCheck.checkJarFast(libName.concat("/classes.jar"), 44, 51)) {
+                                        try {
+                                            message.setText("Download completed!");
+                                            String[] test = new String[]{libName.concat("/classes.jar")};
+                                            new BackTask().execute(test);
+                                            FileUtil.deleteFile(path2.toString());
+                                            FileUtil.writeFile(libName + "/config", findPackageName(libName + "/", library.getText().toString()));
+                                            FileUtil.writeFile(libName + "/version", library.getText().toString());
+                                            checkLibsDirectory(libName + "/");
+                                            deleteUnnecessaryFiles(libName + "/");
+                                        } catch (Exception e) {
+                                            message.setText(e.getCause().toString());
+                                            FileUtil.deleteFile(libName);
+                                            FileUtil.deleteFile(path2.toString());
+                                            start.setEnabled(false);
+                                            start.setVisibility(View.GONE);
+                                        }
+                                    } else {
+                                        message.setText("This jar is not supported by Dx since Dx only supports up to Java 1.7.\nIn order to proceed, " +
+                                                (Build.VERSION.SDK_INT < 26 ? "D8 (Only supported by Android version is 8+)" : "you need Press Start to switch to D8") + ".");
+                                        FileUtil.deleteFile(libName);
+                                        FileUtil.deleteFile(path2.toString());
+                                        start.setEnabled(false);
+                                        start.setVisibility(View.GONE);
+                                    }
+                                });
+                                cancel.setEnabled(true);
+                                cancel.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            message.setText("Library doesn't contain a jar file.");
+                            FileUtil.deleteFile(libName);
+                            FileUtil.deleteFile(path2.toString());
+                            library.setEnabled(true);
+
+                            acao.setEnabled(true);
+
+                            useAar.setEnabled(true);
+                            useJar.setEnabled(true);
+
+                            start.setEnabled(true);
+                            start.setVisibility(View.VISIBLE);
+
+                            cancel.setEnabled(true);
+                            cancel.setVisibility(View.VISIBLE);
                         }
 
                         library.setEnabled(true);
+
+                        acao.setEnabled(true);
+
+                        useAar.setEnabled(true);
+                        useJar.setEnabled(true);
+
                         start.setEnabled(true);
                         start.setVisibility(View.VISIBLE);
 
                         pause.setEnabled(false);
-                        pause.setVisibility(View.INVISIBLE);
+                        pause.setVisibility(View.GONE);
 
                         resume.setEnabled(false);
-                        resume.setVisibility(View.INVISIBLE);
+                        resume.setVisibility(View.GONE);
 
-                        cancel.setEnabled(false);
-                        cancel.setVisibility(View.INVISIBLE);
+                        cancel.setEnabled(true);
+                        cancel.setVisibility(View.VISIBLE);
                     }
 
                     @Override
                     public void onError(PRDownloader.Error e) {
                         if (e.isServerError()) {
-                            if (!(isAarDownloaded || isAarAvailable)) {
+                            if ((Use_Aar ? !(isAarDownloaded || isAarAvailable) : !(isJarDownloaded || isJarAvailable))) {
                                 if (counter < repoUrls.size()) {
                                     currentRepo = repoUrls.get(counter);
                                     String name = repoNames.get(counter);
 
                                     counter++;
-                                    message.setText("Searching... " + counter + "/" + repoUrls.size() + " [" + name + "]");
+                                    String messageText = String.format("%s %d/%d [%s]", SEARCHING_MESSAGE, counter, repoUrls.size(), name);
+                                    message.setText(messageText);
 
                                     downloadId = _download(
-                                            currentRepo + _getAarDownloadLink(library.getText().toString()),
+                                            currentRepo.concat(_getDownloadLink(library.getText().toString())),
                                             downloadPath,
                                             _getLibName(library.getText().toString()) + ".zip",
                                             library,
@@ -495,6 +966,9 @@ public class LibraryDownloader {
                                             pause,
                                             resume,
                                             cancel,
+                                            acao,
+                                            useAar,
+                                            useJar,
                                             progressbar1
                                     );
 
@@ -502,34 +976,47 @@ public class LibraryDownloader {
                                     FileUtil.deleteFile(libName);
                                     message.setText("Library was not found in loaded repositories");
                                     library.setEnabled(true);
+
+                                    acao.setEnabled(true);
+
+                                    useAar.setEnabled(true);
+                                    useJar.setEnabled(true);
+
                                     start.setEnabled(true);
                                     start.setVisibility(View.VISIBLE);
 
                                     pause.setEnabled(false);
-                                    pause.setVisibility(View.INVISIBLE);
+                                    pause.setVisibility(View.GONE);
 
                                     resume.setEnabled(false);
-                                    resume.setVisibility(View.INVISIBLE);
+                                    resume.setVisibility(View.GONE);
 
-                                    cancel.setEnabled(false);
-                                    cancel.setVisibility(View.INVISIBLE);
+                                    cancel.setEnabled(true);
+                                    cancel.setVisibility(View.VISIBLE);
                                 }
                             }
                         } else {
                             if (e.isConnectionError()) {
+                                FileUtil.deleteFile(libName);
                                 message.setText("Downloading failed. No network");
                                 library.setEnabled(true);
+
+                                acao.setEnabled(true);
+
+                                useAar.setEnabled(true);
+                                useJar.setEnabled(true);
+
                                 start.setEnabled(true);
                                 start.setVisibility(View.VISIBLE);
 
                                 pause.setEnabled(false);
-                                pause.setVisibility(View.INVISIBLE);
+                                pause.setVisibility(View.GONE);
 
                                 resume.setEnabled(false);
-                                resume.setVisibility(View.INVISIBLE);
+                                resume.setVisibility(View.GONE);
 
-                                cancel.setEnabled(false);
-                                cancel.setVisibility(View.INVISIBLE);
+                                cancel.setEnabled(true);
+                                cancel.setVisibility(View.VISIBLE);
 
                             }
                         }
@@ -541,102 +1028,104 @@ public class LibraryDownloader {
         repoUrls.clear();
         repoMap.clear();
         repoNames.clear();
-        counter = 0;
+        int counter = 0;
 
-        readRepositories:
-        {
-            String repositories;
-            if (CONFIGURED_REPOSITORIES_FILE.exists() && !(repositories = FileUtil.readFile(CONFIGURED_REPOSITORIES_FILE.getAbsolutePath())).isEmpty()) {
-                try {
-                    repoMap = new Gson().fromJson(repositories, Helper.TYPE_MAP_LIST);
-
-                    if (repoMap != null) {
-                        break readRepositories;
-                    }
-                } catch (JsonParseException ignored) {
-                    // fall-through to shared error toast
-                }
-
-                SketchwareUtil.showFailedToParseJsonDialog(context, CONFIGURED_REPOSITORIES_FILE, "Custom Repositories", v -> _getRepository());
-            } else {
-                FileUtil.writeFile(CONFIGURED_REPOSITORIES_FILE.getAbsolutePath(), DEFAULT_REPOSITORIES_FILE_CONTENT);
-            }
-
-            repoMap = new Gson().fromJson(DEFAULT_REPOSITORIES_FILE_CONTENT, Helper.TYPE_MAP_LIST);
+        String jsonString = readFile(CONFIGURED_REPOSITORIES_FILE);
+        if (jsonString.isEmpty()) {
+            jsonString = DEFAULT_REPOSITORIES_FILE_CONTENT;
+            writeFile(CONFIGURED_REPOSITORIES_FILE, jsonString);
         }
 
+        repoMap = new Gson().fromJson(jsonString, Helper.TYPE_MAP_LIST);
+
         for (HashMap<String, Object> configuration : repoMap) {
-            Object repoUrl = configuration.get("url");
-
-            if (repoUrl instanceof String) {
-                Object repoName = configuration.get("name");
-
-                if (repoName instanceof String) {
-                    repoUrls.add((String) repoUrl);
-                    repoNames.add((String) repoName);
-                }
-            }
-
+            String repositoryUrl = (String) configuration.get("url");
+            String repositoryName = (String) configuration.get("name");
+            repoUrls.add(repositoryUrl);
+            repoNames.add(repositoryName);
             counter++;
         }
     }
 
+    private String readFile(File file) {
+        if (!file.exists()) {
+            return "";
+        }
+        return FileUtil.readFile(file.getAbsolutePath());
+    }
+
+    private void writeFile(File file, String content) {
+        FileUtil.writeFile(file.getAbsolutePath(), content);
+    }
     public interface OnCompleteListener {
         void onComplete();
     }
 
-    private class BackTask extends AsyncTask<String, String, String> implements BuildProgressReceiver {
-        private ProgressDialog progressDialog;
+    private class BackTask extends AsyncTask<String, String, String> {
         boolean success = false;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            if (dialog != null && dialog.isShowing()) {
+                dialog.dismiss();
+            }
             progressDialog = new ProgressDialog(context);
             progressDialog.setTitle("Please wait");
+            //progressDialog.setMessage((use_d8 ? "D8" : "Dx") + " is running...");
+            progressDialog.setMessage(tool + " is running...");
             progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+            progressDialog.setTitle(tool + " is running...");
+            progressDialog.setMessage(values.toString());
+            progressDialog.show();
+        }
+
+        @Override
+        protected void onCancelled(String s) {
+            super.onCancelled(s);
+            progressDialog.setTitle(tool + " is Cancelled...");
+            progressDialog.setMessage(s.toString());
             progressDialog.show();
         }
 
         @Override
         protected String doInBackground(String... params) {
             try {
-                BuiltInLibraries.maybeExtractAndroidJar(this);
-                publishProgress((use_d8 ? "D8" : "Dx") + " is running...");
                 _jar2dex(params[0]);
                 success = true;
             } catch (Exception e) {
                 success = false;
-                return Log.getStackTraceString(e);
+                return e.toString();
             }
-
             return "true";
         }
 
         @Override
         protected void onPostExecute(String s) {
             if (success) {
-                bB.a(context, "The library has been downloaded and imported to local libraries successfully.", 1).show();
+                // make a Toast
+                bB.a(context, "The library has been downloaded and imported to local libraries successfully.\n" + libName, 60).show();
                 listener.onComplete();
             } else {
-                SketchwareUtil.showAnErrorOccurredDialog(context, s);
+                bB.a(context, "Dexing failed: " + s, 60).show();
             }
 
             if (dialog != null && dialog.isShowing()) {
                 dialog.dismiss();
             }
-
-            progressDialog.dismiss();
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
         }
 
-        @Override
-        protected void onProgressUpdate(String... values) {
-            progressDialog.setMessage(values[0]);
-        }
-
-        @Override
-        public void onProgress(String progress) {
-            publishProgress(progress);
+        protected void setSuccess(String success) {
+            bB.a(context, "Dexing finish: " + success, 25).show();
         }
     }
 }

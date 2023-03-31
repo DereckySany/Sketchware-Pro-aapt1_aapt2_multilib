@@ -3,10 +3,12 @@ package a.a.a;
 import static android.text.TextUtils.isEmpty;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Pair;
 
 import com.besome.sketch.beans.ProjectFileBean;
@@ -16,11 +18,13 @@ import com.sketchware.remod.xml.XmlBuilder;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import mod.agus.jcoderz.handle.component.ConstVarManifest;
 import mod.agus.jcoderz.lib.FilePathUtil;
 import mod.agus.jcoderz.lib.FileResConfig;
 import mod.agus.jcoderz.lib.FileUtil;
+//import mod.agus.jcoderz.lib.XmlBuilder;
 import mod.hey.studios.build.BuildSettings;
 import mod.hey.studios.project.ProjectSettings;
 import mod.hey.studios.util.Helper;
@@ -236,51 +240,85 @@ public class Ix {
      *
      * @return The AndroidManifest as {@link String}
      */
+    @SuppressLint("WrongConstant")
     public String a() {
+        // boolean addRequestLegacyExternalStorage = false;
+        // a.addAttribute("", "package", c.packageName);
+
+        // if (!c.hasPermissions()) {
+        //     if (c.hasPermission(jq.PERMISSION_CALL_PHONE)) {
+        //         writePermission(a, Manifest.permission.CALL_PHONE);
+        //     }
+        //     if (c.hasPermission(jq.PERMISSION_INTERNET)) {
+        //         writePermission(a, Manifest.permission.INTERNET);
+        //     }
+        //     if (c.hasPermission(jq.PERMISSION_VIBRATE)) {
+        //         writePermission(a, Manifest.permission.VIBRATE);
+        //     }
+        //     if (c.hasPermission(jq.PERMISSION_ACCESS_NETWORK_STATE)) {
+        //         writePermission(a, Manifest.permission.ACCESS_NETWORK_STATE);
+        //     }
+        //     if (c.hasPermission(jq.PERMISSION_CAMERA)) {
+        //         writePermission(a, Manifest.permission.CAMERA);
+        //     }
+        //     if (c.hasPermission(jq.PERMISSION_READ_EXTERNAL_STORAGE)) {
+        //         try {
+        //             if (Integer.parseInt(settings.getValue(ProjectSettings.SETTING_TARGET_SDK_VERSION, "28")) >= 28) {
+        //                 addRequestLegacyExternalStorage = true;
+        //             }
+        //         } catch (NumberFormatException ignored) {
+        //         }
+        //         writePermission(a, Manifest.permission.READ_EXTERNAL_STORAGE);
+        //     }
+        //     if (c.hasPermission(jq.PERMISSION_WRITE_EXTERNAL_STORAGE)) {
+        //         writePermission(a, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        //     }
+        //     if (c.hasPermission(jq.PERMISSION_RECORD_AUDIO)) {
+        //         writePermission(a, Manifest.permission.RECORD_AUDIO);
+        //     }
+        //     if (c.hasPermission(jq.PERMISSION_BLUETOOTH)) {
+        //         writePermission(a, Manifest.permission.BLUETOOTH);
+        //     }
+        //     if (c.hasPermission(jq.PERMISSION_BLUETOOTH_ADMIN)) {
+        //         writePermission(a, Manifest.permission.BLUETOOTH_ADMIN);
+        //     }
+        //     if (c.hasPermission(jq.PERMISSION_ACCESS_FINE_LOCATION)) {
+        //         writePermission(a, Manifest.permission.ACCESS_FINE_LOCATION);
+        //     }
+        // }
         boolean addRequestLegacyExternalStorage = false;
         a.addAttribute("", "package", c.packageName);
 
-        if (!c.hasPermissions()) {
-            if (c.hasPermission(jq.PERMISSION_CALL_PHONE)) {
-                writePermission(a, Manifest.permission.CALL_PHONE);
-            }
-            if (c.hasPermission(jq.PERMISSION_INTERNET)) {
-                writePermission(a, Manifest.permission.INTERNET);
-            }
-            if (c.hasPermission(jq.PERMISSION_VIBRATE)) {
-                writePermission(a, Manifest.permission.VIBRATE);
-            }
-            if (c.hasPermission(jq.PERMISSION_ACCESS_NETWORK_STATE)) {
-                writePermission(a, Manifest.permission.ACCESS_NETWORK_STATE);
-            }
-            if (c.hasPermission(jq.PERMISSION_CAMERA)) {
-                writePermission(a, Manifest.permission.CAMERA);
-            }
-            if (c.hasPermission(jq.PERMISSION_READ_EXTERNAL_STORAGE)) {
-                try {
-                    if (Integer.parseInt(settings.getValue(ProjectSettings.SETTING_TARGET_SDK_VERSION, "28")) >= 28) {
-                        addRequestLegacyExternalStorage = true;
-                    }
-                } catch (NumberFormatException ignored) {
-                }
-                writePermission(a, Manifest.permission.READ_EXTERNAL_STORAGE);
-            }
-            if (c.hasPermission(jq.PERMISSION_WRITE_EXTERNAL_STORAGE)) {
-                writePermission(a, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }
-            if (c.hasPermission(jq.PERMISSION_RECORD_AUDIO)) {
-                writePermission(a, Manifest.permission.RECORD_AUDIO);
-            }
-            if (c.hasPermission(jq.PERMISSION_BLUETOOTH)) {
-                writePermission(a, Manifest.permission.BLUETOOTH);
-            }
-            if (c.hasPermission(jq.PERMISSION_BLUETOOTH_ADMIN)) {
-                writePermission(a, Manifest.permission.BLUETOOTH_ADMIN);
-            }
-            if (c.hasPermission(jq.PERMISSION_ACCESS_FINE_LOCATION)) {
-                writePermission(a, Manifest.permission.ACCESS_FINE_LOCATION);
+        // Cria um mapa com as permissões necessárias
+        Map<Integer, String> permissionsMap = new HashMap<>();
+        permissionsMap.put(jq.PERMISSION_CALL_PHONE, Manifest.permission.CALL_PHONE);
+        permissionsMap.put(jq.PERMISSION_INTERNET, Manifest.permission.INTERNET);
+        permissionsMap.put(jq.PERMISSION_VIBRATE, Manifest.permission.VIBRATE);
+        permissionsMap.put(jq.PERMISSION_ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_NETWORK_STATE);
+        permissionsMap.put(jq.PERMISSION_CAMERA, Manifest.permission.CAMERA);
+        if (Integer.parseInt(settings.getValue(ProjectSettings.SETTING_TARGET_SDK_VERSION, "28")) >= 28) {
+            permissionsMap.put(jq.PERMISSION_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
+            addRequestLegacyExternalStorage = c.hasPermission(jq.PERMISSION_READ_EXTERNAL_STORAGE);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            permissionsMap.put(jq.PERMISSION_READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+        permissionsMap.put(jq.PERMISSION_WRITE_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        permissionsMap.put(jq.PERMISSION_RECORD_AUDIO, Manifest.permission.RECORD_AUDIO);
+        permissionsMap.put(jq.PERMISSION_BLUETOOTH, Manifest.permission.BLUETOOTH);
+        permissionsMap.put(jq.PERMISSION_BLUETOOTH_ADMIN, Manifest.permission.BLUETOOTH_ADMIN);
+        permissionsMap.put(jq.PERMISSION_ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
+
+        // Adiciona as permissões necessárias
+        for (Map.Entry<Integer, String> entry : permissionsMap.entrySet()) {
+            if (c.hasPermission(entry.getKey())) {
+                writePermission(a, entry.getValue());
             }
         }
+
+        if (addRequestLegacyExternalStorage) {
+            a.addAttribute(null, "requestLegacyExternalStorage", "true");
+        }
+
         if (FileUtil.isExistFile(fpu.getPathPermission(c.sc_id))) {
             for (String s : frc.getPermissionList()) {
                 writePermission(a, s);
@@ -429,26 +467,27 @@ public class Ix {
         XmlBuilder activityTag = new XmlBuilder("activity");
         boolean specifiedActivityName = false;
         boolean specifiedConfigChanges = false;
-        for (HashMap<String, Object> hashMap : activityAttrs) {
-            if (hashMap.containsKey("name") && hashMap.containsKey("value")) {
-                Object nameObject = hashMap.get("name");
-                Object valueObject = hashMap.get("value");
-                if (nameObject instanceof String && valueObject instanceof String) {
-                    String name = nameObject.toString();
-                    String value = valueObject.toString();
-                    if (name.equals(activityName)) {
-                        activityTag.addAttributeValue(value);
-                        if (value.contains("android:name=")) {
-                            specifiedActivityName = true;
-                        } else if (value.contains("android:configChanges=")) {
-                            specifiedConfigChanges = true;
-                        }
+        int size = activityAttrs.size();
+        for (int i = 0; i < size; i++) {
+            HashMap<String, Object> hashMap = activityAttrs.get(i);
+            Object nameObject = hashMap.get("name");
+            Object valueObject = hashMap.get("value");
+            if (nameObject instanceof String && valueObject instanceof String) {
+                String name = (String) nameObject;
+                String value = (String) valueObject;
+                if (name.equals(activityName)) {
+                    if (value.startsWith("android:name=")) {
+                        specifiedActivityName = true;
+                    } else if (value.startsWith("android:configChanges=")) {
+                        specifiedConfigChanges = true;
                     }
+                    activityTag.addAttributeValue(value);
                 }
             }
         }
         if (!specifiedActivityName) {
-            activityTag.addAttribute("android", "name", activityName);
+//            activityTag = new XmlBuilder("activity", "android:name", activityName);
+            activityTag.addAttribute("activity", "name", activityName);
         }
         if (!specifiedConfigChanges) {
             activityTag.addAttribute("android", "configChanges", "orientation|screenSize");

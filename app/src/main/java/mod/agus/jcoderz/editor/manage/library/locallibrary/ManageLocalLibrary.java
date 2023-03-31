@@ -217,6 +217,25 @@ public class ManageLocalLibrary {
         return packageNames.toString();
     }
 
+    public String getManifestPath() {
+        ArrayList<String> manifestPath = new ArrayList<>();
+
+        for (int i = 0, listSize = list.size(); i < listSize; i++) {
+            HashMap<String, Object> localLibrary = list.get(i);
+            if (localLibrary.containsKey("manifestPath")) {
+                Object manifestFilePath = localLibrary.get("manifestPath");
+
+                if (manifestFilePath instanceof String) {
+                    manifestPath.add((String) manifestFilePath);
+                } else {
+                    SketchwareUtil.toastError("Invalid Manifest path of enabled Local library #" + i, Toast.LENGTH_LONG);
+                }
+            }
+        }
+
+        return manifestPath.toString();
+    }
+
     public ArrayList<String> getPgRules() {
         ArrayList<String> proguardRules = new ArrayList<>();
 

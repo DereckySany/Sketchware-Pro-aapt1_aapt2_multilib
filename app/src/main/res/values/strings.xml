@@ -2583,6 +2583,5 @@ Please check the URL again."</string>
     <string name="saveToProject" translatable="false">Project</string>
     <string name="selectAll">Select All</string>
     <string name="text_to_search">Text to search</string>
-    <string name="myprojects_list_menu_title_restore_projects">Restore Projects</string>
-    <string name="sort_projects">Sort projects</string>
+    <string name="build_settings">Build Settings</string>
 </resources>

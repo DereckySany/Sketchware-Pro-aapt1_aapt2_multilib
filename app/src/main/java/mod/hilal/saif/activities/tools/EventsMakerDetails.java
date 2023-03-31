@@ -154,7 +154,7 @@ public class EventsMakerDetails extends Activity {
             TextView title = convertView.findViewById(R.id.custom_view_pro_title);
             TextView subtitle = convertView.findViewById(R.id.custom_view_pro_subtitle);
             if (lisName.equals("")) {
-                icon.setImageResource(R.drawable.widget_source);
+                icon.setImageResource(R.drawable.align_left_48);
             } else {
                 icon.setImageResource(Integer.parseInt(_data.get(position).get("icon").toString()));
             }

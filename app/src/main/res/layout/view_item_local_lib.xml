@@ -1,21 +1,42 @@
-<LinearLayout android:orientation="horizontal"
-    android:padding="5dp"
-    android:layout_width="match_parent"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="@drawable/bg_rectangle_white"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingLeft="3.0pt"
+    android:paddingTop="1.0pt"
+    android:paddingRight="3.0pt"
+    android:paddingBottom="1.0pt">
 
-    <CheckBox
-        android:id="@id/checkbox_content"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text=""
-        android:layout_weight="1.0" />
+        android:gravity="center"
+        android:padding="3.0pt">
 
-    <ImageView
-        android:id="@id/img_delete"
-        android:padding="5dp"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:src="@drawable/ic_more_vert_grey600_24dp"
-        android:scaleType="centerInside" />
+        <LinearLayout
+            android:id="@+id/linear_content_indicator"
+            android:layout_width="3.0pt"
+            android:layout_height="3.0pt"
+            android:layout_gravity="center"
+            android:layout_marginStart="5.0dip"
+            android:background="@color/scolor_red_01"
+            android:orientation="vertical" />
+
+        <CheckBox
+            android:id="@id/checkbox_content"
+            android:layout_width="0.0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0" />
+
+        <ImageView
+            android:id="@id/img_delete"
+            android:layout_width="35.0dip"
+            android:layout_height="35.0dip"
+            android:padding="5.0dip"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_more_vert_black_20dp" />
+    </LinearLayout>
 </LinearLayout>

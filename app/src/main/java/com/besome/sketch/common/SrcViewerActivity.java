@@ -26,6 +26,7 @@ import a.a.a.jC;
 import a.a.a.yq;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import io.github.rosemoe.sora.widget.CodeEditor;
+import io.github.rosemoe.sora.widget.layout.Layout;
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme;
 import mod.hey.studios.util.Helper;
 import mod.jbk.code.CodeEditorColorSchemes;
@@ -61,7 +62,9 @@ public class SrcViewerActivity extends AppCompatActivity {
 
         LinearLayout contentLayout = (LinearLayout) (findViewById(R.id.pager_soruce_code).getParent());
         contentLayout.removeAllViews();
-        contentLayout.addView(codeViewer);
+        contentLayout.addView(codeViewer,new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT,Gravity.TOP));
 
         sc_id = (savedInstanceState != null) ? savedInstanceState.getString("sc_id") : getIntent().getStringExtra("sc_id");
 
@@ -73,8 +76,8 @@ public class SrcViewerActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 SrcCodeBean bean = srcCodeBean.get(position);
-                codeViewer.setText(bean.source);
-                currentPageFileName = bean.srcFileName;
+                codeViewer.setText(bean.getSource());
+                currentPageFileName = bean.getSrcFileName();
                 setCorrectCodeEditorLanguage();
             }
 
@@ -107,12 +110,12 @@ public class SrcViewerActivity extends AppCompatActivity {
                     } else {
                         filesListSpinner.setAdapter(new FilesListSpinnerAdapter());
                         for (SrcCodeBean src : srcCodeBean) {
-                            if (src.srcFileName.equals(currentPageFileName)) {
+                            if (src.getSrcFileName().equals(currentPageFileName)) {
                                 filesListSpinner.setSelection(srcCodeBean.indexOf(src));
                                 break;
                             }
                         }
-                        codeViewer.setText(srcCodeBean.get(filesListSpinner.getSelectedItemPosition()).source);
+                        codeViewer.setText(srcCodeBean.get(filesListSpinner.getSelectedItemPosition()).getSource());
 
                         progressContainer.setVisibility(View.GONE);
                         filesListSpinner.setVisibility(View.VISIBLE);
@@ -171,7 +174,7 @@ public class SrcViewerActivity extends AppCompatActivity {
         private View getCustomSpinnerView(int position, View view, boolean isCurrentlyViewingFile) {
             CommonSpinnerItem spinnerItem = (view != null) ? (CommonSpinnerItem) view :
                     new CommonSpinnerItem(SrcViewerActivity.this);
-            spinnerItem.a((srcCodeBean.get(position)).srcFileName, isCurrentlyViewingFile);
+            spinnerItem.a((srcCodeBean.get(position)).getSrcFileName(), isCurrentlyViewingFile);
             return spinnerItem;
         }
 

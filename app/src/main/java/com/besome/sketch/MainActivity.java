@@ -35,7 +35,6 @@ import java.io.IOException;
 import java.util.Objects;
 
 import a.a.a.DB;
-import a.a.a.GB;
 import a.a.a.aB;
 import a.a.a.bB;
 import a.a.a.oB;
@@ -145,7 +144,8 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
         if (drawer.isShown()) {
             drawerLayout.closeDrawers();
         } else {
-            finish();
+            // API level 21
+            finishAndRemoveTask();
         }
     }
 
@@ -281,7 +281,8 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
     public void onResume() {
         super.onResume();
         /* Check if the device is running low on storage space */
-        long freeMegabytes = GB.c();
+        long freeBytes = Environment.getExternalStorageDirectory().getFreeSpace();
+        long freeMegabytes = freeBytes / (1024 * 1024);
         if (freeMegabytes < 100 && freeMegabytes > 0) {
             showNoticeNotEnoughFreeStorageSpace();
         }
@@ -293,6 +294,7 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
         bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, "MainActivity");
         mAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
+
 
     private void allFilesAccessCheck() {
         if (Build.VERSION.SDK_INT > 29) {

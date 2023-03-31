@@ -413,6 +413,20 @@ public class BuiltInLibraries {
         return getLibraryProGuardConfiguration(libraryName).getAbsolutePath();
     }
 
+    public static File getLibraryManifest(String libraryName) {
+        Jp library = new Jp(libraryName);
+
+        if (library.c()) {
+            return new File(EXTRACTED_BUILT_IN_LIBRARIES_PATH, libraryName + File.separator + "AndroidManifest.xml");
+        } else {
+            throw new IllegalArgumentException("Built-in library '" + libraryName + "' doesn't have AndroidManifest.");
+        }
+    }
+
+    public static String getLibraryManifestPath(String libraryName) {
+        return getLibraryManifest(libraryName).getAbsolutePath();
+    }
+
     public static void extractCompileAssets(@NonNull BuildProgressReceiver... progressReceivers) {
         if (!EXTRACTED_COMPILE_ASSETS_PATH.exists()) {
             if (!EXTRACTED_COMPILE_ASSETS_PATH.mkdirs()) {

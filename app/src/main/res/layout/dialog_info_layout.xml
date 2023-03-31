@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:id="@+id/dialoginfolayoutLinearLayout0"
+        android:paddingLeft="20.0dip"
+        android:paddingTop="15.0dip"
+        android:paddingBottom="5.0dip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="30.0dip"
+            android:layout_height="30.0dip"
+            android:layout_marginRight="10.0dip"
+            android:src="@drawable/color_about_96"
+            android:scaleType="fitCenter" />
+        <TextView
+            android:textSize="18.0sp"
+            android:textStyle="bold"
+            android:textColor="?colorPrimaryDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Information Library"
+            android:text="" />
+    </LinearLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:orientation="vertical"
+        android:id="@+id/dialoginfolayoutLinearLayout1"
+        android:paddingLeft="20.0dip"
+        android:paddingRight="20.0dip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:textSize="18.0sp"
+            android:textColorHint="?colorPrimaryDark"
+            android:id="@+id/edittext_info_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Name Library"
+            android:text=""
+            android:editable="false"
+            android:textIsSelectable="true"
+            android:inputType="none"
+            android:autofillHints=""
+            tools:ignore="Deprecated" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:orientation="vertical"
+        android:id="@+id/dialoginfolayoutLinearLayout2"
+        android:paddingLeft="20.0dip"
+        android:paddingRight="20.0dip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:textSize="18.0sp"
+            android:textColorHint="?colorPrimaryDark"
+            android:id="@+id/edittext_info_import"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Import library name"
+            android:text=""
+            android:editable="false"
+            android:textIsSelectable="true"
+            android:inputType="none"
+            android:autofillHints=""
+            tools:ignore="Deprecated" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <com.google.android.material.textfield.TextInputLayout
+        android:orientation="vertical"
+        android:id="@+id/dialoginfolayoutLinearLayout3"
+        android:paddingLeft="20.0dip"
+        android:paddingRight="20.0dip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <EditText
+            android:textSize="18.0sp"
+            android:textColorHint="?colorPrimaryDark"
+            android:id="@+id/edittext_info_manifast"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:maxLines="10"
+            android:hint="Manifast"
+            android:text=""
+            android:editable="false"
+            android:textIsSelectable="true"
+            android:inputType="none"
+            android:autofillHints=""
+            tools:ignore="Deprecated" />
+    </com.google.android.material.textfield.TextInputLayout>
+    </ScrollView>
+    <LinearLayout
+        android:gravity="right|center_vertical"
+        android:orientation="horizontal"
+        android:background="?colorPrimaryDark"
+        android:paddingTop="10.0dip"
+        android:paddingRight="18.0dip"
+        android:paddingBottom="10.0dip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="RtlHardcoded">
+        <TextView
+            android:gravity="right|center_vertical"
+            android:textStyle="bold"
+            android:textColor="#ffffffff"
+            android:id="@+id/text_info_ok"
+            android:layout_width="@dimen/abc_alert_dialog_button_dimen"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15.0dip"
+            android:text="@string/common_word_ok" />
+    </LinearLayout>
+</LinearLayout>

@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Create a new file"
-            android:textColor="#ff008dcd"
+            android:textColor="?colorPrimary"
             android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -73,7 +73,7 @@
             android:autofillHints=""
             android:hint="Filename"
             android:inputType="text"
-            android:textColorHint="#008dcd"
+            android:textColorHint="?colorPrimary"
             android:textSize="18sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -81,7 +81,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ff09a7ec"
+        android:background="?colorPrimaryDark"
         android:gravity="right"
         android:orientation="horizontal"
         android:paddingTop="10dp"

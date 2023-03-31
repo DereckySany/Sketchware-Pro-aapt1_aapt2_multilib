@@ -33,7 +33,6 @@ import com.sketchware.remod.R;
 import java.io.File;
 
 import a.a.a.aB;
-import dev.aldi.sayuti.editor.manage.ManageLocalLibraryActivity;
 import kellinwood.security.zipsigner.ZipSigner;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
@@ -229,7 +228,16 @@ public class Tools extends Activity {
         makeup(localLibraryManagerLayout, R.drawable.colored_box_96, "Local library manager", "Manage and download local libraries");
         base.addView(localLibraryManager);
         localLibraryManagerLayout.setOnClickListener(new ActivityLauncher(
-                new Intent(getApplicationContext(), ManageLocalLibraryActivity.class),
+                new Intent(getApplicationContext(), dev.aldi.sayuti.editor.manage.ManageLocalLibraryActivity.class),
+                new Pair<>("sc_id", "system")));
+
+        CardView localLibraryManagerNew = newCard(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.0f);
+        LinearLayout localLibraryManagerNewLayout = newLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.0f);
+        localLibraryManagerNew.addView(localLibraryManagerNewLayout);
+        makeup(localLibraryManagerNewLayout, R.drawable.colored_box_96, "Local library manager New", "Manage and download local libraries");
+        base.addView(localLibraryManagerNew);
+        localLibraryManagerNewLayout.setOnClickListener(new ActivityLauncher(
+                new Intent(getApplicationContext(), dev.derecky.sany.manager.ManageLocalLibraryActivity.class),
                 new Pair<>("sc_id", "system")));
 
         CardView modSettings = newCard(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.0f);

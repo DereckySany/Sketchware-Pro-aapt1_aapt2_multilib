@@ -1,0 +1,73 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# Original at https://github.com/tyron12233/CodeAssist/blob/main/.github/workflows/build-apk.yml
+# Changes: Minor adjustments, removal of Cancel previous runs step, but every change can be found with a simple diff.
+
+name: Build and Upload APKs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  configureBuild:
+    name: Configuring Project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+
+      #      - name: Cache
+      #        uses: actions/cache@v3.2.5
+      #        with:
+      #          # A list of files, directories, and wildcard patterns to cache and restore
+      #          path: app
+      #          key: /repos/{owner}/{repo}/actions/caches
+
+      - name: Clear Gradle Build Cache
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: clean
+        continue-on-error: false
+
+  buildMinApi26:
+    name: Build minApi26 debug APK
+    runs-on: ubuntu-latest
+    needs: configureBuild
+    continue-on-error: false
+    steps:
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: assembleMinApi26Debug -PnewPackageName=com.sketchware.remod.kax
+        env:
+          CRASH_REPORT_WEBHOOK_URL: ${{ secrets.CRASH_REPORT_WEBHOOK_URL }}
+        continue-on-error: false
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk-minApi26-debug
+          path: app/build/outputs/apk/minApi26/debug
+
+  buildMinApi21:
+    name: Build minApi21 debug APK
+    runs-on: ubuntu-latest
+    needs: configureBuild
+    continue-on-error: false
+    steps:
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: assembleMinApi21Debug -PnewPackageName=com.sketchware.remod.kax
+        env:
+          CRASH_REPORT_WEBHOOK_URL: ${{ secrets.CRASH_REPORT_WEBHOOK_URL }}
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk-minApi21-debug
+          path: app/build/outputs/apk/minApi21/debug

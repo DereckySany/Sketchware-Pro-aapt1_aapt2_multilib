@@ -2,8 +2,13 @@ package com.besome.sketch.design;
 
 import static mod.SketchwareUtil.getDip;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,8 +19,12 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.util.Pair;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +34,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -80,7 +90,6 @@ import a.a.a.yB;
 import a.a.a.yq;
 import a.a.a.zy;
 import dev.aldi.sayuti.editor.manage.ManageCustomAttributeActivity;
-import dev.aldi.sayuti.editor.manage.ManageLocalLibraryActivity;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.component.Magnifier;
@@ -88,10 +97,12 @@ import io.github.rosemoe.sora.widget.schemes.EditorColorScheme;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.editor.manage.permission.ManagePermissionActivity;
 import mod.agus.jcoderz.editor.manage.resource.ManageResourceActivity;
+import mod.agus.jcoderz.lib.FilePathUtil;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.hey.studios.activity.managers.assets.ManageAssetsActivity;
 import mod.hey.studios.activity.managers.java.ManageJavaActivity;
 import mod.hey.studios.activity.managers.nativelib.ManageNativelibsActivity;
+import mod.hey.studios.build.BuildSettings;
 import mod.hey.studios.build.BuildSettingsDialog;
 import mod.hey.studios.compiler.kotlin.KotlinCompilerBridge;
 import mod.hey.studios.project.custom_blocks.CustomBlocksDialog;
@@ -102,6 +113,7 @@ import mod.hey.studios.project.stringfog.StringfogHandler;
 import mod.hey.studios.util.Helper;
 import mod.hilal.saif.activities.android_manifest.AndroidManifestInjection;
 import mod.hilal.saif.activities.tools.ConfigActivity;
+import mod.hilal.saif.activities.tools.Tools;
 import mod.jbk.build.BuildProgressReceiver;
 import mod.jbk.code.CodeEditorColorSchemes;
 import mod.jbk.code.CodeEditorLanguages;
@@ -119,6 +131,8 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
     private static final int REQUEST_CODE_FONT_MANAGER = 228;
     private static final int REQUEST_CODE_COLLECTION_MANAGER = 233;
     private static final int REQUEST_CODE_SOURCE_CODE_VIEWER = 240;
+
+    private Boolean isActivityForeground = false;
 
     private ImageView xmlLayoutOrientation;
     private boolean B = false;
@@ -139,6 +153,12 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
     private ViewEditorFragment viewTabAdapter = null;
     private rs eventTabAdapter = null;
     private br componentTabAdapter = null;
+
+    private NotificationManager Notify;
+    private Intent designActivityIntent;
+    private int notificationId = 1;
+    private boolean isTaskRunning;
+    private notificationCache currentNotificationCache = new notificationCache();
 
     /**
      * Saves the app's version information to the currently opened Sketchware project file.
@@ -173,6 +193,70 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         }
     }
 
+    public void ProjectBuildingNotify(int notificationId, String title, String content, boolean setProcess, boolean setUnCancelable, String ActionText, Intent IntentForPendingIntent) {
+        if (ConfigActivity.isSettingEnabled(ConfigActivity.SETTING_PROJECT_COMPILING_NOTIFICATION)) {
+            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, IntentForPendingIntent, 0);
+
+            Notify = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                NotificationChannel ntc = new NotificationChannel(
+                        "Project Build", "Project build notify", NotificationManager.IMPORTANCE_HIGH);
+                Notify.createNotificationChannel(ntc);
+            }
+
+            Notification.Builder NotifyProjectBuild;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                NotifyProjectBuild = new Notification.Builder(getApplicationContext(), "Project Build");
+            } else {
+                NotifyProjectBuild = new Notification.Builder(getApplicationContext());
+            }
+            NotifyProjectBuild.setSmallIcon(R.drawable.sketchware_48_white);
+            NotifyProjectBuild.setContentTitle(title);
+            NotifyProjectBuild.setOngoing(setUnCancelable);
+            NotifyProjectBuild.setContentText(content);
+            if (setProcess) {
+                NotifyProjectBuild.setProgress(100, 0, true);
+            }
+            NotifyProjectBuild.setOnlyAlertOnce(true);
+            NotifyProjectBuild.addAction(R.drawable.selector_palette_tab_ic_sketchware, ActionText, pendingIntent);
+            Notify.notify(notificationId, NotifyProjectBuild.build());
+        }
+    }
+
+
+    public void ProjectBuildingNotify(int notificationId, String title, String content, boolean setProcess, boolean setUnCancelable) {
+        if (ConfigActivity.isSettingEnabled(ConfigActivity.SETTING_PROJECT_COMPILING_NOTIFICATION)) {
+            Notify = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                NotificationChannel ntc = new NotificationChannel(
+                        "Project Build", "Project build notify", NotificationManager.IMPORTANCE_HIGH);
+                Notify.createNotificationChannel(ntc);
+            }
+            Notification.Builder NotifyProjectBuild;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                NotifyProjectBuild = new Notification.Builder(getApplicationContext(), "Project Build");
+            } else {
+                NotifyProjectBuild = new Notification.Builder(getApplicationContext());
+            }
+            NotifyProjectBuild.setSmallIcon(R.drawable.sketchware_48_white);
+            NotifyProjectBuild.setContentTitle(title);
+            NotifyProjectBuild.setOngoing(setUnCancelable);
+            NotifyProjectBuild.setContentText(content);
+            if (setProcess) {
+                NotifyProjectBuild.setProgress(100, 0, true);
+            }
+            NotifyProjectBuild.setOnlyAlertOnce(true);
+//            NotifyProjectBuild.addAction(R.drawable.selector_palette_tab_ic_sketchware, title, null);
+            Notify.notify(notificationId, NotifyProjectBuild.build());
+        }
+    }
+
+    public void dismissNotification() {
+        if (Notify != null) {
+            Notify.cancel(notificationId);
+        }
+    }
+
     /**
      * Shows a Snackbar indicating that a problem occurred while compiling. The user can click on "SHOW" to get to {@link CompileLogActivity}.
      *
@@ -184,16 +268,16 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         snackbar.setAction(Helper.getResString(R.string.common_word_show), v -> {
             if (!mB.a()) {
                 snackbar.dismiss();
-                Intent intent = new Intent(getApplicationContext(), CompileLogActivity.class);
-                intent.putExtra("error", error);
-                intent.putExtra("sc_id", sc_id);
-                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(intent);
+                new CompileErrorSaver(sc_id).showDialog(DesignActivity.this);
             }
         });
         /* Set the text color to yellow */
         snackbar.setActionTextColor(Color.YELLOW);
+        /* show snackbar only in foreground */
         snackbar.show();
+        currentNotificationCache.title = "Build Failed";
+        currentNotificationCache.description = "App build has been failed";
+        currentNotificationCache.ProjectStage = 2;
     }
 
     @Override
@@ -219,6 +303,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
      * Opens the debug APK to install.
      */
     private void installBuiltApk() {
+        isTaskRunning = false;
         if (!ConfigActivity.isSettingEnabled(ConfigActivity.SETTING_ROOT_AUTO_INSTALL_PROJECTS)) {
             requestPackageInstallerInstall();
         } else {
@@ -265,8 +350,15 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         } else {
             intent.setDataAndType(Uri.fromFile(new File(q.finalToInstallApkPath)), "application/vnd.android.package-archive");
         }
-
-        startActivity(intent);
+        if (isActivityForeground) {
+            startActivity(intent);
+        } else {
+            isTaskRunning = false;
+            currentNotificationCache.title = "Install Build Apk";
+            currentNotificationCache.description = "App build successfully and ready to install";
+            currentNotificationCache.ProjectStage = 2;
+            ProjectBuildingNotify(notificationId, "Install Build Apk", "App build successfully and ready to install", false, false, "Install", intent);
+        }
     }
 
     @Override
@@ -370,17 +462,22 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 Menu menu = popupMenu.getMenu();
 
                 menu.add(Menu.NONE, 1, Menu.NONE, "Build Settings");
-                menu.add(Menu.NONE, 2, Menu.NONE, "Clean temporary files");
-                menu.add(Menu.NONE, 3, Menu.NONE, "Show last compile error");
-                menu.add(Menu.NONE, 5, Menu.NONE, "Show source code");
+                if (FileUtil.isExistFile(q.projectMyscPath)) {
+                    menu.add(Menu.NONE, 2, Menu.NONE, "Clean temporary files");
+                }
+                menu.add(Menu.NONE, 3, Menu.NONE, "Show Quick log");
+                menu.add(Menu.NONE, 4, Menu.NONE, "Show source code");
                 if (FileUtil.isExistFile(q.finalToInstallApkPath)) {
-                    menu.add(Menu.NONE, 4, Menu.NONE, "Install last built APK");
+                    menu.add(Menu.NONE, 5, Menu.NONE, "Install last built APK");
+                }
+                if (FileUtil.isExistFile(FilePathUtil.getLastDebugCompileLog())) {
+                    menu.add(Menu.NONE, 6, Menu.NONE, "Show last compile log");
                 }
 
                 popupMenu.setOnMenuItemClickListener(item -> {
                     switch (item.getItemId()) {
                         case 1:
-                            new BuildSettingsDialog(this, sc_id).show();
+                            new BuildSettingsDialog(DesignActivity.this, sc_id).show();
                             break;
 
                         case 2:
@@ -392,10 +489,14 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                             break;
 
                         case 3:
-                            new CompileErrorSaver(sc_id).showLastErrors(this);
+                            new CompileErrorSaver(sc_id).showDialog(DesignActivity.this);
                             break;
 
                         case 4:
+                            showCurrentActivitySrcCode();
+                            break;
+
+                        case 5:
                             if (FileUtil.isExistFile(q.finalToInstallApkPath)) {
                                 installBuiltApk();
                             } else {
@@ -403,17 +504,15 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                             }
                             break;
 
-                        case 5:
-                            showCurrentActivitySrcCode();
+                        case 6:
+                                showLastedDebugCompilerlog();
                             break;
 
                         default:
                             return false;
                     }
-
                     return true;
                 });
-
                 popupMenu.show();
             }
         }
@@ -436,7 +535,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         r = new DB(getApplicationContext(), "P1");
         t = new DB(getApplicationContext(), "P12");
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        @SuppressLint("WrongViewCast") Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setSubtitle(sc_id);
         setSupportActionBar(toolbar);
         findViewById(R.id.layout_main_logo).setVisibility(View.GONE);
@@ -579,6 +678,8 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
     @Override
     public void onResume() {
         super.onResume();
+        isActivityForeground = true;
+        dismissNotification();
         if (!j()) {
             finish();
         }
@@ -587,6 +688,37 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         if (freeMegabytes < 100L && freeMegabytes > 0L) {
             warnAboutInsufficientStorageSpace();
         }
+    }
+
+    public class notificationCache {
+        public String title;
+        public String description;
+        // 0 = Compiling or canceling Build
+        // 1 = Build successfully
+        // 2 = Build Failed
+        public int ProjectStage;
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isActivityForeground = false;
+        if (isTaskRunning) {
+            if (currentNotificationCache.ProjectStage == 0) {
+                ProjectBuildingNotify(notificationId, currentNotificationCache.title, currentNotificationCache.description, true, true);
+            } else if (currentNotificationCache.ProjectStage == 1) {
+                dismissNotification();
+            } else if (currentNotificationCache.ProjectStage == 2) {
+                dismissNotification();
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        dismissNotification();
     }
 
     @Override
@@ -711,8 +843,52 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         dialog.show();
     }
 
+    private void showLastedDebugCompilerlog() {
+
+        new Thread(() -> {
+
+            new FilePathUtil();
+            final String source = FileUtil.readFile(FilePathUtil.getLastDebugCompileLog());
+
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(DesignActivity.this)
+                    .setTitle("Compile log")
+                    .setPositiveButton("Dismiss", null)
+                    .setNeutralButton("Clear", (dialog1, which) -> {
+                        FileUtil.writeFile(FilePathUtil.getLastDebugCompileLog(),"");
+                        SketchwareUtil.toast("Cleared Compile log");
+                    });
+
+            runOnUiThread(() -> {
+                TextView errorLogTxt = new TextView(getApplicationContext());
+                CodeEditor editor = new CodeEditor(DesignActivity.this);
+                editor.setTypefaceText(Typeface.MONOSPACE);
+                editor.setEditable(false);
+                editor.setEditorLanguage(new JavaLanguage());
+                editor.setColorScheme(new EditorColorScheme());
+                editor.setTextSize(14);
+                editor.setHardwareAcceleratedDrawAllowed(true);
+                if (!source.equals("")) {
+                    editor.setText(source);
+                } else {
+                    errorLogTxt.setText("\tCompile log no exist!");
+                }
+
+                AlertDialog dialog = dialogBuilder.create();
+                dialog.setView((!source.equals("") ? editor : errorLogTxt),
+                        (int) getDip(8),
+                        (int) getDip(8),
+                        (int) getDip(8),
+                        (int) getDip(8));
+                dialog.show();
+                if (source.equals("")) {
+                    dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(View.GONE);
+                }
+            });
+        }).start();
+    }
+
     private void showCurrentActivitySrcCode() {
-        ProgressDialog progress = new ProgressDialog(this);
+        ProgressDialog progress = new ProgressDialog(DesignActivity.this);
         progress.setMessage("Generating source...");
         progress.setCancelable(false);
         progress.show();
@@ -721,7 +897,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             String filename = projectFileSelector.getFileName();
             final String source = new yq(getApplicationContext(), sc_id).getFileSrc(filename, jC.b(sc_id), jC.a(sc_id), jC.c(sc_id));
 
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this)
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(DesignActivity.this)
                     .setTitle(filename)
                     .setCancelable(false)
                     .setPositiveButton("Dismiss", null);
@@ -730,7 +906,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 if (isFinishing()) return;
                 progress.dismiss();
 
-                CodeEditor editor = new CodeEditor(this);
+                CodeEditor editor = new CodeEditor(DesignActivity.this);
                 editor.setTypefaceText(Typeface.MONOSPACE);
                 editor.setEditable(false);
                 editor.setTextSize(14);
@@ -812,10 +988,17 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
     }
 
     /**
-     * Opens {@link ManageLocalLibraryActivity}.
+     * Opens {@link dev.aldi.sayuti.editor.manage.ManageLocalLibraryActivity}.
      */
     void toLocalLibraryManager() {
-        launchActivity(ManageLocalLibraryActivity.class, null);
+        launchActivity(dev.aldi.sayuti.editor.manage.ManageLocalLibraryActivity.class, null);
+    }
+
+    /**
+     * Opens {@link dev.derecky.sany.manager.ManageLocalLibraryActivity}.
+     */
+    void toNewLocalLibraryManager() {
+        launchActivity(dev.derecky.sany.manager.ManageLocalLibraryActivity.class, null);
     }
 
     /**
@@ -907,8 +1090,16 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         launchActivity(SrcViewerActivity.class, REQUEST_CODE_SOURCE_CODE_VIEWER, new Pair<>("current", current));
     }
 
+    void toToolsManager() {
+        // launchActivity(Tools.class, null);
+        Intent intent = new Intent(getApplicationContext(), Tools.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.putExtra("sc_id", sc_id);
+        startActivity(intent);
+    }
+
     @SafeVarargs
-    private final void launchActivity(Class<? extends Activity> toLaunch, Integer optionalRequestCode, Pair<String, String>... extras) {
+    private void launchActivity(Class<? extends Activity> toLaunch, Integer optionalRequestCode, Pair<String, String>... extras) {
         Intent intent = new Intent(getApplicationContext(), toLaunch);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.putExtra("sc_id", sc_id);
@@ -923,14 +1114,36 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class BuildAsyncTask extends MA implements OnCancelListener, BuildProgressReceiver {
 
         private final BuildingDialog dialog;
+        private final Handler errorLogHandler;
         private boolean canceled = false;
 
         public BuildAsyncTask(Context context) {
             super(context);
             addTask(this);
+            DesignActivity.this.a((MA) this);
+            errorLogHandler = new Handler(Looper.getMainLooper()) {
+                @Override
+                public void handleMessage(@NonNull Message msg) {
+                    if (msg.what == 'E') {
+                        Bundle data = msg.getData();
+                        String tag = data.getString("tag");
+                        String message = data.getString("message");
+                        Throwable throwable;
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                            throwable = (Throwable) data.getSerializable("throwable");
+                        } else {
+                            throwable = data.getSerializable("throwable", Throwable.class);
+                        }
+
+                        // TODO: Show warnings in UI
+                    }
+                }
+            };
+            LogUtil.addLogHandler('E', errorLogHandler);
             dialog = new BuildingDialog(DesignActivity.this);
             maybeShow();
             dialog.setIsCancelableOnBackPressed(false);
@@ -945,6 +1158,8 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
          */
         @Override
         public void a() {
+            // TODO: Remove errorLogHandler in other cases
+            LogUtil.removeLogHandler('E', errorLogHandler);
             dismiss();
             runProject.setText(Helper.getResString(R.string.common_word_run));
             runProject.setClickable(true);
@@ -960,10 +1175,11 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         @Override
         public void a(String str) {
             runOnUiThread(() -> {
+                dismissNotification();
                 dismiss();
+                runProject.setClickable(true);
                 SketchwareUtil.toastError("APK build failed");
                 runProject.setText(Helper.getResString(R.string.common_word_run));
-                runProject.setClickable(true);
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             });
         }
@@ -980,6 +1196,13 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             } else {
                 try {
                     publishProgress("Deleting temporary files...");
+                    isTaskRunning = true;
+                    currentNotificationCache.title = "Building Apk";
+                    currentNotificationCache.description = "Deleting temporary files...";
+                    currentNotificationCache.ProjectStage = 0;
+                    if (!isActivityForeground) {
+                        ProjectBuildingNotify(notificationId, "Building Apk", "Deleting temporary files...", true, true);
+                    }
                     FileUtil.deleteFile(q.projectMyscPath);
 
                     q.c(a);
@@ -1001,7 +1224,10 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                     generateProjectDebugFiles();
                     q.f();
                     q.e();
-
+                    boolean usingAapt2 = new BuildSettings(sc_id).getValue(
+                            BuildSettings.SETTING_RESOURCE_PROCESSOR,
+                            BuildSettings.SETTING_RESOURCE_PROCESSOR_AAPT
+                    ).equals(BuildSettings.SETTING_RESOURCE_PROCESSOR_AAPT2);
                     Dp mDp = new Dp(this, a, q);
 
                     mDp.maybeExtractAapt2();
@@ -1011,13 +1237,28 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                     }
 
                     publishProgress("Extracting built-in libraries...");
+                    isTaskRunning = true;
+                    currentNotificationCache.title = "Building Apk";
+                    currentNotificationCache.description = "Extracting built-in libraries...";
+                    currentNotificationCache.ProjectStage = 0;
+                    if (!isActivityForeground) {
+                        ProjectBuildingNotify(notificationId, "Building Apk", "Extracting built-in libraries...", true, true);
+                    }
                     mDp.getBuiltInLibrariesReady();
                     if (canceled) {
                         cancel(true);
                         return;
                     }
 
-                    publishProgress("AAPT2 is running...");
+                    publishProgress(usingAapt2 ? "AAPT2 is running..." : "AAPT is running...");
+                    currentNotificationCache.title = "Building Apk";
+                    currentNotificationCache.description = usingAapt2 ? "AAPT2 is running..." : "AAPT is running...";
+                    currentNotificationCache.ProjectStage = 0;
+
+                    isTaskRunning = true;
+                    if (!isActivityForeground) {
+                        ProjectBuildingNotify(notificationId, "Building Apk", "AAPT2 is running...", true, true);
+                    }
                     mDp.compileResources();
                     if (canceled) {
                         cancel(true);
@@ -1031,6 +1272,14 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                     }
 
                     publishProgress("Java is compiling...");
+                    isTaskRunning = true;
+                    currentNotificationCache.title = "Building Apk";
+                    currentNotificationCache.description = "Java is compiling...";
+                    currentNotificationCache.ProjectStage = 0;
+
+                    if (!isActivityForeground) {
+                        ProjectBuildingNotify(notificationId, "Building Apk", "Java is compiling...", true, true);
+                    }
                     mDp.compileJavaCode();
                     if (canceled) {
                         cancel(true);
@@ -1054,6 +1303,14 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                     }
 
                     publishProgress(mDp.getDxRunningText());
+                    isTaskRunning = true;
+                    currentNotificationCache.title = "Building Apk";
+                    currentNotificationCache.description = mDp.getDxRunningText();
+                    currentNotificationCache.ProjectStage = 0;
+
+                    if (!isActivityForeground) {
+                        ProjectBuildingNotify(notificationId, "Building Apk", mDp.getDxRunningText(), true, true);
+                    }
                     mDp.createDexFilesFromClasses();
                     if (canceled) {
                         cancel(true);
@@ -1061,6 +1318,14 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                     }
 
                     publishProgress("Merging DEX files...");
+                    isTaskRunning = true;
+                    currentNotificationCache.title = "Building Apk";
+                    currentNotificationCache.description = "Merging DEX files...";
+                    currentNotificationCache.ProjectStage = 0;
+
+                    if (!isActivityForeground) {
+                        ProjectBuildingNotify(notificationId, "Building Apk", "Merging DEX files...", true, true);
+                    }
                     mDp.getDexFilesReady();
                     if (canceled) {
                         cancel(true);
@@ -1068,6 +1333,14 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                     }
 
                     publishProgress("Building APK...");
+                    isTaskRunning = true;
+                    currentNotificationCache.title = "Building Apk";
+                    currentNotificationCache.description = "Building Apk...";
+                    currentNotificationCache.ProjectStage = 0;
+
+                    if (!isActivityForeground) {
+                        ProjectBuildingNotify(notificationId, "Building Apk", "Building APK...", true, true);
+                    }
                     mDp.buildApk();
                     if (canceled) {
                         cancel(true);
@@ -1075,14 +1348,28 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                     }
 
                     publishProgress("Signing APK...");
+                    isTaskRunning = true;
+                    currentNotificationCache.title = "Building Apk";
+                    currentNotificationCache.description = "Signing Apk...";
+                    currentNotificationCache.ProjectStage = 0;
+
+                    if (!isActivityForeground) {
+                        ProjectBuildingNotify(notificationId, "Building Apk", "Signing APK...", true, true);
+                    }
                     mDp.signDebugApk();
                     if (canceled) {
                         cancel(true);
                         return;
                     }
 
+                    isTaskRunning = false;
+                    currentNotificationCache.title = "Install Build Apk";
+                    currentNotificationCache.description = "App build successfully and ready to install";
+                    currentNotificationCache.ProjectStage = 1;
+
                     installBuiltApk();
                 } catch (MissingFileException e) {
+                    dismissNotification();
                     runOnUiThread(() -> {
                         boolean isMissingDirectory = e.isMissingDirectory();
 
@@ -1108,7 +1395,17 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                         dialog.show();
                     });
                 } catch (Throwable tr) {
+                    dismissNotification();
                     LogUtil.e("DesignActivity$BuildAsyncTask", "Failed to build project", tr);
+                    isTaskRunning = false;
+                    currentNotificationCache.title = "Build Failed";
+                    currentNotificationCache.description = "App build has been failed";
+                    currentNotificationCache.ProjectStage = 2;
+                    // Cria um Intent para iniciar a Activity principal
+                    Intent intent = new Intent(getApplicationContext(), getApplicationContext().getClass());
+                    if (!isActivityForeground) {
+                        ProjectBuildingNotify(notificationId, "Build Failed", "App build has been failed!", false, false, "Show DesignActivity", intent);
+                    }
                     indicateCompileErrorOccurred(tr instanceof zy ? tr.getMessage() : Log.getStackTraceString(tr));
                 }
             }
@@ -1154,6 +1451,14 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                 dialog.setIsCancelableOnBackPressed(true);
                 maybeShow();
                 publishProgress("Canceling build...");
+                isTaskRunning = true;
+                currentNotificationCache.title = "Canceling build";
+                currentNotificationCache.description = "Canceling build...";
+                currentNotificationCache.ProjectStage = 0;
+
+                if (!isActivityForeground) {
+                    ProjectBuildingNotify(notificationId, "Canceling build", "Canceling build...", true, true);
+                }
                 canceled = true;
             }
         }
@@ -1162,6 +1467,8 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         public void onCancelled() {
             super.onCancelled();
             runOnUiThread(() -> {
+                dismissNotification();
+                isTaskRunning = false;
                 runProject.setText(Helper.getResString(R.string.common_word_run));
                 runProject.setClickable(true);
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -1189,6 +1496,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class ProjectLoader extends MA {
 
         private final Bundle savedInstanceState;
@@ -1233,6 +1541,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class DiscardChangesProjectCloser extends MA {
 
         public DiscardChangesProjectCloser(Context context) {
@@ -1265,6 +1574,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class ProjectSaver extends MA {
 
         public ProjectSaver(Context context) {
@@ -1303,6 +1613,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class SaveChangesProjectCloser extends MA {
 
         public SaveChangesProjectCloser(Context context) {
@@ -1340,6 +1651,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class UnsavedChangesSaver extends MA {
 
         public UnsavedChangesSaver(Context context) {

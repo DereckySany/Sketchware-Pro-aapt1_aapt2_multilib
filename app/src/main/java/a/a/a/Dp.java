@@ -9,6 +9,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.StrictMode;
 import android.system.Os;
 import android.text.TextUtils;
@@ -25,6 +26,8 @@ import com.github.megatronking.stringfog.plugin.StringFogClassInjector;
 import com.github.megatronking.stringfog.plugin.StringFogMappingPrinter;
 import com.iyxan23.zipalignjava.InvalidZipException;
 import com.iyxan23.zipalignjava.ZipAlign;
+
+import org.spongycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,6 +46,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import kellinwood.security.zipsigner.ZipSigner;
+import kellinwood.security.zipsigner.optional.KeyStoreFileManager;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.dex.Dex;
 import mod.agus.jcoderz.dex.FieldId;
@@ -56,6 +61,7 @@ import mod.agus.jcoderz.editor.library.ExtLibSelected;
 import mod.agus.jcoderz.editor.manage.library.locallibrary.ManageLocalLibrary;
 import mod.agus.jcoderz.lib.FilePathUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.alucard.tn.apksigner.ApkSigner;
 import mod.hey.studios.build.BuildSettings;
 import mod.hey.studios.compiler.kotlin.KotlinCompilerBridge;
 import mod.hey.studios.project.ProjectSettings;
@@ -67,6 +73,8 @@ import mod.jbk.build.compiler.dex.DexCompiler;
 import mod.jbk.build.compiler.resource.ResourceCompiler;
 import mod.jbk.util.LogUtil;
 import mod.jbk.util.TestkeySignBridge;
+import mod.pranav.build.R8Compiler;
+import mod.pranav.build.JarBuilder;
 import proguard.Configuration;
 import proguard.ConfigurationParser;
 import proguard.ParseException;
@@ -75,6 +83,7 @@ import proguard.ProGuard;
 public class Dp {
 
     public static final String TAG = "AppBuilder";
+    private final File aaptBinary;
     private final File aapt2Binary;
     public BuildSettings build_settings;
     private BuildProgressReceiver progressReceiver;
@@ -117,6 +126,7 @@ public class Dp {
             LogUtil.e(TAG, "Somehow failed to get package info about us!", e);
         }
 
+        aaptBinary = new File(context.getCacheDir(), "aapt");
         aapt2Binary = new File(context.getCacheDir(), "aapt2");
         build_settings = new BuildSettings(yqVar.sc_id);
         this.context = context;
@@ -142,9 +152,14 @@ public class Dp {
      */
     public void compileResources() throws Exception {
         timestampResourceCompilationStarted = System.currentTimeMillis();
+        boolean useAapt2 = buildAppBundle || build_settings.getValue(
+                BuildSettings.SETTING_RESOURCE_PROCESSOR,
+                BuildSettings.SETTING_RESOURCE_PROCESSOR_AAPT
+        ).equals(BuildSettings.SETTING_RESOURCE_PROCESSOR_AAPT2);
         ResourceCompiler compiler = new ResourceCompiler(
+                useAapt2,
                 this,
-                aapt2Binary,
+                useAapt2 ? aapt2Binary : aaptBinary,
                 buildAppBundle,
                 progressReceiver);
         compiler.compile();
@@ -189,6 +204,13 @@ public class Dp {
         ).equals(BuildSettings.SETTING_DEXER_D8);
     }
 
+    public boolean isR8Enabled() {
+        return build_settings.getValue(
+                BuildSettings.SETTING_SHRINKER,
+                BuildSettings.SETTING_SHRINKER_PROGUARD
+        ).equals(BuildSettings.SETTING_SHRINKER_R8);
+    }
+
     public String getDxRunningText() {
         return (isD8Enabled() ? "D8" : "Dx") + " is running...";
     }
@@ -199,42 +221,40 @@ public class Dp {
      * @throws Exception Thrown if the compiler had any problems compiling
      */
     public void createDexFilesFromClasses() throws Exception {
-        FileUtil.makeDir(yq.binDirectoryPath + File.separator + "dex");
+    FileUtil.makeDir(yq.binDirectoryPath + File.separator + "dex");
+        if (proguard.isProguardEnabled() && isR8Enabled()) {
+            return;
+        }
+    long savedTimeMillis = System.currentTimeMillis();
         if (isD8Enabled()) {
-            long savedTimeMillis = System.currentTimeMillis();
             try {
                 DexCompiler.compileDexFiles(this);
-                LogUtil.d(TAG, "D8 took " + (System.currentTimeMillis() - savedTimeMillis) + " ms");
+                LogUtil.d(TAG, "D8 took " + (System.currentTimeMillis() - savedTimeMillis) + "ms");
             } catch (Exception e) {
                 LogUtil.e(TAG, "D8 failed to process .class files", e);
                 throw e;
             }
         } else {
-            long savedTimeMillis = System.currentTimeMillis();
             List<String> args = Arrays.asList(
-                    "--debug",
-                    "--verbose",
-                    "--multi-dex",
-                    "--output=" + yq.binDirectoryPath + File.separator + "dex",
-                    proguard.isProguardEnabled() ? yq.classesProGuardPath : yq.compiledClassesPath
+                "--debug",
+                "--verbose",
+                "--multi-dex",
+                "--output=" + yq.binDirectoryPath + File.separator + "dex",
+                proguard.isProguardEnabled() ? yq.classesProGuardPath : yq.compiledClassesPath
             );
-
-            try {
-                LogUtil.d(TAG, "Running Dx with these arguments: " + args);
-
-                Main.clearInternTables();
-                Main.Arguments arguments = new Main.Arguments();
-                Method parseMethod = Main.Arguments.class.getDeclaredMethod("parse", String[].class);
-                parseMethod.setAccessible(true);
-                parseMethod.invoke(arguments, (Object) args.toArray(new String[0]));
-
-                Main.run(arguments);
-                LogUtil.d(TAG, "Dx took " + (System.currentTimeMillis() - savedTimeMillis) + " ms");
-            } catch (Exception e) {
-                LogUtil.e(TAG, "Dx failed to process .class files", e);
-                throw e;
+                try {
+                    Main.clearInternTables();
+                    Main.Arguments arguments = new Main.Arguments();
+                    Method parseMethod = Main.Arguments.class.getDeclaredMethod("parse", String[].class);
+                    parseMethod.setAccessible(true);
+                    parseMethod.invoke(arguments, (Object) args.toArray(new String[0]));
+                    Main.run(arguments);
+                    LogUtil.d(TAG, "DX took " + (System.currentTimeMillis() - savedTimeMillis) + "ms");
+                } catch (Exception e) {
+                    LogUtil.e(TAG, "DX failed to process .class files", e);
+                    throw e;
+                }
             }
-        }
     }
 
     public String getClasspath() {
@@ -712,19 +732,36 @@ public class Dp {
      * @throws By If anything goes wrong while extracting
      */
     public void maybeExtractAapt2() throws By {
-        String aapt2PathInAssets = "aapt/";
-        if (GB.a().toLowerCase().contains("x86")) {
-            aapt2PathInAssets += "aapt2-x86";
+        String abi = GB.a().toLowerCase();
+        String aaptPathInAssets = "aapt/aapt/";
+        String aapt2PathInAssets = "aapt/aapt2/";
+        if (abi.contains("64")) {
+            if (abi.contains("x86")) {
+                aaptPathInAssets += "aapt-x86_64";
+                aapt2PathInAssets += "aapt2-x86_64";
+            } else {
+                aaptPathInAssets += "aapt-arm64";
+                aapt2PathInAssets += "aapt2-arm64";
+            }
         } else {
-            aapt2PathInAssets += "aapt2-arm";
+            if (abi.contains("x86")) {
+                aaptPathInAssets += "aapt-x86";
+                aapt2PathInAssets += "aapt2-x86";
+            } else {
+                aaptPathInAssets += "aapt-arm";
+                aapt2PathInAssets += "aapt2-arm";
+            }
         }
         try {
             if (hasFileChanged(aapt2PathInAssets, aapt2Binary.getAbsolutePath())) {
                 Os.chmod(aapt2Binary.getAbsolutePath(), S_IRUSR | S_IWUSR | S_IXUSR);
             }
+            if (hasFileChanged(aaptPathInAssets, aaptBinary.getAbsolutePath())) {
+                Os.chmod(aaptBinary.getAbsolutePath(), S_IRUSR | S_IWUSR | S_IXUSR);
+            }
         } catch (Exception e) {
-            LogUtil.e(TAG, "Failed to extract AAPT2 binaries", e);
-            throw new By("Couldn't extract AAPT2 binaries! Message: " + e.getMessage());
+            LogUtil.e(TAG, "Failed to extract AAPT/AAPT2 binaries", e);
+            throw new By("Couldn't extract AAPT/AAPT2 binaries! Message: " + e.getMessage());
         }
     }
 
@@ -781,7 +818,17 @@ public class Dp {
      * This method uses apksigner, but kellinwood's zipsigner as fallback.
      */
     public void signDebugApk() throws GeneralSecurityException, IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-        TestkeySignBridge.signWithTestkey(yq.unsignedUnalignedApkPath, yq.finalToInstallApkPath);
+      if(Build.VERSION.SDK_INT >= 26) {
+          TestkeySignBridge.signWithTestkey(yq.unsignedUnalignedApkPath, yq.finalToInstallApkPath);
+        } else if (Build.VERSION.SDK_INT >= 26) {
+            ApkSigner signer = new ApkSigner();
+            signer.signWithTestKey(yq.unsignedUnalignedApkPath, yq.finalToInstallApkPath, null);
+        } else {
+            ZipSigner zipSigner = new ZipSigner();
+            KeyStoreFileManager.setProvider(new BouncyCastleProvider());
+            zipSigner.setKeymode(ZipSigner.KEY_TESTKEY);
+            zipSigner.signZip(yq.unsignedUnalignedApkPath, yq.finalToInstallApkPath);
+        }
     }
 
     private void mergeDexes(File target, List<Dex> dexes) throws IOException {
@@ -804,13 +851,8 @@ public class Dp {
         }
     }
 
-    /**
-     * Generates default ProGuard R.java rules and adds them to {@code args}.
-     *
-     * @param args List of arguments to add R.java rules to.
-     */
-    private void proguardAddRjavaRules(List<String> args) {
-        StringBuilder sb = new StringBuilder("# R.java rules");
+    private String getRJavaRules() {
+         StringBuilder sb = new StringBuilder("# R.java rules");
         for (Jp jp : builtInLibraryManager.a()) {
             if (jp.c() && !jp.b().isEmpty()) {
                 sb.append("\n");
@@ -830,15 +872,55 @@ public class Dp {
         }
         sb.append("\n");
         sb.append("-keep class ").append(yq.packageName).append(".R { *; }").append('\n');
-        FileUtil.writeFile(yq.proGuardAutoGeneratedExclusions, sb.toString());
+        return sb.toString();
+    }
+
+    /**
+     * Generates default ProGuard R.java rules and adds them to {@code args}.
+     *
+     * @param args List of arguments to add R.java rules to.
+     */
+    private void proguardAddRjavaRules(List<String> args) {
+        FileUtil.writeFile(yq.proGuardAutoGeneratedExclusions, getRJavaRules());
         args.add("-include");
         args.add(yq.proGuardAutoGeneratedExclusions);
     }
 
     public void runProguard() throws IOException {
         long savedTimeMillis = System.currentTimeMillis();
-        ArrayList<String> args = new ArrayList<>();
+        if (isR8Enabled()) {
+            ArrayList<String> config = new ArrayList<>();
+            config.add(ProguardHandler.ANDROID_PROGUARD_RULES_PATH);
+            config.add(yq.aaptProGuardRules);
+            config.add(proguard.getCustomProguardRules());
+            var rules = new ArrayList<String>(Arrays.asList(getRJavaRules().split("\n")));
+            for (Jp library : builtInLibraryManager.a()) {
+                 File f = BuiltInLibraries.getLibraryProGuardConfiguration(library.a());
+                 if (f.exists()) {
+                    config.add(f.getAbsolutePath());
+                 }
+            }
+            config.addAll(mll.getPgRules());
+            ArrayList<String> jars = new ArrayList<>();
+            jars.add(yq.compiledClassesPath + ".jar");
 
+            for (HashMap<String, Object> hashMap : mll.list) {
+                String obj = hashMap.get("name").toString();
+                if (hashMap.containsKey("jarPath") && proguard.libIsProguardFMEnabled(obj)) {
+                     jars.add(hashMap.get("jarPath").toString());
+                }
+            }
+            try {
+                 JarBuilder.generateJar(new File(yq.compiledClassesPath));
+                 new R8Compiler(rules, config.toArray(new String[0]), getProGuardClasspath().split(":"), jars.toArray(new String[0]), settings.getMinSdkVersion(), yq).compile();
+            } catch (Exception e) {
+                 throw new IOException(e);
+            }
+            LogUtil.d(TAG, "R8 took " + (System.currentTimeMillis() - savedTimeMillis) + " ms");
+            return;
+        }
+
+        ArrayList<String> args = new ArrayList<>();
         /* Include global ProGuard rules */
         args.add("-include");
         args.add(ProguardHandler.ANDROID_PROGUARD_RULES_PATH);
@@ -874,7 +956,11 @@ public class Dp {
         args.add("-libraryjars");
         args.add(getProGuardClasspath());
         args.add("-outjars");
-        args.add(yq.classesProGuardPath);
+        if (isR8Enabled()) {
+            args.add(yq.binDirectoryPath);
+        } else {
+            args.add(yq.classesProGuardPath);
+        }
         if (proguard.isDebugFilesEnabled()) {
             args.add("-printseeds");
             args.add(yq.proGuardSeedsPath);
@@ -883,8 +969,8 @@ public class Dp {
             args.add("-printmapping");
             args.add(yq.proGuardMappingPath);
         }
-        LogUtil.d(TAG, "About to run ProGuard with these arguments: " + args);
 
+        LogUtil.d(TAG, "About to run ProGuard with these arguments: " + args);
         Configuration configuration = new Configuration();
         ConfigurationParser parser = new ConfigurationParser(args.toArray(new String[0]), System.getProperties());
 
@@ -921,6 +1007,13 @@ public class Dp {
         } catch (Exception e) {
             LogUtil.e("StringFog", "Failed to run StringFog", e);
         }
+    }
+
+    /**
+     * Calls {@link #runZipalign(String, String)} with {@link yq#unsignedUnalignedApkPath} and {@link yq#unsignedAlignedApkPath}.
+     */
+    public void runZipalign() throws By {
+        runZipalign(yq.unsignedUnalignedApkPath, yq.unsignedAlignedApkPath);
     }
 
     public void runZipalign(String inPath, String outPath) throws By {
