@@ -1,6 +1,6 @@
-<androidx.appcompat.widget.ActionBarContextView android:theme="?actionBarTheme"
-    android:visibility="gone"
+<androidx.appcompat.widget.ActionBarContextView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?actionModeStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    style="?actionModeStyle"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+    android:theme="?actionBarTheme"
+    android:visibility="gone" />

@@ -1,85 +1,85 @@
-<androidx.cardview.widget.CardView android:layout_width="match_parent"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
-    android:elevation="4dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:elevation="4dp">
 
     <LinearLayout
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <LinearLayout
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:background="#ffffffff"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:background="#ffffffff"
-            android:padding="16dp"
-            android:layout_width="96dp"
-            android:layout_height="96dp">
+            android:padding="16dp">
 
             <ImageView
                 android:id="@id/img_grade"
-                android:padding="4dp"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/crown_96_line"
-                android:contentDescription="@null" />
+                android:contentDescription="@null"
+                android:padding="4dp"
+                android:src="@drawable/crown_96_line" />
 
             <TextView
-                android:textSize="16sp"
-                android:textColor="#ff535353"
                 android:id="@id/tv_grade_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:textColor="#ff535353"
+                android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout
-            android:gravity="center"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
-                android:textSize="12sp"
-                android:textColor="@color/grey"
                 android:id="@id/tv_grade_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:textColor="@color/grey"
+                android:textSize="12sp" />
 
             <LinearLayout
-                android:gravity="center"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:textSize="16sp"
-                    android:textColor="#ff535353"
                     android:id="@id/tv_grade_point_min"
-                    android:padding="8dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:textSize="16sp"
-                    android:textColor="#ff535353"
-                    android:padding="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="~" />
+                    android:padding="8dp"
+                    android:textColor="#ff535353"
+                    android:textSize="16sp" />
 
                 <TextView
-                    android:textSize="16sp"
-                    android:textColor="#ff535353"
-                    android:id="@id/tv_grade_point_max"
-                    android:padding="8dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="~"
+                    android:textColor="#ff535353"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@id/tv_grade_point_max"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:textColor="#ff535353"
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

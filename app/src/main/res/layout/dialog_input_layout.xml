@@ -1,75 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
+
     <LinearLayout
+        android:id="@id/dialoginputlayoutLinearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:id="@id/dialoginputlayoutLinearLayout1"
         android:paddingLeft="20.0dip"
         android:paddingTop="15.0dip"
-        android:paddingBottom="5.0dip"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:paddingBottom="5.0dip">
+
         <ImageView
             android:layout_width="30.0dip"
             android:layout_height="30.0dip"
             android:layout_marginRight="10.0dip"
-            android:src="@drawable/rename_96_blue"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/rename_96_blue" />
+
         <TextView
-            android:textSize="18.0sp"
-            android:textStyle="bold"
-            android:textColor="?colorPrimaryDark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rename file" />
+            android:text="Rename file"
+            android:textColor="?colorPrimaryDark"
+            android:textSize="18.0sp"
+            android:textStyle="bold" />
     </LinearLayout>
+
     <com.google.android.material.textfield.TextInputLayout
-        android:orientation="vertical"
         android:id="@id/dialoginputlayoutLinearLayout2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:paddingLeft="20.0dip"
         android:paddingTop="10.0dip"
         android:paddingRight="20.0dip"
-        android:paddingBottom="10.0dip"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:paddingBottom="10.0dip">
+
         <EditText
-            android:textSize="18.0sp"
-            android:textColorHint="?colorPrimaryDark"
             android:id="@id/edittext_change_name"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:autofillHints=""
             android:hint="New file name"
             android:inputType="text"
-            android:autofillHints="" />
+            android:textColorHint="?colorPrimaryDark"
+            android:textSize="18.0sp" />
     </com.google.android.material.textfield.TextInputLayout>
+
     <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorPrimaryDark"
         android:gravity="right"
         android:orientation="horizontal"
-        android:background="?colorPrimaryDark"
         android:paddingTop="10.0dip"
         android:paddingRight="18.0dip"
-        android:paddingBottom="10.0dip"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:paddingBottom="10.0dip">
+
         <TextView
-            android:textStyle="bold"
-            android:textColor="#ffffffff"
             android:id="@id/text_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="15.0dip"
-            android:text="@string/common_word_cancel" />
-        <TextView
-            android:textStyle="bold"
+            android:text="@string/common_word_cancel"
             android:textColor="#ffffffff"
+            android:textStyle="bold" />
+
+        <TextView
             android:id="@id/text_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15.0dip"
-            android:text="@string/common_word_save" />
+            android:text="@string/common_word_save"
+            android:textColor="#ffffffff"
+            android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>

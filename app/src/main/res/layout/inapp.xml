@@ -1,15 +1,15 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout android:id="@id/layout_coordinator"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@id/layout_coordinator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:id="@id/appbar_layout"
-        android:background="#ff000000"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#ff000000"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@id/collapsing_toolbar"
@@ -33,9 +33,9 @@
                     android:layout_height="match_parent">
 
                     <androidx.viewpager.widget.ViewPager
-                        android:layout_gravity="center_horizontal"
                         android:layout_width="200dp"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal" />
                 </com.besome.sketch.lib.ui.PagerContainer>
 
                 <com.google.android.material.tabs.TabLayout
@@ -71,19 +71,19 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
-        android:orientation="vertical"
-        android:background="#fff6f6f6"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#fff6f6f6"
+        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <Button
-            android:theme="@style/AppTheme.Button.Blue"
-            android:textColor="#ffffffff"
-            android:layout_gravity="center_horizontal"
             android:id="@id/btn_use_promotion"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#ffffffff"
+            android:theme="@style/AppTheme.Button.Blue" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@id/list"

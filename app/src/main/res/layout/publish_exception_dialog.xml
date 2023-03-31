@@ -1,36 +1,36 @@
-<LinearLayout android:id="@id/layout_container"
-    android:background="#66000000"
-    android:paddingLeft="24dp"
-    android:paddingRight="24dp"
-    android:clipChildren="false"
-    android:clipToPadding="false"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/layout_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="#66000000"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp">
 
     <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:clipChildren="false"
-        android:clipToPadding="false"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:clipToPadding="false">
 
         <LinearLayout
-            android:gravity="center"
-            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:clipChildren="false"
             android:clipToPadding="false"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <LinearLayout
+                android:id="@id/layout_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffffff"
                 android:gravity="center|left"
                 android:orientation="horizontal"
-                android:id="@id/layout_title"
-                android:background="#ffffffff"
-                android:padding="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:padding="16dp">
 
                 <ImageView
                     android:id="@id/img_icon"
@@ -39,116 +39,116 @@
                     android:layout_marginRight="8dp" />
 
                 <TextView
-                    android:textStyle="bold"
-                    android:textColor="@color/color_primary"
                     android:id="@id/tv_title"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_primary"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_gravity="center_horizontal"
-                android:orientation="vertical"
-                android:background="#ffffffff"
-                android:padding="16dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:background="#ffffffff"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:id="@id/layout_code"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
-                        android:textSize="14sp"
-                        android:textColor="@color/color_primary"
                         android:id="@id/tv_title_code"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp" />
+                        android:layout_marginBottom="8dp"
+                        android:textColor="@color/color_primary"
+                        android:textSize="14sp" />
 
                     <TextView
-                        android:textSize="14sp"
-                        android:textColor="#ff4d4d4d"
                         android:id="@id/tv_code"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textColor="#ff4d4d4d"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:id="@id/layout_reason"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
-                        android:textSize="14sp"
-                        android:textColor="@color/color_primary"
                         android:id="@id/tv_title_reason"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp" />
+                        android:layout_marginBottom="8dp"
+                        android:textColor="@color/color_primary"
+                        android:textSize="14sp" />
 
                     <TextView
-                        android:textSize="14sp"
-                        android:textColor="#ff4d4d4d"
                         android:id="@id/tv_reason"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textColor="#ff4d4d4d"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:id="@id/layout_msg"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
-                        android:textSize="14sp"
-                        android:textColor="@color/color_primary"
                         android:id="@id/tv_title_msg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp" />
+                        android:layout_marginBottom="8dp"
+                        android:textColor="@color/color_primary"
+                        android:textSize="14sp" />
 
                     <TextView
-                        android:textSize="14sp"
-                        android:textColor="#ff4d4d4d"
                         android:id="@id/tv_msg"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textColor="#ff4d4d4d"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <WebView
                     android:id="@id/wv_full_json"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@id/layout_read_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffffff"
                 android:gravity="end|center"
                 android:orientation="horizontal"
-                android:id="@id/layout_read_detail"
-                android:background="#ffffffff"
-                android:padding="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:padding="8dp">
 
                 <TextView
-                    android:textSize="14sp"
-                    android:textColor="@color/color_primary"
                     android:id="@id/tv_read_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp" />
+                    android:layout_marginRight="4dp"
+                    android:textColor="@color/color_primary"
+                    android:textSize="14sp" />
 
                 <ImageView
                     android:id="@id/img_read_detail"
@@ -158,38 +158,38 @@
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="vertical"
                 android:id="@id/layout_btn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/scolor_blue_01"
                     android:gravity="center|right"
                     android:orientation="horizontal"
-                    android:background="@color/scolor_blue_01"
-                    android:padding="8dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:padding="8dp">
 
                     <TextView
-                        android:textColor="#ffffffff"
-                        android:gravity="center"
                         android:id="@id/btn_cancel"
-                        android:background="?selectableItemBackground"
-                        android:padding="4dp"
-                        android:focusable="true"
-                        android:clickable="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="8dp" />
+                        android:layout_marginRight="8dp"
+                        android:background="?selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:padding="4dp"
+                        android:textColor="#ffffffff" />
 
                     <TextView
-                        android:textColor="#ffffffff"
                         android:id="@id/btn_ok"
-                        android:padding="4dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="8dp" />
+                        android:layout_marginRight="8dp"
+                        android:padding="4dp"
+                        android:textColor="#ffffffff" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

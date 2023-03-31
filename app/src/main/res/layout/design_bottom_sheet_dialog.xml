@@ -1,29 +1,29 @@
-<FrameLayout android:id="@id/container"
-    android:fitsSystemWindows="true"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:fitsSystemWindows="true">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@id/coordinator"
-        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
         <View
             android:id="@id/touch_outside"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:soundEffectsEnabled="false"
-            android:importantForAccessibility="no" />
+            android:importantForAccessibility="no"
+            android:soundEffectsEnabled="false" />
 
         <FrameLayout
-            android:layout_gravity="center|top"
             android:id="@id/design_bottom_sheet"
+            style="?bottomSheetStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_behavior="@string/bottom_sheet_behavior"
-            style="?bottomSheetStyle" />
+            android:layout_gravity="center|top"
+            app:layout_behavior="@string/bottom_sheet_behavior" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </FrameLayout>

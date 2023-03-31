@@ -1,11 +1,11 @@
-<LinearLayout android:gravity="center|top"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@id/loading_3balls"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="60dp"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:gravity="center|top"
+    android:orientation="vertical">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@id/animation_view"

@@ -1,23 +1,23 @@
-<LinearLayout android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:id="@id/layout_ads"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <LinearLayout
-        android:gravity="center"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp">
+        android:orientation="vertical"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="96dp"
@@ -25,15 +25,15 @@
             android:src="@drawable/sketchware_welcome" />
 
         <TextView
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/color_primary_dark"
-            android:gravity="center"
-            android:layout_gravity="center_vertical"
             android:id="@id/tv_agree_consent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp" />
+            android:layout_gravity="center_vertical"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:textColor="@color/color_primary_dark"
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <ScrollView
@@ -42,19 +42,19 @@
         android:layout_weight="1.0">
 
         <LinearLayout
-            android:orientation="vertical"
             android:id="@id/layout_contents"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
     </ScrollView>
 
     <Button
-        android:theme="@style/AppTheme.Button.Blue"
-        android:textSize="@dimen/text_size_button_material"
-        android:textColor="#ffffffff"
-        android:gravity="center"
         android:id="@id/btn_all_accept"
-        android:background="#ffdddddd"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="#ffdddddd"
+        android:gravity="center"
+        android:textColor="#ffffffff"
+        android:textSize="@dimen/text_size_button_material"
+        android:theme="@style/AppTheme.Button.Blue" />
 </LinearLayout>

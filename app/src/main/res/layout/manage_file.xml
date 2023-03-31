@@ -30,12 +30,12 @@
             android:layout_margin="15dp"
             android:backgroundTint="#ffffffff"
             android:clickable="true"
+            android:focusable="true"
             android:src="@drawable/plus_96"
             app:borderWidth="0dp"
             app:elevation="6dp"
             app:fabSize="normal"
-            app:rippleColor="#ff0000ff"
-            android:focusable="true" />
+            app:rippleColor="#ff0000ff" />
 
         <TextView
             android:id="@+id/text_info"

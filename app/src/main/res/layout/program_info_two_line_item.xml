@@ -1,35 +1,35 @@
-<RelativeLayout android:id="@id/layout_item"
-    android:background="?selectableItemBackground"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/layout_item"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="?selectableItemBackground">
 
     <TextView
-        android:textSize="14sp"
-        android:textColor="#ff757575"
-        android:gravity="start"
         android:id="@id/tv_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:gravity="start"
+        android:textColor="#ff757575"
+        android:textSize="14sp" />
 
     <TextView
-        android:textSize="12sp"
-        android:textColor="#ffcccccc"
-        android:gravity="start"
         android:id="@id/tv_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/tv_name"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="4dp"
-        android:layout_below="@id/tv_name" />
+        android:gravity="start"
+        android:textColor="#ffcccccc"
+        android:textSize="12sp" />
 
     <View
-        android:background="#ffc7c7c7"
         android:layout_width="match_parent"
         android:layout_height="0.5dip"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:background="#ffc7c7c7" />
 </RelativeLayout>

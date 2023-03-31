@@ -164,9 +164,9 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:baselineAligned="false"
                         android:gravity="center|left"
-                        android:orientation="horizontal"
-                        android:baselineAligned="false">
+                        android:orientation="horizontal">
 
                         <LinearLayout
                             android:id="@+id/reset"

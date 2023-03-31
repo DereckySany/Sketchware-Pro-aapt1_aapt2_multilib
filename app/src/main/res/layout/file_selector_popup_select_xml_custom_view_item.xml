@@ -1,28 +1,28 @@
-<LinearLayout android:orientation="vertical"
-    android:background="@drawable/selector_toggle_list_view"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="@drawable/selector_toggle_list_view"
+    android:orientation="vertical">
 
     <TextView
-        android:textSize="16sp"
-        android:textColor="#ff404040"
         android:id="@id/tv_filename"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp" />
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
+        android:textColor="#ff404040"
+        android:textSize="16sp" />
 
     <ImageView
         android:id="@id/img_add"
-        android:visibility="gone"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
-        android:src="@drawable/add_96_blue"
+        android:contentDescription="@null"
         android:scaleType="center"
-        android:contentDescription="@null" />
+        android:src="@drawable/add_96_blue"
+        android:visibility="gone" />
 </LinearLayout>

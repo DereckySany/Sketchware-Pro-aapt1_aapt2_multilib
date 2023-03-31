@@ -1,17 +1,17 @@
-<LinearLayout android:gravity="center"
-    android:orientation="horizontal"
-    android:background="@drawable/bg_outline"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginRight="1dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="@drawable/bg_outline"
+    android:gravity="center"
+    android:orientation="horizontal">
 
     <LinearLayout
-        android:gravity="center"
-        android:orientation="vertical"
-        android:background="@color/scolor_bg_01"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/scolor_bg_01"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -22,29 +22,29 @@
                 android:id="@id/img_reward_icon"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                android:src="@drawable/star_line_96"
+                android:layout_centerInParent="true"
                 android:scaleType="centerCrop"
-                android:layout_centerInParent="true" />
+                android:src="@drawable/star_line_96" />
 
             <TextView
-                android:textSize="16sp"
-                android:textColor="#ffffffff"
                 android:id="@id/tv_discount"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:textColor="#ffffffff"
+                android:textSize="16sp" />
         </RelativeLayout>
 
         <TextView
-            android:textSize="14sp"
-            android:textColor="#ffffffff"
             android:id="@id/tv_reward_title"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp" />
+            android:layout_marginBottom="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:textColor="#ffffffff"
+            android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>

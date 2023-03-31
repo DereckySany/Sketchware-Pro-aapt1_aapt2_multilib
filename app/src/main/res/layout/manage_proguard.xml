@@ -28,7 +28,7 @@
                 android:textColor="#ffe53935"
                 android:textSize="16sp" />
 
-<!-- R8 code shrinker my beloved, I'll come to your house if your remove it -->
+            <!-- R8 code shrinker my beloved, I'll come to your house if your remove it -->
             <Switch
                 android:id="@+id/r8_enabled"
                 android:layout_width="match_parent"

@@ -1,8 +1,8 @@
-<LinearLayout android:orientation="vertical"
-    android:background="#fff6f6f6"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="#fff6f6f6"
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
 
@@ -14,27 +14,27 @@
         android:layout_weight="1.0">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <include layout="@layout/no_connection" />
 
             <LinearLayout
-                android:orientation="vertical"
                 android:id="@id/layout_ads"
-                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone" />
 
             <TextView
-                android:textSize="14sp"
-                android:gravity="center"
                 android:id="@id/tv_nodata"
-                android:background="#fff6f6f6"
-                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:background="#fff6f6f6"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@id/list"

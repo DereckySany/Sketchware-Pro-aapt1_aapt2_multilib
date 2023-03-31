@@ -1,11 +1,11 @@
-<LinearLayout android:gravity="center"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@id/container"
-    android:background="?selectableItemBackground"
     android:layout_width="wrap_content"
     android:layout_height="84dp"
+    android:background="?selectableItemBackground"
+    android:gravity="center"
     android:minWidth="96dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="48dp"
@@ -21,18 +21,18 @@
             android:id="@id/img_used_event"
             android:layout_width="12dp"
             android:layout_height="12dp"
-            android:src="@drawable/ic_add_green_circle_24dp"
             android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_add_green_circle_24dp" />
     </RelativeLayout>
 
     <TextView
-        android:textSize="12sp"
-        android:textColor="#ff7d7d7d"
         android:id="@id/tv_title"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:lines="1" />
+        android:lines="1"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textColor="#ff7d7d7d"
+        android:textSize="12sp" />
 </LinearLayout>

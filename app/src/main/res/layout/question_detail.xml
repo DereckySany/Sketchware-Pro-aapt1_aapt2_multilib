@@ -1,16 +1,16 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout android:id="@id/layout_coordinator"
-    android:background="#ffffffff"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@id/layout_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="#ffffffff">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:id="@id/appbar_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@id/collapsing_toolbar"
@@ -23,13 +23,13 @@
             app:titleEnabled="true">
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:background="#ffffffff"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:background="#ffffffff"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="160dp">
+                android:paddingRight="16dp">
 
                 <ImageView
                     android:layout_width="120dp"
@@ -37,13 +37,13 @@
                     android:src="@drawable/borad_boy" />
 
                 <TextView
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/scolor_blue_01"
-                    android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="질문하면 전문가가 답변해준다" />
+                    android:gravity="center"
+                    android:text="질문하면 전문가가 답변해준다"
+                    android:textColor="@color/scolor_blue_01"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <androidx.appcompat.widget.Toolbar
@@ -61,118 +61,118 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <include layout="@layout/no_connection" />
 
             <include layout="@layout/loading_3balls" />
 
             <LinearLayout
-                android:orientation="vertical"
                 android:id="@id/qna_container"
-                android:background="#ffffffff"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:animateLayoutChanges="true">
+                android:animateLayoutChanges="true"
+                android:background="#ffffffff"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:background="@color/scolor_bg_02"
-                    android:padding="8dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:animateLayoutChanges="true">
+                    android:animateLayoutChanges="true"
+                    android:background="@color/scolor_bg_02"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
 
                     <ImageView
-                        android:layout_gravity="center"
-                        android:padding="2dp"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
+                        android:layout_gravity="center"
+                        android:padding="2dp"
                         android:src="@drawable/qa_q" />
 
                     <TextView
-                        android:gravity="center_vertical"
                         android:id="@id/tv_question"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp" />
+                        android:layout_marginLeft="8dp"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:animateLayoutChanges="true">
+                    android:animateLayoutChanges="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <LinearLayout
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical"
                         android:id="@id/layout_vote"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
 
                         <ImageView
                             android:id="@id/img_upvote"
-                            android:background="?selectableItemBackground"
-                            android:padding="8dp"
                             android:layout_width="56dp"
                             android:layout_height="56dp"
+                            android:background="?selectableItemBackground"
+                            android:padding="8dp"
                             android:src="@drawable/selector_ic_expand_less_24" />
 
                         <TextView
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/scolor_black_02"
-                            android:gravity="center"
                             android:id="@id/tv_vote_cnt"
-                            android:background="#fff6f6f6"
                             android:layout_width="32dp"
-                            android:layout_height="32dp" />
+                            android:layout_height="32dp"
+                            android:background="#fff6f6f6"
+                            android:gravity="center"
+                            android:textColor="@color/scolor_black_02"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
 
                         <ImageView
                             android:id="@id/img_downvote"
-                            android:background="?selectableItemBackground"
-                            android:padding="8dp"
                             android:layout_width="56dp"
                             android:layout_height="56dp"
+                            android:background="?selectableItemBackground"
+                            android:padding="8dp"
                             android:src="@drawable/selector_ic_expand_more_24" />
                     </LinearLayout>
 
                     <TextView
-                        android:textSize="13sp"
                         android:id="@id/tv_question_desc"
-                        android:background="@drawable/bg_round_light_grey"
-                        android:padding="8dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="2dp" />
+                        android:layout_marginLeft="2dp"
+                        android:background="@drawable/bg_round_light_grey"
+                        android:padding="8dp"
+                        android:textSize="13sp" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="8dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:animateLayoutChanges="true">
+                    android:animateLayoutChanges="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
 
                     <ImageView
-                        android:layout_gravity="center"
-                        android:padding="2dp"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
+                        android:layout_gravity="center"
+                        android:padding="2dp"
                         android:src="@drawable/qa_a" />
 
                     <com.besome.sketch.lib.ui.MiddleLineHeader
                         android:id="@id/answer_header"
-                        android:paddingRight="4dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:paddingRight="4dp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

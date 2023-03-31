@@ -1,4 +1,6 @@
-<androidx.cardview.widget.CardView android:id="@id/cv_item"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@id/cv_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="16dp"
@@ -6,29 +8,27 @@
     android:layout_marginRight="16dp"
     android:layout_marginBottom="@dimen/card_view_margin"
     android:elevation="8dp"
-    app:cardBackgroundColor="#ffffffff"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    app:cardBackgroundColor="#ffffffff">
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center|left"
         android:orientation="horizontal"
-        android:padding="12dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:padding="12dp">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1.0">
+            android:layout_weight="1.0"
+            android:orientation="vertical">
 
             <TextView
-                android:textSize="16sp"
-                android:textColor="#ff404040"
                 android:id="@id/tv_block_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="#ff404040"
+                android:textSize="16sp" />
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
@@ -44,10 +44,10 @@
 
         <ImageView
             android:id="@id/img_selected"
-            android:visibility="invisible"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginLeft="12dp"
-            android:src="@drawable/ic_ok_48dp" />
+            android:src="@drawable/ic_ok_48dp"
+            android:visibility="invisible" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

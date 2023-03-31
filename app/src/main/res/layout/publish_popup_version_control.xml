@@ -1,29 +1,29 @@
-<LinearLayout android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_gravity="center"
-        android:orientation="vertical"
-        android:background="@drawable/bg_outline"
-        android:padding="4dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_outline"
+        android:orientation="vertical"
+        android:padding="4dp">
 
         <TextView
-            android:textSize="12dp"
-            android:textColor="@color/scolor_blue_01"
-            android:layout_gravity="center_horizontal"
             android:id="@id/tv_code"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/scolor_blue_01"
+            android:textSize="12dp" />
 
         <NumberPicker
-            android:theme="@style/NumberPickerText"
             android:id="@id/version_code"
-            android:focusable="false"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:theme="@style/NumberPickerText" />
     </LinearLayout>
 </LinearLayout>

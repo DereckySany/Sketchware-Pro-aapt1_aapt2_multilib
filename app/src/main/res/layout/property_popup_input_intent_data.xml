@@ -1,22 +1,22 @@
-<ScrollView android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <LinearLayout android:gravity="center|left"
-        android:orientation="vertical"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center|left"
+        android:orientation="vertical">
 
         <TextView
-            android:textSize="14sp"
             android:id="@id/tv_desc_intent_usage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:textSize="14sp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@id/ti_input"
@@ -27,13 +27,13 @@
             android:layout_marginRight="8dp">
 
             <EditText
-                android:textSize="16sp"
                 android:id="@id/ed_input"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:lines="1"
+                android:imeOptions="actionDone"
                 android:inputType="text"
-                android:imeOptions="actionDone" />
+                android:lines="1"
+                android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 </ScrollView>

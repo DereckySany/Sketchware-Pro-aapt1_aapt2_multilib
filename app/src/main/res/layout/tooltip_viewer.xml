@@ -1,34 +1,34 @@
-<LinearLayout android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
 
     <LinearLayout
-        android:gravity="center"
-        android:layout_gravity="bottom"
-        android:orientation="vertical"
         android:id="@id/tooltip_container"
-        android:background="#ffe74c3c"
-        android:padding="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#ffe74c3c"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <TextView
-            android:textSize="20sp"
-            android:textColor="#ffffffff"
-            android:gravity="center"
             android:id="@id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Default Title" />
+            android:gravity="center"
+            android:text="Default Title"
+            android:textColor="#ffffffff"
+            android:textSize="20sp" />
 
         <TextView
-            android:textSize="14sp"
-            android:textColor="#ffffffff"
-            android:gravity="center"
             android:id="@id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Default Description" />
+            android:gravity="center"
+            android:text="Default Description"
+            android:textColor="#ffffffff"
+            android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>

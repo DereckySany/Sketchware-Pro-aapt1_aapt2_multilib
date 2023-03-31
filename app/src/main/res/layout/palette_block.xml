@@ -1,36 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:orientation="horizontal"
-    android:background="@color/transparent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="@color/transparent"
+    android:orientation="horizontal">
+
     <com.besome.sketch.lib.ui.CustomScrollView
         android:id="@id/scv"
         android:layout_width="0.0dip"
         android:layout_height="fill_parent"
         android:layout_weight="1.0">
+
         <com.besome.sketch.lib.ui.CustomHorizontalScrollView
             android:id="@id/hscv"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
+
             <LinearLayout
-                android:orientation="vertical"
                 android:id="@id/block_builder"
-                android:padding="8.0dip"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8.0dip" />
         </com.besome.sketch.lib.ui.CustomHorizontalScrollView>
     </com.besome.sketch.lib.ui.CustomScrollView>
+
     <View
-        android:layout_gravity="center"
         android:id="@id/divider"
-        android:background="#10000000"
         android:layout_width="1.0dip"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:background="#10000000" />
+
     <ScrollView
         android:layout_width="120.0dip"
         android:layout_height="fill_parent">
+
         <com.besome.sketch.editor.logic.PaletteSelector
             android:id="@id/palette_selector"
             android:layout_width="wrap_content"

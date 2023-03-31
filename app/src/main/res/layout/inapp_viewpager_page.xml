@@ -1,10 +1,10 @@
-<LinearLayout android:gravity="center"
-    android:orientation="vertical"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
 
     <ImageView
         android:id="@id/page_icon"
@@ -13,21 +13,21 @@
         android:scaleType="fitCenter" />
 
     <TextView
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="#ffffffff"
-        android:gravity="center"
         android:id="@id/page_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:textColor="#ffffffff"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <TextView
-        android:textColor="#ffdddddd"
-        android:gravity="center"
         android:id="@id/page_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:maxLines="2" />
+        android:gravity="center"
+        android:maxLines="2"
+        android:textColor="#ffdddddd" />
 </LinearLayout>

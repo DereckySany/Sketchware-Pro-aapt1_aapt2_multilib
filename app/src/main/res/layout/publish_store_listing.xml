@@ -1,30 +1,30 @@
-<LinearLayout android:orientation="vertical"
-    android:padding="16dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
 
         <ImageView
-            android:layout_gravity="center_vertical"
             android:layout_width="28dp"
             android:layout_height="28dp"
+            android:layout_gravity="center_vertical"
             android:layout_marginRight="8dp"
             android:src="@drawable/ic_title" />
 
         <TextView
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="#ff4d4d4d"
-            android:layout_gravity="center_vertical"
             android:id="@id/tv_title_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textColor="#ff4d4d4d"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <View
             android:layout_width="0dp"
@@ -32,40 +32,40 @@
             android:layout_weight="1.0" />
 
         <TextView
-            android:textSize="12sp"
-            android:textColor="#ff4d4d4d"
-            android:layout_gravity="bottom"
             android:id="@id/tv_name_limit"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:textColor="#ff4d4d4d"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginBottom="8dp"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:gravity="center">
 
         <EditText
-            android:textSize="14sp"
-            android:gravity="center_vertical"
             android:id="@id/ed_input_name"
-            android:background="@drawable/bg_round_light_grey"
-            android:padding="8dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/bg_round_light_grey"
+            android:gravity="center_vertical"
+            android:imeOptions="actionDone"
             android:inputType="textMultiLine"
-            android:imeOptions="actionDone" />
+            android:padding="8dp"
+            android:textSize="14sp" />
     </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <ImageView
             android:layout_width="28dp"
@@ -74,12 +74,12 @@
             android:src="@drawable/ic_short_desc" />
 
         <TextView
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="#ff4d4d4d"
             android:id="@id/tv_title_short_desc"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="#ff4d4d4d"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <View
             android:layout_width="0dp"
@@ -87,41 +87,41 @@
             android:layout_weight="1.0" />
 
         <TextView
-            android:textSize="12sp"
-            android:textColor="#ff4d4d4d"
-            android:layout_gravity="bottom"
             android:id="@id/tv_short_desc_limit"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:textColor="#ff4d4d4d"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_marginBottom="8dp"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:gravity="center">
 
         <EditText
-            android:textSize="14sp"
-            android:gravity="top"
             android:id="@id/ed_input_short_desc"
-            android:background="@drawable/bg_round_light_grey"
-            android:padding="8dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:minHeight="40dp"
+            android:background="@drawable/bg_round_light_grey"
+            android:gravity="top"
+            android:imeOptions="actionDone"
             android:inputType="textMultiLine"
-            android:imeOptions="actionDone" />
+            android:minHeight="40dp"
+            android:padding="8dp"
+            android:textSize="14sp" />
     </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <ImageView
             android:layout_width="28dp"
@@ -130,12 +130,12 @@
             android:src="@drawable/ic_full_desc" />
 
         <TextView
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="#ff4d4d4d"
             android:id="@id/tv_title_full_desc"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="#ff4d4d4d"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <View
             android:layout_width="0dp"
@@ -143,41 +143,41 @@
             android:layout_weight="1.0" />
 
         <TextView
-            android:textSize="12sp"
-            android:textColor="#ff4d4d4d"
-            android:layout_gravity="bottom"
             android:id="@id/tv_full_desc_limit"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:textColor="#ff4d4d4d"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_marginBottom="8dp"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:gravity="center">
 
         <EditText
-            android:textSize="14sp"
-            android:gravity="top"
             android:id="@id/ed_input_full_desc"
-            android:background="@drawable/bg_round_light_grey"
-            android:padding="8dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:minHeight="40dp"
+            android:background="@drawable/bg_round_light_grey"
+            android:gravity="top"
+            android:imeOptions="actionDone"
             android:inputType="textMultiLine"
-            android:imeOptions="actionDone" />
+            android:minHeight="40dp"
+            android:padding="8dp"
+            android:textSize="14sp" />
     </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <ImageView
             android:layout_width="28dp"
@@ -186,12 +186,12 @@
             android:src="@drawable/ic_youtube" />
 
         <TextView
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="#ff4d4d4d"
             android:id="@id/tv_title_video"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="#ff4d4d4d"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <View
             android:layout_width="0dp"
@@ -206,13 +206,13 @@
     </LinearLayout>
 
     <EditText
-        android:textSize="14sp"
-        android:gravity="center_vertical"
         android:id="@id/ed_input_video"
-        android:background="@drawable/bg_round_light_grey"
-        android:padding="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_round_light_grey"
+        android:gravity="center_vertical"
+        android:imeOptions="actionDone"
         android:inputType="textMultiLine"
-        android:imeOptions="actionDone" />
+        android:padding="8dp"
+        android:textSize="14sp" />
 </LinearLayout>

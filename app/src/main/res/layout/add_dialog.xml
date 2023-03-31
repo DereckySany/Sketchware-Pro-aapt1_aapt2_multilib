@@ -1,67 +1,67 @@
-<LinearLayout android:orientation="horizontal"
-    android:padding="8dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="horizontal"
+    android:padding="8dp">
 
     <LinearLayout
-        android:gravity="center"
-        android:orientation="vertical"
         android:id="@id/cv_create"
-        android:padding="8dp"
-        android:clickable="true"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1.0">
+        android:layout_weight="1.0"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="8dp">
 
         <ImageView
             android:layout_width="65dp"
             android:layout_height="65dp"
-            android:src="@drawable/plus"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/plus" />
 
         <TextView
-            android:textSize="14sp"
-            android:typeface="serif"
-            android:textColor="#ff000000"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Create New File" />
+            android:gravity="center"
+            android:text="Create New File"
+            android:textColor="#ff000000"
+            android:textSize="14sp"
+            android:typeface="serif" />
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
-        android:background="#ffa8a8a8"
         android:layout_width="2dp"
         android:layout_height="match_parent"
-        android:alpha="0.5" />
+        android:alpha="0.5"
+        android:background="#ffa8a8a8"
+        android:orientation="vertical" />
 
     <LinearLayout
-        android:gravity="center"
-        android:orientation="vertical"
         android:id="@id/cv_load"
-        android:padding="8dp"
-        android:clickable="true"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1.0">
+        android:layout_weight="1.0"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="8dp">
 
         <ImageView
             android:layout_width="65dp"
             android:layout_height="65dp"
-            android:src="@drawable/folder"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/folder" />
 
         <TextView
-            android:textSize="14sp"
-            android:typeface="serif"
-            android:textColor="#ff000000"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Add From Storage" />
+            android:gravity="center"
+            android:text="Add From Storage"
+            android:textColor="#ff000000"
+            android:textSize="14sp"
+            android:typeface="serif" />
     </LinearLayout>
 </LinearLayout>

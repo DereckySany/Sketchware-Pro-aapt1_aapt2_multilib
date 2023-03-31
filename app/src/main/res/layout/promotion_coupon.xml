@@ -1,15 +1,15 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout android:id="@id/layout_coordinator"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@id/layout_coordinator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:id="@id/appbar_layout"
-        android:background="@color/scolor_blue_01"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/scolor_blue_01"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@id/collapsing_toolbar"
@@ -23,25 +23,25 @@
             app:titleEnabled="true">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="100dp">
+                android:layout_height="100dp"
+                android:orientation="vertical">
 
                 <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:paddingRight="16dp">
 
                     <LinearLayout
-                        android:gravity="center"
-                        android:orientation="horizontal"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginRight="2dp"
-                        android:layout_weight="4.0">
+                        android:layout_weight="4.0"
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -50,71 +50,71 @@
                             android:src="@drawable/alarm_clock_96" />
 
                         <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4dp">
+                            android:layout_marginLeft="4dp"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
                             <TextView
-                                android:textSize="12sp"
-                                android:textColor="#ffffffff"
-                                android:gravity="left"
                                 android:id="@id/tv_remaining_day"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0 days" />
+                                android:gravity="left"
+                                android:text="0 days"
+                                android:textColor="#ffffffff"
+                                android:textSize="12sp" />
 
                             <TextView
-                                android:textSize="20sp"
-                                android:textStyle="bold"
-                                android:textColor="#ffffffff"
-                                android:gravity="center"
                                 android:id="@id/tv_remaining_time"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:textColor="#ffffffff"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="6.0">
+                        android:layout_weight="6.0"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
                         <View
-                            android:background="#ffffffff"
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
                             android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp" />
+                            android:layout_marginBottom="8dp"
+                            android:background="#ffffffff" />
 
                         <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1.0">
+                            android:layout_weight="1.0"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
                             <TextView
-                                android:textSize="12sp"
-                                android:textColor="#ffffffff"
-                                android:gravity="center"
                                 android:id="@id/tv_my_tickets"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true" />
+                                android:layout_alignParentBottom="true"
+                                android:gravity="center"
+                                android:textColor="#ffffffff"
+                                android:textSize="12sp" />
 
                             <TextView
-                                android:textSize="24sp"
-                                android:textStyle="bold"
-                                android:textColor="#ffffffff"
-                                android:gravity="center"
                                 android:id="@id/tv_join_cnt"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="-" />
+                                android:gravity="center"
+                                android:text="-"
+                                android:textColor="#ffffffff"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
                         </LinearLayout>
 
                         <ImageView
@@ -135,10 +135,10 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
-        android:orientation="vertical"
-        android:background="#ffffffff"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#ffffffff"
+        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.cardview.widget.CardView
@@ -148,19 +148,19 @@
             app:cardElevation="4dp">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingLeft="4dp"
                     android:paddingTop="2dp"
                     android:paddingRight="4dp"
-                    android:paddingBottom="2dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:paddingBottom="2dp">
 
                     <ImageView
                         android:layout_width="32dp"
@@ -168,46 +168,46 @@
                         android:src="@drawable/clover_96_green" />
 
                     <TextView
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/scolor_red_02"
-                        android:layout_gravity="center_vertical"
                         android:id="@id/tv_title_choose_ticket"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp" />
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="8dp"
+                        android:textColor="@color/scolor_red_02"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@id/list_tickets"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
                     android:splitMotionEvents="false" />
 
                 <Button
-                    android:textSize="12sp"
-                    android:textColor="#ff7d7d7d"
-                    android:layout_gravity="center_horizontal"
                     android:id="@id/btn_show_result"
-                    android:background="@drawable/button_round"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:layout_margin="4dp"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/button_round"
+                    android:textColor="#ff7d7d7d"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@id/list_ads"
-            android:paddingLeft="2dp"
-            android:paddingRight="2dp"
-            android:scrollbars="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="4dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:scrollbars="vertical"
             android:splitMotionEvents="false" />
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

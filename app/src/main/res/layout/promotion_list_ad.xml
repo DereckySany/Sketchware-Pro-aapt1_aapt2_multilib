@@ -1,95 +1,95 @@
-<LinearLayout android:orientation="vertical"
-    android:background="@drawable/bg_outline"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="280dp"
     android:layout_height="wrap_content"
     android:layout_marginLeft="4dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="@drawable/bg_outline"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="vertical"
         android:id="@id/ad_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="20dp">
+            android:layout_height="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:gravity="center|right"
-                android:orientation="horizontal"
                 android:id="@id/ad_choice"
                 android:layout_width="20dp"
-                android:layout_height="20dp" />
+                android:layout_height="20dp"
+                android:gravity="center|right"
+                android:orientation="horizontal" />
 
             <TextView
-                android:textSize="10sp"
-                android:textColor="#ff7d7d7d"
                 android:id="@id/tv_sponsored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp" />
+                android:layout_marginLeft="4dp"
+                android:textColor="#ff7d7d7d"
+                android:textSize="10sp" />
         </LinearLayout>
 
         <RelativeLayout
-            android:gravity="left"
-            android:orientation="horizontal"
-            android:padding="4dp"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginBottom="4dp">
+            android:layout_marginBottom="4dp"
+            android:gravity="left"
+            android:orientation="horizontal"
+            android:padding="4dp">
 
             <ImageView
                 android:id="@id/ad_icon"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:scaleType="fitStart"
-                android:layout_centerVertical="true" />
+                android:layout_centerVertical="true"
+                android:scaleType="fitStart" />
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true">
+                android:layout_centerVertical="true"
+                android:orientation="vertical">
 
                 <TextView
-                    android:textSize="13sp"
-                    android:textColor="#ff555555"
                     android:id="@id/ad_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="60dp"
-                    android:layout_marginRight="8dp" />
+                    android:layout_marginRight="8dp"
+                    android:textColor="#ff555555"
+                    android:textSize="13sp" />
 
                 <TextView
-                    android:textSize="13sp"
-                    android:textColor="#ff555555"
                     android:id="@id/ad_social"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/ad_title"
                     android:layout_marginLeft="60dp"
                     android:layout_marginRight="8dp"
                     android:maxLines="2"
-                    android:layout_below="@id/ad_title" />
+                    android:textColor="#ff555555"
+                    android:textSize="13sp" />
             </LinearLayout>
         </RelativeLayout>
 
         <com.facebook.ads.MediaView
-            android:gravity="center"
             android:id="@id/ad_bg"
             android:layout_width="match_parent"
-            android:layout_height="120dp" />
+            android:layout_height="120dp"
+            android:gravity="center" />
 
         <Button
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="@color/color_btn_ltorange_normal"
             android:id="@id/ad_btn"
-            android:background="@drawable/bg_outline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lines="1" />
+            android:background="@drawable/bg_outline"
+            android:lines="1"
+            android:textColor="@color/color_btn_ltorange_normal"
+            android:textSize="14sp"
+            android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>

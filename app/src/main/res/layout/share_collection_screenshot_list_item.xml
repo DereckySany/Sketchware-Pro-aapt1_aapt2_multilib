@@ -1,23 +1,23 @@
-<RelativeLayout android:background="#fff5f5f5"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="188dp"
     android:layout_margin="4dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="#fff5f5f5">
 
     <ImageView
-        android:layout_gravity="center"
         android:id="@id/img_screen"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center" />
 
     <ImageView
         android:id="@id/img_delete"
-        android:padding="4dp"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:layout_marginBottom="4dp"
-        android:src="@drawable/icon_delete"
-        android:scaleType="fitXY"
         android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="4dp"
+        android:padding="4dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/icon_delete" />
 </RelativeLayout>

@@ -1,15 +1,15 @@
-<LinearLayout android:gravity="center"
-    android:orientation="vertical"
-    android:background="@color/color_primary"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="@color/color_primary"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.0">
+        android:layout_weight="1.0"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -17,29 +17,29 @@
             android:layout_weight="1.0">
 
             <ImageView
-                android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="240dp"
-                android:src="@drawable/thankyou"
-                android:scaleType="centerInside" />
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/thankyou" />
         </LinearLayout>
 
         <TextView
-            android:textSize="20sp"
-            android:textColor="#ffffffff"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="36dp"
-            android:text="Happy Coding!" />
+            android:gravity="center"
+            android:text="Happy Coding!"
+            android:textColor="#ffffffff"
+            android:textSize="20sp" />
     </LinearLayout>
 
     <TextView
-        android:textSize="12sp"
-        android:textColor="#ffffffff"
-        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:text="Sketchware team" />
+        android:gravity="center"
+        android:text="Sketchware team"
+        android:textColor="#ffffffff"
+        android:textSize="12sp" />
 </LinearLayout>

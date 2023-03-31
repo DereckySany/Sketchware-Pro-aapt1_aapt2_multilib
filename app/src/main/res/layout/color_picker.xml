@@ -1,90 +1,99 @@
 <?xml  version="1.0" encoding="utf-8" ?>
-<LinearLayout
-    android:orientation="vertical"
-    android:background="@color/nowhite_bg"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_margin="8.0dip"
+    android:background="@color/nowhite_bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
     android:paddingTop="16.0dip"
-    android:paddingBottom="16.0dip"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:paddingBottom="16.0dip">
+
     <LinearLayout
-        android:orientation="horizontal"
-        android:paddingLeft="8.0dip"        
-        android:paddingRight="8.0dip"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="8.0dip"
+        android:paddingRight="8.0dip">
+
         <LinearLayout
-            android:layout_gravity="bottom"
-            android:orientation="horizontal"
             android:layout_width="0.0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="1.0">
+            android:layout_gravity="bottom"
+            android:layout_weight="1.0"
+            android:orientation="horizontal">
+
             <TextView
-                android:textSize="22.0sp"
-                android:textColor="#ff555555"
-                android:layout_gravity="bottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:layout_marginBottom="4.0dip"
-                android:text="\#"/>
+                android:text="\#"
+                android:textColor="#ff555555"
+                android:textSize="22.0sp" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@id/ti_custom_color"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="noExcludeDescendants">
+
                 <EditText
                     android:id="@id/et_custom_color"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:lines="1"
-                    android:maxLength="8"/>
+                    android:maxLength="8" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
+
         <TextView
-            android:textColor="#ffffffff"
-            android:gravity="center"
-            android:layout_gravity="center_vertical"
             android:id="@id/tv_add_color"
-            android:textSize="12.0sp"
-            android:background="@color/color_primary"
             android:layout_width="wrap_content"
             android:layout_height="48.0dip"
+            android:layout_gravity="center_vertical"
             android:layout_margin="2.0dip"
+            android:background="@color/color_primary"
+            android:gravity="center"
             android:paddingLeft="8.0dip"
-            android:paddingRight="8.0dip"/>
+            android:paddingRight="8.0dip"
+            android:textColor="#ffffffff"
+            android:textSize="12.0sp" />
     </LinearLayout>
+
     <TextView
-        android:layout_gravity="center_vertical"
         android:id="@id/tv_custom_color"
-        android:background="@color/nowhite_bg"
         android:layout_width="fill_parent"
         android:layout_height="48.0dip"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="8.0dip"
         android:layout_marginRight="8.0dip"
-        android:layout_marginLeft="8.0dip"/>
+        android:background="@color/nowhite_bg" />
+
     <HorizontalScrollView
         android:id="@id/layout_hsv_color"
-        android:paddingLeft="8.0dip"
-        android:paddingRight="8.0dip"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:paddingLeft="8.0dip"
+        android:paddingRight="8.0dip">
+
         <LinearLayout
-            android:orientation="horizontal"
             android:id="@id/layout_color_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8.0dip"
-            android:layout_marginBottom="8.0dip"/>
+            android:layout_marginBottom="8.0dip"
+            android:orientation="horizontal" />
     </HorizontalScrollView>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@id/color_list"
-        android:paddingBottom="16.0dip"
-        android:scrollbars="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16.0dip"
-        android:splitMotionEvents="false"/>
+        android:paddingBottom="16.0dip"
+        android:scrollbars="vertical"
+        android:splitMotionEvents="false" />
 </LinearLayout>

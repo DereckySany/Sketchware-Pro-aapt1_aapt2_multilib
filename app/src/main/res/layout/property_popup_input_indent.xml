@@ -1,20 +1,20 @@
-<LinearLayout android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_gravity="center_vertical"
-            android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.0">
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1.0"
+            android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@id/ti_all"
@@ -22,54 +22,54 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:textSize="16sp"
                     android:id="@id/et_all"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="ALL"
-                    android:inputType="numberSigned" />
+                    android:inputType="numberSigned"
+                    android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:textSize="16sp"
-                android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="dp" />
+                android:layout_gravity="center_vertical"
+                android:text="dp"
+                android:textSize="16sp" />
         </LinearLayout>
 
         <CheckBox
-            android:layout_gravity="center_vertical"
             android:id="@id/chk_pty_all"
-            android:padding="8dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginRight="16dp"
-            android:layout_weight="1.0" />
+            android:layout_weight="1.0"
+            android:padding="8dp" />
     </LinearLayout>
 
     <View
-        android:background="#ffeeeeee"
         android:layout_width="match_parent"
-        android:layout_height="1dp" />
+        android:layout_height="1dp"
+        android:background="#ffeeeeee" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:layout_weight="1.0">
+            android:layout_weight="1.0"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_gravity="center_vertical"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@id/ti_left"
@@ -77,27 +77,27 @@
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:textSize="16sp"
                         android:id="@id/et_left"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="left"
-                        android:inputType="numberSigned" />
+                        android:inputType="numberSigned"
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
-                    android:textSize="16sp"
-                    android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="dp" />
+                    android:layout_gravity="center_vertical"
+                    android:text="dp"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_gravity="center_vertical"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@id/ti_right"
@@ -105,35 +105,35 @@
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:textSize="16sp"
                         android:id="@id/et_right"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="right"
-                        android:inputType="numberSigned" />
+                        android:inputType="numberSigned"
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
-                    android:textSize="16sp"
-                    android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="dp" />
+                    android:layout_gravity="center_vertical"
+                    android:text="dp"
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:layout_weight="1.0">
+            android:layout_weight="1.0"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_gravity="center_vertical"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@id/ti_top"
@@ -141,27 +141,27 @@
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:textSize="16sp"
                         android:id="@id/et_top"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="top"
-                        android:inputType="numberSigned" />
+                        android:inputType="numberSigned"
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
-                    android:textSize="16sp"
-                    android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="dp" />
+                    android:layout_gravity="center_vertical"
+                    android:text="dp"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_gravity="center_vertical"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@id/ti_bottom"
@@ -169,20 +169,20 @@
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:textSize="16sp"
                         android:id="@id/et_bottom"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="bottom"
-                        android:inputType="numberSigned" />
+                        android:inputType="numberSigned"
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
-                    android:textSize="16sp"
-                    android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="dp" />
+                    android:layout_gravity="center_vertical"
+                    android:text="dp"
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

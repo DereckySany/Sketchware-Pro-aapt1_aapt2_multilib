@@ -1,52 +1,52 @@
-<view android:layout_gravity="center"
+<view xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@id/activity_chooser_view_content"
+    style="?activityChooserViewStyle"
+    class="androidx.appcompat.widget.ActivityChooserView$InnerLayout"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    class="androidx.appcompat.widget.ActivityChooserView$InnerLayout"
-    style="?activityChooserViewStyle"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_gravity="center">
 
     <FrameLayout
-        android:layout_gravity="center"
         android:id="@id/expand_activities_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:addStatesFromChildren="true"
         android:background="?actionBarItemBackground"
+        android:focusable="true"
         android:paddingLeft="12dp"
         android:paddingTop="2dp"
         android:paddingRight="12dp"
-        android:paddingBottom="2dp"
-        android:focusable="true"
-        android:addStatesFromChildren="true"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+        android:paddingBottom="2dp">
 
         <ImageView
-            android:layout_gravity="center"
             android:id="@id/image"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true" />
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter" />
     </FrameLayout>
 
     <FrameLayout
-        android:layout_gravity="center"
         android:id="@id/default_activity_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:addStatesFromChildren="true"
         android:background="?actionBarItemBackground"
+        android:focusable="true"
         android:paddingLeft="12dp"
         android:paddingTop="2dp"
         android:paddingRight="12dp"
-        android:paddingBottom="2dp"
-        android:focusable="true"
-        android:addStatesFromChildren="true"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+        android:paddingBottom="2dp">
 
         <ImageView
-            android:layout_gravity="center"
             android:id="@id/image"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true" />
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter" />
     </FrameLayout>
 </view>

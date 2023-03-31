@@ -1,85 +1,85 @@
-<LinearLayout android:id="@id/layout_ads"
-    android:background="#ffffffff"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/layout_ads"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/card_view_margin"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="#ffffffff">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:background="?selectableItemBackground"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:gravity="center|left"
-            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp">
+            android:layout_marginRight="8dp"
+            android:gravity="center|left"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:gravity="center|left"
-                android:orientation="horizontal"
                 android:id="@id/ad_choice"
                 android:layout_width="20dp"
-                android:layout_height="20dp" />
+                android:layout_height="20dp"
+                android:gravity="center|left"
+                android:orientation="horizontal" />
 
             <TextView
-                android:textSize="10sp"
-                android:textColor="#ff7d7d7d"
                 android:id="@id/tv_sponsored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp" />
+                android:layout_marginLeft="4dp"
+                android:textColor="#ff7d7d7d"
+                android:textSize="10sp" />
         </LinearLayout>
 
         <ImageView
-            android:layout_gravity="center_horizontal"
             android:id="@id/img"
             android:layout_width="84dp"
             android:layout_height="84dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:scaleType="fitCenter" />
 
         <TextView
-            android:textSize="13sp"
-            android:textColor="#ff555555"
             android:id="@id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:lines="2" />
+            android:lines="2"
+            android:textColor="#ff555555"
+            android:textSize="13sp" />
 
         <LinearLayout
-            android:gravity="center|left"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="4dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="4dp">
+            android:layout_marginBottom="4dp"
+            android:gravity="center|left"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:src="@drawable/red_download_24"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                android:src="@drawable/red_download_24" />
 
             <TextView
-                android:textSize="12sp"
-                android:textColor="@color/scolor_black_01"
-                android:gravity="center|left"
                 android:id="@id/ad_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:lines="2" />
+                android:gravity="center|left"
+                android:lines="2"
+                android:textColor="@color/scolor_black_01"
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -1,20 +1,20 @@
-<LinearLayout android:gravity="center_vertical"
-    android:orientation="horizontal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@id/property_group_item"
-    android:background="@drawable/selector_tab_round"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
     android:layout_width="wrap_content"
     android:layout_height="32dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="@drawable/selector_tab_round"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp">
 
     <TextView
-        android:textSize="12sp"
-        android:textColor="#ffffffff"
         android:id="@id/tv_title"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:lines="1" />
+        android:lines="1"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:textColor="#ffffffff"
+        android:textSize="12sp" />
 </LinearLayout>

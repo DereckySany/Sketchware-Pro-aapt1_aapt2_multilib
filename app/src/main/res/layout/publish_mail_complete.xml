@@ -1,19 +1,19 @@
-<ScrollView android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:fillViewport="true">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:background="#ffffffff"
-            android:padding="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="#ffffffff"
+            android:orientation="vertical"
+            android:padding="16dp">
 
             <ImageView
                 android:layout_width="48dp"
@@ -21,32 +21,32 @@
                 android:src="@drawable/ic_papar_plane_48dp" />
 
             <TextView
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="#ff212121"
-                android:layout_gravity="center_vertical"
                 android:id="@id/tv_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp" />
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="16dp"
+                android:textColor="#ff212121"
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="#ff212121"
-            android:gravity="center"
             android:id="@id/tv_desc"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1.0" />
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:textColor="#ff212121"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <Button
-            android:theme="@style/AppTheme.Button.LightBlue"
-            android:textStyle="bold"
-            android:textColor="#ffffffff"
             android:id="@id/btn_ok"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="#ffffffff"
+            android:textStyle="bold"
+            android:theme="@style/AppTheme.Button.LightBlue" />
     </LinearLayout>
 </ScrollView>

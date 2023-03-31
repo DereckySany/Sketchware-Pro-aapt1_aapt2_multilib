@@ -1,20 +1,20 @@
-<ScrollView android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <RadioGroup
-            android:orientation="vertical"
             android:id="@id/rg_width_height"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:orientation="vertical">
 
             <RadioButton
                 android:id="@id/rb_matchparent"
@@ -39,37 +39,37 @@
         </RadioGroup>
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginRight="16dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"
+            android:orientation="vertical">
 
             <TextView
-                android:textSize="16sp"
                 android:id="@id/tv_matchparent"
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="match_parent" />
+                android:text="match_parent"
+                android:textSize="16sp" />
 
             <TextView
-                android:textSize="16sp"
                 android:id="@id/tv_wrapcontent"
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="wrap_content" />
+                android:text="wrap_content"
+                android:textSize="16sp" />
 
             <LinearLayout
-                android:gravity="left"
-                android:orientation="horizontal"
                 android:id="@id/direct_input"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@id/ti_input"
@@ -77,25 +77,25 @@
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:enabled="false"
-                        android:textSize="16sp"
                         android:id="@id/ed_input"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:minWidth="80dp"
-                        android:lines="1"
+                        android:enabled="false"
+                        android:imeOptions="actionDone"
                         android:inputType="numberSigned"
-                        android:imeOptions="actionDone" />
+                        android:lines="1"
+                        android:minWidth="80dp"
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
-                    android:textSize="16sp"
-                    android:gravity="top"
                     android:id="@id/tv_input_dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text=" dp" />
+                    android:gravity="top"
+                    android:text=" dp"
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

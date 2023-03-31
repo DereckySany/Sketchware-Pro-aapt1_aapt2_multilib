@@ -1,9 +1,9 @@
-<LinearLayout android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:padding="8dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="8dp">
 
     <ImageView
         android:id="@id/img_icon"
@@ -11,25 +11,25 @@
         android:layout_height="32dp" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:layout_weight="1.0">
+        android:layout_weight="1.0"
+        android:orientation="vertical">
 
         <TextView
-            android:textSize="14sp"
-            android:textColor="#ff606060"
             android:id="@id/tv_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="#ff606060"
+            android:textSize="14sp" />
 
         <TextView
-            android:textSize="12sp"
-            android:textColor="@color/light_grey"
             android:id="@id/tv_desc"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/light_grey"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <ImageView

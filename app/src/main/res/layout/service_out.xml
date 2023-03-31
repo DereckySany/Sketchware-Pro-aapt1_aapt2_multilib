@@ -1,51 +1,51 @@
-<LinearLayout android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="#fff6f6f6"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
+        android:orientation="vertical">
 
         <EditText
-            android:textSize="16sp"
-            android:textColor="#ff535353"
-            android:textColorHint="#ff8e8e8e"
             android:id="@id/et_login_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textColor="#ff535353"
+            android:textColorHint="#ff8e8e8e"
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
+        android:orientation="vertical">
 
         <Button
-            android:theme="@style/AppTheme.Button.Green"
-            android:textSize="@dimen/text_size_button_material"
-            android:textColor="#ffffffff"
             android:id="@id/btn_service_out"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="#ffffffff"
+            android:textSize="@dimen/text_size_button_material"
+            android:theme="@style/AppTheme.Button.Green" />
     </LinearLayout>
 </LinearLayout>

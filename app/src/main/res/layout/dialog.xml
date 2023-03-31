@@ -37,14 +37,15 @@
                 android:textColor="@color/color_primary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
+
             <ImageView
                 android:id="@+id/dialog_img_translated"
-                android:src="@drawable/language_translate_96"
-                android:visibility="visible"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center"
-                android:scaleType="fitCenter" />
+                android:scaleType="fitCenter"
+                android:src="@drawable/language_translate_96"
+                android:visibility="gone" />
         </LinearLayout>
 
         <TextView

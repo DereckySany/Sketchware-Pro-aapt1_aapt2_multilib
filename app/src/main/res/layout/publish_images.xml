@@ -1,15 +1,15 @@
-<LinearLayout android:orientation="vertical"
-    android:padding="16dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <LinearLayout
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <ImageView
             android:layout_width="28dp"
@@ -18,12 +18,12 @@
             android:src="@drawable/ic_title_icon" />
 
         <TextView
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="#ff4d4d4d"
             android:id="@id/tv_title_icon"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="#ff4d4d4d"
+            android:textSize="14sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <RelativeLayout
@@ -33,27 +33,27 @@
         android:layout_marginBottom="8dp">
 
         <View
-            android:background="#ffffffff"
             android:layout_width="56dp"
             android:layout_height="56dp"
+            android:background="#ffffffff"
             android:contentDescription="@null" />
 
         <ImageView
             android:id="@id/img_icon"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/default_icon"
             android:layout_centerInParent="true"
-            android:contentDescription="@null" />
+            android:contentDescription="@null"
+            android:src="@drawable/default_icon" />
     </RelativeLayout>
 
     <LinearLayout
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <ImageView
             android:layout_width="28dp"
@@ -62,17 +62,17 @@
             android:src="@drawable/ic_title_screenshots" />
 
         <TextView
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="#ff4d4d4d"
             android:id="@id/tv_title_screenshots"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="#ff4d4d4d"
+            android:textSize="14sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_gravity="center"
         android:id="@id/list_screenshots"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 </LinearLayout>

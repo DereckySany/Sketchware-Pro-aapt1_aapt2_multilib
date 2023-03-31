@@ -1,50 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <include
-        layout="@layout/toolbar" />
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
     <RelativeLayout
-        android:background="@color/white_bg"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:background="@color/white_bg">
+
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_above="@id/layout_ads">
+            android:layout_above="@id/layout_ads"
+            android:orientation="horizontal">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@id/property_group_list"
-                android:background="@color/white_bg"
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:splitMotionEvents="false" />
+                android:background="@color/white_bg"
+                android:splitMotionEvents="false"
+                android:visibility="gone" />
+
             <View
-                android:background="?colorPrimaryDark"
                 android:layout_width="1.0dip"
-                android:layout_height="fill_parent" />
+                android:layout_height="fill_parent"
+                android:background="?colorPrimaryDark" />
+
             <com.besome.sketch.lib.ui.CustomScrollView
                 android:id="@id/scroll_view"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
+
                 <LinearLayout
-                    android:orientation="vertical"
                     android:id="@id/content"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
             </com.besome.sketch.lib.ui.CustomScrollView>
         </LinearLayout>
+
         <LinearLayout
-            android:orientation="vertical"
             android:id="@id/layout_ads"
-            android:visibility="gone"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8.0dip"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8.0dip"
+            android:orientation="vertical"
+            android:visibility="gone" />
     </RelativeLayout>
 </LinearLayout>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -16,8 +15,8 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/package_96"
-            android:paddingLeft="@dimen/mtrl_btn_icon_padding"/>
+            android:paddingLeft="@dimen/mtrl_btn_icon_padding"
+            android:src="@drawable/package_96" />
 
         <LinearLayout
             android:id="@+id/linearlayout_indicator_content_use_lib"
@@ -25,8 +24,8 @@
             android:layout_height="3pt"
             android:layout_gravity="center"
             android:layout_margin="1pt"
-            android:orientation="vertical"
-            android:background="@color/scolor_green_02" />
+            android:background="@color/scolor_green_02"
+            android:orientation="vertical" />
 
         <LinearLayout
             android:id="@+id/main_content_use_lib"

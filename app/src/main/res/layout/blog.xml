@@ -1,7 +1,7 @@
-<LinearLayout android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@id/container"
@@ -15,9 +15,9 @@
 
         <ProgressBar
             android:id="@id/progress"
+            style="@style/CustomProgressBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            style="@style/CustomProgressBar" />
+            android:layout_alignParentTop="true" />
     </RelativeLayout>
 </LinearLayout>

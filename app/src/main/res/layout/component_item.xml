@@ -1,15 +1,15 @@
-<LinearLayout android:theme="@style/selectableMainItemBackground"
-    android:orientation="horizontal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="horizontal"
+    android:theme="@style/selectableMainItemBackground">
 
     <LinearLayout
-        android:gravity="center_vertical"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:layout_weight="1.0">
+        android:layout_weight="1.0"
+        android:gravity="center_vertical">
 
         <ImageView
             android:id="@id/img_icon"
@@ -18,23 +18,23 @@
             android:contentDescription="@null" />
 
         <TextView
-            android:textSize="14sp"
-            android:textColor="#ff757575"
             android:id="@id/tv_component_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp" />
+            android:textColor="#ff757575"
+            android:textSize="14sp" />
     </LinearLayout>
 
     <ImageView
-        android:layout_gravity="center_vertical"
         android:id="@id/imgv_selected"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:src="@drawable/ic_checkmark_green_48dp"
         android:contentDescription="@null"
-        android:layout_marginEnd="8dp" />
+        android:src="@drawable/ic_checkmark_green_48dp"
+        android:visibility="gone" />
 </LinearLayout>

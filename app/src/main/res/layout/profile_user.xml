@@ -1,17 +1,17 @@
-<LinearLayout android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="#fff6f6f6"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -20,9 +20,9 @@
             android:layout_weight="1.0">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@id/ti_input"
@@ -30,49 +30,49 @@
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:textSize="16sp"
                         android:id="@id/ed_input"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:maxLines="1" />
+                        android:maxLines="1"
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
-                    android:textSize="12sp"
                     android:id="@id/tv_nickname_public"
-                    android:padding="8dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:textSize="12sp" />
             </LinearLayout>
         </ScrollView>
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:padding="8dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
 
             <Button
-                android:theme="@style/AppTheme.Button.Blue"
-                android:textSize="@dimen/text_size_button_material"
-                android:textColor="#ffffffff"
-                android:gravity="center"
                 android:id="@id/btn_cancel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.0" />
+                android:layout_weight="1.0"
+                android:gravity="center"
+                android:textColor="#ffffffff"
+                android:textSize="@dimen/text_size_button_material"
+                android:theme="@style/AppTheme.Button.Blue" />
 
             <Button
-                android:theme="@style/AppTheme.Button.LightBlue"
-                android:textSize="@dimen/text_size_button_material"
-                android:textColor="#ffffffff"
-                android:gravity="center"
                 android:id="@id/btn_save"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_weight="1.0"
-                android:layout_marginStart="16dp" />
+                android:gravity="center"
+                android:textColor="#ffffffff"
+                android:textSize="@dimen/text_size_button_material"
+                android:theme="@style/AppTheme.Button.LightBlue" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

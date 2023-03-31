@@ -1,20 +1,20 @@
-<LinearLayout android:gravity="center"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@id/layout_theme_color"
-    android:background="?android:selectableItemBackground"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="?android:selectableItemBackground"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:paddingLeft="4dp"
         android:paddingTop="8dp"
         android:paddingRight="4dp"
-        android:paddingBottom="4dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:paddingBottom="4dp">
 
         <TextView
             android:id="@id/color"
@@ -22,11 +22,11 @@
             android:layout_height="24dp" />
 
         <TextView
-            android:textSize="11sp"
-            android:textColor="@color/scolor_black_01"
             android:id="@id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp" />
+            android:layout_marginTop="4dp"
+            android:textColor="@color/scolor_black_01"
+            android:textSize="11sp" />
     </LinearLayout>
 </LinearLayout>

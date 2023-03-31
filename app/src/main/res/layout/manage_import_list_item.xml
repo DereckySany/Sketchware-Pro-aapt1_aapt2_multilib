@@ -1,12 +1,12 @@
-<LinearLayout android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@id/layout_item"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:paddingLeft="5dp"
     android:paddingTop="10dp"
     android:paddingRight="5dp"
-    android:paddingBottom="10dp"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:paddingBottom="10dp">
 
     <RelativeLayout
         android:layout_width="52dp"
@@ -26,11 +26,11 @@
     </RelativeLayout>
 
     <TextView
-        android:textSize="10sp"
-        android:textColor="#ff000000"
-        android:gravity="center"
         android:id="@id/tv_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:textColor="#ff000000"
+        android:textSize="10sp" />
 </LinearLayout>

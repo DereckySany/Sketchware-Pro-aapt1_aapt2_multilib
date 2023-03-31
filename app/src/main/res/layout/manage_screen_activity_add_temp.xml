@@ -1,30 +1,30 @@
-<LinearLayout android:orientation="vertical"
-    android:background="#ffffffff"
-    android:padding="16dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="#ffffffff"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <RelativeLayout
             android:id="@id/activity_preview"
-            android:background="@drawable/border_shadow"
             android:layout_width="140dp"
-            android:layout_height="240dp">
+            android:layout_height="240dp"
+            android:background="@drawable/border_shadow">
 
             <LinearLayout
-                android:gravity="center_vertical"
                 android:id="@id/preview_toolbar"
-                android:background="@color/color_primary"
-                android:padding="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_below="@id/preview_statusbar">
+                android:layout_below="@id/preview_statusbar"
+                android:background="@color/color_primary"
+                android:gravity="center_vertical"
+                android:padding="8dp">
 
                 <ImageView
                     android:layout_width="16dp"
@@ -33,13 +33,13 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@id/preview_statusbar"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="#ff000000"
                 android:gravity="right"
                 android:orientation="horizontal"
-                android:id="@id/preview_statusbar"
-                android:background="#ff000000"
-                android:padding="2dp"
-                android:layout_width="match_parent"
-                android:layout_height="10dp">
+                android:padding="2dp">
 
                 <ImageView
                     android:layout_width="6dp"
@@ -54,20 +54,20 @@
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="vertical"
                 android:id="@id/preview_drawer"
-                android:background="#ff66aa5b"
-                android:visibility="visible"
                 android:layout_width="90dp"
                 android:layout_height="match_parent"
-                android:layout_alignParentLeft="true">
+                android:layout_alignParentLeft="true"
+                android:background="#ff66aa5b"
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <LinearLayout
-                    android:gravity="center"
-                    android:background="@drawable/circle_bg_white"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_margin="16dp">
+                    android:layout_margin="16dp"
+                    android:background="@drawable/circle_bg_white"
+                    android:gravity="center">
 
                     <ImageView
                         android:layout_width="16dp"
@@ -76,10 +76,10 @@
                 </LinearLayout>
 
                 <View
-                    android:background="@color/lighter_grey"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="8dp"
+                    android:background="@color/lighter_grey" />
             </LinearLayout>
 
             <RelativeLayout
@@ -90,28 +90,28 @@
 
                 <ImageView
                     android:id="@id/preview_fab"
-                    android:padding="4dp"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/fab_color"
                     android:layout_above="@id/img_keyboard"
-                    android:layout_alignParentRight="true" />
+                    android:layout_alignParentRight="true"
+                    android:padding="4dp"
+                    android:src="@drawable/fab_color" />
 
                 <ImageView
                     android:id="@id/img_keyboard"
                     android:layout_width="match_parent"
                     android:layout_height="83dp"
-                    android:src="@drawable/android_keyboard"
+                    android:layout_alignParentBottom="true"
                     android:scaleType="fitEnd"
-                    android:layout_alignParentBottom="true" />
+                    android:src="@drawable/android_keyboard" />
             </RelativeLayout>
         </RelativeLayout>
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1.0">
+            android:layout_weight="1.0"
+            android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@id/ti_name"
@@ -121,13 +121,13 @@
                 android:layout_marginRight="8dp">
 
                 <EditText
-                    android:textSize="18sp"
                     android:id="@id/ed_name"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:lines="1"
+                    android:imeOptions="actionDone"
                     android:inputType="text"
-                    android:imeOptions="actionDone" />
+                    android:lines="1"
+                    android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -140,44 +140,44 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
-        android:paddingBottom="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="16dp">
 
         <View
-            android:background="@color/lighter_grey"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:background="@color/lighter_grey" />
 
         <TextView
-            android:textSize="12sp"
-            android:textColor="@color/grey"
-            android:layout_gravity="center"
             android:id="@id/tv_warning"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:animateLayoutChanges="true" />
+            android:animateLayoutChanges="true"
+            android:textColor="@color/grey"
+            android:textSize="12sp" />
 
         <LinearLayout
-            android:gravity="center"
-            android:orientation="vertical"
             android:id="@id/add_view_type_selector_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
-                android:textSize="14sp"
-                android:textColor="@color/color_primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="Type" />
+                android:text="Type"
+                android:textColor="@color/color_primary"
+                android:textSize="14sp" />
 
             <com.besome.sketch.lib.ui.SelectableButtonBar
                 android:id="@id/add_view_type_selector"
@@ -186,19 +186,19 @@
         </LinearLayout>
 
         <LinearLayout
-            android:gravity="center"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
-                android:textSize="14sp"
-                android:textColor="@color/color_primary"
                 android:id="@id/tv_screen_orientation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="8dp"
+                android:textColor="@color/color_primary"
+                android:textSize="14sp" />
 
             <com.besome.sketch.lib.ui.SelectableButtonBar
                 android:id="@id/btnbar_orientation"
@@ -207,19 +207,19 @@
         </LinearLayout>
 
         <LinearLayout
-            android:gravity="center"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
-                android:textSize="14sp"
-                android:textColor="@color/color_primary"
                 android:id="@id/tv_keyboard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="8dp"
+                android:textColor="@color/color_primary"
+                android:textSize="14sp" />
 
             <com.besome.sketch.lib.ui.SelectableButtonBar
                 android:id="@id/btnbar_keyboard"

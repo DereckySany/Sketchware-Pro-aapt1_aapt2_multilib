@@ -1,16 +1,16 @@
-<LinearLayout android:orientation="vertical"
-    android:background="#ffffffff"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="4dp"
     android:layout_marginTop="4dp"
     android:layout_marginRight="4dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="#ffffffff"
+    android:orientation="vertical">
 
     <RelativeLayout
-        android:background="?selectableItemBackground"
         android:layout_width="match_parent"
-        android:layout_height="64dp">
+        android:layout_height="64dp"
+        android:background="?selectableItemBackground">
 
         <ImageView
             android:id="@id/img_icon"
@@ -22,83 +22,83 @@
             android:contentDescription="@null" />
 
         <TextView
-            android:textSize="14sp"
-            android:textColor="#ff404040"
             android:id="@id/tv_component_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="72dp"
             android:layout_marginLeft="72dp"
             android:layout_marginTop="12dp"
-            android:layout_marginStart="72dp" />
+            android:textColor="#ff404040"
+            android:textSize="14sp" />
 
         <TextView
-            android:textSize="14sp"
-            android:textColor="#ff9a9a9a"
-            android:gravity="center_vertical"
             android:id="@id/tv_component_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="72dp"
-            android:layout_marginRight="16dp"
             android:layout_below="@id/tv_component_type"
             android:layout_marginStart="72dp"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginLeft="72dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:gravity="center_vertical"
+            android:textColor="#ff9a9a9a"
+            android:textSize="14sp" />
 
         <LinearLayout
-            android:orientation="horizontal"
             android:id="@id/events_preview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/img_menu"
-            android:layout_centerVertical="true" />
+            android:orientation="horizontal" />
 
         <ImageView
             android:id="@id/img_menu"
-            android:padding="16dp"
-            android:clickable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_drop_down_grey600_24dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:clickable="true"
             android:contentDescription="@null"
-            android:layout_alignParentEnd="true" />
+            android:padding="16dp"
+            android:src="@drawable/ic_arrow_drop_down_grey600_24dp" />
     </RelativeLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:id="@id/component_option_layout"
-        android:background="#ffffffff"
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#ffffffff"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <HorizontalScrollView
             android:id="@id/sv_component_events"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:paddingLeft="24dp"
             android:paddingRight="24dp"
-            android:visibility="visible"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:visibility="visible">
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:id="@id/component_events"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
         </HorizontalScrollView>
 
         <View
-            android:background="@color/color_secondary"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
+            android:layout_marginRight="16dp"
+            android:background="@color/color_secondary" />
 
         <LinearLayout
-            android:orientation="horizontal"
             android:id="@id/component_option"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
     </LinearLayout>
 </LinearLayout>

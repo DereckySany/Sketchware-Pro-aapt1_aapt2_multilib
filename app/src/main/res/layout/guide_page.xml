@@ -1,27 +1,27 @@
-<LinearLayout android:orientation="vertical"
-    android:paddingTop="32dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical"
+    android:paddingTop="32dp">
 
     <TextView
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@color/color_btn_ltorange_normal"
-        android:gravity="center"
         android:id="@id/page_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/color_btn_ltorange_normal"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <TextView
-        android:textSize="14dp"
-        android:textColor="#ff7d7d7d"
-        android:gravity="center"
         android:id="@id/page_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginRight="16dp"
-        android:maxLines="2" />
+        android:gravity="center"
+        android:maxLines="2"
+        android:textColor="#ff7d7d7d"
+        android:textSize="14dp" />
 </LinearLayout>

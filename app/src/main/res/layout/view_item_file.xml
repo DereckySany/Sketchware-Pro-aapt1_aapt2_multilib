@@ -1,22 +1,22 @@
-<RelativeLayout android:gravity="center"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:gravity="center">
 
     <ImageView
         android:id="@id/image_file"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:src="@drawable/java_96"
-        android:scaleType="fitCenter" />
+        android:scaleType="fitCenter"
+        android:src="@drawable/java_96" />
 
     <TextView
-        android:textColor="#ffffffff"
-        android:gravity="center"
         android:id="@id/name_file"
-        android:background="#754e4e4e"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#754e4e4e"
+        android:gravity="center"
         android:text="Text"
-        android:layout_alignParentBottom="true" />
+        android:textColor="#ffffffff" />
 </RelativeLayout>

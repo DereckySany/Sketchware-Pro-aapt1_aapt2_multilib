@@ -1,9 +1,9 @@
-<LinearLayout android:gravity="center"
-    android:orientation="horizontal"
-    android:background="#ffeeeeee"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="#ffeeeeee"
+    android:gravity="center"
+    android:orientation="horizontal">
 
     <ImageView
         android:id="@id/img_popup"

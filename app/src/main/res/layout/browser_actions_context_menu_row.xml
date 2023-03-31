@@ -1,27 +1,27 @@
-<LinearLayout android:orientation="horizontal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="40dp"
+    android:orientation="horizontal"
     android:paddingStart="15dp"
-    android:paddingEnd="15dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:paddingEnd="15dp">
 
     <ImageView
         android:id="@id/browser_actions_menu_item_icon"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:layout_width="20dp"
         android:layout_height="match_parent"
-        android:scaleType="centerInside"
-        android:contentDescription="@null" />
+        android:contentDescription="@null"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:scaleType="centerInside" />
 
     <TextView
-        android:textSize="15sp"
-        android:textColor="@color/browser_actions_text_color"
-        android:layout_gravity="center_vertical"
         android:id="@id/browser_actions_menu_item_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="10dp"
         android:layout_weight="1.0"
-        android:layout_marginStart="10dp" />
+        android:textColor="@color/browser_actions_text_color"
+        android:textSize="15sp" />
 </LinearLayout>

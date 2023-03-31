@@ -1,32 +1,32 @@
-<LinearLayout android:gravity="center_vertical"
-    android:orientation="horizontal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@id/layout_item"
-    android:padding="4dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="4dp">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1.0">
+        android:layout_weight="1.0"
+        android:orientation="vertical">
 
         <TextView
-            android:textSize="12sp"
-            android:textColor="#ff000000"
             android:id="@id/tv_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="#ff000000"
+            android:textSize="12sp" />
 
         <TextView
-            android:textSize="11sp"
-            android:textColor="#ff555555"
             android:id="@id/tv_unit_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
-            android:layout_marginStart="8dp" />
+            android:textColor="#ff555555"
+            android:textSize="11sp" />
     </LinearLayout>
 
     <ImageView

@@ -1,67 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
+
     <LinearLayout
-        android:gravity="center_vertical"
-        android:background="@drawable/layout_rounded_border_lightblue"
-        android:paddingLeft="4.0dip"
-        android:paddingRight="4.0dip"
         android:layout_width="match_parent"
         android:layout_height="40.0dip"
-        android:paddingHorizontal="4.0dip">
+        android:background="@drawable/layout_rounded_border_lightblue"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="4.0dip"
+        android:paddingLeft="4.0dip"
+        android:paddingRight="4.0dip">
+
         <Spinner
             android:id="@id/spn_widget"
             android:layout_width="0.0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="1.0"
-            android:spinnerMode="dropdown"
             android:layout_marginStart="8.0dip"
-            android:backgroundTint="#ffffffff" />
+            android:layout_weight="1.0"
+            android:backgroundTint="#ffffffff"
+            android:spinnerMode="dropdown" />
+
         <ImageView
             android:id="@id/img_save"
             android:layout_width="32.0dip"
             android:layout_height="32.0dip"
-            android:src="@drawable/save_white_48"
+            android:layout_marginEnd="8.0dip"
             android:contentDescription="@null"
-            android:layout_marginEnd="8.0dip" />
+            android:src="@drawable/save_white_48" />
     </LinearLayout>
+
     <LinearLayout
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
         android:id="@id/layout_property_group"
-        android:background="@color/white_bg"
-        android:paddingTop="2.0dip"
         android:layout_width="match_parent"
         android:layout_height="32.0dip"
-        android:paddingStart="4.0dip" />
-    <RelativeLayout
+        android:background="@color/white_bg"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:id="@id/property_layout"      
+        android:paddingStart="4.0dip"
+        android:paddingTop="2.0dip" />
+
+    <RelativeLayout
+        android:id="@id/property_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
         <com.besome.sketch.lib.ui.CustomHorizontalScrollView
             android:id="@id/hcv_property"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
+
             <LinearLayout
-                android:orientation="horizontal"
-                android:background="@color/white_bg"
                 android:id="@id/property_contents"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:background="@color/white_bg"
+                android:orientation="horizontal" />
         </com.besome.sketch.lib.ui.CustomHorizontalScrollView>
+
         <LinearLayout
-            android:orientation="horizontal"
             android:id="@id/layout_property_see_all"
             android:layout_width="wrap_content"
             android:layout_height="82.0dip"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true" />
+            android:orientation="horizontal" />
     </RelativeLayout>
+
     <com.besome.sketch.editor.view.ViewEvents
         android:id="@id/view_event"
         android:layout_width="match_parent"

@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.Toolbar
-    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@id/toolbar"
-    android:background="@color/color_primary_dark"
     android:layout_width="fill_parent"
     android:layout_height="@dimen/action_bar_height"
+    android:background="@color/color_primary_dark"
     android:popupTheme="@style/ThemeOverlay.ToolbarMenu"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:layout_collapseMode="parallax"
-    app:titleTextAppearance="@style/ToolbarTextAppearance"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    app:titleTextAppearance="@style/ToolbarTextAppearance">
+
     <RelativeLayout
         android:id="@id/layout_main_logo"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="72.0dip">
+
         <ImageView
             android:id="@id/img_title_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/top_title_logo"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"
+            android:src="@drawable/top_title_logo" />
     </RelativeLayout>
 </androidx.appcompat.widget.Toolbar>

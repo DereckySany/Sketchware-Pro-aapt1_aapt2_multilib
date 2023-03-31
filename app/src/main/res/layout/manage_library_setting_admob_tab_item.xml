@@ -1,18 +1,18 @@
-<LinearLayout android:gravity="center_vertical"
-    android:orientation="horizontal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@id/tab_item"
+    android:layout_width="match_parent"
+    android:layout_height="24dp"
     android:background="@drawable/selector_palette_tab_round"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
     android:paddingLeft="8dp"
     android:paddingTop="4dp"
     android:paddingRight="8dp"
-    android:paddingBottom="4dp"
-    android:layout_width="match_parent"
-    android:layout_height="24dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:paddingBottom="4dp">
 
     <TextView
-        android:textSize="12sp"
         android:id="@id/tab_text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textSize="12sp" />
 </LinearLayout>

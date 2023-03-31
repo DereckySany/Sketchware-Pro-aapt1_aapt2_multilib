@@ -1,132 +1,132 @@
-<LinearLayout android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
         android:layout_marginTop="3dp"
         android:layout_marginRight="4dp"
         android:layout_marginBottom="3dp"
+        android:orientation="vertical"
         app:cardCornerRadius="8dp"
         app:cardElevation="2dp">
 
         <LinearLayout
-            android:orientation="vertical"
             android:id="@id/background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="#ffffffff"
+            android:orientation="vertical"
             android:paddingLeft="8dp"
             android:paddingTop="5dp"
             android:paddingRight="8dp"
-            android:paddingBottom="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:paddingBottom="5dp">
 
             <LinearLayout
-                android:gravity="center|left"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="center|left"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.0">
+                    android:layout_weight="1.0"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:textSize="14sp"
-                        android:textColor="#ff424242"
                         android:id="@id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
                         android:paddingLeft="2dp"
                         android:paddingTop="2dp"
                         android:paddingRight="2dp"
                         android:paddingBottom="6dp"
-                        android:focusable="false"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="application" />
+                        android:text="application"
+                        android:textColor="#ff424242"
+                        android:textSize="14sp" />
 
                     <TextView
-                        android:textSize="10sp"
-                        android:textStyle="bold"
-                        android:textColor="#ffffffff"
-                        android:gravity="center|left"
                         android:id="@id/spec"
+                        android:layout_width="wrap_content"
+                        android:layout_height="29dp"
+                        android:focusable="false"
+                        android:gravity="center|left"
                         android:paddingLeft="8dp"
                         android:paddingTop="2dp"
                         android:paddingRight="8dp"
                         android:paddingBottom="2dp"
-                        android:focusable="false"
-                        android:layout_width="wrap_content"
-                        android:layout_height="29dp"
+                        android:singleLine="true"
                         android:text="%m.view change background colour %m.color"
-                        android:singleLine="true" />
+                        android:textColor="#ffffffff"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:gravity="center"
-                    android:orientation="horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
                     <androidx.cardview.widget.CardView
-                        android:gravity="center"
-                        android:orientation="vertical"
                         android:id="@id/down_layout"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_margin="4dp"
+                        android:gravity="center"
+                        android:orientation="vertical"
                         app:cardCornerRadius="5dp"
                         app:cardElevation="1dp">
 
                         <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
                             android:id="@id/down"
-                            android:background="#ffffffff"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="match_parent"
+                            android:background="#ffffffff"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
                             <ImageView
-                                android:focusable="false"
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
-                                android:src="@drawable/selector_ic_chevron_left_grey_48"
+                                android:focusable="false"
+                                android:rotation="270.0"
                                 android:scaleType="fitXY"
-                                android:rotation="270.0" />
+                                android:src="@drawable/selector_ic_chevron_left_grey_48" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-                        android:gravity="center"
-                        android:orientation="vertical"
                         android:id="@id/up_layout"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_margin="4dp"
+                        android:gravity="center"
+                        android:orientation="vertical"
                         app:cardCornerRadius="5dp"
                         app:cardElevation="1dp">
 
                         <LinearLayout
-                            android:gravity="center"
-                            android:orientation="vertical"
                             android:id="@id/up"
-                            android:background="#ffffffff"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="match_parent"
+                            android:background="#ffffffff"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
                             <ImageView
-                                android:focusable="false"
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
-                                android:src="@drawable/selector_ic_chevron_left_grey_48"
+                                android:focusable="false"
+                                android:rotation="90.0"
                                 android:scaleType="fitXY"
-                                android:rotation="90.0" />
+                                android:src="@drawable/selector_ic_chevron_left_grey_48" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>

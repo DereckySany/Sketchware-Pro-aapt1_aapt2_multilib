@@ -1,11 +1,11 @@
-<ImageButton android:gravity="center"
+<ImageButton xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@id/cancel_action"
-    android:visibility="gone"
+    style="?android:borderlessButtonStyle"
     android:layout_width="48dp"
     android:layout_height="match_parent"
     android:layout_marginLeft="2dp"
     android:layout_marginRight="2dp"
-    android:src="@android:drawable/ic_menu_close_clear_cancel"
     android:layout_weight="1.0"
-    style="?android:borderlessButtonStyle"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+    android:gravity="center"
+    android:src="@android:drawable/ic_menu_close_clear_cancel"
+    android:visibility="gone" />

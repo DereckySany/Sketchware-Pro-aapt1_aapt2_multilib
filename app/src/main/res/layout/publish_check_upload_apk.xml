@@ -1,8 +1,8 @@
-<LinearLayout android:orientation="vertical"
-    android:padding="16dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <RadioGroup
         android:id="@id/rg_upload_apk"
@@ -10,17 +10,17 @@
         android:layout_height="wrap_content">
 
         <RadioButton
-            android:textSize="14sp"
             android:id="@id/radio_upload"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:checked="true" />
+            android:checked="true"
+            android:textSize="14sp" />
 
         <RadioButton
-            android:textSize="14sp"
             android:id="@id/radio_not_upload"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="14sp" />
     </RadioGroup>
 </LinearLayout>

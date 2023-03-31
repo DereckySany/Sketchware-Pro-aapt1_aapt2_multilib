@@ -1,7 +1,7 @@
-<LinearLayout android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
 
@@ -11,58 +11,58 @@
         android:fillViewport="true">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:padding="16dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
 
             <LinearLayout
-                android:layout_gravity="center"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1.0">
+                android:layout_gravity="center"
+                android:layout_weight="1.0"
+                android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="32dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/google_play_banner"
-                    android:scaleType="fitStart" />
+                    android:scaleType="fitStart"
+                    android:src="@drawable/google_play_banner" />
 
                 <TextView
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="#ff212121"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Google Play Account Needed" />
+                    android:text="Google Play Account Needed"
+                    android:textColor="#ff212121"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:textSize="14sp"
-                    android:textColor="#ff4d4d4d"
                     android:id="@id/tv_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="8dp"
+                    android:textColor="#ff4d4d4d"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <Button
-                android:theme="@style/AppTheme.Button.LightBlue"
-                android:textSize="@dimen/text_size_button_material"
-                android:textColor="#ffffffff"
                 android:id="@id/btn_console"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="#ffffffff"
+                android:textSize="@dimen/text_size_button_material"
+                android:theme="@style/AppTheme.Button.LightBlue" />
 
             <Button
-                android:theme="@style/AppTheme.Button.Green"
-                android:textSize="@dimen/text_size_button_material"
-                android:textColor="#ffffffff"
                 android:id="@id/btn_doc"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="#ffffffff"
+                android:textSize="@dimen/text_size_button_material"
+                android:theme="@style/AppTheme.Button.Green" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

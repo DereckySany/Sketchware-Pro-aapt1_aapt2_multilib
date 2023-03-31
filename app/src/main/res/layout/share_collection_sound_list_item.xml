@@ -1,20 +1,20 @@
-<androidx.cardview.widget.CardView android:id="@id/layout_item"
-    android:background="@color/transparent"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/layout_item"
     android:layout_width="match_parent"
     android:layout_height="64dp"
     android:layout_marginLeft="4dp"
     android:layout_marginTop="2dp"
     android:layout_marginRight="4dp"
     android:layout_marginBottom="2dp"
-    android:elevation="4dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="@color/transparent"
+    android:elevation="4dp">
 
     <LinearLayout
-        android:gravity="center|left"
-        android:orientation="horizontal"
-        android:background="?selectableItemBackground"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?selectableItemBackground"
+        android:gravity="center|left"
+        android:orientation="horizontal">
 
         <CheckBox
             android:id="@id/chk_select"
@@ -38,64 +38,64 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.0">
+                android:layout_weight="1.0"
+                android:orientation="vertical">
 
                 <TextView
-                    android:textSize="16sp"
-                    android:textColor="#ff404040"
                     android:id="@id/tv_sound_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp" />
+                    android:layout_marginBottom="2dp"
+                    android:textColor="#ff404040"
+                    android:textSize="16sp" />
 
                 <LinearLayout
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:textSize="12sp"
-                        android:textColor="#ff9a9a9a"
                         android:id="@id/tv_currenttime"
-                        android:paddingRight="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp" />
+                        android:layout_marginRight="5dp"
+                        android:paddingRight="5dp"
+                        android:textColor="#ff9a9a9a"
+                        android:textSize="12sp" />
 
                     <ProgressBar
                         android:id="@id/prog_playtime"
+                        style="@style/SoundProgressBar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1.0"
-                        style="@style/SoundProgressBar" />
+                        android:layout_weight="1.0" />
 
                     <TextView
-                        android:textSize="12sp"
-                        android:textColor="#ff9a9a9a"
                         android:id="@id/tv_endtime"
-                        android:paddingLeft="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp" />
+                        android:layout_marginLeft="5dp"
+                        android:paddingLeft="5dp"
+                        android:textColor="#ff9a9a9a"
+                        android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
 
             <ImageView
                 android:id="@id/img_play"
-                android:padding="8dp"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginRight="8dp" />
+                android:layout_marginRight="8dp"
+                android:padding="8dp" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -1,13 +1,98 @@
-<LinearLayout android:orientation="vertical" android:paddingLeft="32dp" android:paddingTop="16dp" android:paddingRight="32dp" android:paddingBottom="16dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="24dp" android:paddingHorizontal="32dp" android:paddingVertical="16dp"
-  xmlns:android="http://schemas.android.com/apk/res/android">
-    <RelativeLayout android:orientation="vertical" android:id="@id/item_header" android:background="@drawable/border_top_corner_orange" android:padding="16dp" android:layout_width="match_parent" android:layout_height="wrap_content">
-        <TextView android:textSize="24sp" android:textStyle="bold" android:textColor="#ffffffff" android:id="@id/item_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1-Month" />
-        <TextView android:textSize="16sp" android:textColor="#ffffffff" android:id="@id/mo1_license" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="License" android:layout_below="@id/item_title" />
-        <TextView android:textSize="13sp" android:textStyle="bold" android:textColor="#ffffffff" android:id="@id/item_sale" android:background="@drawable/bg_round_red" android:paddingLeft="8dp" android:paddingRight="8dp" android:layout_width="wrap_content" android:layout_height="20dp" android:text="save 40%" android:layout_alignParentRight="true" android:paddingHorizontal="8dp" />
-        <TextView android:textSize="28sp" android:textStyle="bold" android:textColor="#ffffffff" android:id="@id/item_price" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$2.49" android:layout_below="@id/item_sale" android:layout_alignParentRight="true" android:layout_alignEnd="@id/item_sale" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="24dp"
+    android:orientation="vertical"
+    android:paddingHorizontal="32dp"
+    android:paddingVertical="16dp"
+    android:paddingLeft="32dp"
+    android:paddingTop="16dp"
+    android:paddingRight="32dp"
+    android:paddingBottom="16dp">
+
+    <RelativeLayout
+        android:id="@id/item_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_top_corner_orange"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@id/item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1-Month"
+            android:textColor="#ffffffff"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@id/mo1_license"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_title"
+            android:text="License"
+            android:textColor="#ffffffff"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@id/item_sale"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/bg_round_red"
+            android:paddingHorizontal="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="save 40%"
+            android:textColor="#ffffffff"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@id/item_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_sale"
+            android:layout_alignEnd="@id/item_sale"
+            android:layout_alignParentRight="true"
+            android:text="$2.49"
+            android:textColor="#ffffffff"
+            android:textSize="28sp"
+            android:textStyle="bold" />
     </RelativeLayout>
-    <LinearLayout android:orientation="vertical" android:background="@drawable/border_bottom_corner" android:paddingLeft="8dp" android:paddingRight="8dp" android:paddingBottom="16dp" android:layout_width="match_parent" android:layout_height="wrap_content">
-        <TextView android:textSize="14sp" android:textColor="#ff404040" android:id="@id/item_desc" android:padding="8dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Down from $3mo. Our monthly plan grans acess to all premium features, the best plan for short-term subscribers." />
-        <Button android:textSize="12sp" android:textColor="#ff7d7d7d" android:layout_gravity="center_horizontal" android:id="@id/purchase" android:background="@drawable/button_round" android:paddingLeft="4dp" android:paddingRight="4dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="Purchase" android:paddingHorizontal="4dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_bottom_corner"
+        android:orientation="vertical"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="16dp">
+
+        <TextView
+            android:id="@id/item_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Down from $3mo. Our monthly plan grans acess to all premium features, the best plan for short-term subscribers."
+            android:textColor="#ff404040"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@id/purchase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/button_round"
+            android:paddingHorizontal="4dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:text="Purchase"
+            android:textColor="#ff7d7d7d"
+            android:textSize="12sp" />
     </LinearLayout>
 </LinearLayout>

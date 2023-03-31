@@ -1,17 +1,17 @@
-<LinearLayout android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
 
     <RadioGroup
-        android:orientation="vertical"
         android:id="@id/rg_type"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">
 
         <RadioButton
             android:id="@id/rb_all"

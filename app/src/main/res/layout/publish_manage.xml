@@ -1,13 +1,13 @@
-<androidx.coordinatorlayout.widget.CoordinatorLayout android:background="#fff6f6f6"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="#fff6f6f6">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <include layout="@layout/toolbar" />
 
@@ -19,20 +19,20 @@
             android:layout_height="match_parent">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <include layout="@layout/loading_3balls" />
 
                 <LinearLayout
+                    android:id="@id/layout_guide"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:id="@id/layout_guide"
                     android:paddingBottom="40dp"
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:visibility="gone">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -40,35 +40,35 @@
                         android:src="@drawable/google_play_banner" />
 
                     <TextView
-                        android:textSize="14sp"
-                        android:textColor="@color/grey"
-                        android:gravity="center"
                         android:id="@id/tv_guide"
-                        android:background="#fff6f6f6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp" />
+                        android:layout_marginTop="24dp"
+                        android:background="#fff6f6f6"
+                        android:gravity="center"
+                        android:textColor="@color/grey"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@id/list_publish"
-                    android:background="#fff5f5f5"
-                    android:scrollbars="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="2dp"
+                    android:background="#fff5f5f5"
+                    android:scrollbars="vertical"
                     android:splitMotionEvents="false" />
             </LinearLayout>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_gravity="bottom|center|right"
         android:id="@id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center|right"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_add_white_36dp"
         android:backgroundTint="@color/color_btn_ltpink_normal"
+        android:src="@drawable/ic_add_white_36dp"
         app:borderWidth="0dp" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

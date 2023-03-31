@@ -1,17 +1,17 @@
-<LinearLayout android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="#fff6f6f6"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -19,14 +19,14 @@
             android:layout_weight="1.0">
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="start"
                 android:orientation="vertical"
                 android:paddingLeft="16dp"
                 android:paddingTop="16dp"
                 android:paddingRight="16dp"
-                android:paddingBottom="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:paddingBottom="20dp">
 
                 <com.besome.sketch.lib.ui.MiddleLineHeader
                     android:id="@id/header_project_info"
@@ -36,23 +36,23 @@
                     android:layout_marginBottom="8dp" />
 
                 <LinearLayout
+                    android:id="@id/linear_my_project"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center|left"
                     android:orientation="horizontal"
-                    android:id="@id/linear_my_project"
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:visibility="gone">
 
                     <TextView
-                        android:textSize="13sp"
-                        android:textStyle="bold"
-                        android:textColor="#ff008dce"
-                        android:gravity="center|left"
                         android:id="@id/tv_select_my_project"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|left"
                         android:paddingLeft="4dp"
                         android:paddingRight="4dp"
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content" />
+                        android:textColor="#ff008dce"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
 
                     <Spinner
                         android:id="@id/spn_my_project"
@@ -62,10 +62,10 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:gravity="center|left"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:gravity="center|left"
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:id="@id/img_icon"
@@ -74,165 +74,165 @@
                         android:layout_margin="8dp" />
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:gravity="center|left"
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"
-                            android:layout_marginTop="4dp">
+                            android:layout_marginTop="4dp"
+                            android:gravity="center|left"
+                            android:orientation="horizontal">
 
                             <TextView
-                                android:textSize="13sp"
-                                android:textColor="#ff999999"
-                                android:gravity="left"
                                 android:id="@id/tv_package_title"
-                                android:paddingLeft="4dp"
-                                android:paddingRight="4dp"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="3.0" />
+                                android:layout_weight="3.0"
+                                android:gravity="left"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:textColor="#ff999999"
+                                android:textSize="13sp" />
 
                             <TextView
-                                android:textSize="13sp"
-                                android:textColor="#ff404040"
                                 android:id="@id/tv_pkg_name"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="8dp"
-                                android:layout_weight="7.0" />
+                                android:layout_weight="7.0"
+                                android:textColor="#ff404040"
+                                android:textSize="13sp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:gravity="center|left"
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"
-                            android:layout_marginTop="4dp">
+                            android:layout_marginTop="4dp"
+                            android:gravity="center|left"
+                            android:orientation="horizontal">
 
                             <TextView
-                                android:textSize="13sp"
-                                android:textColor="#ff999999"
-                                android:gravity="left"
                                 android:id="@id/tv_project_title"
-                                android:paddingLeft="4dp"
-                                android:paddingRight="4dp"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="3.0" />
+                                android:layout_weight="3.0"
+                                android:gravity="left"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:textColor="#ff999999"
+                                android:textSize="13sp" />
 
                             <TextView
-                                android:textSize="13sp"
-                                android:textColor="#ff404040"
                                 android:id="@id/tv_ws_name"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="8dp"
-                                android:layout_weight="7.0" />
+                                android:layout_weight="7.0"
+                                android:textColor="#ff404040"
+                                android:textSize="13sp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:gravity="center|left"
-                            android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp">
+                            android:layout_marginLeft="8dp"
+                            android:gravity="center|left"
+                            android:orientation="horizontal">
 
                             <TextView
-                                android:textSize="13sp"
-                                android:textColor="#ff999999"
-                                android:gravity="left"
                                 android:id="@id/tv_appname_title"
-                                android:paddingLeft="4dp"
-                                android:paddingRight="4dp"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="3.0" />
+                                android:layout_weight="3.0"
+                                android:gravity="left"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:textColor="#ff999999"
+                                android:textSize="13sp" />
 
                             <TextView
-                                android:textSize="15sp"
-                                android:textStyle="bold"
-                                android:textColor="#ff404040"
                                 android:id="@id/tv_app_name"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="8dp"
-                                android:layout_weight="7.0" />
+                                android:layout_weight="7.0"
+                                android:textColor="#ff404040"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
 
                 <View
-                    android:background="#ffc7c7c7"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="8dp"
+                    android:background="#ffc7c7c7" />
 
                 <LinearLayout
-                    android:gravity="center|left"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp">
+                    android:layout_margin="4dp"
+                    android:gravity="center|left"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:textSize="13sp"
-                        android:textColor="#ff999999"
-                        android:gravity="left"
                         android:id="@id/tv_version_code_title"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3.0" />
+                        android:layout_weight="3.0"
+                        android:gravity="left"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:textColor="#ff999999"
+                        android:textSize="13sp" />
 
                     <TextView
-                        android:textSize="13sp"
-                        android:textColor="#ff404040"
                         android:id="@id/tv_sc_ver_code"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
-                        android:layout_weight="1.0" />
+                        android:layout_weight="1.0"
+                        android:textColor="#ff404040"
+                        android:textSize="13sp" />
 
                     <TextView
-                        android:textSize="13sp"
-                        android:textColor="#ff999999"
-                        android:gravity="left"
                         android:id="@id/tv_version_name_title"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3.0" />
+                        android:layout_weight="3.0"
+                        android:gravity="left"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:textColor="#ff999999"
+                        android:textSize="13sp" />
 
                     <TextView
-                        android:textSize="13sp"
-                        android:textColor="#ff404040"
                         android:id="@id/tv_sc_ver_name"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
-                        android:layout_weight="1.0" />
+                        android:layout_weight="1.0"
+                        android:textColor="#ff404040"
+                        android:textSize="13sp" />
                 </LinearLayout>
 
                 <View
-                    android:background="#ffc7c7c7"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    android:background="#ffc7c7c7" />
 
                 <LinearLayout
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingRight="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp">
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingRight="4dp">
 
                     <TextView
                         android:id="@id/tv_visibility_title"
@@ -241,16 +241,16 @@
                         android:layout_weight="1.0" />
 
                     <RadioGroup
-                        android:orientation="horizontal"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
                         <RadioButton
                             android:id="@id/rd_privacy_public"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="true"
-                            android:layout_weight="1.0" />
+                            android:layout_weight="1.0"
+                            android:checked="true" />
 
                         <RadioButton
                             android:id="@id/rd_privacy_onlyme"
@@ -262,11 +262,11 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp">
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@id/tv_allow_comment_title"
@@ -282,23 +282,23 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@id/linear_shared_project"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center|left"
                     android:orientation="horizontal"
-                    android:id="@id/linear_shared_project"
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:visibility="gone">
 
                     <TextView
-                        android:textSize="13sp"
-                        android:textStyle="bold"
-                        android:textColor="#ff999999"
-                        android:gravity="center|left"
                         android:id="@id/tv_select_shared_projects"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|left"
                         android:paddingLeft="4dp"
                         android:paddingRight="4dp"
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content" />
+                        android:textColor="#ff999999"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
 
                     <Spinner
                         android:id="@id/spn_shared_project"
@@ -322,15 +322,15 @@
                     android:splitMotionEvents="false" />
 
                 <TextView
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#ff008dce"
                     android:id="@id/tv_share_title"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="8dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:textColor="#ff008dce"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@id/ti_title"
@@ -338,26 +338,26 @@
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:textSize="14sp"
-                        android:textColor="#ff535353"
-                        android:textColorHint="#ff8e8e8e"
-                        android:gravity="start|center"
                         android:id="@id/et_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text" />
+                        android:gravity="start|center"
+                        android:inputType="text"
+                        android:textColor="#ff535353"
+                        android:textColorHint="#ff8e8e8e"
+                        android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#ff008dce"
                     android:id="@id/tv_share_desc"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp" />
+                    android:layout_marginTop="16dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:textColor="#ff008dce"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@id/ti_desc"
@@ -365,45 +365,45 @@
                     android:layout_height="wrap_content">
 
                     <EditText
-                        android:textSize="14sp"
-                        android:textColor="#ff535353"
-                        android:textColorHint="#ff8e8e8e"
-                        android:gravity="start|center"
                         android:id="@id/et_desc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textMultiLine" />
+                        android:gravity="start|center"
+                        android:inputType="textMultiLine"
+                        android:textColor="#ff535353"
+                        android:textColorHint="#ff8e8e8e"
+                        android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </ScrollView>
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:padding="8dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp">
 
             <Button
-                android:theme="@style/AppTheme.Button.Blue"
-                android:textSize="@dimen/text_size_button_material"
-                android:textColor="#ffffffff"
-                android:gravity="center"
                 android:id="@id/btn_cancel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.0" />
+                android:layout_weight="1.0"
+                android:gravity="center"
+                android:textColor="#ffffffff"
+                android:textSize="@dimen/text_size_button_material"
+                android:theme="@style/AppTheme.Button.Blue" />
 
             <Button
-                android:theme="@style/AppTheme.Button.LightBlue"
-                android:textSize="@dimen/text_size_button_material"
-                android:textColor="#ffffffff"
-                android:gravity="center"
                 android:id="@id/btn_save"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_weight="1.0"
-                android:layout_marginStart="16dp" />
+                android:gravity="center"
+                android:textColor="#ffffffff"
+                android:textSize="@dimen/text_size_button_material"
+                android:theme="@style/AppTheme.Button.LightBlue" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

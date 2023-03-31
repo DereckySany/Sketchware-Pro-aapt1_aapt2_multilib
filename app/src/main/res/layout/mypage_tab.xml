@@ -1,10 +1,10 @@
-<LinearLayout android:gravity="center"
-    android:orientation="horizontal"
-    android:paddingLeft="16dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_weight="1.0"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingLeft="16dp">
 
     <ImageView
         android:id="@id/mypage_tab_image"
@@ -12,10 +12,10 @@
         android:layout_height="24dp" />
 
     <TextView
-        android:textSize="16sp"
-        android:textColor="#ff7d7d7d"
         android:id="@id/mypage_tab_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp" />
+        android:layout_marginLeft="8dp"
+        android:textColor="#ff7d7d7d"
+        android:textSize="16sp" />
 </LinearLayout>

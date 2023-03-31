@@ -1,6 +1,6 @@
-<LinearLayout android:background="@drawable/layout_background"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@drawable/layout_background"
     android:minWidth="60dp"
-    android:minHeight="30dp"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+    android:minHeight="30dp" />

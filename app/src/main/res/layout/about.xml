@@ -44,11 +44,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#FFFFFF"
+            app:tabContentStart="56dp"
             app:tabGravity="fill"
             app:tabIndicatorFullWidth="false"
             app:tabInlineLabel="true"
             app:tabMode="scrollable"
-            app:tabContentStart="56dp"
             app:tabSelectedTextColor="@color/color_primary"
             app:tabTextColor="#424242"
             app:tabUnboundedRipple="true" />

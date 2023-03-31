@@ -1,15 +1,15 @@
-<ScrollView android:id="@id/root"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:fillViewport="true">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:padding="24dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp">
 
         <androidx.cardview.widget.CardView
             android:id="@id/card_have_account"
@@ -20,12 +20,12 @@
             app:cardBackgroundColor="#ffffffff">
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffffff"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:background="#ffffffff"
-                android:padding="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:padding="16dp">
 
                 <ImageView
                     android:layout_width="32dp"
@@ -48,12 +48,12 @@
             app:cardBackgroundColor="#ffffffff">
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffffff"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:background="#ffffffff"
-                android:padding="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:padding="16dp">
 
                 <ImageView
                     android:layout_width="32dp"

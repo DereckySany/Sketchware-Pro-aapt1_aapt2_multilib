@@ -1,14 +1,14 @@
-<LinearLayout android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:background="#ffffffff"
-        android:padding="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#ffffffff"
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <ImageView
             android:layout_width="48dp"
@@ -16,162 +16,162 @@
             android:src="@drawable/ic_google_play_48dp" />
 
         <TextView
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#ff212121"
             android:id="@id/tv_title_complete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:textColor="#ff212121"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
-            android:textSize="12sp"
-            android:textColor="#ff4d4d4d"
             android:id="@id/tv_desc_complete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp" />
+            android:layout_marginTop="4dp"
+            android:textColor="#ff4d4d4d"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:fillViewport="true"
-        android:layout_weight="1.0">
+        android:layout_weight="1.0"
+        android:fillViewport="true">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:background="#ffffffff"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="#ffffffff"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:orientation="vertical"
-                android:padding="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1.0">
+                android:layout_weight="1.0"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_gravity="center_vertical"
                         android:layout_width="28dp"
                         android:layout_height="28dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginRight="8dp"
                         android:src="@drawable/ic_track_48dp" />
 
                     <TextView
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="#ff000000"
-                        android:layout_gravity="center_vertical"
                         android:id="@id/tv_title_track"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="#ff000000"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <TextView
-                    android:textSize="14sp"
-                    android:textColor="#ff000000"
-                    android:gravity="center_vertical"
                     android:id="@id/tv_track"
-                    android:background="@drawable/bg_round_light_grey"
-                    android:padding="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginBottom="8dp" />
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/bg_round_light_grey"
+                    android:gravity="center_vertical"
+                    android:padding="4dp"
+                    android:textColor="#ff000000"
+                    android:textSize="14sp" />
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_gravity="center_vertical"
                         android:layout_width="28dp"
                         android:layout_height="28dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginRight="8dp"
                         android:src="@drawable/ic_versions_48dp" />
 
                     <TextView
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="#ff000000"
-                        android:layout_gravity="center_vertical"
                         android:id="@id/tv_title_version"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="#ff000000"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <TextView
-                    android:textSize="14sp"
-                    android:textColor="#ff000000"
-                    android:gravity="center_vertical"
                     android:id="@id/tv_version"
-                    android:background="@drawable/bg_round_light_grey"
-                    android:padding="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginBottom="8dp" />
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/bg_round_light_grey"
+                    android:gravity="center_vertical"
+                    android:padding="4dp"
+                    android:textColor="#ff000000"
+                    android:textSize="14sp" />
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_gravity="center_vertical"
                         android:layout_width="28dp"
                         android:layout_height="28dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginRight="8dp"
                         android:src="@drawable/widget_calendar" />
 
                     <TextView
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="#ff000000"
-                        android:layout_gravity="center_vertical"
                         android:id="@id/tv_title_update_dt"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="#ff000000"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <TextView
-                    android:textSize="14sp"
-                    android:textColor="#ff000000"
-                    android:gravity="center_vertical"
                     android:id="@id/tv_update_dt"
-                    android:background="@drawable/bg_round_light_grey"
-                    android:padding="4dp"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginBottom="8dp" />
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/bg_round_light_grey"
+                    android:gravity="center_vertical"
+                    android:padding="4dp"
+                    android:textColor="#ff000000"
+                    android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:background="#ffffffff"
-        android:padding="8dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#ffffffff"
+        android:orientation="horizontal"
+        android:padding="8dp">
 
         <Button
-            android:theme="@style/AppTheme.Button.LightBlue"
-            android:textSize="@dimen/text_size_button_material"
-            android:textColor="#ffffffff"
-            android:gravity="center"
             android:id="@id/btn_accept"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.0" />
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:textColor="#ffffffff"
+            android:textSize="@dimen/text_size_button_material"
+            android:theme="@style/AppTheme.Button.LightBlue" />
     </LinearLayout>
 </LinearLayout>
