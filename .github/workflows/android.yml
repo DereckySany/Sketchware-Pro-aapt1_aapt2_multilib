@@ -4,6 +4,11 @@
 name: android CI
 
 on:
+  create:
+  delete:
+  merge_group:
+  pull_request_target:
+    types: branches,tags
   push:
     paths:
       - ".github/workflows/android.yml"
@@ -30,6 +35,8 @@ on:
       - "gradlew.bat"
       - "public-stable-ids.txt"
       - "settings.gradle"
+  branch_protection_rule:
+    types: [created, deleted]
   workflow_dispatch:
 
 jobs:
@@ -91,6 +98,7 @@ jobs:
 #          # A list of files, directories, and wildcard patterns to cache and restore
 #          path: app
 #          key: /repos/{owner}/{repo}/actions/caches
+
       - name: Clear Gradle Build Cache
         uses: gradle/gradle-build-action@v2
         with:
