@@ -2649,4 +2649,5 @@ Please check the URL again."</string>
     <string name="selectAll">Select All</string>
     <string name="text_to_search">Text to search</string>
     <string name="build_settings">Build Settings</string>
+    <string name="sort_projects">Sort</string>
 </resources>

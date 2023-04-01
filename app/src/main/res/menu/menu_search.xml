@@ -1,12 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/search_icon_white"
         android:orderInCategory="10"
         android:title=""
         app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="always" />
+        app:showAsAction="always|collapseActionView"
+        tools:ignore="AlwaysShowAction" />
     <item
         android:id="@+id/action_reset"
         android:icon="@drawable/ic_restore_white_24dp"

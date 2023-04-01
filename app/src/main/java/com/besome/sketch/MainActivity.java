@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
@@ -200,7 +201,7 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
         drawerLayout = findViewById(R.id.drawer_layout);
         drawerToggle = new l(this, drawerLayout, R.string.app_name, R.string.app_name);
         // DrawerLayout#addDrawerListener(DrawerLayout.DrawerListener)
-        drawerLayout.a((DrawerLayout.c) drawerToggle);
+        drawerLayout.a(DrawerLayout.c);
         d().a("");
 
         viewPager = findViewById(R.id.viewpager);
@@ -332,15 +333,23 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-     MenuItem menuitem1 = menu.add(Menu.NONE,1,Menu.NONE,"");
-     menuitem1.setIcon(R.drawable.sorting_options_48);
-     menuitem1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        return super.onCreateOptionsMenu(menu);
+//     MenuItem menuitem0 = menu.add(Menu.NONE,0,Menu.NONE,"");
+//     menuitem0.setIcon(R.drawable.sorting_options_48);
+//     menuitem0.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        getMenuInflater().inflate(R.menu.projects_fragment_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.searchProjects);
+        showSearchOnActionBar(menuItem);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case 0:
+                if (!mB.a()) {
+                    return true;
+                }
+                break;
             case 1:
                 if (!mB.a()) {
                     showProjectSortingDialog();
@@ -354,6 +363,24 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+    private void showSearchOnActionBar(MenuItem item) {
+        // SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) item.getActionView();
+        // searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setQueryHint("Search for a Project");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+//                applyFilter(newText);
+                return true;
+            }
+        });
     }
 
     @Override
