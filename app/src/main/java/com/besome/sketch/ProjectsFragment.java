@@ -64,10 +64,9 @@ import mod.hey.studios.project.backup.BackupRestoreManager;
 import mod.hey.studios.util.Helper;
 
 public class ProjectsFragment extends DA implements View.OnClickListener {
-
-    private static final int REQUEST_CODE_DESIGN_ACTIVITY = 204;
-    private static final int REQUEST_CODE_PROJECT_SETTINGS_ACTIVITY = 206;
     private static final int REQUEST_CODE_RESTORE_PROJECT = 700;
+    private static final int REQUEST_CODE_DESIGN_ACTIVITY = 204;
+    public static final int REQUEST_CODE_PROJECT_SETTINGS_ACTIVITY = 206;
 
     private SwipeRefreshLayout swipeRefresh;
     private SearchView projectsSearchView;
@@ -103,13 +102,12 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
         loading = parent.findViewById(R.id.loading_3balls);
 
         swipeRefresh.setOnRefreshListener(() -> {
-            // Check storage access
-            if (!c()) {
-                swipeRefresh.setRefreshing(false);
-                // Ask for it
-                ((MainActivity) requireActivity()).s();
-            } else {
+            if (swipeRefresh.d()) swipeRefresh.setRefreshing(false);
+
+            if (c()) {
                 refreshProjectsList();
+            } else if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).s();
             }
         });
         floatingActionButton = getActivity().findViewById(R.id.fab);
@@ -117,19 +115,61 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
 
         myProjects = parent.findViewById(R.id.myprojects);
         myProjects.setHasFixedSize(true);
-
+        myProjects.setLayoutManager(new LinearLayoutManager(getContext()));
         projectsAdapter = new ProjectsAdapter(myProjects);
         myProjects.setAdapter(projectsAdapter);
+        myProjects.setItemAnimator(new ci());
+
+        cvCreateNew = parent.findViewById(R.id.cv_create_new);
+        cvCreateNew.setOnClickListener(this);
+
+        isCollapsed = false;
+
+        cvRestoreProjects = parent.findViewById(R.id.cv_restore_projects);
+        cvRestoreProjects.setOnClickListener(this);
+        ImageView ivRestoreProjects = parent.findViewById(R.id.iv_restore_projects);
+        TextView tvRestoreProjects = parent.findViewById(R.id.tv_restore_projects);
+
+        collapseAnimatorSet = new AnimatorSet();
+        expandAnimatorSet = new AnimatorSet();
+        ValueAnimator collapseValueAnimator = ValueAnimator.ofFloat(wB.a(getContext(), 96.0F), wB.a(getContext(), 48.0F));
+        collapseValueAnimator.addUpdateListener(valueAnimator -> {
+            float value = (Float) valueAnimator.getAnimatedValue();
+            cvRestoreProjects.getLayoutParams().height = (int) value;
+            cvRestoreProjects.requestLayout();
+        });
+        ValueAnimator expandValueAnimator = ValueAnimator.ofFloat(wB.a(getContext(), 48.0F), wB.a(getContext(), 96.0F));
+        expandValueAnimator.addUpdateListener(valueAnimator -> {
+            float value = (Float) valueAnimator.getAnimatedValue();
+            cvRestoreProjects.getLayoutParams().height = (int) value;
+            cvRestoreProjects.requestLayout();
+        });
+        collapseAnimatorSet.playTogether(collapseValueAnimator,
+                ObjectAnimator.ofFloat(tvRestoreProjects, View.TRANSLATION_Y, 0.0F, -100.0F),
+                ObjectAnimator.ofFloat(tvRestoreProjects, View.ALPHA, 1.0F, 0.0F),
+                ObjectAnimator.ofFloat(ivRestoreProjects, View.SCALE_X, 1.0F, 0.5F),
+                ObjectAnimator.ofFloat(ivRestoreProjects, View.SCALE_Y, 1.0F, 0.5F));
+        expandAnimatorSet.playTogether(expandValueAnimator,
+                ObjectAnimator.ofFloat(tvRestoreProjects, View.TRANSLATION_Y, -100.0F, 0.0F),
+                ObjectAnimator.ofFloat(tvRestoreProjects, View.ALPHA, 0.0F, 1.0F),
+                ObjectAnimator.ofFloat(ivRestoreProjects, View.SCALE_X, 0.5F, 1.0F),
+                ObjectAnimator.ofFloat(ivRestoreProjects, View.SCALE_Y, 0.5F, 1.0F));
+        collapseAnimatorSet.setDuration(300L);
+        expandAnimatorSet.setDuration(300L);
         refreshProjectsList();
     }
 
-    public void refreshProjectsList() {
+    public void a(boolean isEmpty) {
         // Don't load project list without having permissions
-        if (!c()) return;
+        if (!c()) {
+            showCreateNewProjectLayout();
+            return;
+        }
 
         new Thread(() -> {
             synchronized (projectsList) {
                 projectsList.clear();
+//                projectsList = lC.a();
                 projectsList.addAll(lC.a());
                 Collections.sort(projectsList, new ProjectComparator(preference.d("sortBy")));
         }
@@ -142,6 +182,7 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
                     loading = null;
                 }
                 myProjects.getAdapter().c();
+                if (isEmpty) showCreateNewProjectLayout();
                 /*if (projectsSearchView != null) {
                      projectsAdapter.filterData(projectsSearchView.getQuery().toString());
                 }*/
@@ -198,6 +239,10 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.putExtra("sc_id", yB.c(projectsList.get(position), "sc_id"));
         startActivity(intent);
+    }
+
+    public void refreshProjectsList() {
+        a(true);
     }
 
     public void showCreateNewProjectLayout() {
@@ -338,7 +383,7 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
             }
             preference.a("sortBy", sortValue, true);
             dialog.dismiss();
-            refreshProjectsList();
+            a();
         });
         dialog.setNegativeButton("Cancel", Helper.getDialogDismissListener(dialog));
         dialog.show();

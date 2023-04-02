@@ -260,7 +260,7 @@ public class BackupRestoreManager {
             if (!bm.isRestoreSuccess() || error) {
                 SketchwareUtil.toastError("Couldn't restore: " + bm.error, Toast.LENGTH_LONG);
             } else if (projectsFragment != null) {
-                projectsFragment.refreshProjectsList();
+                projectsFragment.a();
                 SketchwareUtil.toast("Restored successfully");
             } else {
                 SketchwareUtil.toast("Restored successfully. Refresh to see the project", Toast.LENGTH_LONG);

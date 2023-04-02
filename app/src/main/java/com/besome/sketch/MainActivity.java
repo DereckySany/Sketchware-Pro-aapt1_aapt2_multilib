@@ -82,7 +82,7 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
             allFilesAccessCheck();
 
             if (viewPager.getCurrentItem() == 0 && projectsFragment != null) {
-                projectsFragment.refreshProjectsList();
+                projectsFragment.a();
             }
         }
     }
@@ -111,7 +111,7 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
 
     public void n() {
         if (projectsFragment != null) {
-            projectsFragment.refreshProjectsList();
+            projectsFragment.a();
         }
     }
 
@@ -138,7 +138,7 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
 
                 case 212:
                     if (!(data.getStringExtra("save_as_new_id") == null ? "" : data.getStringExtra("save_as_new_id")).isEmpty() && j()) {
-                        projectsFragment.refreshProjectsList();
+                        projectsFragment.a();
                     }
                     break;
             }
@@ -382,7 +382,7 @@ public class MainActivity extends BasePermissionAppCompatActivity implements Vie
     // ViewPager.OnPageChangeListener#onPageSelected(int)
     public void b(int position) {
         if (position == 0 && j() && projectsFragment != null && projectsFragment.getProjectsCount() == 0) {
-            projectsFragment.refreshProjectsList();
+            projectsFragment.a();
             projectsFragment.showCreateNewProjectLayout();
         } else if (position == 1) {
             //fab.hide()
