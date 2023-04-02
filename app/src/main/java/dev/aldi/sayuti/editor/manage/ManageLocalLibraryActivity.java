@@ -204,7 +204,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     private void indexSizeList(int size) {
         index.setText("index: " + size);
     }
-    private void loadLocalLibraryList() {
+
+/*    private void loadLocalLibraryList() {
         arrayList.clear();
         if (!notAssociatedWithProject) {
             if (!FileUtil.isExistFile(IN_USE_LIBRARY_FILE_PATH) || FileUtil.readFile(IN_USE_LIBRARY_FILE_PATH).equals("")) {
@@ -232,8 +233,31 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         arrayList.addAll(directories);
         indexSizeList(arrayList.size());
         listview.setAdapter(adapter);
-    }
+    }*/
+        private void loadLocalLibraryList() {
+        arrayList.clear();
+        if (!notAssociatedWithProject) {
+            if (!FileUtil.isExistFile(IN_USE_LIBRARY_FILE_PATH) || FileUtil.readFile(IN_USE_LIBRARY_FILE_PATH).equals("")) {
+                FileUtil.writeFile(IN_USE_LIBRARY_FILE_PATH, "[]");
+            } else {
+                project_used_libs = new Gson().fromJson(FileUtil.readFile(IN_USE_LIBRARY_FILE_PATH), Helper.TYPE_MAP_LIST);
+            }
+        }
 
+        Set<String> uniqueDirectories = new HashSet<>();
+        File[] localLibraries = new File(LOCAL_LIBRARYS_PATH).listFiles(File::isDirectory);
+        for (File library : localLibraries) {
+            uniqueDirectories.add(library.getName());
+        }
+
+        List<String> directories = new ArrayList<>(uniqueDirectories);
+        Collections.sort(directories, String.CASE_INSENSITIVE_ORDER);
+
+        adapter = new LibraryAdapter(directories);
+        arrayList.addAll(directories);
+        indexSizeList(arrayList.size());
+        listview.setAdapter(adapter);
+    }
     private void applyFilter(String query) {
         if (query.isEmpty()) {
             adapter.updateData(arrayList);
