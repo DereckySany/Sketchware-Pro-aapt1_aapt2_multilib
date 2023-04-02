@@ -55,6 +55,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     private final ArrayList<String> arrayList = new ArrayList<>();
     private boolean notAssociatedWithProject = false;
     private ListView listview;
+    private SearchView searchView;
     private TextView index;
     private static String IN_USE_LIBRARY_FILE_PATH = "";
     private static String LOCAL_LIBRARYS_PATH = "";
@@ -119,7 +120,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
     private void showSearchOnActionBar(MenuItem item) {
         // SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) item.getActionView();
+        searchView = (SearchView) item.getActionView();
         // searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setQueryHint("Search for a library");
         searchView.setOnQueryTextListener(new SearchView.c() {
@@ -201,6 +202,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             }
         }.execute(lib);
     }
+
     private void indexSizeList(int size) {
         index.setText("index: " + size);
     }
@@ -257,7 +259,9 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         arrayList.addAll(directories);
         indexSizeList(arrayList.size());
         listview.setAdapter(adapter);
-    }
+        if (searchView != null) applyFilter(searchView.getQuery().toString());
+        }
+
     private void applyFilter(String query) {
         if (query.isEmpty()) {
             adapter.updateData(arrayList);
