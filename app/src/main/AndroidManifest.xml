@@ -237,7 +237,7 @@
         <activity
             android:name="dev.aldi.sayuti.editor.manage.ManageLocalLibraryActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.MyApplication"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <activity

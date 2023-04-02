@@ -17,9 +17,11 @@ import android.util.TypedValue;
 import android.view.View;
 
 import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.reflect.TypeToken;
+import com.sketchware.remod.R;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -88,7 +90,7 @@ public class Helper {
 
     public static void applyRippleToToolbarView(View view) {
         GradientDrawable content = new GradientDrawable();
-        content.setColor(Color.parseColor("#008dcd"));
+        content.setColor(getContext().getResources().getColor(R.color.color_primary_dark));
         content.setCornerRadius(90);
 
         view.setBackground(

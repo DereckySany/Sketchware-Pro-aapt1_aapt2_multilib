@@ -496,7 +496,7 @@ public class AboutModActivity extends AppCompatActivity {
             }
 
             if (isMainModderBool) {
-                advancedCorners(sidebar, "#008DCD");
+                advancedCorners(sidebar, String.valueOf(getResources().getColor(R.color.color_primary_dark)));
             } else {
                 advancedCorners(sidebar, "#00CDAB");
             }
@@ -666,7 +666,7 @@ public class AboutModActivity extends AppCompatActivity {
                 c(position);
             });
             if (0 == position) {
-                advancedCorners(leftLine, "#008dcd");
+                advancedCorners(leftLine, getColor(R.color.colorPrimaryDark));
             } else {
                 leftLine.setBackground(null);
             }
