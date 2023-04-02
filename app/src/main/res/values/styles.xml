@@ -2863,14 +2863,15 @@
         <item name="closeIcon">@drawable/ic_close_x_white_48dp</item>
         <item name="voiceIcon">@drawable/abc_ic_voice_search_api_material</item>
         <item name="queryHint">@string/abc_search_hint</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textColorHint">@color/grey</item>
+        <item name="textColor">@color/white</item>
+        <item name="textColorHint">@color/grey</item>
     </style>
     <style name="Theme.MyApplication.Light" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="searchViewStyle">@style/SearchViewStyle</item>
+        <item name="dialogTheme">@style/AlertDialog.AppCompat.Light</item>
     </style>
     <style name="Theme.MyApplication" parent="Base.V7.Theme.AppCompat.Light">
         <item name="actionBarStyle">@style/Widget.AppCompat.ActionBar.Solid</item>
