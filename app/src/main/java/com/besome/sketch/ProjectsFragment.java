@@ -70,7 +70,7 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
 
     private SwipeRefreshLayout swipeRefresh;
     private SearchView projectsSearchView;
-    private final ArrayList<HashMap<String, Object>> projectsList = new ArrayList<>();
+    private ArrayList<HashMap<String, Object>> projectsList = new ArrayList<>();
     private RecyclerView myProjects;
     private CardView cvCreateNew;
     private CardView cvRestoreProjects;
@@ -102,12 +102,14 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
         loading = parent.findViewById(R.id.loading_3balls);
 
         swipeRefresh.setOnRefreshListener(() -> {
-            if (swipeRefresh.d()) swipeRefresh.setRefreshing(false);
-
+            // Check storage access
             if (c()) {
                 refreshProjectsList();
-            } else if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).s();
+            } else {
+//                swipeRefresh.setRefreshing(false);
+                if (swipeRefresh.d()) swipeRefresh.setRefreshing(false);
+                // Ask for it
+                ((MainActivity) requireActivity()).s();
             }
         });
         floatingActionButton = getActivity().findViewById(R.id.fab);
@@ -169,8 +171,8 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
         new Thread(() -> {
             synchronized (projectsList) {
                 projectsList.clear();
-//                projectsList = lC.a();
-                projectsList.addAll(lC.a());
+                projectsList = lC.a();
+//                projectsList.addAll(lC.a());
                 Collections.sort(projectsList, new ProjectComparator(preference.d("sortBy")));
         }
 
@@ -183,9 +185,9 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
                 }
                 myProjects.getAdapter().c();
                 if (isEmpty) showCreateNewProjectLayout();
-                /*if (projectsSearchView != null) {
-                     projectsAdapter.filterData(projectsSearchView.getQuery().toString());
-                }*/
+//                if (projectsSearchView != null) {
+//                     projectsAdapter.filterData(projectsSearchView.getQuery().toString());
+//                }
             });
         }).start();
     }
@@ -315,7 +317,7 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
         projectsSearchView.setOnQueryTextListener(new SearchView.c() {
             @Override
             public boolean onQueryTextChange(String s) {
-//                projectsAdapter.filterData(s);
+//                applyFilter(s);
                 return false;
             }
 
@@ -324,6 +326,25 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
                 return false;
             }
         });
+    }
+    private void applyFilter(String query) {
+        if (query.isEmpty()) {
+            projectsList.clear();
+//            projectsList.addAll(lC.a());
+            projectsList = lC.a();
+            projectsAdapter.a();
+            return;
+        }
+        final ArrayList<HashMap<String, Object>> projectsFilter = new ArrayList<>();
+        for (HashMap<String, Object> search : projectsList) {
+            if (search.values().toString().toLowerCase().contains(query.toLowerCase())) {
+                projectsFilter.add(search);
+            } else if (search.toString().toLowerCase().contains(query.toLowerCase())) {
+                projectsFilter.add(search);
+            }
+        }
+//        projectsAdapter.a(projectsFilter);
+        projectsAdapter.a();
     }
 
     @Override
@@ -517,6 +538,9 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
         public ViewHolder b(ViewGroup parent, int viewType) {
             return new ViewHolder(
                     LayoutInflater.from(parent.getContext()).inflate(R.layout.myprojects_item, parent, false));
+        }
+
+        public void filterData(String toString) {
         }
 
         public class ViewHolder extends RecyclerView.v {

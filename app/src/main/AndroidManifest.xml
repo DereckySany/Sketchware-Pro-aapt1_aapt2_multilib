@@ -243,7 +243,7 @@
         <activity
             android:name="dev.derecky.sany.manager.ManageLocalLibraryActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.MyApplication"
+            android:theme="@style/Theme.MyApplication.Light"
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <activity
