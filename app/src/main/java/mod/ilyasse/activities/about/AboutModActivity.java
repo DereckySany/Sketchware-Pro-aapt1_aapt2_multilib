@@ -666,7 +666,7 @@ public class AboutModActivity extends AppCompatActivity {
                 c(position);
             });
             if (0 == position) {
-                advancedCorners(leftLine, getColor(R.color.colorPrimaryDark));
+                advancedCorners(leftLine, String.valueOf(getResources().getColor(R.color.colorPrimaryDark)));
             } else {
                 leftLine.setBackground(null);
             }
