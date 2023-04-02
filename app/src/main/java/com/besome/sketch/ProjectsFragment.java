@@ -13,18 +13,25 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.besome.sketch.design.DesignActivity;
 import com.besome.sketch.editor.manage.library.ProjectComparator;
 import com.besome.sketch.export.ExportProjectActivity;
@@ -50,9 +57,11 @@ import a.a.a.mB;
 import a.a.a.wB;
 import a.a.a.wq;
 import a.a.a.yB;
+import mod.hasrat.dialog.SketchDialog;
 import mod.hey.studios.project.ProjectSettingsDialog;
 import mod.hey.studios.project.ProjectTracker;
 import mod.hey.studios.project.backup.BackupRestoreManager;
+import mod.hey.studios.util.Helper;
 
 public class ProjectsFragment extends DA implements View.OnClickListener {
 
@@ -61,7 +70,8 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
     private static final int REQUEST_CODE_RESTORE_PROJECT = 700;
 
     private SwipeRefreshLayout swipeRefresh;
-    private ArrayList<HashMap<String, Object>> projectsList = new ArrayList<>();
+    private SearchView projectsSearchView;
+    private final ArrayList<HashMap<String, Object>> projectsList = new ArrayList<>();
     private RecyclerView myProjects;
     private CardView cvCreateNew;
     private CardView cvRestoreProjects;
@@ -71,6 +81,7 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
     private ProjectsAdapter projectsAdapter;
     private FloatingActionButton floatingActionButton;
     private DB preference;
+    private LottieAnimationView loading;
 
     private void toProjectSettingOrRequestPermission(int position) {
         if (super.c()) {
@@ -86,16 +97,19 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
         }
     }
 
-    private void initialize(ViewGroup parent) {
+    private void initialize(View parent) {
         preference = new DB(getContext(), "project");
         swipeRefresh = parent.findViewById(R.id.swipe_refresh);
-        swipeRefresh.setOnRefreshListener(() -> {
-            if (swipeRefresh.d()) swipeRefresh.setRefreshing(false);
+        loading = parent.findViewById(R.id.loading_3balls);
 
-            if (c()) {
+        swipeRefresh.setOnRefreshListener(() -> {
+            // Check storage access
+            if (!c()) {
+                swipeRefresh.setRefreshing(false);
+                // Ask for it
+                ((MainActivity) requireActivity()).s();
+            } else {
                 refreshProjectsList();
-            } else if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).s();
             }
         });
         floatingActionButton = getActivity().findViewById(R.id.fab);
@@ -103,65 +117,36 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
 
         myProjects = parent.findViewById(R.id.myprojects);
         myProjects.setHasFixedSize(true);
-        myProjects.setLayoutManager(new LinearLayoutManager(getContext()));
+
         projectsAdapter = new ProjectsAdapter(myProjects);
         myProjects.setAdapter(projectsAdapter);
-        myProjects.setItemAnimator(new ci());
-
-        cvCreateNew = parent.findViewById(R.id.cv_create_new);
-        cvCreateNew.setOnClickListener(this);
-
-        isCollapsed = false;
-
-        cvRestoreProjects = parent.findViewById(R.id.cv_restore_projects);
-        cvRestoreProjects.setOnClickListener(this);
-        ImageView ivRestoreProjects = parent.findViewById(R.id.iv_restore_projects);
-        TextView tvRestoreProjects = parent.findViewById(R.id.tv_restore_projects);
-
-        collapseAnimatorSet = new AnimatorSet();
-        expandAnimatorSet = new AnimatorSet();
-        ValueAnimator collapseValueAnimator = ValueAnimator.ofFloat(wB.a(getContext(), 96.0F), wB.a(getContext(), 48.0F));
-        collapseValueAnimator.addUpdateListener(valueAnimator -> {
-            float value = (Float) valueAnimator.getAnimatedValue();
-            cvRestoreProjects.getLayoutParams().height = (int) value;
-            cvRestoreProjects.requestLayout();
-        });
-        ValueAnimator expandValueAnimator = ValueAnimator.ofFloat(wB.a(getContext(), 48.0F), wB.a(getContext(), 96.0F));
-        expandValueAnimator.addUpdateListener(valueAnimator -> {
-            float value = (Float) valueAnimator.getAnimatedValue();
-            cvRestoreProjects.getLayoutParams().height = (int) value;
-            cvRestoreProjects.requestLayout();
-        });
-        collapseAnimatorSet.playTogether(collapseValueAnimator,
-                ObjectAnimator.ofFloat(tvRestoreProjects, View.TRANSLATION_Y, 0.0F, -100.0F),
-                ObjectAnimator.ofFloat(tvRestoreProjects, View.ALPHA, 1.0F, 0.0F),
-                ObjectAnimator.ofFloat(ivRestoreProjects, View.SCALE_X, 1.0F, 0.5F),
-                ObjectAnimator.ofFloat(ivRestoreProjects, View.SCALE_Y, 1.0F, 0.5F));
-        expandAnimatorSet.playTogether(expandValueAnimator,
-                ObjectAnimator.ofFloat(tvRestoreProjects, View.TRANSLATION_Y, -100.0F, 0.0F),
-                ObjectAnimator.ofFloat(tvRestoreProjects, View.ALPHA, 0.0F, 1.0F),
-                ObjectAnimator.ofFloat(ivRestoreProjects, View.SCALE_X, 0.5F, 1.0F),
-                ObjectAnimator.ofFloat(ivRestoreProjects, View.SCALE_Y, 0.5F, 1.0F));
-        collapseAnimatorSet.setDuration(300L);
-        expandAnimatorSet.setDuration(300L);
         refreshProjectsList();
     }
 
-    public void a(boolean isEmpty) {
+    public void refreshProjectsList() {
         // Don't load project list without having permissions
-        if (!c()) {
-            showCreateNewProjectLayout();
-            return;
+        if (!c()) return;
+
+        new Thread(() -> {
+            synchronized (projectsList) {
+                projectsList.clear();
+                projectsList.addAll(lC.a());
+                Collections.sort(projectsList, new ProjectComparator(preference.d("sortBy")));
         }
 
-        projectsList = lC.a();
-        if (projectsList.size() > 0) {
-            //noinspection Java8ListSort
-            Collections.sort(projectsList, new ProjectComparator(preference.d("sortBy")));
-        }
-
-        myProjects.getAdapter().c();
-        if (isEmpty) showCreateNewProjectLayout();
+            requireActivity().runOnUiThread(() -> {
+                if (swipeRefresh.d()) swipeRefresh.setRefreshing(false);
+                if (loading != null) {
+                    ((ViewGroup) loading.getParent()).removeView(loading);
+                    myProjects.setVisibility(View.VISIBLE);
+                    loading = null;
+                }
+                myProjects.getAdapter().c();
+                /*if (projectsSearchView != null) {
+                     projectsAdapter.filterData(projectsSearchView.getQuery().toString());
+                }*/
+            });
+        }).start();
     }
 
     @Override
@@ -173,18 +158,18 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
         }
     }
 
-    private void toDesignActivity(String sc_id) {
-        Intent intent = new Intent(getContext(), DesignActivity.class);
+    public void toDesignActivity(String sc_id) {
+        Intent intent = new Intent(requireContext(), DesignActivity.class);
         ProjectTracker.setScId(sc_id);
         intent.putExtra("sc_id", sc_id);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivityForResult(intent, REQUEST_CODE_DESIGN_ACTIVITY);
+        requireActivity().startActivityForResult(intent, REQUEST_CODE_DESIGN_ACTIVITY);
     }
 
     @Override
     public void c(int requestCode) {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        intent.setData(Uri.parse("package:" + getContext().getPackageName()));
+        intent.setData(Uri.parse("package:" + requireContext().getPackageName()));
         startActivityForResult(intent, requestCode);
     }
 
@@ -203,7 +188,9 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
     }
 
     public int getProjectsCount() {
-        return projectsList.size();
+        synchronized (projectsList) {
+            return projectsList.size();
+        }
     }
 
     private void toExportProjectActivity(int position) {
@@ -211,10 +198,6 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.putExtra("sc_id", yB.c(projectsList.get(position), "sc_id"));
         startActivity(intent);
-    }
-
-    public void refreshProjectsList() {
-        a(true);
     }
 
     public void showCreateNewProjectLayout() {
@@ -233,7 +216,7 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
         startActivityForResult(intent, REQUEST_CODE_PROJECT_SETTINGS_ACTIVITY);
     }
 
-    private void restoreProject() {
+    public void restoreProject() {
         (new BackupRestoreManager(getActivity(), this)).restore();
     }
 
@@ -277,12 +260,89 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
     }
 
     @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.projects_fragment_menu, menu);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        projectsSearchView = (SearchView) menu.findItem(R.id.searchProjects).getActionView();
+        projectsSearchView.setOnQueryTextListener(new SearchView.c() {
+            @Override
+            public boolean onQueryTextChange(String s) {
+//                projectsAdapter.filterData(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.sortProject) {
+            showProjectSortingDialog();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.myprojects, parent, false);
+        View viewGroup = inflater.inflate(R.layout.myprojects, parent, false);
+        setHasOptionsMenu(true);
         initialize(viewGroup);
         return viewGroup;
     }
 
+    private void showProjectSortingDialog() {
+        SketchDialog dialog = new SketchDialog(requireActivity());
+        dialog.setTitle("Sort options");
+        View root = wB.a(requireActivity(), R.layout.sort_project_dialog);
+        RadioButton sortByName = root.findViewById(R.id.sortByName);
+        RadioButton sortByID = root.findViewById(R.id.sortByID);
+        RadioButton sortOrderAsc = root.findViewById(R.id.sortOrderAsc);
+        RadioButton sortOrderDesc = root.findViewById(R.id.sortOrderDesc);
+
+        int storedValue = preference.a("sortBy", ProjectComparator.DEFAULT);
+        if ((storedValue & ProjectComparator.SORT_BY_NAME) == ProjectComparator.SORT_BY_NAME) {
+            sortByName.setChecked(true);
+        }
+        if ((storedValue & ProjectComparator.SORT_BY_ID) == ProjectComparator.SORT_BY_ID) {
+            sortByID.setChecked(true);
+        }
+        if ((storedValue & ProjectComparator.SORT_ORDER_ASCENDING) == ProjectComparator.SORT_ORDER_ASCENDING) {
+            sortOrderAsc.setChecked(true);
+        }
+        if ((storedValue & ProjectComparator.SORT_ORDER_DESCENDING) == ProjectComparator.SORT_ORDER_DESCENDING) {
+            sortOrderDesc.setChecked(true);
+        }
+        dialog.setView(root);
+        dialog.setPositiveButton("Save", v -> {
+            int sortValue = ProjectComparator.DEFAULT;
+            if (sortByName.isChecked()) {
+                sortValue |= ProjectComparator.SORT_BY_NAME;
+            }
+            if (sortByID.isChecked()) {
+                sortValue |= ProjectComparator.SORT_BY_ID;
+            }
+            if (sortOrderAsc.isChecked()) {
+                sortValue |= ProjectComparator.SORT_ORDER_ASCENDING;
+            }
+            if (sortOrderDesc.isChecked()) {
+                sortValue |= ProjectComparator.SORT_ORDER_DESCENDING;
+            }
+            preference.a("sortBy", sortValue, true);
+            dialog.dismiss();
+            refreshProjectsList();
+        });
+        dialog.setNegativeButton("Cancel", Helper.getDialogDismissListener(dialog));
+        dialog.show();
+    }
     @SuppressLint("StaticFieldLeak")
     public class DeleteProjectTask extends MA {
         private final int position;
