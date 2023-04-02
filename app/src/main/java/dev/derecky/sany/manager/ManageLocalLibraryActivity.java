@@ -19,11 +19,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.appcompat.widget.SearchView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.sketchware.remod.R;
@@ -96,17 +95,8 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         return true;
     }
 
-    @Override
-    public void onOptionsMenuClosed(Menu menu) {
-        setTitle(original_Title);
-        super.onOptionsMenuClosed(menu);
-    }
-
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_search) {
-            setTitle("");
-        }
         if (id == R.id.action_reset) {
             showDialogResetLibrary();
         }
@@ -131,16 +121,16 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         SearchView searchView = (SearchView) item.getActionView();
         // searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setQueryHint("Search for a library");
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextListener(new SearchView.c() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
+            public boolean onQueryTextChange(String s) {
+                applyFilter(s);
+                return true;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                applyFilter(newText);
-                return true;
+            public boolean onQueryTextSubmit(String s) {
+                return false;
             }
         });
     }
