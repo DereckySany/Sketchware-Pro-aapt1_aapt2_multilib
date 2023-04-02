@@ -2857,6 +2857,9 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
 
     </style>
+    <style name="Theme.MyApplication.Light" parent="AppTheme">
+        <item name="windowActionBar">true</item>
+    </style>
     <style name="Theme.MyApplication" parent="Base.V7.Theme.AppCompat.Light">
         <item name="actionBarStyle">@style/Widget.AppCompat.ActionBar.Solid</item>
         <item name="actionBarTabBarStyle">@style/Widget.AppCompat.ActionBar.TabBar</item>
