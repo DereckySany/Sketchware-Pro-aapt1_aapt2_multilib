@@ -31,6 +31,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -236,7 +237,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         // Initialize the adapter with the directory names
         adapter = new LibraryAdapter(directories);
         ALL_LOCAL_LIBRARYS_LIST.addAll(directories);
-        indexSizeList(ALL_LOCAL_LIBRARYS_LIST.size());
+        // indexSizeList(ALL_LOCAL_LIBRARYS_LIST.size());
         listview.setAdapter(adapter);
         if (searchView != null) applyFilter(searchView.getQuery().toString());
     }
@@ -245,7 +246,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         if (query.isEmpty()) {
             adapter.updateData(ALL_LOCAL_LIBRARYS_LIST);
             adapter.notifyDataSetChanged();
-            indexSizeList(ALL_LOCAL_LIBRARYS_LIST.size());
+            // indexSizeList(ALL_LOCAL_LIBRARYS_LIST.size());
             return;
         }
 
@@ -257,7 +258,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         }
         adapter.updateData(filteredList);
         adapter.notifyDataSetChanged();
-        indexSizeList(filteredList.size());
+        // indexSizeList(filteredList.size());
     }
 
 
@@ -283,6 +284,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
         @Override
         public int getCount() {
+            index.setText(MessageFormat.format("index: {0}", localLibraries.size()));
             return localLibraries.size();
         }
 
