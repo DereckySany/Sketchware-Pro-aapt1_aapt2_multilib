@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.sketchware.remod.R;
@@ -31,7 +32,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -237,16 +237,31 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         // Initialize the adapter with the directory names
         adapter = new LibraryAdapter(directories);
         ALL_LOCAL_LIBRARYS_LIST.addAll(directories);
-        // indexSizeList(ALL_LOCAL_LIBRARYS_LIST.size());
+        indexSizeList(ALL_LOCAL_LIBRARYS_LIST.size());
         listview.setAdapter(adapter);
         if (searchView != null) applyFilter(searchView.getQuery().toString());
     }
+    private void hideExpandBar(){
+        if (adapter.isExpandBarVisible.contains(true)) {
+            adapter.isExpandBarVisible = new ArrayList<>(Collections.nCopies(adapter.localLibraries.size(), false));
+            adapter.notifyDataSetChanged();
+        }
+    }
+    @Override
+    public void onBackPressed() {
+        if (adapter.isExpandBarVisible.contains(true)) {
+            hideExpandBar();
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     private void applyFilter(String query) {
+        hideExpandBar();
         if (query.isEmpty()) {
             adapter.updateData(ALL_LOCAL_LIBRARYS_LIST);
             adapter.notifyDataSetChanged();
-            // indexSizeList(ALL_LOCAL_LIBRARYS_LIST.size());
+            indexSizeList(ALL_LOCAL_LIBRARYS_LIST.size());
             return;
         }
 
@@ -258,13 +273,12 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         }
         adapter.updateData(filteredList);
         adapter.notifyDataSetChanged();
-        // indexSizeList(filteredList.size());
+        indexSizeList(filteredList.size());
     }
-
 
     public class LibraryAdapter extends BaseAdapter {
 
-        private final AbstractList<Boolean> isExpandBarVisible;
+        private AbstractList<Boolean> isExpandBarVisible;
         private List<String> localLibraries;
 
         public LibraryAdapter(List<String> localLibraries) {
@@ -284,7 +298,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
         @Override
         public int getCount() {
-            index.setText(MessageFormat.format("index: {0}", localLibraries.size()));
             return localLibraries.size();
         }
 
