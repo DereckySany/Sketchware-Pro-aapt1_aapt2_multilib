@@ -207,6 +207,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
 
     private void indexSizeList(int size) {
         index.setText("index: " + size);
+        hideExpandBar();
     }
 
     private void loadLocalLibraryList() {
@@ -241,12 +242,19 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
         listview.setAdapter(adapter);
         if (searchView != null) applyFilter(searchView.getQuery().toString());
     }
+
     private void hideExpandBar(){
-        if (adapter.isExpandBarVisible.contains(true)) {
-            adapter.isExpandBarVisible = new ArrayList<>(Collections.nCopies(adapter.localLibraries.size(), false));
-            adapter.notifyDataSetChanged();
+        int firstTrueIndex = adapter.isExpandBarVisible.indexOf(true);
+        if (firstTrueIndex != -1) {
+            for (int i = firstTrueIndex; i < adapter.getCount(); i++) {
+                if (adapter.isExpandBarVisible.get(i)) {
+                    adapter.isExpandBarVisible.set(i, false);
+                }
+            }
+            adapter.notifyItemRangeChanged(firstTrueIndex, adapter.isExpandBarVisible.size() - firstTrueIndex);
         }
     }
+
     @Override
     public void onBackPressed() {
         if (adapter.isExpandBarVisible.contains(true)) {
@@ -257,7 +265,6 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
     }
 
     private void applyFilter(String query) {
-        hideExpandBar();
         if (query.isEmpty()) {
             adapter.updateData(ALL_LOCAL_LIBRARYS_LIST);
             adapter.notifyDataSetChanged();
@@ -285,12 +292,21 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             this.localLibraries = localLibraries;
             this.isExpandBarVisible = new ArrayList<>(Collections.nCopies(localLibraries.size(), false));
         }
-
         public void updateData(List<String> localLibraries) {
             this.localLibraries = localLibraries;
             notifyDataSetChanged();
         }
+        public void notifyItemChanged(int position) {
+            notifyDataSetChanged();
+        }
 
+        public void notifyItemRangeChanged(int startPosition, int itemCount) {
+            notifyDataSetChanged();
+        }
+
+        public List<Boolean> getIsExpandBarVisible() {
+            return isExpandBarVisible;
+        }
         @Override
         public String getItem(int position) {
             return localLibraries.get(position);
@@ -324,7 +340,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
             final ImageButton expand_rename_option = convertView.findViewById(R.id.rename_button_content_use_lib);
             final ImageButton expand_info_option = convertView.findViewById(R.id.info_button_content_use_lib);
 
-            boolean isExpandBarVisibleForPosition = isExpandBarVisible.get(position);
+            boolean isExpanded = isExpandBarVisible.get(position);
 
             String directory = localLibraries.get(position);
             name_text_lib.setText(directory);
@@ -350,7 +366,7 @@ public class ManageLocalLibraryActivity extends AppCompatActivity implements Lib
                 enable_this_lib.setEnabled(false);
             }
 
-            if (isExpandBarVisibleForPosition) {
+            if (isExpanded) {
                 show_expand_bar_options.setRotationX(180);
                 expand_bar_options.setTranslationY(0);
                 expand_bar_options.setVisibility(View.VISIBLE);
