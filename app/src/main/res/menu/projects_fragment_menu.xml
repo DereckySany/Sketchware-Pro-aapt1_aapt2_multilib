@@ -10,11 +10,12 @@
         android:title="@string/search_menu_title"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always|collapseActionView"
-        tools:ignore="AlwaysShowAction" />
+        tools:ignore="AlwaysShowAction,AppCompatResource" />
 
     <item
         android:id="@+id/sortProject"
         android:icon="@drawable/sorting_options_48"
+        android:orderInCategory="11"
         android:showAsAction="always"
         android:title="@string/sort_projects" />
 </menu>

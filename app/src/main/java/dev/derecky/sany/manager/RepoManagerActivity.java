@@ -37,9 +37,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import mod.SketchwareUtil;
@@ -118,6 +121,7 @@ public class RepoManagerActivity extends AppCompatActivity {
         if (query.isEmpty()) {
             adapter.updateData(REPOSITORY_LIST);
             adapter.notifyDataSetChanged();
+            getRepositoriesIndex(REPOSITORY_LIST.size());
             return;
         }
         final ArrayList<HashMap<String, Object>> repositoryFilter = new ArrayList<>();
@@ -130,6 +134,7 @@ public class RepoManagerActivity extends AppCompatActivity {
         }
         adapter.updateData(repositoryFilter);
         adapter.notifyDataSetChanged();
+        getRepositoriesIndex(repositoryFilter.size());
     }
 
     public void showAddRepositoryDialog() {
@@ -161,7 +166,7 @@ public class RepoManagerActivity extends AppCompatActivity {
             HashMap<String, Object> repositoryAdd = new HashMap<>();
             repositoryAdd.put("name", name);
             repositoryAdd.put("url", url);
-            repositoryAdd.put("menu_expanded", View.GONE);
+//            repositoryAdd.put("menu_expanded", View.GONE);
             REPOSITORY_LIST.add(repositoryAdd);
             saveRepositories();
             adapter.notifyDataSetChanged();
@@ -174,17 +179,37 @@ public class RepoManagerActivity extends AppCompatActivity {
         addRepositoryDialog.show();
     }
 
-    private void getRepositoriesIndex() {
-        index_size.setText("index: " + REPOSITORY_LIST.size());
+    private void getRepositoriesIndex(int size) {
+        index_size.setText("index: " + size);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (adapter.isExpandBarVisible.contains(true)) {
+            hideExpandBar();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void hideExpandBar(){
+        int firstTrueIndex = adapter.isExpandBarVisible.indexOf(true);
+        if (firstTrueIndex != -1) {
+            for (int i = firstTrueIndex; i < adapter.getCount(); i++) {
+                if (adapter.isExpandBarVisible.get(i)) {
+                    adapter.isExpandBarVisible.set(i, false);
+                }
+            }
+            adapter.notifyDataSetChanged();
+        }
+    }
     private void saveRepositories() {
         try {
             // Cria uma cópia da lista sem as chaves "menu_expanded"
             List<HashMap<String, Object>> newList = new ArrayList<>();
             for (HashMap<String, Object> repository : REPOSITORY_LIST) {
                 HashMap<String, Object> newRepository = new HashMap<>(repository);
-                newRepository.remove("menu_expanded");
+//                newRepository.remove("menu_expanded");
                 newList.add(newRepository);
             }
 
@@ -196,7 +221,7 @@ public class RepoManagerActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        getRepositoriesIndex();
+        getRepositoriesIndex(REPOSITORY_LIST.size());
     }
 
     private void loadRepositories() {
@@ -210,23 +235,25 @@ public class RepoManagerActivity extends AppCompatActivity {
         }
         if (REPOSITORY_LIST == null) {
             REPOSITORY_LIST = new ArrayList<>();
-        } else {
-            // Adiciona a chave "menu_expanded" com o valor View.GONE a cada elemento do REPOSITORY_LIST
-            for (HashMap<String, Object> repository : REPOSITORY_LIST) {
-                repository.put("menu_expanded", View.GONE);
-            }
+//        } else {
+//            // Adiciona a chave "menu_expanded" com o valor View.GONE a cada elemento do REPOSITORY_LIST
+//            for (HashMap<String, Object> repository : REPOSITORY_LIST) {
+//                repository.put("menu_expanded", View.GONE);
+//            }
         }
-        getRepositoriesIndex();
+        getRepositoriesIndex(REPOSITORY_LIST.size());
     }
 
     public class RepositoryListAdapter extends BaseAdapter {
 
         private ArrayList<HashMap<String, Object>> repositoryList;
         private final LayoutInflater inflater;
+        private AbstractList<Boolean> isExpandBarVisible;
 
         public RepositoryListAdapter(Context context, ArrayList<HashMap<String, Object>> repositoryList) {
             this.repositoryList = repositoryList;
             this.inflater = LayoutInflater.from(context.getApplicationContext());
+            this.isExpandBarVisible = new ArrayList<>(Collections.nCopies(repositoryList.size(), false));
         }
 
         public void updateData(ArrayList<HashMap<String, Object>> repositoryList) {
@@ -256,6 +283,7 @@ public class RepoManagerActivity extends AppCompatActivity {
             }
             final int ANIMATION_DURATION = 200; // Duração da animação em milissegundos
             final float OPTIONS_SCALE_FACTOR = 0.9f; // Fator de escala das opções
+            boolean isExpanded = isExpandBarVisible.get(position);
 
             TextView nameTextView = convertView.findViewById(R.id.name_text_view);
             TextView urlTextView = convertView.findViewById(R.id.url_text_view);
@@ -268,7 +296,8 @@ public class RepoManagerActivity extends AppCompatActivity {
             HashMap<String, Object> repository = repositoryList.get(position);
             String name = (String) repository.get("name");
             String url = (String) repository.get("url");
-            Integer menu_expanded = (Integer) repository.get("menu_expanded");
+//            Integer menu_expanded = (Integer) repository.get("menu_expanded");
+            Integer menu_expanded = isExpanded ? View.VISIBLE : View.GONE;
 
             nameTextView.setText(name);
             urlTextView.setText(url);
@@ -278,7 +307,6 @@ public class RepoManagerActivity extends AppCompatActivity {
 
             expand_button.setOnClickListener(v -> {
                 if (expand_options.getVisibility() == View.GONE) {
-                    //expand_button.animate().rotationX(1);
                     expand_button.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_less_24));
                     // Adiciona animação de deslocamento para baixo
                     ObjectAnimator translateY = ObjectAnimator.ofFloat(expand_options, "translationY", -expand_options.getHeight(), 0);
@@ -294,11 +322,6 @@ public class RepoManagerActivity extends AppCompatActivity {
                     // Adiciona animação de transparência
                     ObjectAnimator alpha = ObjectAnimator.ofFloat(expand_options, "alpha", 0f, 1f);
                     alpha.setDuration(ANIMATION_DURATION);
-
-                    // Inicia todas as animações ao mesmo tempo
-                    //AnimatorSet animatorSet = new AnimatorSet();
-                    //animatorSet.playTogether(translateY, scaleX, scaleY, alpha);
-                    //animatorSet.start();
                     // Inicia todas as animações ao mesmo tempo
                     AnimatorSet animatorSet = new AnimatorSet();
                     animatorSet.playTogether(translateY, scaleX, scaleY, alpha);
@@ -306,7 +329,8 @@ public class RepoManagerActivity extends AppCompatActivity {
                         @Override
                         public void onAnimationEnd(Animator animation) {
                             expand_options.setVisibility(View.VISIBLE);
-                            repository.put("menu_expanded", View.VISIBLE);
+                            isExpandBarVisible.set(position, true);
+//                            repository.put("menu_expanded", View.VISIBLE);
                         }
                     });
                     animatorSet.start();
@@ -343,6 +367,9 @@ public class RepoManagerActivity extends AppCompatActivity {
                         deleteDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                         deleteDialog.setView(deleteRoot);
                         deleteDialog.show();
+
+                        expand_options.setVisibility(View.GONE);
+                        isExpandBarVisible.set(position, false);
 
                     });
                     expand_options_edit.setOnClickListener(view -> {
@@ -394,9 +421,11 @@ public class RepoManagerActivity extends AppCompatActivity {
                         repositoryDialogEdit.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                         repositoryDialogEdit.setView(editRoot);
                         repositoryDialogEdit.show();
+
+                        expand_options.setVisibility(View.GONE);
+                        isExpandBarVisible.set(position, false);
                     });
                 } else {
-                    // expand_button.animate().rotationX(1);
                     expand_button.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_more_24));
                     // Adiciona animação de deslocamento para cima
                     ObjectAnimator translateY = ObjectAnimator.ofFloat(expand_options, "translationY", 0, -expand_options.getHeight());
@@ -421,7 +450,8 @@ public class RepoManagerActivity extends AppCompatActivity {
                         public void onAnimationEnd(Animator animation) {
                             expand_options.setVisibility(View.GONE);
                             // Define a variável menu_expanded para View.GONE
-                            repository.put("menu_expanded", View.GONE);
+                            isExpandBarVisible.set(position, false);
+//                            repository.put("menu_expanded", View.GONE);
 
                         }
                     });
