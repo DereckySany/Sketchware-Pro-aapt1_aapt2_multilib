@@ -116,7 +116,7 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
         floatingActionButton.setOnClickListener(this);
 
         myProjects = parent.findViewById(R.id.myprojects);
-        myProjects.setHasFixedSize(true);
+//        myProjects.setHasFixedSize(true);
         myProjects.setLayoutManager(new LinearLayoutManager(getContext()));
         projectsAdapter = new ProjectsAdapter(myProjects);
         myProjects.setAdapter(projectsAdapter);
@@ -171,8 +171,8 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
         new Thread(() -> {
             synchronized (projectsList) {
                 projectsList.clear();
-                projectsList = lC.a();
-//                projectsList.addAll(lC.a());
+//                projectsList = lC.a();
+                projectsList.addAll(lC.a());
                 Collections.sort(projectsList, new ProjectComparator(preference.d("sortBy")));
         }
 
@@ -306,27 +306,6 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-        menuInflater.inflate(R.menu.projects_fragment_menu, menu);
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        projectsSearchView = (SearchView) menu.findItem(R.id.searchProjects).getActionView();
-        projectsSearchView.setOnQueryTextListener(new SearchView.c() {
-            @Override
-            public boolean onQueryTextChange(String s) {
-//                applyFilter(s);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
-        });
-    }
     private void applyFilter(String query) {
         if (query.isEmpty()) {
             projectsList.clear();
@@ -346,22 +325,43 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
 //        projectsAdapter.a(projectsFilter);
         projectsAdapter.a();
     }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menuInflater.inflate(R.menu.projects_fragment_menu, menu);
+        super.onCreateOptionsMenu(menu, menuInflater);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        projectsSearchView = (SearchView) menu.findItem(R.id.searchProjects).getActionView();
+        projectsSearchView.setOnQueryTextListener(new SearchView.c() {
+            @Override
+            public boolean onQueryTextChange(String s) {
+//                applyFilter(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+        });
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.sortProject) {
+        int id = item.getItemId();
+        if (id == R.id.sortProject) {
             showProjectSortingDialog();
-            return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View viewGroup = inflater.inflate(R.layout.myprojects, parent, false);
-        setHasOptionsMenu(true);
         initialize(viewGroup);
+        setHasOptionsMenu(true);
         return viewGroup;
     }
 
