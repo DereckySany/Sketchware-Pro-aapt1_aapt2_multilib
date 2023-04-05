@@ -166,7 +166,6 @@ public class RepoManagerActivity extends AppCompatActivity {
             HashMap<String, Object> repositoryAdd = new HashMap<>();
             repositoryAdd.put("name", name);
             repositoryAdd.put("url", url);
-//            repositoryAdd.put("menu_expanded", View.GONE);
             REPOSITORY_LIST.add(repositoryAdd);
             saveRepositories();
             adapter.notifyDataSetChanged();
@@ -181,6 +180,7 @@ public class RepoManagerActivity extends AppCompatActivity {
 
     private void getRepositoriesIndex(int size) {
         index_size.setText("index: " + size);
+        hideExpandBar();
     }
 
     @Override
@@ -205,11 +205,10 @@ public class RepoManagerActivity extends AppCompatActivity {
     }
     private void saveRepositories() {
         try {
-            // Cria uma cópia da lista sem as chaves "menu_expanded"
+            // Cria uma cópia da lista
             List<HashMap<String, Object>> newList = new ArrayList<>();
             for (HashMap<String, Object> repository : REPOSITORY_LIST) {
                 HashMap<String, Object> newRepository = new HashMap<>(repository);
-//                newRepository.remove("menu_expanded");
                 newList.add(newRepository);
             }
 
@@ -221,6 +220,7 @@ public class RepoManagerActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (searchEditText != null) applyFilter(searchEditText.getEditableText().toString());
         getRepositoriesIndex(REPOSITORY_LIST.size());
     }
 
@@ -235,11 +235,6 @@ public class RepoManagerActivity extends AppCompatActivity {
         }
         if (REPOSITORY_LIST == null) {
             REPOSITORY_LIST = new ArrayList<>();
-//        } else {
-//            // Adiciona a chave "menu_expanded" com o valor View.GONE a cada elemento do REPOSITORY_LIST
-//            for (HashMap<String, Object> repository : REPOSITORY_LIST) {
-//                repository.put("menu_expanded", View.GONE);
-//            }
         }
         getRepositoriesIndex(REPOSITORY_LIST.size());
     }
@@ -284,6 +279,7 @@ public class RepoManagerActivity extends AppCompatActivity {
             final int ANIMATION_DURATION = 200; // Duração da animação em milissegundos
             final float OPTIONS_SCALE_FACTOR = 0.9f; // Fator de escala das opções
             boolean isExpanded = isExpandBarVisible.get(position);
+            int menu_expanded = isExpanded ? View.VISIBLE : View.GONE;
 
             TextView nameTextView = convertView.findViewById(R.id.name_text_view);
             TextView urlTextView = convertView.findViewById(R.id.url_text_view);
@@ -296,8 +292,6 @@ public class RepoManagerActivity extends AppCompatActivity {
             HashMap<String, Object> repository = repositoryList.get(position);
             String name = (String) repository.get("name");
             String url = (String) repository.get("url");
-//            Integer menu_expanded = (Integer) repository.get("menu_expanded");
-            Integer menu_expanded = isExpanded ? View.VISIBLE : View.GONE;
 
             nameTextView.setText(name);
             urlTextView.setText(url);
@@ -308,21 +302,17 @@ public class RepoManagerActivity extends AppCompatActivity {
             expand_button.setOnClickListener(v -> {
                 if (expand_options.getVisibility() == View.GONE) {
                     expand_button.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_less_24));
-                    // Adiciona animação de deslocamento para baixo
                     ObjectAnimator translateY = ObjectAnimator.ofFloat(expand_options, "translationY", -expand_options.getHeight(), 0);
                     translateY.setDuration(ANIMATION_DURATION);
 
-                    // Adiciona animação de escala
                     ObjectAnimator scaleX = ObjectAnimator.ofFloat(expand_options, "scaleX", OPTIONS_SCALE_FACTOR, 1f);
                     scaleX.setDuration(ANIMATION_DURATION);
 
                     ObjectAnimator scaleY = ObjectAnimator.ofFloat(expand_options, "scaleY", OPTIONS_SCALE_FACTOR, 1f);
                     scaleY.setDuration(ANIMATION_DURATION);
 
-                    // Adiciona animação de transparência
                     ObjectAnimator alpha = ObjectAnimator.ofFloat(expand_options, "alpha", 0f, 1f);
                     alpha.setDuration(ANIMATION_DURATION);
-                    // Inicia todas as animações ao mesmo tempo
                     AnimatorSet animatorSet = new AnimatorSet();
                     animatorSet.playTogether(translateY, scaleX, scaleY, alpha);
                     animatorSet.addListener(new AnimatorListenerAdapter() {
@@ -330,7 +320,6 @@ public class RepoManagerActivity extends AppCompatActivity {
                         public void onAnimationEnd(Animator animation) {
                             expand_options.setVisibility(View.VISIBLE);
                             isExpandBarVisible.set(position, true);
-//                            repository.put("menu_expanded", View.VISIBLE);
                         }
                     });
                     animatorSet.start();
@@ -344,8 +333,7 @@ public class RepoManagerActivity extends AppCompatActivity {
                         final EditText fileNameToDelete = deleteRoot.findViewById(R.id.edittext_delete_name);
 
                         final View deleteTitleChildAt1 = deleteTitle.getChildAt(1);
-                        if (deleteTitleChildAt1 instanceof TextView) {
-                            final TextView deleteTitleTextView = (TextView) deleteTitleChildAt1;
+                        if (deleteTitleChildAt1 instanceof final TextView deleteTitleTextView) {
                             deleteTitleTextView.setText("Delete Repository");
                         }
                         deleteFileName.setHint("That local Repository will be permanently removed!");
@@ -354,9 +342,7 @@ public class RepoManagerActivity extends AppCompatActivity {
                         deleteRoot.findViewById(R.id.text_del_delete)
                                 .setOnClickListener(view1 -> {
                                     ArrayList<HashMap<String, Object>> repositoryRemove = REPOSITORY_LIST;
-                                    // remove from FILTER REPOSITORY_LIST
                                     repositoryList.remove(repository);
-                                    // remove from REPOSITORY_LIST
                                     repositoryRemove.remove(repository);
                                     saveRepositories();
                                     adapter.notifyDataSetChanged();
@@ -380,12 +366,10 @@ public class RepoManagerActivity extends AppCompatActivity {
                         final EditText nameEditText = editRoot.findViewById(R.id.repo_name_edit_text);
                         final EditText urlEditText = editRoot.findViewById(R.id.repo_url_edit_text);
 
-                        // Get the repository data at the specified position
                         HashMap<String, Object> repositoryData = repositoryList.get(position);
                         String currentName = (String) repositoryData.get("name");
                         String currentUrl = (String) repositoryData.get("url");
 
-                        // Set the current name and URL values in the EditText fields
                         nameTitle.setText("Rename Repository");
                         nameEditText.setText(currentName);
                         urlEditText.setText(currentUrl);
@@ -408,8 +392,6 @@ public class RepoManagerActivity extends AppCompatActivity {
                                 urlEditText.setError("Invalid URL format");
                                 return;
                             }
-
-                            // Update the name and URL values in the repository data
                             repositoryData.put("name", editName);
                             repositoryData.put("url", editUrl);
                             saveRepositories();
@@ -427,31 +409,22 @@ public class RepoManagerActivity extends AppCompatActivity {
                     });
                 } else {
                     expand_button.setImageDrawable(getDrawable(R.drawable.selector_ic_expand_more_24));
-                    // Adiciona animação de deslocamento para cima
                     ObjectAnimator translateY = ObjectAnimator.ofFloat(expand_options, "translationY", 0, -expand_options.getHeight());
                     translateY.setDuration(ANIMATION_DURATION);
 
-                    // Adiciona animação de escala
                     ObjectAnimator scaleX = ObjectAnimator.ofFloat(expand_options, "scaleX", OPTIONS_SCALE_FACTOR, 1f);
                     scaleX.setDuration(ANIMATION_DURATION);
-
                     ObjectAnimator scaleY = ObjectAnimator.ofFloat(expand_options, "scaleY", OPTIONS_SCALE_FACTOR, 1f);
                     scaleY.setDuration(ANIMATION_DURATION);
-
-                    // Adiciona animação de transparência
                     ObjectAnimator alpha = ObjectAnimator.ofFloat(expand_options, "alpha", 1f, 0f);
                     alpha.setDuration(ANIMATION_DURATION);
-
-                    // Inicia todas as animações ao mesmo tempo
                     AnimatorSet animatorSet = new AnimatorSet();
                     animatorSet.playTogether(translateY, scaleX, scaleY, alpha);
                     animatorSet.addListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
                             expand_options.setVisibility(View.GONE);
-                            // Define a variável menu_expanded para View.GONE
                             isExpandBarVisible.set(position, false);
-//                            repository.put("menu_expanded", View.GONE);
 
                         }
                     });
