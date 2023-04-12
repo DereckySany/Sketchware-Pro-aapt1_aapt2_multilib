@@ -180,7 +180,7 @@ public class RepoManagerActivity extends AppCompatActivity {
 
     private void getRepositoriesIndex(int size) {
         index_size.setText("index: " + size);
-        hideExpandBar();
+        //hideExpandBar();
     }
 
     @Override
