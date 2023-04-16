@@ -2,8 +2,10 @@ package com.besome.sketch.editor;
 
 import static mod.SketchwareUtil.getDip;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -30,16 +32,19 @@ public class LogicEditorDrawer extends LinearLayout {
 
     private LinearLayout favorite;
     private CustomScrollView scrollView;
+    private SharedPreferences sharedpref;
     private boolean ascendingOrder = true;
 
     public LogicEditorDrawer(Context context) {
         super(context);
         initialize(context);
+        loadPreferences();
     }
 
     public LogicEditorDrawer(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         initialize(context);
+        loadPreferences();
     }
 
     public void setDragEnabled(boolean dragEnabled) {
@@ -55,8 +60,9 @@ public class LogicEditorDrawer extends LinearLayout {
         ((TextView) findViewById(R.id.tv_block_collection)).setText(Helper.getResString(R.string.logic_editor_title_block_collection));
         favorite = findViewById(R.id.layout_favorite);
         scrollView = findViewById(R.id.scv);
-        ImageButton ascendingOrdernation = findViewById(R.id.sort_collection);
+        sharedpref = getContext().getSharedPreferences("collection_order_pref", 0);
 
+        ImageButton ascendingOrdernation = findViewById(R.id.sort_collection);
         CardView tools = findViewById(R.id.new_button);
         tools.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), Tools.class);
@@ -68,7 +74,15 @@ public class LogicEditorDrawer extends LinearLayout {
             sortCollections();
             Drawable drawable = getContext().getDrawable(ascendingOrder ? R.drawable.selector_ic_expand_more_24 : R.drawable.selector_ic_expand_less_24);
             ascendingOrdernation.setImageDrawable(drawable);
+            setPreference("ascendingOrder",ascendingOrder);
         });
+    }
+    private void loadPreferences() {
+        sharedpref = getContext().getSharedPreferences("collection_order_pref", Activity.MODE_PRIVATE);
+        ascendingOrder = sharedpref.getBoolean("ascendingOrder", false);
+    }
+    private void setPreference(String key, boolean value) {
+        sharedpref.edit().putBoolean(key, value).apply();
     }
     private void sortCollections() {
         ArrayList<Us> collections = new ArrayList<>();
