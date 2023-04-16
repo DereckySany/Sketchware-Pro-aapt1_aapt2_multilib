@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 
@@ -33,7 +34,9 @@ public class LogicEditorDrawer extends LinearLayout {
     private LinearLayout favorite;
     private CustomScrollView scrollView;
     private SharedPreferences sharedpref;
+    private ImageButton ascendingOrdernation;
     private boolean ascendingOrder = true;
+    private boolean feature = false;
 
     public LogicEditorDrawer(Context context) {
         super(context);
@@ -60,9 +63,9 @@ public class LogicEditorDrawer extends LinearLayout {
         ((TextView) findViewById(R.id.tv_block_collection)).setText(Helper.getResString(R.string.logic_editor_title_block_collection));
         favorite = findViewById(R.id.layout_favorite);
         scrollView = findViewById(R.id.scv);
+        ascendingOrdernation = findViewById(R.id.sort_collection);
         sharedpref = getContext().getSharedPreferences("collection_order_pref", 0);
 
-        ImageButton ascendingOrdernation = findViewById(R.id.sort_collection);
         CardView tools = findViewById(R.id.new_button);
         tools.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), Tools.class);
@@ -70,16 +73,31 @@ public class LogicEditorDrawer extends LinearLayout {
             ((LogicEditorActivity) getContext()).startActivityForResult(intent, 463);
         });
 
-        findViewById(R.id.sort_collection).setOnClickListener(v -> {
-            sortCollections();
-            Drawable drawable = getContext().getDrawable(ascendingOrder ? R.drawable.selector_ic_expand_more_24 : R.drawable.selector_ic_expand_less_24);
-            ascendingOrdernation.setImageDrawable(drawable);
-            setPreference("ascendingOrder",ascendingOrder);
+        ascendingOrdernation.setOnClickListener(v -> {
+            loadViewCollection();
         });
+
+        ascendingOrdernation.setOnLongClickListener(v -> {
+            if(feature) {
+                Toast.makeText(context, "Feature:Scroll List Enabled", Toast.LENGTH_SHORT).show();
+                feature = true;
+            } else {
+                Toast.makeText(context, "Feature:Scroll List Disabled", Toast.LENGTH_SHORT).show();
+                feature = false;
+            }
+            return false;
+        });
+    }
+    private void loadViewCollection(){
+        sortCollections();
+        Drawable drawable = getContext().getDrawable(ascendingOrder ? R.drawable.selector_ic_expand_more_24 : R.drawable.selector_ic_expand_less_24);
+        ascendingOrdernation.setImageDrawable(drawable);
+        setPreference("ascendingOrder",ascendingOrder);
     }
     private void loadPreferences() {
         sharedpref = getContext().getSharedPreferences("collection_order_pref", Activity.MODE_PRIVATE);
         ascendingOrder = sharedpref.getBoolean("ascendingOrder", false);
+        loadViewCollection();
     }
     private void setPreference(String key, boolean value) {
         sharedpref.edit().putBoolean(key, value).apply();
@@ -126,11 +144,13 @@ public class LogicEditorDrawer extends LinearLayout {
     }
 
     public boolean z(){
-        if (ascendingOrder) {
-            return scrollView.fullScroll(View.FOCUS_DOWN);
-        } else {
-            return scrollView.fullScroll(View.FOCUS_UP);
-        }
+        if(feature)
+            if (ascendingOrder) {
+                return scrollView.fullScroll(View.FOCUS_DOWN);
+            } else {
+                return scrollView.fullScroll(View.FOCUS_UP);
+            }
+        return false;
     }
 
     public View a(String str, ArrayList<BlockBean> arrayList) {
@@ -145,7 +165,7 @@ public class LogicEditorDrawer extends LinearLayout {
                     (int) getDip(8)));
             favorite.addView(view);
         }
-//        z();
+        z();
         return collectionBlock;
     }
 
