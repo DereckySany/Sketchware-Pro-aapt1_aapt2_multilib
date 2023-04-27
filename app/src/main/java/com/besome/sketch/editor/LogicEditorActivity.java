@@ -72,6 +72,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import a.a.a.DB;
 import a.a.a.FB;
@@ -406,30 +407,16 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
         aBVar.a(R.drawable.delete_96);
         View a2 = wB.a(this, R.layout.property_popup_selector_single);
         ViewGroup viewGroup = a2.findViewById(R.id.rg_content);
-        // for (Pair<Integer, String> next : jC.a(B).k(M.getJavaName())) {
-        //     RadioButton e = e(next.second);
-        //     e.setTag(next.first);
-        //     viewGroup.addView(e);
-        // }
-
-        // Limit the number of variables displayed to avoid freezing
-        final int MAX_VARIABLES = 100;
-        int variableCount = 0;
-
-        for (Pair<Integer, String> next : jC.a(B).k(M.getJavaName())) {
-            if (variableCount >= MAX_VARIABLES) {
-                break;
+        int pageSize = 50; // número máximo de itens a serem exibidos em cada página
+        List<Pair<Integer, String>> variablePairs = jC.a(B).k(M.getJavaName());
+        int pageCount = (variablePairs.size() + pageSize - 1) / pageSize; // calcular o número de páginas necessárias
+        for (int pageIndex = 0; pageIndex < pageCount; pageIndex++) {
+            List<Pair<Integer, String>> pageVariablePairs = variablePairs.subList(pageIndex * pageSize, Math.min((pageIndex + 1) * pageSize, variablePairs.size()));
+            for (Pair<Integer, String> next : pageVariablePairs) {
+                RadioButton e = e(next.second);
+                e.setTag(next.first);
+                viewGroup.addView(e);
             }
-
-            RadioButton e = e(next.second);
-            e.setTag(next.first);
-            viewGroup.addView(e);
-
-            variableCount++;
-        }
-
-        if (variableCount >= MAX_VARIABLES) {
-            Toast.makeText(getContext(), "Too many variables to display, some may be missing", Toast.LENGTH_SHORT).show();
         }
         aBVar.a(a2);
         aBVar.b(xB.b().a(getContext(), R.string.common_word_remove), v -> {
