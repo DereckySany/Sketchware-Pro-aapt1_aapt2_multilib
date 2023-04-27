@@ -406,10 +406,30 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
         aBVar.a(R.drawable.delete_96);
         View a2 = wB.a(this, R.layout.property_popup_selector_single);
         ViewGroup viewGroup = a2.findViewById(R.id.rg_content);
+        // for (Pair<Integer, String> next : jC.a(B).k(M.getJavaName())) {
+        //     RadioButton e = e(next.second);
+        //     e.setTag(next.first);
+        //     viewGroup.addView(e);
+        // }
+
+        // Limit the number of variables displayed to avoid freezing
+        final int MAX_VARIABLES = 100;
+        int variableCount = 0;
+
         for (Pair<Integer, String> next : jC.a(B).k(M.getJavaName())) {
+            if (variableCount >= MAX_VARIABLES) {
+                break;
+            }
+
             RadioButton e = e(next.second);
             e.setTag(next.first);
             viewGroup.addView(e);
+
+            variableCount++;
+        }
+
+        if (variableCount >= MAX_VARIABLES) {
+            Toast.makeText(getContext(), "Too many variables to display, some may be missing", Toast.LENGTH_SHORT).show();
         }
         aBVar.a(a2);
         aBVar.b(xB.b().a(getContext(), R.string.common_word_remove), v -> {
