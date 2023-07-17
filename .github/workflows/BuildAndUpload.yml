@@ -30,7 +30,7 @@ jobs:
 #          key: /repos/{owner}/{repo}/actions/caches
 
       - name: Clear Gradle Build Cache
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@2.4.2
         with:
           arguments: clean
         continue-on-error: false
@@ -41,7 +41,7 @@ jobs:
         needs: configureBuild
         continue-on-error: false
         steps:
-        - uses: gradle/gradle-build-action@v2
+        - uses: gradle/gradle-build-action@2.4.2
           with:
             arguments: assembleMinApi26Debug -PnewPackageName=com.sketchware.remod.kax
           env:
@@ -60,7 +60,7 @@ jobs:
           needs: configureBuild
           continue-on-error: false
           steps:
-          - uses: gradle/gradle-build-action@v2
+          - uses: gradle/gradle-build-action@2.4.2
             with:
               arguments: assembleMinApi21Debug -PnewPackageName=com.sketchware.remod.kax
             env:
