@@ -1,0 +1,56 @@
+name: Cleanup Workflows
+
+on:
+  workflow_dispatch:
+    inputs:
+      age:
+        description: 'Idade dos workflows para remover (1 dia, 1 semana, 1 mês)'
+        required: true
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cleanup old workflows
+        run: |
+          AGE="${{ github.event.inputs.age }}"
+          echo "Removendo workflows mais antigos que $AGE"
+
+          # Converta a idade para segundos
+          if [[ $AGE == *"dia"* ]]; then
+            AGE_SECONDS=$(( ${AGE//[^0-9]/} * 24 * 60 * 60 ))
+          elif [[ $AGE == *"semana"* ]]; then
+            AGE_SECONDS=$(( ${AGE//[^0-9]/} * 7 * 24 * 60 * 60 ))
+          elif [[ $AGE == *"mês"* ]]; then
+            AGE_SECONDS=$(( ${AGE//[^0-9]/} * 30 * 24 * 60 * 60 ))
+          else
+            echo "Formato de idade inválido"
+            exit 1
+          fi
+
+          # Obtenha a data atual em segundos
+          CURRENT_DATE=$(date +%s)
+
+          # Liste todos os workflows
+          WORKFLOWS=$(gh api repos/${{ github.repository }}/actions/runs -q '.workflow_runs[] | {id: .id, created_at: .created_at}')
+
+          # Percorra cada workflow
+          for WORKFLOW in $WORKFLOWS
+          do
+            WORKFLOW_ID=$(echo $WORKFLOW | jq -r '.id')
+            WORKFLOW_DATE=$(echo $WORKFLOW | jq -r '.created_at')
+
+            # Converta a data do workflow para segundos
+            WORKFLOW_DATE_SECONDS=$(date -d"$WORKFLOW_DATE" +%s)
+
+            # Calcule a diferença de tempo
+            TIME_DIFF=$(( CURRENT_DATE - WORKFLOW_DATE_SECONDS ))
+
+            # Se o workflow for mais antigo que a idade especificada, remova-o
+            if (( TIME_DIFF > AGE_SECONDS )); then
+              echo "Removendo workflow $WORKFLOW_ID"
+              gh api -X DELETE repos/${{ github.repository }}/actions/runs/$WORKFLOW_ID
+            fi
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
