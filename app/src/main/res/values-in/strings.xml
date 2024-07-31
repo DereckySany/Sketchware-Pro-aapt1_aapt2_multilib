@@ -55,5 +55,6 @@
     <string name="s6">Izinkan Iklan membuat acara kalender?</string>
     <string name="s7">Tes Iklan</string>
     <string name="search_menu_title">Telusuri</string>
+    <string name="sort_projects">sort</string>
     <string name="status_bar_notification_info_overflow">999+</string>
 </resources>
