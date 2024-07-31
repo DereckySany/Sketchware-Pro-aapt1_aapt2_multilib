@@ -2423,6 +2423,7 @@ Please try again later"</string>
     <string name="slack_url_primary">http://slack.sketchware.io</string>
     <string name="slack_url_secondary">http://sketchware.slack.com</string>
     <string name="source_code_dialog_title_change_font_size">Change font size</string>
+    <string name="sort_projects">sort</string>
     <string name="subscribe_button_unlock">Watch a video to unlock</string>
     <string name="subscribe_desc_become_a_premium_user">Subscribe now to become a premium user!</string>
     <string name="subscribe_desc_five">Unlimited share, sign, and exports</string>
