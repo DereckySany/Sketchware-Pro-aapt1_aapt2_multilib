@@ -154,7 +154,7 @@ jobs:
         uses: actions/upload-artifact@v4.3.3
         with:
           name: apk-minApi26-${{ github.event_name == 'workflow_dispatch' && github.event.inputs.build_type || 'debug' }}
-          path: app/build/outputs/apk/minApi26/${{ github.event_name == 'workflow_dispatch' && github.event.inputs.build_type || 'debug' }}/*.apk
+          path: app/build/outputs/apk/minApi26/${{ github.event_name == 'workflow_dispatch' && github.event.inputs.build_type || 'debug' }}/
 
   buildMinApi21:
     if: |
@@ -200,7 +200,7 @@ jobs:
         uses: actions/upload-artifact@v4.3.3
         with:
           name: apk-minApi21-${{ github.event_name == 'workflow_dispatch' && github.event.inputs.build_type || 'debug' }}
-          path: app/build/outputs/apk/minApi21/${{ github.event_name == 'workflow_dispatch' && github.event.inputs.build_type || 'debug' }}/*.apk
+          path: app/build/outputs/apk/minApi21/${{ github.event_name == 'workflow_dispatch' && github.event.inputs.build_type || 'debug' }}/
 
   run_custom_task:
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.custom_gradle_task != ''
