@@ -140,11 +140,12 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
+          
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Build APK
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          arguments: assembleMinApi21${{ github.event_name == 'workflow_dispatch' && github.event.inputs.build_type || 'Debug' }}
+        run: ./gradlew assembleMinApi26${{ github.event_name == 'workflow_dispatch' && github.event.inputs.build_type || 'Debug' }}     
         env:
           CRASH_REPORT_WEBHOOK_URL: ${{ secrets.CRASH_REPORT_WEBHOOK_URL }}
 
@@ -185,13 +186,14 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
+          
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Build APK
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          arguments: assembleMinApi21${{ github.event_name == 'workflow_dispatch' && github.event.inputs.build_type || 'Debug' }}
+        run: ./gradlew assembleMinApi21${{ github.event_name == 'workflow_dispatch' && github.event.inputs.build_type || 'Debug' }}    
         env:
-          CRASH_REPORT_WEBHOOK_URL: ${{ secrets.CRASH_REPORT_WEBHOOK_URL }}
+           CRASH_REPORT_WEBHOOK_URL: ${{ secrets.CRASH_REPORT_WEBHOOK_URL }}
 
       - name: Upload APK
         if: (github.event_name == 'workflow_dispatch' && github.event.inputs.upload_artifacts) || (github.event_name != 'workflow_dispatch')
@@ -226,11 +228,12 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
+          
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Run Custom Gradle Task
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          arguments: ${{ github.event.inputs.custom_gradle_task }}
+        run: ${{ github.event.inputs.custom_gradle_task }}
         env:
           CRASH_REPORT_WEBHOOK_URL: ${{ secrets.CRASH_REPORT_WEBHOOK_URL }} # Incluído por consistência
 
