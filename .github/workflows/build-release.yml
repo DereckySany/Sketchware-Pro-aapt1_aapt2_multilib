@@ -1,0 +1,46 @@
+name: ABuild and Release
+
+on:
+  push:
+    branches: [ main ]  # or your default branch
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'  # Adjust based on your project needs
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Build Release APK
+      run: ./gradlew assembleRelease
+
+    - name: Upload Release APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-release
+        path: app/build/outputs/apk/release/*.apk
+        if-no-files-found: error
+
+    - name: Upload Build Outputs
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-outputs
+        path: |
+          app/build/outputs/
+          !app/build/outputs/logs/
+        if-no-files-found: error
