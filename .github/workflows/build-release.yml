@@ -32,8 +32,8 @@ jobs:
     - name: Upload Release APK
       uses: actions/upload-artifact@v4
       with:
-        name: app-release
-        path: app/build/outputs/apk/debug/*.apk
+        name: app-debug
+        path: app/build/outputs/apk/minApi26/debug
         if-no-files-found: error
 
     - name: Upload Build Outputs
@@ -41,6 +41,6 @@ jobs:
       with:
         name: build-outputs
         path: |
-          app/build/outputs/
+          app/build/outputs/apk/minApi26/debug
           !app/build/outputs/logs/
         if-no-files-found: error
